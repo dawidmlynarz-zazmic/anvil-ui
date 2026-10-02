@@ -1,7 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
+import { useState } from 'react'
 import { expect, userEvent } from 'storybook/test'
 
 import { Checkbox } from './checkbox'
+import { Combobox, ComboboxContent, ComboboxItem, ComboboxTrigger } from './combobox'
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandList } from './command'
 import {
   Field,
   FieldContent,
@@ -14,7 +17,9 @@ import {
   FieldSet,
 } from './field'
 import { Input } from './input'
+import { InputOTP, InputOTPGroup, InputOTPSlot } from './input-otp'
 import { RadioGroup, RadioGroupItem } from './radio-group'
+import { Slider } from './slider'
 import { Switch } from './switch'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10940-109'
@@ -30,7 +35,7 @@ const meta = {
       description: {
         component: [
           '**What it is:** shadcn/ui Field — the form layout primitive. It lays out a label, a control, a description and an error with consistent spacing, and carries the state: `data-invalid` turns the label and error destructive, `data-disabled` dims the label.',
-          '**When to use it:** for controls that have no label of their own — horizontal Switch / Checkbox rows, radio and checkbox groups (with `FieldSet` + `FieldLegend`), and later Combobox, Slider and Input OTP.',
+          '**When to use it:** for controls that have no label of their own — horizontal Switch / Checkbox rows, radio and checkbox groups (with `FieldSet` + `FieldLegend`), Combobox, Slider and Input OTP.',
           '**When not to:** Input, Textarea and Select already render a Field when you pass `label` (see *Built into Input*). Never wrap those in another Field.',
         ].join('\n\n'),
       },
@@ -48,8 +53,82 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-/** Figma orientation=horizontal (its default control here is a Switch): control first, then label and description. */
+function FieldCombobox({
+  id,
+  invalid,
+  describedBy,
+}: {
+  id: string
+  invalid?: boolean
+  describedBy?: string
+}) {
+  const [open, setOpen] = useState(false)
+  const [value, setValue] = useState('')
+  return (
+    <Combobox open={open} onOpenChange={setOpen}>
+      <ComboboxTrigger
+        id={id}
+        placeholder="Placeholder"
+        aria-invalid={invalid || undefined}
+        aria-describedby={describedBy}
+      >
+        {value}
+      </ComboboxTrigger>
+      <ComboboxContent>
+        <Command>
+          <CommandInput placeholder="Placeholder" />
+          <CommandList>
+            <CommandGroup>
+              {OPTIONS.map((option) => (
+                <ComboboxItem
+                  key={option}
+                  value={option}
+                  selected={value === option}
+                  onSelect={(next) => {
+                    setValue(next === value ? '' : next)
+                    setOpen(false)
+                  }}
+                >
+                  {option}
+                </ComboboxItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+          <CommandEmpty>Subtitle</CommandEmpty>
+        </Command>
+      </ComboboxContent>
+    </Combobox>
+  )
+}
+
+/** Figma default (orientation=vertical, control Combobox): label, control, description. */
 export const Default: Story = {
+  render: () => (
+    <Field>
+      <FieldLabel htmlFor="field-combobox">Label</FieldLabel>
+      <FieldCombobox id="field-combobox" describedBy="field-combobox-hint" />
+      <FieldDescription id="field-combobox-hint">Subtitle</FieldDescription>
+    </Field>
+  ),
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole('combobox', { name: 'Label' })).toHaveAccessibleDescription('Subtitle')
+  },
+}
+
+/** Figma orientation=vertical, state=invalid: the label and error turn destructive. */
+export const VerticalInvalid: Story = {
+  name: 'Vertical invalid',
+  render: () => (
+    <Field data-invalid="true">
+      <FieldLabel htmlFor="field-combobox-invalid">Label</FieldLabel>
+      <FieldCombobox id="field-combobox-invalid" invalid describedBy="field-combobox-error" />
+      <FieldError id="field-combobox-error">Subtitle</FieldError>
+    </Field>
+  ),
+}
+
+/** Figma orientation=horizontal (control Switch): control first, then label and description. */
+export const Horizontal: Story = {
   render: () => (
     <Field orientation="horizontal">
       <Switch id="field-switch" defaultChecked />
@@ -132,6 +211,40 @@ export const CheckboxGroup: Story = {
       </FieldGroup>
     </FieldSet>
   ),
+}
+
+/** Slider: FieldLabel names it (the label is forwarded to the thumb). */
+export const WithSlider: Story = {
+  render: () => (
+    <Field>
+      <FieldLabel id="field-slider-label">Label</FieldLabel>
+      <Slider aria-labelledby="field-slider-label" defaultValue={[50]} max={100} step={1} />
+      <FieldDescription>Subtitle</FieldDescription>
+    </Field>
+  ),
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole('slider', { name: 'Label' })).toHaveAttribute('aria-valuenow', '50')
+  },
+}
+
+/** Input OTP: FieldLabel points at the hidden input that drives the slots. */
+export const WithInputOTP: Story = {
+  render: () => (
+    <Field>
+      <FieldLabel htmlFor="field-otp">Label</FieldLabel>
+      <InputOTP id="field-otp" maxLength={6} aria-describedby="field-otp-hint">
+        <InputOTPGroup>
+          {Array.from({ length: 6 }, (_, i) => (
+            <InputOTPSlot key={i} index={i} />
+          ))}
+        </InputOTPGroup>
+      </InputOTP>
+      <FieldDescription id="field-otp-hint">Subtitle</FieldDescription>
+    </Field>
+  ),
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole('textbox', { name: 'Label' })).toHaveAccessibleDescription('Subtitle')
+  },
 }
 
 /** Sections of a settings form: FieldGroup stacks Fields, FieldSeparator divides them. */
