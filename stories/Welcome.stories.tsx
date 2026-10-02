@@ -1,15 +1,31 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect } from 'storybook/test'
 
-// Placeholder story for the Step 1 exit gate. Replaced by Foundations in Step 2.
+// Placeholder story until components exist: token utilities only, so the light and dark
+// test projects check real token colors for a11y contrast.
 function Welcome() {
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-semibold">Anvil UI</h1>
-      <p className="mt-2 text-sm">
-        Zazmic&apos;s design system for conversational AI agents. Tokens arrive in Step 2, components from
-        Step 3.
+    <div className="flex flex-col gap-4 bg-background p-(--space-lg) text-foreground">
+      <h1 className="type-heading-3xl">Anvil UI</h1>
+      <p className="type-text-base-normal text-muted-foreground">
+        Zazmic&apos;s design system for conversational AI agents. See Foundations for tokens; components
+        arrive from Step 3.
       </p>
+      <div className="flex gap-2">
+        <span className="rounded-md bg-agent-subtle px-2 py-1 type-text-sm-medium text-agent-strong">
+          Agent
+        </span>
+        <span className="rounded-md bg-info-subtle px-2 py-1 type-text-sm-medium text-info-strong">Info</span>
+        <span className="rounded-md bg-primary px-2 py-1 type-text-sm-medium text-primary-foreground">
+          Primary
+        </span>
+      </div>
+      <div className="w-72 rounded-lg border border-border bg-popover p-4 text-popover-foreground shadow-elevation-raised">
+        <p className="type-text-sm-normal">Popover surface with elevation/raised.</p>
+        <a className="type-text-sm-link text-foreground-link focus-ring rounded-sm" href="#tokens">
+          Link with focus ring
+        </a>
+      </div>
     </div>
   )
 }

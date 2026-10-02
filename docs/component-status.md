@@ -4,7 +4,7 @@ Updated by Claude Code after each component. Figma node ids come from `CLAUDE.md
 
 | Component | Figma page · node | Code path | Status | Notes |
 | --- | --- | --- | --- | --- |
-| Foundations (tokens) | Colors 8272:455 · Typography 8207:6875 · Spacings 8272:456 · Elevation 8369:2258 | src/styles/tokens | Not started | Needs tokens/anvil.tokens.json |
+| Foundations (tokens) | Colors 8272:455 · Typography 8207:6875 · Spacings 8272:456 · Elevation 8369:2258 | src/styles/tokens · stories/foundations | Done (Step 2) | 301 variables, 13 effect styles, 23 text styles pulled from Figma. Figma issues: `--success-foreground` on `--success` is 4.29:1 (below 4.5:1 AA); shell descriptions say `[data-surface]` (code uses `data-shell`); `focus/ring` and `radius/full` descriptions list stale values; link text styles have no underline offset in Figma (description says underline-offset-4) |
 | Button | Button 8208:12587 | src/components/ui/button.tsx | Not started | Reference component |
 | Tooltip | Tooltip 8208:12600 | src/components/ui/tooltip.tsx | Scaffold only | shadcn primitive added in Step 1 for the Storybook `TooltipProvider`; unstyled until Step 4 |
 | Toast (Sonner) | Toast 8208:12599 | src/components/ui/sonner.tsx | Scaffold only | Added in Step 1 for the Storybook `Toaster`; theme passed as a prop (no next-themes); unstyled until Step 4 |

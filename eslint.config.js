@@ -6,7 +6,17 @@ import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
-  { ignores: ['dist', 'storybook-static', 'node_modules', 'src/styles/tokens'] },
+  {
+    ignores: [
+      'dist',
+      'storybook-static',
+      'node_modules',
+      'src/styles/tokens',
+      'stories/foundations/*.generated.ts',
+      // Runs inside Figma via the Figma MCP (top-level await and return); not a Node module.
+      'scripts/figma/export-tokens.js',
+    ],
+  },
   {
     files: ['**/*.{ts,tsx}'],
     extends: [js.configs.recommended, ...tseslint.configs.recommended],

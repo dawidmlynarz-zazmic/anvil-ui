@@ -1,18 +1,34 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
-/* Generated token files are imported here in Step 2 (pnpm tokens:build → ./tokens/*.css). */
+/* Order matters: clear Tailwind's defaults, then register the tokens pulled from Figma. */
+@import './theme-reset.css';
+@import './tokens/primitives.css';
+@import './tokens/colors.css';
+@import './tokens/typography.css';
+@import './tokens/dimensions.css';
+@import './tokens/shell.css';
+@import './tokens/effects.css';
 
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Semantic tokens are registered here in Step 2 as --color-*, --radius-*, --shadow-*, --font-*.
- * Until then this block is intentionally empty: no default shadcn palette, no hand-set values.
+ * focus/ring (Figma effect style): 2px --background gap + 2px --ring outside it.
+ * Ring utilities compose with the element's own shadow (e.g. shadow-xs on inputs), so use this
+ * rather than shadow-focus-ring, which would replace it.
  */
-@theme inline {
+@utility focus-ring {
+  @apply ring-2 ring-ring ring-offset-2 ring-offset-background;
 }
 
 @layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background font-sans text-foreground;
+  }
+
   /* Storybook motion toolbar: "off" adds .no-motion on <html>. */
   .no-motion *,
   .no-motion *::before,

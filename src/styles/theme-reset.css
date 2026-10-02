@@ -1,0 +1,20 @@
+/*
+ * Clears Tailwind's default values in every namespace that Figma owns, so only Anvil tokens
+ * produce utilities (no bg-red-500, text-lg, font-bold, rounded-3xl, shadow-inner …).
+ * Kept from Tailwind: --spacing (Figma spacing is calc(var(--spacing) * n)), breakpoints,
+ * containers, blur, perspective, aspect ratios and animations.
+ */
+@theme {
+  --color-*: initial;
+  --font-*: initial;
+  --font-weight-*: initial;
+  --text-*: initial;
+  --tracking-*: initial;
+  --leading-*: initial;
+  --radius-*: initial;
+  --shadow-*: initial;
+  --inset-shadow-*: initial;
+  --drop-shadow-*: initial;
+  --text-shadow-*: initial;
+  --ease-*: initial;
+}
