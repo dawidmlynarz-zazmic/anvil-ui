@@ -57,10 +57,10 @@ function Input({ className, type, size = 'default', label, hint, marker, id, ...
       disabled={props.disabled}
     >
       <input
+        data-slot="input"
         {...props}
         type={type}
         id={controlId}
-        data-slot="input"
         data-size={size}
         aria-describedby={ariaDescribedBy}
         className={cn(inputVariants({ size }), className)}
