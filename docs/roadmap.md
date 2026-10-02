@@ -11,8 +11,9 @@ a **review checkpoint**: stop, summarize what changed, and wait for approval bef
   `@custom-variant dark (&:is(.dark *));`, `@theme inline`, base layer.
 - `shadcn init` (`components.json`: aliases `@/components`, `@/components/ui`, `@/lib/utils`;
   CSS variables on). Path alias `@/` in `tsconfig` and `vite.config`.
-- Storybook 9+ (`@storybook/react-vite`) with addons: docs, themes, a11y, designs, vitest,
-  pseudo-states.
+- Storybook 10 (`@storybook/react-vite`) with addons: docs, themes, a11y, designs, vitest,
+  pseudo-states. `pnpm test-storybook` runs the stories through Vitest browser mode twice
+  (projects `storybook-light` and `storybook-dark`).
 - `.storybook/preview.tsx`: `withThemeByClassName` on `html` (light `""`, dark `"dark"`),
   `shell` toolbar (full screen · side panel · popover · mobile → `data-shell` on a wrapper),
   `motion` toolbar (on · off → `.no-motion`), `TooltipProvider` + Sonner `Toaster`, a11y
@@ -26,16 +27,17 @@ toggle flips `.dark` on `html`; typecheck and lint pass. **Checkpoint.**
 
 ## Step 2 — Tokens
 
-- Requires `tokens/anvil.tokens.json` (DTCG, exported from Figma by the designer). If missing,
-  stop and ask.
-- Style Dictionary 4 config (`style-dictionary.config.mjs`) and `pnpm tokens:build` writing to
+- Pull `tokens/anvil.tokens.json` from Figma with `scripts/figma/export-tokens.js` via the Figma
+  MCP (variables with code syntax, effect styles, text styles). Figma is the source of truth.
+- Style Dictionary 5 config (`style-dictionary.config.mjs`) and `pnpm tokens:build` writing to
   `src/styles/tokens/`: `primitives.css`, `colors.css` (`:root` + `.dark`), `dimensions.css`
   (radius from `--radius`, `--space-*` with a `@media (max-width: 767px)` override, z-index,
   motion), `typography.css` (sizes, line heights, weights 400/500/600, tracking in px, mobile
-  override), `shell.css` (`[data-shell=…]`).
+  override), `shell.css` (`[data-shell=…]`), `effects.css` (shadows, elevation, focus ring).
 - Names come from the Figma code syntax; rules in `CLAUDE.md` → Tokens.
 - `@theme inline` registers every semantic variable as a Tailwind utility.
-- Foundations stories (MDX) generated from the JSON: color swatches with light/dark values and
+- Foundations stories (MDX) written by `scripts/build-foundations.mjs` as part of
+  `pnpm tokens:build` (generated files, not read at runtime): color swatches with light/dark values and
   contrast ratios, type scale, spacing, radius, elevation.
 
 **Exit gate:** `globals.css` compiles with zero hand edits; a test page re-themes with `.dark`;
@@ -52,8 +54,8 @@ locked before scaling out.
 
 ## Step 4 — Top 15, then the rest
 
-Order: Button ✓, Badge, Label, Input (Text field), Textarea, Select, Checkbox, Radio Group,
-Switch, Field, Dialog (+ `ShellHeader` / `ShellFooter` / overlay), Sheet, Popover, Dropdown Menu,
+Order: Button ✓, Badge, Label, Field, Input (Text field), Textarea, Select, Checkbox, Radio
+Group, Switch, Dialog (+ `ShellHeader` / `ShellFooter` / overlay), Sheet, Popover, Dropdown Menu,
 Tooltip. Then: Alert, Alert Dialog, Drawer, Tabs, Toast (Sonner), Avatar, Card (+ hover card
 example), Command, Combobox, Toggle / Toggle Group, Accordion, Calendar / Date Picker, Slider,
 Carousel, Resizable, Menu, Pagination, Progress, Skeleton, Separator, Scroll Area, Table,
