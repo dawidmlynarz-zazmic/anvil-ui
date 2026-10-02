@@ -40,3 +40,4 @@ Behavior or API that differs from the shadcn source, and why. Everything else is
 | Popover | content gets aria-labelledby / -describedby from PopoverTitle / PopoverDescription | Radix role=dialog has no accessible name (axe) |
 | Dialog, Sheet | close positioned into the header bar (still rendered last); `DialogBody` / `SheetBody` slot, focusable only while it scrolls | Figma shell layout; axe scrollable-region-focusable |
 | Toast | `theme` prop instead of next-themes | next-themes is not an approved dependency |
+| Kbd | Badge 8208:12591 · badge/shortcut 2534:31422 | src/components/ui/kbd.tsx | Ready for review (Step 4a·1) | shadcn Kbd + KbdGroup: 16px, 4px padding, rounded-sm, `--overlay-8`, text/xs/semibold `--muted-foreground`, 10px icon; shadcn's in-tooltip adaptation kept (inverse tokens) |
