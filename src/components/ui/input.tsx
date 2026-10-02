@@ -1,8 +1,7 @@
 import * as React from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 
-import { Field, FieldDescription, FieldError, FieldLabel } from '@/components/ui/field'
-import type { LabelProps } from '@/components/ui/label'
+import { FieldAnatomy, isInvalid, useFieldAnatomy, type FieldAnatomyProps } from '@/components/ui/field'
 import { cn } from '@/lib/utils'
 
 // Figma: Forms page → `text field` (57:154). With `label` it renders the field anatomy
@@ -36,43 +35,37 @@ const inputVariants = cva(
 )
 
 type InputProps = Omit<React.ComponentProps<'input'>, 'size'> &
-  VariantProps<typeof inputVariants> & {
-    /** Renders the field anatomy (Field + FieldLabel + hint) around the input. */
-    label?: React.ReactNode
-    /** Text under the input: FieldDescription, or FieldError when `aria-invalid` is set. Needs `label`. */
-    hint?: React.ReactNode
-    marker?: LabelProps['marker']
-  }
+  VariantProps<typeof inputVariants> &
+  FieldAnatomyProps
 
 function Input({ className, type, size = 'default', label, hint, marker, id, ...props }: InputProps) {
-  const generatedId = React.useId()
-  const inputId = id ?? generatedId
-  const invalid = props['aria-invalid'] === true || props['aria-invalid'] === 'true'
-  const hintId = label && hint ? `${inputId}-hint` : undefined
-
-  const control = (
-    <input
-      {...props}
-      type={type}
-      id={inputId}
-      data-slot="input"
-      data-size={size}
-      aria-describedby={[hintId, props['aria-describedby']].filter(Boolean).join(' ') || undefined}
-      className={cn(inputVariants({ size }), className)}
-    />
-  )
-
-  if (!label) return control
+  const { controlId, hintId, ariaDescribedBy } = useFieldAnatomy({
+    id,
+    label,
+    hint,
+    describedBy: props['aria-describedby'],
+  })
 
   return (
-    <Field data-invalid={invalid || undefined} data-disabled={props.disabled || undefined}>
-      <FieldLabel htmlFor={inputId} marker={marker}>
-        {label}
-      </FieldLabel>
-      {control}
-      {hint && invalid && <FieldError id={hintId}>{hint}</FieldError>}
-      {hint && !invalid && <FieldDescription id={hintId}>{hint}</FieldDescription>}
-    </Field>
+    <FieldAnatomy
+      controlId={controlId}
+      hintId={hintId}
+      label={label}
+      hint={hint}
+      marker={marker}
+      invalid={isInvalid(props['aria-invalid'])}
+      disabled={props.disabled}
+    >
+      <input
+        {...props}
+        type={type}
+        id={controlId}
+        data-slot="input"
+        data-size={size}
+        aria-describedby={ariaDescribedBy}
+        className={cn(inputVariants({ size }), className)}
+      />
+    </FieldAnatomy>
   )
 }
 
