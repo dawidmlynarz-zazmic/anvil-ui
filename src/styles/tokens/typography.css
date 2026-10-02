@@ -18,8 +18,8 @@
   --font-weight-normal: 400;
   --font-weight-semibold: 600;
   --tracking-normal: 0px;
-  --tracking-tight: -1px;
-  --tracking-tighter: -2px;
+  --tracking-tight: -0.5px;
+  --tracking-tighter: -1px;
   --text-2xl--line-height: 32px;
   --text-2xs--line-height: 14px;
   --text-3xl--line-height: 40px;
