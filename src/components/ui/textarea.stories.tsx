@@ -19,9 +19,9 @@ const meta = {
     },
   },
   args: {
-    label: 'Message',
-    placeholder: 'Type your message here.',
-    hint: 'Shift + Enter for a new line.',
+    label: 'Label',
+    placeholder: 'Placeholder',
+    hint: 'Subtitle',
     marker: 'none',
     disabled: false,
   },
@@ -44,46 +44,45 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   play: async ({ canvas }) => {
-    const textarea = canvas.getByLabelText('Message')
-    await expect(textarea).toHaveAccessibleDescription('Shift + Enter for a new line.')
-    await userEvent.type(textarea, 'Hello{Shift>}{Enter}{/Shift}agent')
-    await expect(textarea).toHaveValue('Hello\nagent')
+    const textarea = canvas.getByLabelText('Label')
+    await expect(textarea).toHaveAccessibleDescription('Subtitle')
+    await userEvent.type(textarea, 'Value{Shift>}{Enter}{/Shift}Value')
+    await expect(textarea).toHaveValue('Value\nValue')
   },
 }
 
 export const Bare: Story = {
-  args: { label: undefined, hint: undefined, 'aria-label': 'Prompt' },
+  args: { label: undefined, hint: undefined, 'aria-label': 'Label' },
 }
 
-/** Figma states as selectors; hover and focus forced with storybook-addon-pseudo-states. */
+/** Figma states as selectors (rows: default · filled · hover · focus · invalid · disabled); hover and focus forced with storybook-addon-pseudo-states. */
 export const States: Story = {
   parameters: {
     pseudo: { hover: ['[data-demo="hover"]'], focusVisible: ['[data-demo="focus"]'] },
   },
   render: () => (
     <div className="flex flex-col gap-4">
-      <Textarea label="Default" placeholder="Type your message here." />
-      <Textarea label="Filled" defaultValue="Type your message here." />
-      <Textarea label="Hover" defaultValue="Type your message here." data-demo="hover" />
-      <Textarea label="Focus" defaultValue="Type your message here." data-demo="focus" />
-      <Textarea label="Invalid" defaultValue="Too short" aria-invalid hint="Explain what to fix." />
-      <Textarea label="Disabled" defaultValue="Type your message here." disabled />
+      <Textarea label="Label" placeholder="Placeholder" />
+      <Textarea label="Label" defaultValue="Value" />
+      <Textarea label="Label" defaultValue="Value" data-demo="hover" />
+      <Textarea label="Label" defaultValue="Value" data-demo="focus" />
+      <Textarea label="Label" defaultValue="Value" aria-invalid hint="Subtitle" />
+      <Textarea label="Label" defaultValue="Value" disabled />
     </div>
   ),
 }
 
 export const Invalid: Story = {
-  args: { 'aria-invalid': true, defaultValue: 'Hi', hint: 'Write at least 20 characters.' },
+  args: { 'aria-invalid': true, defaultValue: 'Value', hint: 'Subtitle' },
   play: async ({ canvas }) => {
-    await expect(canvas.getByRole('alert')).toHaveTextContent('Write at least 20 characters.')
+    await expect(canvas.getByRole('alert')).toHaveTextContent('Subtitle')
   },
 }
 
 /** Grows with its content (field-sizing: content) from the 80px minimum. */
 export const AutoGrow: Story = {
   args: {
-    label: 'System prompt',
-    defaultValue:
-      'You are a helpful support agent for Zazmic.\nAnswer briefly.\nAsk a clarifying question when the request is ambiguous.\nNever share internal ticket ids.',
+    label: 'Label',
+    defaultValue: 'Value\nValue\nValue\nValue\nValue',
   },
 }

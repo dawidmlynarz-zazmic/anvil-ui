@@ -52,7 +52,7 @@ export const HeaderBar: Story = {
       </ShellHeader>
       <ShellHeader close={<ShellCloseButton />}>
         <Title>Title</Title>
-        <Description>Optional description</Description>
+        <Description>Subtitle</Description>
       </ShellHeader>
     </div>
   ),
@@ -67,7 +67,7 @@ export const HeaderInline: Story = {
       </ShellHeader>
       <ShellHeader variant="inline">
         <Title>Title</Title>
-        <Description>Optional description</Description>
+        <Description>Subtitle</Description>
       </ShellHeader>
     </div>
   ),
@@ -86,9 +86,9 @@ export const Footer: Story = {
             </div>
             <ShellFooter variant={variant} align={align}>
               <Button size="sm" variant="outline" intent="neutral">
-                Cancel
+                Label
               </Button>
-              <Button size="sm">Save</Button>
+              <Button size="sm">Label</Button>
             </ShellFooter>
           </div>
         )),

@@ -34,7 +34,7 @@ type DemoProps = {
 function DemoDialog({
   size = 'default',
   open,
-  title = 'Rename conversation',
+  title = 'Title',
   description,
   align = 'end',
   children,
@@ -43,7 +43,7 @@ function DemoDialog({
     <Dialog open={open}>
       <DialogTrigger asChild>
         <Button variant="outline" intent="neutral">
-          Open dialog
+          Label
         </Button>
       </DialogTrigger>
       <DialogContent
@@ -55,14 +55,14 @@ function DemoDialog({
           <DialogTitle>{title}</DialogTitle>
           {description && <DialogDescription>{description}</DialogDescription>}
         </DialogHeader>
-        <DialogBody>{children ?? <Input label="Name" defaultValue="Billing question" />}</DialogBody>
+        <DialogBody>{children ?? <Input label="Label" defaultValue="Value" />}</DialogBody>
         <DialogFooter align={align}>
           <DialogClose asChild>
             <Button size="sm" variant="outline" intent="neutral">
-              Cancel
+              Label
             </Button>
           </DialogClose>
-          <Button size="sm">Save</Button>
+          <Button size="sm">Label</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -83,7 +83,7 @@ const meta = {
       },
     },
   },
-  args: { open: true, size: 'default', description: 'Visible only to you.', align: 'end' },
+  args: { open: true, size: 'default', description: 'Subtitle', align: 'end' },
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'default', 'lg'] },
     align: { control: 'inline-radio', options: ['end', 'between', 'stretch'] },
@@ -98,28 +98,28 @@ const body = (canvasElement: HTMLElement) => within(canvasElement.ownerDocument.
 
 export const Default: Story = {
   play: async ({ canvasElement }) => {
-    const dialog = await body(canvasElement).findByRole('dialog', { name: 'Rename conversation' })
-    await expect(dialog).toHaveAccessibleDescription('Visible only to you.')
+    const dialog = await body(canvasElement).findByRole('dialog', { name: 'Title' })
+    await expect(dialog).toHaveAccessibleDescription('Subtitle')
     await expect(within(dialog).getByRole('button', { name: 'Close' })).toBeInTheDocument()
   },
 }
 
-export const Small: Story = { args: { size: 'sm', title: 'Leave workspace?', description: undefined } }
+export const Small: Story = { args: { size: 'sm', description: undefined } }
 
 export const Large: Story = {
-  args: { size: 'lg', title: 'Agent settings', description: 'Changes apply to new conversations.' },
+  args: { size: 'lg' },
   render: (args) => (
     <DemoDialog {...args}>
-      <Select defaultValue="sonnet">
-        <SelectTrigger label="Model">
+      <Select defaultValue="1">
+        <SelectTrigger label="Label">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="sonnet">Claude Sonnet 4.6</SelectItem>
-          <SelectItem value="opus">Claude Opus 4.6</SelectItem>
+          <SelectItem value="1">Label 1</SelectItem>
+          <SelectItem value="2">Label 2</SelectItem>
         </SelectContent>
       </Select>
-      <Textarea label="System prompt" defaultValue="You are a helpful support agent for Zazmic." />
+      <Textarea label="Label" defaultValue="Value" />
     </DemoDialog>
   ),
 }
@@ -129,12 +129,12 @@ export const FooterBetween: Story = { args: { align: 'between' } }
 
 /** Long content scrolls inside the body; header and footer stay put (footer casts shadow/top). */
 export const Scrolling: Story = {
-  args: { title: 'Terms of use', description: undefined },
+  args: { description: undefined },
   render: (args) => (
     <DemoDialog {...args}>
       {Array.from({ length: 30 }, (_, i) => (
         <p key={i} className="type-text-sm-normal text-muted-foreground">
-          Section {i + 1}. Conversations may be reviewed to improve the agent. Do not share secrets.
+          Subtitle
         </p>
       ))}
     </DemoDialog>
@@ -146,10 +146,10 @@ export const WithTrigger: Story = {
   args: { open: undefined },
   parameters: { docs: { story: { inline: true } } },
   play: async ({ canvas, canvasElement }) => {
-    const trigger = canvas.getByRole('button', { name: 'Open dialog' })
+    const trigger = canvas.getByRole('button', { name: 'Label' })
     await userEvent.click(trigger)
     const dialog = await body(canvasElement).findByRole('dialog')
-    await expect(within(dialog).getByLabelText('Name')).toHaveFocus()
+    await expect(within(dialog).getByLabelText('Label')).toHaveFocus()
     await userEvent.keyboard('{Escape}')
     await waitFor(() => expect(body(canvasElement).queryByRole('dialog')).toBeNull())
     await expect(trigger).toHaveFocus()

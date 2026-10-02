@@ -225,7 +225,7 @@ export function TextStyles({
       {styles.map((s) => (
         <tr key={s.figma}>
           <Td className="max-w-md">
-            <div className={cn(s.utility, 'text-foreground')}>Conversational agents</div>
+            <div className={cn(s.utility, 'text-foreground')}>Title</div>
           </Td>
           <Td>
             <div className="type-text-sm-medium">{s.figma}</div>

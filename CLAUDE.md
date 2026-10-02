@@ -212,6 +212,9 @@ Customer Support) are consumers of the library. Use them as real-world usage ref
    (pseudo-states for hover / focus), With icons, Composition. Overlay stories: controlled
    `open`, `within(document.body)` in play functions, `parameters.docs.story.inline = false`.
    Add `parameters.design` with the Figma URL of the component set.
+   Copy is plain and context-agnostic: "Title", "Subtitle" (descriptions, hints, errors),
+   "Label" (labels, buttons, options; "Label 1", "Label 2" when several), "Placeholder" /
+   "Value" in inputs. Realistic examples belong in the examples playground (roadmap Step 5).
 5. Compare against the Figma screenshot in light and dark; fix differences or note them.
 6. Run `pnpm typecheck && pnpm lint && pnpm test-storybook`.
 7. Update `docs/component-status.md` (component · Figma node · status · notes).

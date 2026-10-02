@@ -71,6 +71,9 @@ three to five components.**
 - Visual check of every story against Figma in both themes and all four shells.
 - `pnpm build-storybook` succeeds; the static build opens from `storybook-static/`.
 - README with setup and contribution steps.
+- **Examples playground** (after the whole design system is built): a separate Storybook
+  section with realistic compositions of the components (agent conversations, settings forms,
+  dialogs in context). Component stories themselves keep plain copy — see `CLAUDE.md`.
 
 ## Later — publish (only when asked)
 

@@ -15,7 +15,7 @@ import {
 } from './select'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=56-121'
-const MODELS = ['Claude Sonnet 4.6', 'Claude Opus 4.6', 'Claude Haiku 4.5']
+const OPTIONS = ['Label 1', 'Label 2', 'Label 3']
 
 type DemoProps = SelectTriggerProps & {
   defaultValue?: string
@@ -24,21 +24,15 @@ type DemoProps = SelectTriggerProps & {
   placeholder?: string
 }
 
-/** One Select with the model list; trigger props (label, hint, size, aria-invalid) pass through. */
-function ModelSelect({
-  defaultValue,
-  disabled,
-  open,
-  placeholder = 'Choose a model',
-  ...trigger
-}: DemoProps) {
+/** One Select with three options; trigger props (label, hint, size, aria-invalid) pass through. */
+function DemoSelect({ defaultValue, disabled, open, placeholder = 'Placeholder', ...trigger }: DemoProps) {
   return (
     <Select defaultValue={defaultValue} disabled={disabled} open={open}>
       <SelectTrigger {...trigger}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
-        {MODELS.map((m) => (
+        {OPTIONS.map((m) => (
           <SelectItem key={m} value={m}>
             {m}
           </SelectItem>
@@ -54,7 +48,7 @@ const openListA11y = { config: { rules: [{ id: 'aria-hidden-focus', enabled: fal
 
 const meta = {
   title: 'Components/Select',
-  component: ModelSelect,
+  component: DemoSelect,
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
@@ -65,7 +59,7 @@ const meta = {
       },
     },
   },
-  args: { label: 'Model', hint: 'Used for new conversations.', size: 'default', marker: 'none' },
+  args: { label: 'Label', hint: 'Subtitle', size: 'default', marker: 'none' },
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'default', 'lg'] },
     marker: { control: 'inline-radio', options: ['none', 'required', 'optional'] },
@@ -78,19 +72,19 @@ const meta = {
       </div>
     ),
   ],
-} satisfies Meta<typeof ModelSelect>
+} satisfies Meta<typeof DemoSelect>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   play: async ({ canvas, canvasElement }) => {
-    const trigger = canvas.getByRole('combobox', { name: 'Model' })
-    await expect(trigger).toHaveAccessibleDescription('Used for new conversations.')
+    const trigger = canvas.getByRole('combobox', { name: 'Label' })
+    await expect(trigger).toHaveAccessibleDescription('Subtitle')
     await userEvent.click(trigger)
     const body = within(canvasElement.ownerDocument.body)
-    await userEvent.click(await body.findByRole('option', { name: 'Claude Opus 4.6' }))
-    await expect(trigger).toHaveTextContent('Claude Opus 4.6')
+    await userEvent.click(await body.findByRole('option', { name: 'Label 2' }))
+    await expect(trigger).toHaveTextContent('Label 2')
     // Let the list finish its exit animation before the a11y check runs.
     await waitFor(() => expect(body.queryByRole('listbox')).toBeNull())
   },
@@ -98,7 +92,7 @@ export const Default: Story = {
 
 /** Without a label: the bare trigger (show label off in Figma). */
 export const Bare: Story = {
-  args: { label: undefined, hint: undefined, 'aria-label': 'Model', defaultValue: MODELS[0] },
+  args: { label: undefined, hint: undefined, 'aria-label': 'Label', defaultValue: OPTIONS[0] },
 }
 
 /** 32 / 40 / 48 px. */
@@ -106,25 +100,25 @@ export const Sizes: Story = {
   render: () => (
     <div className="flex flex-col gap-4">
       {(['sm', 'default', 'lg'] as const).map((size) => (
-        <ModelSelect key={size} size={size} label={`Size ${size}`} defaultValue={MODELS[0]} />
+        <DemoSelect key={size} size={size} label="Label" defaultValue={OPTIONS[0]} />
       ))}
     </div>
   ),
 }
 
-/** Figma states as selectors; hover and focus forced with storybook-addon-pseudo-states. */
+/** Figma states as selectors (rows: empty · default · hover · focus · invalid · disabled); hover and focus forced with storybook-addon-pseudo-states. */
 export const States: Story = {
   parameters: {
     pseudo: { hover: ['[data-demo="hover"]'], focusVisible: ['[data-demo="focus"]'] },
   },
   render: () => (
     <div className="flex flex-col gap-4">
-      <ModelSelect label="Empty (placeholder)" />
-      <ModelSelect label="Default" defaultValue={MODELS[0]} />
-      <ModelSelect label="Hover" defaultValue={MODELS[0]} data-demo="hover" />
-      <ModelSelect label="Focus" defaultValue={MODELS[0]} data-demo="focus" />
-      <ModelSelect label="Invalid" defaultValue={MODELS[0]} aria-invalid hint="Explain what to fix." />
-      <ModelSelect label="Disabled" defaultValue={MODELS[0]} disabled />
+      <DemoSelect label="Label" />
+      <DemoSelect label="Label" defaultValue={OPTIONS[0]} />
+      <DemoSelect label="Label" defaultValue={OPTIONS[0]} data-demo="hover" />
+      <DemoSelect label="Label" defaultValue={OPTIONS[0]} data-demo="focus" />
+      <DemoSelect label="Label" defaultValue={OPTIONS[0]} aria-invalid hint="Subtitle" />
+      <DemoSelect label="Label" defaultValue={OPTIONS[0]} disabled />
     </div>
   ),
 }
@@ -132,19 +126,19 @@ export const States: Story = {
 /** Figma open=true: controlled `open` so the list stays visible. */
 export const Open: Story = {
   parameters: { docs: { story: { inline: false, height: '280px' } }, a11y: openListA11y },
-  args: { open: true, defaultValue: MODELS[0] },
+  args: { open: true, defaultValue: OPTIONS[0] },
   play: async ({ canvasElement }) => {
     const body = within(canvasElement.ownerDocument.body)
     const listbox = await body.findByRole('listbox')
     await waitFor(() => expect(listbox).toBeVisible()) // after the fade-in
-    await expect(body.getByRole('option', { name: MODELS[0] })).toHaveAttribute('data-state', 'checked')
+    await expect(body.getByRole('option', { name: OPTIONS[0] })).toHaveAttribute('data-state', 'checked')
   },
 }
 
 export const Invalid: Story = {
-  args: { 'aria-invalid': true, hint: 'Pick a model to continue.' },
+  args: { 'aria-invalid': true, hint: 'Subtitle' },
   play: async ({ canvas }) => {
-    await expect(canvas.getByRole('alert')).toHaveTextContent('Pick a model to continue.')
+    await expect(canvas.getByRole('alert')).toHaveTextContent('Subtitle')
   },
 }
 
@@ -153,23 +147,23 @@ export const Groups: Story = {
   parameters: { docs: { story: { inline: false, height: '340px' } }, a11y: openListA11y },
   render: () => {
     function GroupedSelect() {
-      const [value, setValue] = useState('sonnet')
+      const [value, setValue] = useState('1')
       return (
         <Select value={value} onValueChange={setValue} open>
-          <SelectTrigger label="Model">
+          <SelectTrigger label="Label">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectLabel>Anthropic</SelectLabel>
-              <SelectItem value="sonnet">Claude Sonnet 4.6</SelectItem>
-              <SelectItem value="opus">Claude Opus 4.6</SelectItem>
+              <SelectLabel>Title</SelectLabel>
+              <SelectItem value="1">Label 1</SelectItem>
+              <SelectItem value="2">Label 2</SelectItem>
             </SelectGroup>
             <SelectSeparator />
             <SelectGroup>
-              <SelectLabel>Legacy</SelectLabel>
-              <SelectItem value="haiku" disabled>
-                Claude Haiku 3 (retired)
+              <SelectLabel>Title</SelectLabel>
+              <SelectItem value="3" disabled>
+                Label 3
               </SelectItem>
             </SelectGroup>
           </SelectContent>

@@ -38,7 +38,7 @@ const meta = {
       },
     },
   },
-  args: { children: 'Badge', variant: 'default', intent: 'neutral', size: 'default' },
+  args: { children: 'Label', variant: 'default', intent: 'neutral', size: 'default' },
   argTypes: {
     variant: { control: 'inline-radio', options: variants },
     intent: { control: 'inline-radio', options: intents },
@@ -57,7 +57,7 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   play: async ({ canvas }) => {
-    const badge = canvas.getByText('Badge')
+    const badge = canvas.getByText('Label')
     await expect(badge).toHaveAttribute('data-slot', 'badge')
   },
 }
@@ -69,7 +69,7 @@ export const Variants: Story = {
         <Surface key={intent} intent={intent}>
           {variants.map((variant) => (
             <Badge key={variant} variant={variant} intent={intent}>
-              {variant} · {intent}
+              Label
             </Badge>
           ))}
         </Surface>
@@ -86,7 +86,7 @@ export const Sizes: Story = {
         <Surface key={variant}>
           {sizes.map((size) => (
             <Badge key={size} variant={variant} size={size}>
-              Size {size}
+              Label
             </Badge>
           ))}
         </Surface>
@@ -100,34 +100,35 @@ export const WithIcons: Story = {
     <Surface>
       <Badge>
         <Sparkles />
-        Agent
+        Label
       </Badge>
       <Badge variant="outline">
-        <Clock />2 min ago
+        <Clock />
+        Label
       </Badge>
       <Badge variant="subtle">12</Badge>
     </Surface>
   ),
 }
 
-/** Counts next to text, and asChild for a linked tag (gets the focus ring). */
+/** A count next to a label, and asChild for linked tags (they get the focus ring). */
 export const Composition: Story = {
   render: () => (
     <div className="flex flex-col gap-3 p-3">
       <div className="flex items-center gap-2 type-text-sm-medium text-foreground">
-        Conversations <Badge size="sm">24</Badge>
+        Label <Badge size="sm">24</Badge>
       </div>
       <div className="flex items-center gap-2">
         <Badge asChild variant="outline">
-          <a href="#tag">#onboarding</a>
+          <a href="#tag">Label 1</a>
         </Badge>
         <Badge asChild variant="outline">
-          <a href="#tag">#billing</a>
+          <a href="#tag">Label 2</a>
         </Badge>
       </div>
     </div>
   ),
   play: async ({ canvas }) => {
-    await expect(canvas.getByRole('link', { name: '#billing' })).toHaveAttribute('data-slot', 'badge')
+    await expect(canvas.getByRole('link', { name: 'Label 2' })).toHaveAttribute('data-slot', 'badge')
   },
 }

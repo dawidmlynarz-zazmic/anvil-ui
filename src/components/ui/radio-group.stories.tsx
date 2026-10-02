@@ -7,9 +7,9 @@ import { RadioGroup, RadioGroupItem } from './radio-group'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=8230-2112'
 const OPTIONS = [
-  { value: 'concise', label: 'Concise' },
-  { value: 'balanced', label: 'Balanced' },
-  { value: 'detailed', label: 'Detailed' },
+  { value: '1', label: 'Label 1' },
+  { value: '2', label: 'Label 2' },
+  { value: '3', label: 'Label 3' },
 ]
 
 const meta = {
@@ -25,15 +25,15 @@ const meta = {
       },
     },
   },
-  args: { defaultValue: 'balanced', orientation: 'vertical', onValueChange: fn(), disabled: false },
+  args: { defaultValue: '2', orientation: 'vertical', onValueChange: fn(), disabled: false },
   argTypes: {
     orientation: { control: 'inline-radio', options: ['vertical', 'horizontal'] },
     disabled: { control: 'boolean' },
   },
   render: (args) => (
     <FieldSet>
-      <FieldLegend variant="label">Answer length</FieldLegend>
-      <RadioGroup {...args} aria-label="Answer length">
+      <FieldLegend variant="label">Title</FieldLegend>
+      <RadioGroup {...args} aria-label="Title">
         {OPTIONS.map((o) => (
           <div key={o.value} className="flex items-center gap-2">
             <RadioGroupItem id={`len-${o.value}`} value={o.value} />
@@ -50,21 +50,21 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   play: async ({ canvas, args }) => {
-    await userEvent.click(canvas.getByText('Detailed'))
-    await expect(canvas.getByRole('radio', { name: 'Detailed' })).toBeChecked()
-    await expect(args.onValueChange).toHaveBeenCalledWith('detailed')
+    await userEvent.click(canvas.getByText('Label 3'))
+    await expect(canvas.getByRole('radio', { name: 'Label 3' })).toBeChecked()
+    await expect(args.onValueChange).toHaveBeenCalledWith('3')
     // Keyboard: arrows move and select. Radix moves focus on a timeout and selects only while the
     // arrow key is still down, so hold it (a real key press lasts long enough; a synthetic one not).
-    canvas.getByRole('radio', { name: 'Detailed' }).focus()
+    canvas.getByRole('radio', { name: 'Label 3' }).focus()
     await userEvent.keyboard('{ArrowUp>}')
-    await waitFor(() => expect(canvas.getByRole('radio', { name: 'Balanced' })).toBeChecked())
+    await waitFor(() => expect(canvas.getByRole('radio', { name: 'Label 2' })).toBeChecked())
     await userEvent.keyboard('{/ArrowUp}')
   },
 }
 
 export const Horizontal: Story = { args: { orientation: 'horizontal' } }
 
-/** Figma `checked` × `state`; hover and focus forced with storybook-addon-pseudo-states. */
+/** Figma `checked` × `state` (columns: unchecked · checked; rows: default · hover · focus · disabled); hover and focus forced with storybook-addon-pseudo-states. */
 export const States: Story = {
   parameters: {
     pseudo: { hover: ['[data-demo="hover"]'], focusVisible: ['[data-demo="focus"]'] },
@@ -79,14 +79,12 @@ export const States: Story = {
               <RadioGroup
                 key={state}
                 value={checked === 'checked' ? 'on' : ''}
-                aria-label={`${checked} ${state}`}
+                aria-label="Title"
                 orientation="horizontal"
                 className="items-center gap-2"
               >
                 <RadioGroupItem id={id} value="on" data-demo={state} disabled={state === 'disabled'} />
-                <Label htmlFor={id}>
-                  {checked} · {state}
-                </Label>
+                <Label htmlFor={id}>Label</Label>
               </RadioGroup>
             )
           })}
@@ -102,12 +100,12 @@ export const Disabled: Story = { args: { disabled: true } }
 export const WithDescriptions: Story = {
   render: () => (
     <FieldSet className="w-80">
-      <FieldLegend variant="label">Escalation</FieldLegend>
-      <RadioGroup defaultValue="auto" aria-label="Escalation">
+      <FieldLegend variant="label">Title</FieldLegend>
+      <RadioGroup defaultValue="1" aria-label="Title">
         {[
-          { value: 'auto', label: 'Automatic', hint: 'The agent hands off when it is unsure.' },
-          { value: 'ask', label: 'Ask first', hint: 'The agent asks the user before handing off.' },
-          { value: 'never', label: 'Never', hint: 'The agent always answers itself.' },
+          { value: '1', label: 'Label 1', hint: 'Subtitle' },
+          { value: '2', label: 'Label 2', hint: 'Subtitle' },
+          { value: '3', label: 'Label 3', hint: 'Subtitle' },
         ].map((o) => (
           <div key={o.value} className="flex items-start gap-2">
             <RadioGroupItem id={`esc-${o.value}`} value={o.value} aria-describedby={`esc-${o.value}-hint`} />
