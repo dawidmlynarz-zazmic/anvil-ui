@@ -40,3 +40,4 @@ Behavior or API that differs from the shadcn source, and why. Everything else is
 | Popover | content gets aria-labelledby / -describedby from PopoverTitle / PopoverDescription | Radix role=dialog has no accessible name (axe) |
 | Dialog, Sheet | close positioned into the header bar (still rendered last); `DialogBody` / `SheetBody` slot, focusable only while it scrolls | Figma shell layout; axe scrollable-region-focusable |
 | Toast | `theme` prop instead of next-themes | next-themes is not an approved dependency |
+| Input OTP | Forms 10951:40504 · input otp 10855:5813 | src/components/ui/input-otp.tsx | Ready for review (Step 4a·1) | shadcn Input OTP on input-otp 1.5.0. Separate 40×48 slots, gap 8, rounded-md, `--input` stroke, heading/xl digits (shadcn joins the slots; Figma draws them apart); active 2px `--ring`; invalid (aria-invalid on InputOTP or a slot) 2px `--danger` on every slot; disabled 50%; separator via Icon |

@@ -1,7 +1,13 @@
 import * as React from 'react'
-import { cn } from '@/lib/utils'
 import { OTPInput, OTPInputContext } from 'input-otp'
-import { MinusIcon } from 'lucide-react'
+
+import { Icon, MinusIcon } from '@/components/ui/icon'
+import { cn } from '@/lib/utils'
+
+// Figma: Forms page → `input otp` (10855:5813). One-time code entry: separate 40×48 slots, 8px apart,
+// radius md, --input stroke, digits in heading/xl. Figma `state` → selectors: the active slot gets a
+// 2px --ring stroke (data-active); invalid (aria-invalid on InputOTP or a slot) a 2px --danger
+// stroke on every slot; disabled 50%. Error keeps the digits; put the message in a Field under it.
 
 function InputOTP({
   className,
@@ -13,7 +19,10 @@ function InputOTP({
   return (
     <OTPInput
       data-slot="input-otp"
-      containerClassName={cn('flex items-center gap-2 has-disabled:opacity-50', containerClassName)}
+      containerClassName={cn(
+        'group/input-otp flex items-center gap-2 has-disabled:opacity-50',
+        containerClassName,
+      )}
       className={cn('disabled:cursor-not-allowed', className)}
       {...props}
     />
@@ -21,7 +30,7 @@ function InputOTP({
 }
 
 function InputOTPGroup({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div data-slot="input-otp-group" className={cn('flex items-center', className)} {...props} />
+  return <div data-slot="input-otp-group" className={cn('flex items-center gap-2', className)} {...props} />
 }
 
 function InputOTPSlot({
@@ -39,7 +48,10 @@ function InputOTPSlot({
       data-slot="input-otp-slot"
       data-active={isActive}
       className={cn(
-        'relative flex h-9 w-9 items-center justify-center border-y border-r border-input text-sm shadow-xs transition-all outline-none first:rounded-l-md first:border-l last:rounded-r-md aria-invalid:border-destructive data-[active=true]:z-10 data-[active=true]:border-ring data-[active=true]:ring-[3px] data-[active=true]:ring-ring/50 data-[active=true]:aria-invalid:border-destructive data-[active=true]:aria-invalid:ring-destructive/20 dark:bg-input/30 dark:data-[active=true]:aria-invalid:ring-destructive/40',
+        'relative flex h-12 w-10 items-center justify-center rounded-md bg-background type-heading-xl text-foreground outline-none',
+        'inset-ring inset-ring-input transition-[box-shadow] duration-(--duration-fast) ease-out',
+        'data-[active=true]:z-10 data-[active=true]:inset-ring-2 data-[active=true]:inset-ring-ring',
+        'aria-invalid:inset-ring-2 aria-invalid:inset-ring-danger group-has-[input[aria-invalid=true]]/input-otp:inset-ring-2 group-has-[input[aria-invalid=true]]/input-otp:inset-ring-danger',
         className,
       )}
       {...props}
@@ -56,8 +68,8 @@ function InputOTPSlot({
 
 function InputOTPSeparator({ ...props }: React.ComponentProps<'div'>) {
   return (
-    <div data-slot="input-otp-separator" role="separator" {...props}>
-      <MinusIcon />
+    <div data-slot="input-otp-separator" role="separator" className="text-foreground-subtle" {...props}>
+      <Icon icon={MinusIcon} />
     </div>
   )
 }
