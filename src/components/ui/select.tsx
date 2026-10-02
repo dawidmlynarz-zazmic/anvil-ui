@@ -83,9 +83,9 @@ function SelectTrigger({
       invalid={isInvalid(props['aria-invalid'])}
     >
       <SelectPrimitive.Trigger
+        data-slot="select-trigger"
         {...props}
         id={controlId}
-        data-slot="select-trigger"
         data-size={size}
         aria-describedby={ariaDescribedBy}
         className={cn(selectTriggerVariants({ size }), className)}

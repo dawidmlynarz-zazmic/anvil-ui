@@ -37,9 +37,9 @@ function Textarea({ className, label, hint, marker, id, ...props }: TextareaProp
       disabled={props.disabled}
     >
       <textarea
+        data-slot="textarea"
         {...props}
         id={controlId}
-        data-slot="textarea"
         aria-describedby={ariaDescribedBy}
         className={cn(textareaClassName, className)}
       />
