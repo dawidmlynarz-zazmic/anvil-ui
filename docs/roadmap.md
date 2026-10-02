@@ -52,17 +52,40 @@ link, a11y passing, compared to the Figma screenshot in both themes.
 **Exit gate:** the design lead approves Button in Storybook. **Checkpoint** — the pattern is
 locked before scaling out.
 
-## Step 4 — Top 15, then the rest
+## Step 4 — Components: every shadcn counterpart first, then the custom ones
 
-Order: Button ✓, Badge, Label, Field, Input (Text field), Textarea, Select, Checkbox, Radio
-Group, Switch, Dialog (+ `ShellHeader` / `ShellFooter` / overlay), Sheet, Popover, Dropdown Menu,
-Tooltip. Then: Alert, Alert Dialog, Drawer, Tabs, Toast (Sonner), Avatar, Card (+ hover card
-example), Command, Combobox, Toggle / Toggle Group, Accordion, Calendar / Date Picker, Slider,
-Carousel, Resizable, Menu, Pagination, Progress, Skeleton, Separator, Scroll Area, Table,
-Breadcrumbs, Link, Empty state, Sidebar. Then Anvil compositions, then Agent Builder components.
+Every component follows `CLAUDE.md` → Architecture (shadcn source → Anvil styling, Icon for
+icons). One component per branch and PR; **checkpoint after every 3–5 components.**
 
-One component per branch; update `docs/component-status.md` each time. **Checkpoint after every
-three to five components.**
+**Done:** Button, Badge, Label, Field, Input, Textarea, Select, Checkbox, Radio Group, Switch,
+Dialog (+ shell header / footer / body / overlay), Sheet, Popover, Dropdown Menu, Tooltip,
+Icon (foundation).
+
+### 4a — shadcn counterparts, in priority order
+
+Ordered so each group completes something usable and later groups build on earlier ones.
+
+| # | Group | Components (Figma page) | New dependency |
+| --- | --- | --- | --- |
+| 1 | Finish the form controls Field exists for | Kbd (Badge · badge/shortcut), Slider (Forms), Input Group (Forms · search), Input OTP (Forms), Command (Command), Combobox (Forms: Popover + Command per the API Contract) | `input-otp`, `cmdk` |
+| 2 | Overlays and feedback on the shell | Alert Dialog, Drawer, Toast (restyle Sonner), Alert, Context Menu (Dropdown Menu items) | `vaul` |
+| 3 | Surfaces and structure | Card (+ Hover Card example), Tabs, Accordion (+ Collapsible), Separator (restyle), Scroll Area, Toggle / Toggle Group, Button Group (base for Toolbar) | — |
+| 4 | Navigation | Breadcrumb, Pagination, Menubar (Figma Menu), Sidebar | — |
+| 5 | Data display | Avatar, Skeleton, Progress, Empty (Empty state), Table, Calendar + Date Picker, Carousel, Resizable | `react-day-picker`, `date-fns`, `embla-carousel-react`, `react-resizable-panels` |
+| 6 | Agent Builder primitives from shadcn's chat set, where the Figma Core Kit matches | Message, Bubble, Attachment, Marker, Message Scroller (checked against Agent Builder → Core Kit first) | `@shadcn/react` (Message Scroller) |
+
+### 4b — custom components (no shadcn counterpart), built on 4a
+
+| Component (Figma) | Built on |
+| --- | --- |
+| Status Badge (Badge · status badge) | Badge |
+| Choice Card (Forms · choice card) | FieldLabel's choice-card pattern |
+| Stepper (Forms · stepper) | Button / Field |
+| Toolbar (Toolbar) | Button Group |
+| Chip (Chip) | Toggle |
+| Link (Link) | shadcn link styles on an anchor (Button `asChild` pattern) |
+| Code block (Code block) | Scroll Area + Kbd styles |
+| Agent Builder components (Core Kit, Agent Patterns, Surfaces) | 4a + Agent primitives |
 
 **Exit gate:** `pnpm test-storybook` passes with zero a11y errors in light and dark.
 
