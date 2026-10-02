@@ -1,61 +1,159 @@
 import * as React from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
-import { cn } from '@/lib/utils'
+import { LoaderCircle } from 'lucide-react'
 import { Slot } from 'radix-ui'
 
+import { cn } from '@/lib/utils'
+
+// Figma: Button page → `button` (917:9268) and `icon button` (8218:5908). Icon button is this
+// component with an icon-* size. Figma `state` maps to selectors: hover → hover:,
+// focus → focus-visible: (focus/ring), disabled → disabled: (Figma draws 30% opacity).
+// Outline strokes are inset rings so they sit inside the box like Figma's inside stroke.
 const buttonVariants = cva(
-  "inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  [
+    'inline-flex shrink-0 items-center justify-center whitespace-nowrap outline-none select-none',
+    'transition-[color,background-color,box-shadow] duration-(--duration-fast) ease-out',
+    'focus-visible:focus-ring disabled:pointer-events-none disabled:opacity-30',
+    'data-[loading=true]:pointer-events-none',
+    "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  ],
   {
     variants: {
       variant: {
-        default: 'bg-primary text-primary-foreground hover:bg-primary/90',
-        destructive:
-          'bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40',
-        outline:
-          'border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50',
-        secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
-        ghost: 'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
-        link: 'text-primary underline-offset-4 hover:underline',
+        default: '',
+        outline: 'inset-ring',
+        ghost: 'bg-transparent',
+      },
+      intent: {
+        neutral: '',
+        brand: '',
+        inverse: '',
+        destructive: '',
       },
       size: {
-        default: 'h-9 px-4 py-2 has-[>svg]:px-3',
-        xs: "h-6 gap-1 rounded-md px-2 text-xs has-[>svg]:px-1.5 [&_svg:not([class*='size-'])]:size-3",
-        sm: 'h-8 gap-1.5 rounded-md px-3 has-[>svg]:px-2.5',
-        lg: 'h-10 rounded-md px-6 has-[>svg]:px-4',
-        icon: 'size-9',
-        'icon-xs': "size-6 rounded-md [&_svg:not([class*='size-'])]:size-3",
-        'icon-sm': 'size-8',
-        'icon-lg': 'size-10',
+        xs: "h-6 gap-1 rounded-sm px-2 type-text-xs-semibold [&_svg:not([class*='size-'])]:size-3",
+        sm: 'h-8 gap-2 rounded-md px-3 type-text-xs-semibold',
+        default: 'h-10 gap-2 rounded-lg px-3 type-text-sm-semibold',
+        lg: 'h-12 gap-2 rounded-lg px-4 type-text-sm-semibold',
+        'icon-xs': "size-6 rounded-sm [&_svg:not([class*='size-'])]:size-3",
+        'icon-sm': 'size-8 rounded-md',
+        icon: 'size-10 rounded-lg',
+        'icon-lg': 'size-12 rounded-lg',
+      },
+      shape: {
+        default: '',
+        pill: 'rounded-full',
+        circle: 'rounded-full',
       },
     },
+    compoundVariants: [
+      // default (solid)
+      {
+        variant: 'default',
+        intent: 'brand',
+        className: 'bg-primary text-primary-foreground hover:bg-button-primary-hover',
+      },
+      {
+        variant: 'default',
+        intent: 'neutral',
+        className: 'bg-button-neutral text-button-neutral-foreground hover:bg-button-neutral-hover',
+      },
+      {
+        variant: 'default',
+        intent: 'inverse',
+        className: 'bg-overlay-inverse-8 text-button-neutral-foreground hover:bg-overlay-inverse-16',
+      },
+      {
+        variant: 'default',
+        intent: 'destructive',
+        className: 'bg-destructive text-destructive-foreground hover:bg-button-destructive-hover',
+      },
+      // outline
+      {
+        variant: 'outline',
+        intent: 'neutral',
+        className:
+          'bg-button-outline text-foreground inset-ring-overlay-16 hover:bg-button-outline-hover hover:inset-ring-overlay-24',
+      },
+      {
+        variant: 'outline',
+        intent: 'brand',
+        className:
+          'bg-background text-foreground-link inset-ring-foreground-link hover:bg-info-subtle hover:text-info-medium hover:inset-ring-info-medium',
+      },
+      {
+        variant: 'outline',
+        intent: 'inverse',
+        className:
+          'bg-transparent text-button-neutral-foreground inset-ring-overlay-inverse-32 hover:bg-overlay-inverse-16 hover:inset-ring-overlay-inverse-24',
+      },
+      {
+        variant: 'outline',
+        intent: 'destructive',
+        className: 'bg-background text-danger-medium inset-ring-danger-medium hover:bg-danger-subtle',
+      },
+      // ghost
+      { variant: 'ghost', intent: 'neutral', className: 'text-foreground hover:bg-button-outline-hover' },
+      {
+        variant: 'ghost',
+        intent: 'brand',
+        className: 'text-foreground-link hover:bg-info-subtle hover:text-info-medium',
+      },
+      {
+        variant: 'ghost',
+        intent: 'inverse',
+        className: 'text-button-neutral-foreground hover:bg-overlay-inverse-16',
+      },
+      { variant: 'ghost', intent: 'destructive', className: 'text-danger-medium hover:bg-danger-subtle' },
+    ],
     defaultVariants: {
       variant: 'default',
+      intent: 'brand',
       size: 'default',
+      shape: 'default',
     },
   },
 )
 
+type ButtonProps = React.ComponentProps<'button'> &
+  VariantProps<typeof buttonVariants> & {
+    asChild?: boolean
+    /** Shows a spinner before the label and blocks clicks; the button stays focusable. */
+    loading?: boolean
+  }
+
 function Button({
   className,
   variant = 'default',
+  intent = 'brand',
   size = 'default',
+  shape = 'default',
   asChild = false,
+  loading = false,
+  children,
+  onClick,
   ...props
-}: React.ComponentProps<'button'> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean
-  }) {
+}: ButtonProps) {
   const Comp = asChild ? Slot.Root : 'button'
 
   return (
     <Comp
       data-slot="button"
       data-variant={variant}
+      data-intent={intent}
       data-size={size}
-      className={cn(buttonVariants({ variant, size, className }))}
+      data-shape={shape}
+      data-loading={loading || undefined}
+      aria-busy={loading || undefined}
+      aria-disabled={loading || undefined}
+      className={cn(buttonVariants({ variant, intent, size, shape, className }))}
+      onClick={loading ? (event: React.MouseEvent<HTMLButtonElement>) => event.preventDefault() : onClick}
       {...props}
-    />
+    >
+      {loading && <LoaderCircle data-slot="button-spinner" aria-hidden className="animate-spin" />}
+      <Slot.Slottable>{children}</Slot.Slottable>
+    </Comp>
   )
 }
 
-export { Button, buttonVariants }
+export { Button, buttonVariants, type ButtonProps }
