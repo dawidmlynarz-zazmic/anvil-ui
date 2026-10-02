@@ -108,6 +108,8 @@ function FieldLabel({ className, ...props }: React.ComponentProps<typeof Label>)
       className={cn(
         // Choice-card styling (label wrapping a Field) is the Anvil ChoiceCard, not FieldLabel.
         'group/field-label peer/field-label flex w-fit group-data-[disabled=true]/field:opacity-50',
+        // A disabled Select trigger (disabled on the Radix root) dims its label too.
+        'group-has-[[data-slot=select-trigger][data-disabled]]/field:opacity-50',
         className,
       )}
       {...props}
