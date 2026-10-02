@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
-import { useEffect, useState } from 'react'
+import preview from '#.storybook/preview'
+import { useEffect, useState, type ComponentProps } from 'react'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 
 import { Button } from './button'
@@ -48,9 +48,66 @@ function Items() {
   )
 }
 
-const meta = {
+type DemoProps = Pick<ComponentProps<typeof Command>, 'loop' | 'shouldFilter' | 'disablePointerSelection'> & {
+  placeholder?: string
+  /** Story-only: the search text the input starts with (Figma `empty=true` → a query with no results). */
+  search?: string
+}
+
+/** A standalone Command; the input is controlled so a story can start with a query. */
+function DemoCommand({ placeholder = 'Placeholder', search: initialSearch = '', ...props }: DemoProps) {
+  const [search, setSearch] = useState(initialSearch)
+  // The control changed: follow it (state adjusted during render, not in an effect).
+  const [prev, setPrev] = useState(initialSearch)
+  if (prev !== initialSearch) {
+    setPrev(initialSearch)
+    setSearch(initialSearch)
+  }
+  return (
+    <Command className="w-80 inset-ring inset-ring-border" {...props}>
+      <CommandInput placeholder={placeholder} value={search} onValueChange={setSearch} />
+      <CommandList>
+        <Items />
+      </CommandList>
+      <CommandEmpty>Subtitle</CommandEmpty>
+    </Command>
+  )
+}
+
+type PaletteProps = { open?: boolean; onOpenChange?: (open: boolean) => void }
+
+/** The command palette: a Dialog with a Command, toggled with ⌘K / Ctrl+K or the trigger. */
+function DemoPalette({ open = false, onOpenChange }: PaletteProps) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault()
+        onOpenChange?.(!open)
+      }
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [open, onOpenChange])
+  return (
+    <>
+      <Button variant="outline" intent="neutral" onClick={() => onOpenChange?.(true)}>
+        Label <Kbd>⌘K</Kbd>
+      </Button>
+      <CommandDialog open={open} onOpenChange={onOpenChange} title="Title" description="Subtitle">
+        <CommandInput placeholder="Placeholder" />
+        <CommandList>
+          <Items />
+        </CommandList>
+        <CommandEmpty>Subtitle</CommandEmpty>
+      </CommandDialog>
+    </>
+  )
+}
+
+// `open` / `onOpenChange` are args of the Palette story only (the palette's Dialog).
+const meta = preview.type<{ args: PaletteProps }>().meta({
   title: 'Components/Command',
-  component: Command,
+  component: DemoCommand,
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
@@ -61,76 +118,57 @@ const meta = {
       },
     },
   },
-  render: () => (
-    <Command className="w-80 inset-ring inset-ring-border">
-      <CommandInput placeholder="Placeholder" />
-      <CommandList>
-        <Items />
-      </CommandList>
-      <CommandEmpty>Subtitle</CommandEmpty>
-    </Command>
-  ),
-} satisfies Meta<typeof Command>
-
-export default meta
-type Story = StoryObj<typeof meta>
+  args: {
+    placeholder: 'Placeholder',
+    search: '',
+    loop: false,
+    shouldFilter: true,
+    disablePointerSelection: false,
+  },
+  argTypes: {
+    placeholder: { control: 'text' },
+    search: { control: 'text', description: 'Search text in the input (story-only)' },
+    loop: { control: 'boolean' },
+    shouldFilter: { control: 'boolean' },
+    disablePointerSelection: { control: 'boolean' },
+  },
+})
 
 /** Figma empty=false. Typing filters; arrow keys move the highlight. */
-export const Default: Story = {
-  play: async ({ canvas }) => {
-    const input = canvas.getByRole('combobox')
-    await userEvent.type(input, 'Label 4')
-    await waitFor(() => expect(canvas.getAllByRole('option')).toHaveLength(1))
-    await expect(canvas.getByRole('option', { name: 'Label 4' })).toHaveAttribute('data-selected', 'true')
-  },
-}
+export const Default = meta.story()
 
-/** Figma empty=true: no results. */
-export const Empty: Story = {
-  play: async ({ canvas }) => {
-    await userEvent.type(canvas.getByRole('combobox'), 'zzz')
-    await expect(await canvas.findByText('Subtitle')).toBeVisible()
-  },
-}
+Default.test('typing filters and highlights the match', async ({ canvas }) => {
+  const input = canvas.getByRole('combobox')
+  await userEvent.type(input, 'Label 4')
+  await waitFor(() => expect(canvas.getAllByRole('option')).toHaveLength(1))
+  await expect(canvas.getByRole('option', { name: 'Label 4' })).toHaveAttribute('data-selected', 'true')
+})
+
+/** Figma empty=true: a query with no results. */
+export const Empty = meta.story({ args: { search: 'zzz' } })
+
+Empty.test('shows the empty state on load', async ({ canvas }) => {
+  await expect(canvas.getByRole('combobox')).toHaveValue('zzz')
+  await expect(await canvas.findByText('Subtitle')).toBeVisible()
+  await expect(canvas.queryAllByRole('option')).toHaveLength(0)
+})
 
 /** The command palette: a Dialog with a Command, opened with ⌘K or the trigger. */
-export const Palette: Story = {
+export const Palette = meta.story({
   parameters: { docs: { story: { inline: false, height: '480px' } } },
-  render: () => {
-    function Demo() {
-      const [open, setOpen] = useState(false)
-      useEffect(() => {
-        const onKey = (e: KeyboardEvent) => {
-          if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
-            e.preventDefault()
-            setOpen((o) => !o)
-          }
-        }
-        document.addEventListener('keydown', onKey)
-        return () => document.removeEventListener('keydown', onKey)
-      }, [])
-      return (
-        <>
-          <Button variant="outline" intent="neutral" onClick={() => setOpen(true)}>
-            Label <Kbd>⌘K</Kbd>
-          </Button>
-          <CommandDialog open={open} onOpenChange={setOpen} title="Title" description="Subtitle">
-            <CommandInput placeholder="Placeholder" />
-            <CommandList>
-              <Items />
-            </CommandList>
-            <CommandEmpty>Subtitle</CommandEmpty>
-          </CommandDialog>
-        </>
-      )
-    }
-    return <Demo />
+  args: { open: false },
+  argTypes: {
+    open: { control: 'boolean' },
+    onOpenChange: { table: { disable: true } },
   },
-  play: async ({ canvasElement }) => {
-    await userEvent.keyboard('{Meta>}k{/Meta}')
-    const dialog = await within(canvasElement.ownerDocument.body).findByRole('dialog', { name: 'Title' })
-    await expect(within(dialog).getByRole('combobox')).toHaveFocus()
-    await userEvent.keyboard('{Escape}')
-    await waitFor(() => expect(within(canvasElement.ownerDocument.body).queryByRole('dialog')).toBeNull())
-  },
-}
+  render: (args) => <DemoPalette open={args.open} onOpenChange={args.onOpenChange} />,
+})
+
+Palette.test('⌘K opens it with focus in the search, Escape closes it', async ({ canvasElement }) => {
+  const body = within(canvasElement.ownerDocument.body)
+  await userEvent.keyboard('{Meta>}k{/Meta}')
+  const dialog = await body.findByRole('dialog', { name: 'Title' })
+  await waitFor(() => expect(within(dialog).getByRole('combobox')).toHaveFocus())
+  await userEvent.keyboard('{Escape}')
+  await waitFor(() => expect(body.queryByRole('dialog')).toBeNull())
+})

@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { Command as CommandPrimitive } from 'cmdk'
+import { Command as CommandPrimitive, useCommandState } from 'cmdk'
 
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Icon, SearchIcon } from '@/components/ui/icon'
@@ -106,10 +106,21 @@ function CommandGroup({ className, ...props }: React.ComponentProps<typeof Comma
   )
 }
 
-function CommandSeparator({ className, ...props }: React.ComponentProps<typeof CommandPrimitive.Separator>) {
+// cmdk's Separator hard-codes role="separator", which a role="listbox" may not contain (axe
+// aria-required-children). Same behavior (hidden while searching unless `alwaysRender`), drawn as a
+// presentational divider.
+function CommandSeparator({
+  className,
+  alwaysRender,
+  ...props
+}: React.ComponentProps<typeof CommandPrimitive.Separator>) {
+  const searching = useCommandState((state) => Boolean(state.search))
+  if (searching && !alwaysRender) return null
   return (
-    <CommandPrimitive.Separator
+    <div
       data-slot="command-separator"
+      cmdk-separator=""
+      role="none"
       className={cn('my-1 h-px bg-border', className)}
       {...props}
     />
@@ -133,7 +144,11 @@ function CommandShortcut({ className, ...props }: React.ComponentProps<'span'>) 
   return (
     <span
       data-slot="command-shortcut"
-      className={cn('ml-auto pl-2 type-text-xs-medium text-foreground-subtle', className)}
+      // --foreground-subtle on the highlighted --muted row is 4.34:1; --muted-foreground passes.
+      className={cn(
+        'ml-auto pl-2 type-text-xs-medium text-foreground-subtle in-data-[selected=true]:text-muted-foreground',
+        className,
+      )}
       {...props}
     />
   )

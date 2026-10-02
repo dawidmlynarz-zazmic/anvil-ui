@@ -1,18 +1,23 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
-import { Icon, PlusIcon } from './icon'
+import preview from '#.storybook/preview'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 
 import { Button } from './button'
+import { Icon, PlusIcon } from './icon'
 import { Tooltip, TooltipContent, TooltipTrigger } from './tooltip'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=27-95'
 const sides = ['top', 'right', 'bottom', 'left'] as const
 
-type DemoProps = { open?: boolean; side?: (typeof sides)[number]; text?: string }
+type DemoProps = {
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
+  side?: (typeof sides)[number]
+  text?: string
+}
 
-function DemoTooltip({ open, side = 'top', text = 'Label' }: DemoProps) {
+function DemoTooltip({ open, onOpenChange, side = 'top', text = 'Label' }: DemoProps) {
   return (
-    <Tooltip open={open}>
+    <Tooltip open={open} onOpenChange={onOpenChange}>
       <TooltipTrigger asChild>
         <Button size="icon" variant="outline" intent="neutral" aria-label="Label">
           <Icon icon={PlusIcon} />
@@ -23,7 +28,7 @@ function DemoTooltip({ open, side = 'top', text = 'Label' }: DemoProps) {
   )
 }
 
-const meta = {
+const meta = preview.meta({
   title: 'Components/Tooltip',
   component: DemoTooltip,
   parameters: {
@@ -37,26 +42,37 @@ const meta = {
       },
     },
   },
-  args: { open: true, side: 'top', text: 'Label' },
+  args: { open: false, side: 'top', text: 'Label' },
   argTypes: {
     side: { control: 'inline-radio', options: sides },
     open: { control: 'boolean' },
+    text: { control: 'text' },
+    onOpenChange: { table: { disable: true } },
   },
-} satisfies Meta<typeof DemoTooltip>
-
-export default meta
-type Story = StoryObj<typeof meta>
+})
 
 const body = (el: HTMLElement) => within(el.ownerDocument.body)
 
-export const Default: Story = {
-  play: async ({ canvasElement }) => {
-    await expect(await body(canvasElement).findByRole('tooltip')).toHaveTextContent('Label')
-  },
-}
+/** Closed, like on a page: hover or focus the trigger (or use the `open` control) to show it. */
+export const Default = meta.story()
+
+Default.test('keyboard focus shows it, Escape hides it', async ({ canvasElement }) => {
+  await userEvent.tab()
+  await expect(await body(canvasElement).findByRole('tooltip')).toHaveTextContent('Label')
+  await userEvent.keyboard('{Escape}')
+  await waitFor(() => expect(body(canvasElement).queryByRole('tooltip')).toBeNull())
+})
+
+/** Open on load (Figma default). The trigger is not focused; Radix Tooltip never moves focus. */
+export const Open = meta.story({ args: { open: true } })
+
+Open.test('shows the label without focusing the trigger', async ({ canvas, canvasElement }) => {
+  await expect(await body(canvasElement).findByRole('tooltip')).toHaveTextContent('Label')
+  await expect(canvas.getByRole('button', { name: 'Label' })).not.toHaveFocus()
+})
 
 /** Every `side`. */
-export const Sides: Story = {
+export const Sides = meta.story({
   render: () => (
     <div className="grid grid-cols-2 gap-x-24 gap-y-16 p-12">
       {sides.map((side) => (
@@ -65,21 +81,9 @@ export const Sides: Story = {
     </div>
   ),
   parameters: { docs: { story: { inline: false, height: '320px' } } },
-}
+})
 
 /** Longer text wraps at max-w-xs (Figma variant `fixed width`). */
-export const LongText: Story = {
-  args: { text: 'Subtitle Subtitle Subtitle Subtitle Subtitle Subtitle Subtitle Subtitle' },
-}
-
-/** Uncontrolled: keyboard focus shows it, Escape hides it. */
-export const OnFocus: Story = {
-  args: { open: undefined },
-  parameters: { docs: { story: { inline: true } } },
-  play: async ({ canvasElement }) => {
-    await userEvent.tab()
-    await expect(await body(canvasElement).findByRole('tooltip')).toHaveTextContent('Label')
-    await userEvent.keyboard('{Escape}')
-    await waitFor(() => expect(body(canvasElement).queryByRole('tooltip')).toBeNull())
-  },
-}
+export const LongText = meta.story({
+  args: { open: true, text: 'Subtitle Subtitle Subtitle Subtitle Subtitle Subtitle Subtitle Subtitle' },
+})

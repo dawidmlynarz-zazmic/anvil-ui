@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import preview from '#.storybook/preview'
 import { expect } from 'storybook/test'
 
 import { Button } from './button'
@@ -38,7 +38,7 @@ const GLYPHS: [string, LucideIcon][] = [
 ]
 const tones = ['neutral', 'brand', 'info', 'success', 'warning', 'destructive', 'agent'] as const
 
-const meta = {
+const meta = preview.meta({
   title: 'Foundations/Icon',
   component: Icon,
   parameters: {
@@ -56,24 +56,23 @@ const meta = {
     icon: { table: { disable: true } },
     size: { control: 'inline-radio', options: [undefined, 'xs', 'default'] },
     tone: { control: 'select', options: tones },
-    label: { control: 'text' },
+    label: { control: 'text', description: 'Accessible name; without it the icon is decorative' },
+    className: { table: { disable: true } },
   },
-} satisfies Meta<typeof Icon>
+})
 
-export default meta
-type Story = StoryObj<typeof meta>
+/** `size`, `tone` and `label` are in Controls. */
+export const Default = meta.story()
 
-export const Default: Story = {
-  play: async ({ canvasElement }) => {
-    const svg = canvasElement.querySelector('[data-slot=icon]')!
-    await expect(svg).toHaveAttribute('aria-hidden', 'true')
-    await expect(svg.getAttribute('width')).toBe('16')
-    await expect(svg.getAttribute('stroke-width')).toBe('1.33')
-  },
-}
+Default.test('is decorative, 16px with a 1.33px stroke', async ({ canvasElement }) => {
+  const svg = canvasElement.querySelector('[data-slot=icon]')!
+  await expect(svg).toHaveAttribute('aria-hidden', 'true')
+  await expect(svg.getAttribute('width')).toBe('16')
+  await expect(svg.getAttribute('stroke-width')).toBe('1.33')
+})
 
 /** A few Lucide glyphs at the default 16px (the Figma library holds the full Lucide set). */
-export const Glyphs: Story = {
+export const Glyphs = meta.story({
   render: () => (
     <div className="grid grid-cols-[repeat(auto-fill,minmax(7rem,1fr))] gap-4">
       {GLYPHS.map(([name, glyph]) => (
@@ -87,20 +86,20 @@ export const Glyphs: Story = {
       ))}
     </div>
   ),
-}
+})
 
 /** `size` xs (12px) · default (16px); the stroke stays 1.33px. */
-export const Sizes: Story = {
+export const Sizes = meta.story({
   render: () => (
     <div className="flex items-center gap-4 text-foreground">
       <Icon icon={SparklesIcon} size="xs" />
       <Icon icon={SparklesIcon} size="default" />
     </div>
   ),
-}
+})
 
 /** `tone` maps to the status and agent base tones (Figma: "fills, icons"). */
-export const Tones: Story = {
+export const Tones = meta.story({
   render: () => (
     <div className="flex items-center gap-4">
       {tones.map((tone) => (
@@ -108,18 +107,19 @@ export const Tones: Story = {
       ))}
     </div>
   ),
-}
+})
 
 /** With `label` the icon is announced (role="img"); without it, it is hidden from assistive tech. */
-export const Accessible: Story = {
+export const Accessible = meta.story({
   args: { icon: CircleAlertIcon, label: 'Label', tone: 'destructive' },
-  play: async ({ canvas }) => {
-    await expect(canvas.getByRole('img', { name: 'Label' })).toBeInTheDocument()
-  },
-}
+})
+
+Accessible.test('is announced with its label', async ({ canvas }) => {
+  await expect(canvas.getByRole('img', { name: 'Label' })).toBeInTheDocument()
+})
 
 /** Inside components the container sizes the icon: Button xs → 12px, other sizes → 16px. */
-export const InComponents: Story = {
+export const InComponents = meta.story({
   render: () => (
     <div className="flex items-center gap-3">
       <Button size="xs">
@@ -135,13 +135,14 @@ export const InComponents: Story = {
       </Button>
     </div>
   ),
-  play: async ({ canvasElement }) => {
-    const [xs, sm] = canvasElement.querySelectorAll('[data-slot=icon]')
-    await expect(xs.getBoundingClientRect().width).toBe(12)
-    await expect(sm.getBoundingClientRect().width).toBe(16)
-    // Constant 1.33px stroke at both sizes (Figma), via non-scaling-stroke.
-    for (const svg of [xs, sm]) {
-      await expect(getComputedStyle(svg.firstElementChild!).vectorEffect).toBe('non-scaling-stroke')
-    }
-  },
-}
+})
+
+InComponents.test('the container sizes the icon; the stroke stays constant', async ({ canvasElement }) => {
+  const [xs, sm] = canvasElement.querySelectorAll('[data-slot=icon]')
+  await expect(xs.getBoundingClientRect().width).toBe(12)
+  await expect(sm.getBoundingClientRect().width).toBe(16)
+  // Constant 1.33px stroke at both sizes (Figma), via non-scaling-stroke.
+  for (const svg of [xs, sm]) {
+    await expect(getComputedStyle(svg.firstElementChild!).vectorEffect).toBe('non-scaling-stroke')
+  }
+})

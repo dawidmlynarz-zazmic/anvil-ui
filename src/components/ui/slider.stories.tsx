@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import preview from '#.storybook/preview'
 import { useState } from 'react'
-import { expect, userEvent } from 'storybook/test'
+import { expect, fn, userEvent } from 'storybook/test'
 
 import { Field, FieldDescription, FieldLabel } from './field'
 import { Slider } from './slider'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10946-184'
 
-const meta = {
+const meta = preview.meta({
   title: 'Components/Slider',
   component: Slider,
   parameters: {
@@ -20,8 +20,28 @@ const meta = {
       },
     },
   },
-  args: { defaultValue: [60], max: 100, step: 1, disabled: false, 'aria-label': 'Label' },
-  argTypes: { disabled: { control: 'boolean' } },
+  args: {
+    defaultValue: [60],
+    min: 0,
+    max: 100,
+    step: 1,
+    orientation: 'horizontal',
+    disabled: false,
+    'aria-label': 'Label',
+    onValueChange: fn(),
+  },
+  argTypes: {
+    defaultValue: { control: 'object', description: 'One number (single) or two (range)' },
+    min: { control: 'number' },
+    max: { control: 'number' },
+    step: { control: 'number' },
+    orientation: { control: 'inline-radio', options: ['horizontal', 'vertical'] },
+    disabled: { control: 'boolean' },
+    'aria-label': { control: 'text' },
+    onValueChange: { table: { disable: true } },
+    onValueCommit: { table: { disable: true } },
+    asChild: { table: { disable: true } },
+  },
   decorators: [
     (Story) => (
       <div className="w-72">
@@ -29,28 +49,31 @@ const meta = {
       </div>
     ),
   ],
-} satisfies Meta<typeof Slider>
+})
 
-export default meta
-type Story = StoryObj<typeof meta>
+/** Every prop is in Controls; hover / focus via the State control. */
+export const Default = meta.story()
 
-export const Default: Story = {
-  play: async ({ canvas }) => {
-    const thumb = canvas.getByRole('slider', { name: 'Label' })
-    await expect(thumb).toHaveAttribute('aria-valuenow', '60')
-    thumb.focus()
-    await userEvent.keyboard('{ArrowRight}')
-    await expect(thumb).toHaveAttribute('aria-valuenow', '61')
-  },
-}
+Default.test('arrow keys change the value', async ({ canvas, args }) => {
+  const thumb = canvas.getByRole('slider', { name: 'Label' })
+  await expect(thumb).toHaveAttribute('aria-valuenow', '60')
+  thumb.focus()
+  await userEvent.keyboard('{ArrowRight}')
+  await expect(thumb).toHaveAttribute('aria-valuenow', '61')
+  await expect(args.onValueChange).toHaveBeenCalledWith([61])
+})
 
 /** Figma mode=range: two thumbs, `value` is an array of two numbers. */
-export const Range: Story = { args: { defaultValue: [25, 60] } }
+export const Range = meta.story({ args: { defaultValue: [25, 60] } })
 
-export const Disabled: Story = { args: { disabled: true } }
+Range.test('renders two thumbs', async ({ canvas }) => {
+  await expect(canvas.getAllByRole('slider', { name: 'Label' })).toHaveLength(2)
+})
+
+export const Disabled = meta.story({ args: { disabled: true } })
 
 /** In a Field: FieldLabel names the slider; the description shows the current value. */
-export const WithField: Story = {
+export const WithField = meta.story({
   render: () => {
     function Demo() {
       const [value, setValue] = useState([40])
@@ -64,7 +87,8 @@ export const WithField: Story = {
     }
     return <Demo />
   },
-  play: async ({ canvas }) => {
-    await expect(canvas.getByRole('slider', { name: 'Label' })).toHaveAttribute('aria-valuenow', '40')
-  },
-}
+})
+
+WithField.test('FieldLabel names the slider', async ({ canvas }) => {
+  await expect(canvas.getByRole('slider', { name: 'Label' })).toHaveAttribute('aria-valuenow', '40')
+})

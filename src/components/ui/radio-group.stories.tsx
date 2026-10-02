@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import preview from '#.storybook/preview'
 import { expect, fn, userEvent, waitFor } from 'storybook/test'
 
 import { FieldDescription, FieldLegend, FieldSet } from './field'
@@ -12,7 +12,7 @@ const OPTIONS = [
   { value: '3', label: 'Label 3' },
 ]
 
-const meta = {
+const meta = preview.meta({
   title: 'Components/Radio Group',
   component: RadioGroup,
   parameters: {
@@ -28,7 +28,16 @@ const meta = {
   args: { defaultValue: '2', orientation: 'vertical', onValueChange: fn(), disabled: false },
   argTypes: {
     orientation: { control: 'inline-radio', options: ['vertical', 'horizontal'] },
+    defaultValue: { control: 'inline-radio', options: OPTIONS.map((o) => o.value) },
+    value: {
+      control: 'inline-radio',
+      options: OPTIONS.map((o) => o.value),
+      description: 'Controlled value; leave unset for an uncontrolled group',
+    },
     disabled: { control: 'boolean' },
+    required: { control: 'boolean' },
+    onValueChange: { table: { disable: true } },
+    asChild: { table: { disable: true } },
   },
   render: (args) => (
     <FieldSet>
@@ -43,38 +52,34 @@ const meta = {
       </RadioGroup>
     </FieldSet>
   ),
-} satisfies Meta<typeof RadioGroup>
+})
 
-export default meta
-type Story = StoryObj<typeof meta>
+/** Every prop is in Controls; hover / focus via the State control. */
+export const Default = meta.story()
 
-export const Default: Story = {
-  play: async ({ canvas, args }) => {
-    await userEvent.click(canvas.getByText('Label 3'))
-    await expect(canvas.getByRole('radio', { name: 'Label 3' })).toBeChecked()
-    await expect(args.onValueChange).toHaveBeenCalledWith('3')
-    // Keyboard: arrows move and select. Radix moves focus on a timeout and selects only while the
-    // arrow key is still down, so hold it (a real key press lasts long enough; a synthetic one not).
-    canvas.getByRole('radio', { name: 'Label 3' }).focus()
-    await userEvent.keyboard('{ArrowUp>}')
-    await waitFor(() => expect(canvas.getByRole('radio', { name: 'Label 2' })).toBeChecked())
-    await userEvent.keyboard('{/ArrowUp}')
-  },
-}
+Default.test('selects by label click and arrow keys', async ({ canvas, args }) => {
+  await userEvent.click(canvas.getByText('Label 3'))
+  await expect(canvas.getByRole('radio', { name: 'Label 3' })).toBeChecked()
+  await expect(args.onValueChange).toHaveBeenCalledWith('3')
+  // Keyboard: arrows move and select. Radix moves focus on a timeout and selects only while the
+  // arrow key is still down, so hold it (a real key press lasts long enough; a synthetic one not).
+  canvas.getByRole('radio', { name: 'Label 3' }).focus()
+  await userEvent.keyboard('{ArrowUp>}')
+  await waitFor(() => expect(canvas.getByRole('radio', { name: 'Label 2' })).toBeChecked())
+  await userEvent.keyboard('{/ArrowUp}')
+})
 
-export const Horizontal: Story = { args: { orientation: 'horizontal' } }
+export const Horizontal = meta.story({ args: { orientation: 'horizontal' } })
 
-/** Figma `checked` × `state` (columns: unchecked · checked; rows: default · hover · focus · disabled); hover and focus forced with storybook-addon-pseudo-states. */
-export const States: Story = {
-  parameters: {
-    pseudo: { hover: ['[data-demo="hover"]'], focusVisible: ['[data-demo="focus"]'] },
-  },
+/** Figma `checked` × `state` (columns: unchecked · checked; rows: default · hover · focus · disabled). For one group, use the State control on Default. */
+export const States = meta.story({
   render: () => (
     <div className="grid grid-cols-2 gap-x-10 gap-y-4">
       {(['unchecked', 'checked'] as const).map((checked) => (
         <div key={checked} className="flex flex-col gap-4">
           {(['default', 'hover', 'focus', 'disabled'] as const).map((state) => {
             const id = `radio-${checked}-${state}`
+            const item = <RadioGroupItem id={id} value="on" disabled={state === 'disabled'} />
             return (
               <RadioGroup
                 key={state}
@@ -83,7 +88,13 @@ export const States: Story = {
                 orientation="horizontal"
                 className="items-center gap-2"
               >
-                <RadioGroupItem id={id} value="on" data-demo={state} disabled={state === 'disabled'} />
+                {state === 'hover' ? (
+                  <span className="pseudo-hover-all contents">{item}</span>
+                ) : state === 'focus' ? (
+                  <span className="pseudo-focus-visible-all contents">{item}</span>
+                ) : (
+                  item
+                )}
                 <Label htmlFor={id}>Label</Label>
               </RadioGroup>
             )
@@ -92,12 +103,16 @@ export const States: Story = {
       ))}
     </div>
   ),
-}
+})
 
-export const Disabled: Story = { args: { disabled: true } }
+export const Disabled = meta.story({ args: { disabled: true } })
+
+Disabled.test('every option is disabled', async ({ canvas }) => {
+  for (const radio of canvas.getAllByRole('radio')) await expect(radio).toBeDisabled()
+})
 
 /** With per-option descriptions. */
-export const WithDescriptions: Story = {
+export const WithDescriptions = meta.story({
   render: () => (
     <FieldSet className="w-80">
       <FieldLegend variant="label">Title</FieldLegend>
@@ -118,4 +133,4 @@ export const WithDescriptions: Story = {
       </RadioGroup>
     </FieldSet>
   ),
-}
+})

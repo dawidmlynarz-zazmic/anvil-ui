@@ -1,5 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
-import { Icon, FolderIcon, FolderPlusIcon, Trash2Icon } from './icon'
+import preview from '#.storybook/preview'
 import { useState } from 'react'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 
@@ -20,20 +19,29 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from './dropdown-menu'
+import { FolderIcon, FolderPlusIcon, Icon, Trash2Icon } from './icon'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=8257-3156'
 
-function DemoMenu({ open }: { open?: boolean }) {
+type DemoProps = {
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
+  side?: 'top' | 'right' | 'bottom' | 'left'
+  align?: 'start' | 'center' | 'end'
+  modal?: boolean
+}
+
+function DemoMenu({ open, onOpenChange, side = 'bottom', align = 'start', modal = false }: DemoProps) {
   const [radio, setRadio] = useState('1')
   const [checked, setChecked] = useState(true)
   return (
-    <DropdownMenu open={open} modal={false}>
+    <DropdownMenu open={open} onOpenChange={onOpenChange} modal={modal}>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" intent="neutral">
           Label
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start">
+      <DropdownMenuContent side={side} align={align}>
         <DropdownMenuLabel>Title</DropdownMenuLabel>
         <DropdownMenuGroup>
           <DropdownMenuItem>
@@ -79,7 +87,7 @@ function DemoMenu({ open }: { open?: boolean }) {
   )
 }
 
-const meta = {
+const meta = preview.meta({
   title: 'Components/Dropdown Menu',
   component: DemoMenu,
   parameters: {
@@ -93,31 +101,24 @@ const meta = {
       },
     },
   },
-  args: { open: true },
-  argTypes: { open: { control: 'boolean' } },
-} satisfies Meta<typeof DemoMenu>
-
-export default meta
-type Story = StoryObj<typeof meta>
+  args: { open: false, side: 'bottom', align: 'start', modal: false },
+  argTypes: {
+    open: { control: 'boolean' },
+    side: { control: 'inline-radio', options: ['top', 'right', 'bottom', 'left'] },
+    align: { control: 'inline-radio', options: ['start', 'center', 'end'] },
+    modal: { control: 'boolean' },
+    onOpenChange: { table: { disable: true } },
+  },
+})
 
 const body = (el: HTMLElement) => within(el.ownerDocument.body)
 
-export const Default: Story = {
-  play: async ({ canvasElement }) => {
-    const menu = await body(canvasElement).findByRole('menu')
-    await expect(within(menu).getByRole('menuitemradio', { name: 'Label 1' })).toHaveAttribute(
-      'data-state',
-      'checked',
-    )
-    await expect(within(menu).getByRole('menuitemcheckbox', { name: 'Label' })).toBeChecked()
-  },
-}
+/** Closed, like on a page: the trigger (or the `open` control) opens it. */
+export const Default = meta.story()
 
-/** Uncontrolled: opens from the trigger, arrow keys move the highlight, Escape closes. */
-export const WithTrigger: Story = {
-  args: { open: undefined },
-  parameters: { docs: { story: { inline: true } } },
-  play: async ({ canvas, canvasElement }) => {
+Default.test(
+  'trigger opens, arrow keys move the highlight, Escape closes',
+  async ({ canvas, canvasElement }) => {
     const trigger = canvas.getByRole('button', { name: 'Label' })
     await userEvent.click(trigger)
     const menu = await body(canvasElement).findByRole('menu')
@@ -127,4 +128,20 @@ export const WithTrigger: Story = {
     await waitFor(() => expect(body(canvasElement).queryByRole('menu')).toBeNull())
     await expect(trigger).toHaveFocus()
   },
-}
+)
+
+/**
+ * Open on load (Figma reference). Radix focuses the menu container (not an item) when a menu
+ * opens without the keyboard, so nothing is highlighted until you interact.
+ */
+export const Open = meta.story({ args: { open: true } })
+
+Open.test('shows radio and checkbox items checked, nothing highlighted', async ({ canvasElement }) => {
+  const menu = await body(canvasElement).findByRole('menu')
+  await expect(within(menu).getByRole('menuitemradio', { name: 'Label 1' })).toHaveAttribute(
+    'data-state',
+    'checked',
+  )
+  await expect(within(menu).getByRole('menuitemcheckbox', { name: 'Label' })).toBeChecked()
+  await expect(menu.querySelector('[data-highlighted]')).toBeNull()
+})

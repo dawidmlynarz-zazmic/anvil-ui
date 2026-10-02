@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import preview from '#.storybook/preview'
 import { useState } from 'react'
 import { expect, fn, userEvent } from 'storybook/test'
 
@@ -9,7 +9,7 @@ import { Label } from './label'
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=8230-1312'
 const checkedValues = [false, true, 'indeterminate'] as const
 
-const meta = {
+const meta = preview.meta({
   title: 'Components/Checkbox',
   component: Checkbox,
   parameters: {
@@ -24,8 +24,16 @@ const meta = {
   },
   args: { onCheckedChange: fn(), disabled: false },
   argTypes: {
-    checked: { control: 'inline-radio', options: checkedValues },
+    checked: {
+      control: 'inline-radio',
+      options: checkedValues,
+      description: 'Controlled checked state; leave unset for an uncontrolled checkbox',
+    },
+    defaultChecked: { control: 'boolean' },
     disabled: { control: 'boolean' },
+    'aria-invalid': { control: 'boolean', description: 'Invalid state (Figma state=invalid)' },
+    onCheckedChange: { table: { disable: true } },
+    asChild: { table: { disable: true } },
   },
   render: (args) => (
     <div className="flex items-center gap-2">
@@ -33,42 +41,53 @@ const meta = {
       <Label htmlFor="cb">Label</Label>
     </div>
   ),
-} satisfies Meta<typeof Checkbox>
+})
 
-export default meta
-type Story = StoryObj<typeof meta>
+/** Every prop is in Controls; hover / focus via the State control. */
+export const Default = meta.story()
 
-export const Default: Story = {
-  play: async ({ canvas, args }) => {
-    const checkbox = canvas.getByRole('checkbox', { name: 'Label' })
-    await userEvent.click(canvas.getByText('Label'))
-    await expect(checkbox).toBeChecked()
-    await expect(args.onCheckedChange).toHaveBeenCalledWith(true)
-    await userEvent.keyboard(' ')
-    await expect(checkbox).not.toBeChecked()
-  },
-}
+Default.test('toggles by label click and Space', async ({ canvas, args }) => {
+  const checkbox = canvas.getByRole('checkbox', { name: 'Label' })
+  await userEvent.click(canvas.getByText('Label'))
+  await expect(checkbox).toBeChecked()
+  await expect(args.onCheckedChange).toHaveBeenCalledWith(true)
+  checkbox.focus()
+  await userEvent.keyboard(' ')
+  await expect(checkbox).not.toBeChecked()
+})
 
-/** Figma `checked` × `state` (columns: false · true · indeterminate; rows: default · hover · focus · invalid · disabled); hover and focus forced with storybook-addon-pseudo-states. */
-export const States: Story = {
-  parameters: {
-    pseudo: { hover: ['[data-demo="hover"]'], focusVisible: ['[data-demo="focus"]'] },
-  },
+Default.test('disabled ignores clicks', { args: { disabled: true } }, async ({ canvas, args }) => {
+  const checkbox = canvas.getByRole('checkbox', { name: 'Label' })
+  await expect(checkbox).toBeDisabled()
+  await userEvent.click(checkbox, { pointerEventsCheck: 0 })
+  await expect(args.onCheckedChange).not.toHaveBeenCalled()
+})
+
+/** Figma `checked` × `state` (columns: false · true · indeterminate; rows: default · hover · focus · invalid · disabled). For one checkbox, use the State control on Default. */
+export const States = meta.story({
   render: () => (
     <div className="grid grid-cols-3 gap-x-10 gap-y-4">
       {checkedValues.map((checked) => (
         <div key={String(checked)} className="flex flex-col gap-4">
           {(['default', 'hover', 'focus', 'invalid', 'disabled'] as const).map((state) => {
             const id = `cb-${String(checked)}-${state}`
+            const box = (
+              <Checkbox
+                id={id}
+                checked={checked}
+                aria-invalid={state === 'invalid' || undefined}
+                disabled={state === 'disabled'}
+              />
+            )
             return (
               <div key={state} className="flex items-center gap-2">
-                <Checkbox
-                  id={id}
-                  checked={checked}
-                  data-demo={state}
-                  aria-invalid={state === 'invalid' || undefined}
-                  disabled={state === 'disabled'}
-                />
+                {state === 'hover' ? (
+                  <span className="pseudo-hover-all contents">{box}</span>
+                ) : state === 'focus' ? (
+                  <span className="pseudo-focus-visible-all contents">{box}</span>
+                ) : (
+                  box
+                )}
                 <Label htmlFor={id}>Label</Label>
               </div>
             )
@@ -77,10 +96,10 @@ export const States: Story = {
       ))}
     </div>
   ),
-}
+})
 
 /** Parent with indeterminate state for a partial selection. */
-export const Indeterminate: Story = {
+export const Indeterminate = meta.story({
   render: () => {
     function Group() {
       const [tools, setTools] = useState({ 'Label 1': true, 'Label 2': false, 'Label 3': false })
@@ -113,16 +132,17 @@ export const Indeterminate: Story = {
     }
     return <Group />
   },
-  play: async ({ canvas }) => {
-    const all = canvas.getByRole('checkbox', { name: 'Label' })
-    await expect(all).toHaveAttribute('data-state', 'indeterminate')
-    await userEvent.click(all)
-    await expect(canvas.getByRole('checkbox', { name: 'Label 3' })).toBeChecked()
-  },
-}
+})
+
+Indeterminate.test('parent checks every child', async ({ canvas }) => {
+  const all = canvas.getByRole('checkbox', { name: 'Label' })
+  await expect(all).toHaveAttribute('data-state', 'indeterminate')
+  await userEvent.click(all)
+  await expect(canvas.getByRole('checkbox', { name: 'Label 3' })).toBeChecked()
+})
 
 /** With a description or error: a horizontal Field (Figma field, orientation=horizontal). */
-export const WithField: Story = {
+export const WithField = meta.story({
   render: () => (
     <div className="flex w-96 flex-col gap-6">
       <Field orientation="horizontal">
@@ -141,4 +161,4 @@ export const WithField: Story = {
       </Field>
     </div>
   ),
-}
+})

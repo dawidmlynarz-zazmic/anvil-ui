@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
-import { useState } from 'react'
+import preview from '#.storybook/preview'
+import { useId, useState } from 'react'
 import { expect, userEvent } from 'storybook/test'
 
 import { Checkbox } from './checkbox'
@@ -25,41 +25,15 @@ import { Switch } from './switch'
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10940-109'
 const OPTIONS = ['Label 1', 'Label 2', 'Label 3']
 
-const meta = {
-  title: 'Components/Field',
-  component: Field,
-  parameters: {
-    layout: 'padded',
-    design: { type: 'figma', url: FIGMA },
-    docs: {
-      description: {
-        component: [
-          '**What it is:** shadcn/ui Field — the form layout primitive. It lays out a label, a control, a description and an error with consistent spacing, and carries the state: `data-invalid` turns the label and error destructive, `data-disabled` dims the label.',
-          '**When to use it:** for controls that have no label of their own — horizontal Switch / Checkbox rows, radio and checkbox groups (with `FieldSet` + `FieldLegend`), Combobox, Slider and Input OTP.',
-          '**When not to:** Input, Textarea and Select already render a Field when you pass `label` (see *Built into Input*). Never wrap those in another Field.',
-        ].join('\n\n'),
-      },
-    },
-  },
-  decorators: [
-    (Story) => (
-      <div className="w-96">
-        <Story />
-      </div>
-    ),
-  ],
-} satisfies Meta<typeof Field>
-
-export default meta
-type Story = StoryObj<typeof meta>
-
 function FieldCombobox({
   id,
   invalid,
+  disabled,
   describedBy,
 }: {
   id: string
   invalid?: boolean
+  disabled?: boolean
   describedBy?: string
 }) {
   const [open, setOpen] = useState(false)
@@ -69,6 +43,7 @@ function FieldCombobox({
       <ComboboxTrigger
         id={id}
         placeholder="Placeholder"
+        disabled={disabled}
         aria-invalid={invalid || undefined}
         aria-describedby={describedBy}
       >
@@ -101,22 +76,127 @@ function FieldCombobox({
   )
 }
 
-/** Figma default (orientation=vertical, control Combobox): label, control, description. */
-export const Default: Story = {
-  render: () => (
-    <Field>
-      <FieldLabel htmlFor="field-combobox">Label</FieldLabel>
-      <FieldCombobox id="field-combobox" describedBy="field-combobox-hint" />
-      <FieldDescription id="field-combobox-hint">Subtitle</FieldDescription>
-    </Field>
-  ),
-  play: async ({ canvas }) => {
-    await expect(canvas.getByRole('combobox', { name: 'Label' })).toHaveAccessibleDescription('Subtitle')
-  },
+type DemoProps = {
+  /** Figma orientation: vertical (control Combobox) · horizontal (control Switch). */
+  orientation?: 'vertical' | 'horizontal'
+  label?: string
+  description?: string
+  /** Figma state=invalid: `data-invalid` on Field; the error replaces the description (vertical). */
+  invalid?: boolean
+  error?: string
+  /** `data-disabled` on Field dims the label; the control is disabled too. */
+  disabled?: boolean
 }
 
+/** A Field with the Figma anatomy: vertical → label, Combobox, description / error; horizontal → Switch, label, description. */
+function DemoField({
+  orientation = 'vertical',
+  label = 'Label',
+  description = 'Subtitle',
+  invalid = false,
+  error = 'Subtitle',
+  disabled = false,
+}: DemoProps) {
+  const id = useId()
+  const state = {
+    'data-invalid': invalid || undefined,
+    'data-disabled': disabled || undefined,
+  }
+  if (orientation === 'horizontal') {
+    return (
+      <Field orientation="horizontal" {...state}>
+        <Switch
+          id={id}
+          defaultChecked
+          disabled={disabled}
+          aria-invalid={invalid || undefined}
+          aria-describedby={invalid ? `${id}-error` : undefined}
+        />
+        <FieldContent>
+          <FieldLabel htmlFor={id}>{label}</FieldLabel>
+          <FieldDescription>{description}</FieldDescription>
+          {invalid && <FieldError id={`${id}-error`}>{error}</FieldError>}
+        </FieldContent>
+      </Field>
+    )
+  }
+  return (
+    <Field {...state}>
+      <FieldLabel htmlFor={id}>{label}</FieldLabel>
+      <FieldCombobox id={id} invalid={invalid} disabled={disabled} describedBy={`${id}-hint`} />
+      {invalid ? (
+        <FieldError id={`${id}-hint`}>{error}</FieldError>
+      ) : (
+        <FieldDescription id={`${id}-hint`}>{description}</FieldDescription>
+      )}
+    </Field>
+  )
+}
+
+const meta = preview.meta({
+  title: 'Components/Field',
+  component: DemoField,
+  parameters: {
+    layout: 'padded',
+    design: { type: 'figma', url: FIGMA },
+    docs: {
+      description: {
+        component: [
+          '**What it is:** shadcn/ui Field — the form layout primitive. It lays out a label, a control, a description and an error with consistent spacing, and carries the state: `data-invalid` turns the label and error destructive, `data-disabled` dims the label.',
+          '**When to use it:** for controls that have no label of their own — horizontal Switch / Checkbox rows, radio and checkbox groups (with `FieldSet` + `FieldLegend`), Combobox, Slider and Input OTP.',
+          '**When not to:** Input, Textarea and Select already render a Field when you pass `label` (see *Built into Input*). Never wrap those in another Field.',
+        ].join('\n\n'),
+      },
+    },
+  },
+  args: {
+    orientation: 'vertical',
+    label: 'Label',
+    description: 'Subtitle',
+    invalid: false,
+    error: 'Subtitle',
+    disabled: false,
+  },
+  argTypes: {
+    orientation: { control: 'inline-radio', options: ['vertical', 'horizontal'] },
+    label: { control: 'text' },
+    description: { control: 'text' },
+    invalid: {
+      control: 'boolean',
+      description: 'Invalid state (Figma state=invalid): `data-invalid` on Field',
+    },
+    error: { control: 'text' },
+    disabled: { control: 'boolean', description: '`data-disabled` on Field, `disabled` on the control' },
+  },
+  decorators: [
+    (Story) => (
+      <div className="w-96">
+        <Story />
+      </div>
+    ),
+  ],
+})
+
+/** Figma default (orientation=vertical, control Combobox): label, control, description. Every prop is in Controls. */
+export const Default = meta.story()
+
+Default.test('the label names the control and the description describes it', async ({ canvas }) => {
+  await expect(canvas.getByRole('combobox', { name: 'Label' })).toHaveAccessibleDescription('Subtitle')
+})
+
+Default.test('invalid shows the error', { args: { invalid: true } }, async ({ canvas }) => {
+  await expect(canvas.getByRole('group')).toHaveAttribute('data-invalid', 'true')
+  await expect(canvas.getByRole('alert')).toHaveTextContent('Subtitle')
+  await expect(canvas.getByRole('combobox', { name: 'Label' })).toHaveAttribute('aria-invalid', 'true')
+})
+
+Default.test('disabled', { args: { disabled: true } }, async ({ canvas }) => {
+  await expect(canvas.getByRole('group')).toHaveAttribute('data-disabled', 'true')
+  await expect(canvas.getByRole('combobox', { name: 'Label' })).toBeDisabled()
+})
+
 /** Figma orientation=vertical, state=invalid: the label and error turn destructive. */
-export const VerticalInvalid: Story = {
+export const VerticalInvalid = meta.story({
   name: 'Vertical invalid',
   render: () => (
     <Field data-invalid="true">
@@ -125,10 +205,10 @@ export const VerticalInvalid: Story = {
       <FieldError id="field-combobox-error">Subtitle</FieldError>
     </Field>
   ),
-}
+})
 
 /** Figma orientation=horizontal (control Switch): control first, then label and description. */
-export const Horizontal: Story = {
+export const Horizontal = meta.story({
   render: () => (
     <Field orientation="horizontal">
       <Switch id="field-switch" defaultChecked />
@@ -138,15 +218,16 @@ export const Horizontal: Story = {
       </FieldContent>
     </Field>
   ),
-  play: async ({ canvas }) => {
-    const toggle = canvas.getByRole('switch', { name: 'Label' })
-    await userEvent.click(canvas.getByText('Label'))
-    await expect(toggle).not.toBeChecked()
-  },
-}
+})
+
+Horizontal.test('clicking the label toggles the switch', async ({ canvas }) => {
+  const toggle = canvas.getByRole('switch', { name: 'Label' })
+  await userEvent.click(canvas.getByText('Label'))
+  await expect(toggle).not.toBeChecked()
+})
 
 /** Figma state=invalid: `data-invalid` on Field turns the label and error destructive; the description stays. */
-export const Invalid: Story = {
+export const Invalid = meta.story({
   render: () => (
     <Field orientation="horizontal" data-invalid="true">
       <Checkbox id="field-checkbox" aria-invalid aria-describedby="field-checkbox-error" />
@@ -157,14 +238,15 @@ export const Invalid: Story = {
       </FieldContent>
     </Field>
   ),
-  play: async ({ canvas }) => {
-    await expect(canvas.getByRole('alert')).toHaveTextContent('Subtitle')
-    await expect(canvas.getByRole('checkbox', { name: 'Label' })).toHaveAccessibleDescription('Subtitle')
-  },
-}
+})
+
+Invalid.test('the error is announced and describes the control', async ({ canvas }) => {
+  await expect(canvas.getByRole('alert')).toHaveTextContent('Subtitle')
+  await expect(canvas.getByRole('checkbox', { name: 'Label' })).toHaveAccessibleDescription('Subtitle')
+})
 
 /** `data-disabled` on Field dims the label; disable the control itself too. */
-export const Disabled: Story = {
+export const Disabled = meta.story({
   render: () => (
     <Field orientation="horizontal" data-disabled="true">
       <Switch id="field-disabled" disabled />
@@ -174,10 +256,10 @@ export const Disabled: Story = {
       </FieldContent>
     </Field>
   ),
-}
+})
 
 /** A radio group: FieldSet + FieldLegend label the group, each option is a horizontal Field. */
-export const RadioGroupInFieldSet: Story = {
+export const RadioGroupInFieldSet = meta.story({
   name: 'Radio group',
   render: () => (
     <FieldSet>
@@ -193,10 +275,10 @@ export const RadioGroupInFieldSet: Story = {
       </RadioGroup>
     </FieldSet>
   ),
-}
+})
 
 /** A checkbox group with a group-level error. */
-export const CheckboxGroup: Story = {
+export const CheckboxGroup = meta.story({
   render: () => (
     <FieldSet>
       <FieldLegend variant="label">Title</FieldLegend>
@@ -211,10 +293,10 @@ export const CheckboxGroup: Story = {
       </FieldGroup>
     </FieldSet>
   ),
-}
+})
 
 /** Slider: FieldLabel names it (the label is forwarded to the thumb). */
-export const WithSlider: Story = {
+export const WithSlider = meta.story({
   render: () => (
     <Field>
       <FieldLabel id="field-slider-label">Label</FieldLabel>
@@ -222,13 +304,14 @@ export const WithSlider: Story = {
       <FieldDescription>Subtitle</FieldDescription>
     </Field>
   ),
-  play: async ({ canvas }) => {
-    await expect(canvas.getByRole('slider', { name: 'Label' })).toHaveAttribute('aria-valuenow', '50')
-  },
-}
+})
+
+WithSlider.test('the label names the slider', async ({ canvas }) => {
+  await expect(canvas.getByRole('slider', { name: 'Label' })).toHaveAttribute('aria-valuenow', '50')
+})
 
 /** Input OTP: FieldLabel points at the hidden input that drives the slots. */
-export const WithInputOTP: Story = {
+export const WithInputOTP = meta.story({
   render: () => (
     <Field>
       <FieldLabel htmlFor="field-otp">Label</FieldLabel>
@@ -242,13 +325,14 @@ export const WithInputOTP: Story = {
       <FieldDescription id="field-otp-hint">Subtitle</FieldDescription>
     </Field>
   ),
-  play: async ({ canvas }) => {
-    await expect(canvas.getByRole('textbox', { name: 'Label' })).toHaveAccessibleDescription('Subtitle')
-  },
-}
+})
+
+WithInputOTP.test('the label names the input', async ({ canvas }) => {
+  await expect(canvas.getByRole('textbox', { name: 'Label' })).toHaveAccessibleDescription('Subtitle')
+})
 
 /** Sections of a settings form: FieldGroup stacks Fields, FieldSeparator divides them. */
-export const Group: Story = {
+export const Group = meta.story({
   render: () => (
     <FieldGroup>
       <Field orientation="horizontal">
@@ -268,13 +352,13 @@ export const Group: Story = {
       </Field>
     </FieldGroup>
   ),
-}
+})
 
 /**
  * Figma orientation=vertical (label, control, description, error) is what Input, Textarea and
  * Select render for you with `label`: this is a Field — don't wrap it in another one.
  */
-export const BuiltIntoInput: Story = {
+export const BuiltIntoInput = meta.story({
   name: 'Built into Input',
   render: () => (
     <div className="flex flex-col gap-6">
@@ -282,9 +366,10 @@ export const BuiltIntoInput: Story = {
       <Input label="Label" hint="Subtitle" defaultValue="Value" aria-invalid />
     </div>
   ),
-  play: async ({ canvasElement }) => {
-    const fields = canvasElement.querySelectorAll('[data-slot=field]')
-    await expect(fields).toHaveLength(2)
-    await expect(fields[1]).toHaveAttribute('data-invalid', 'true')
-  },
-}
+})
+
+BuiltIntoInput.test('Input renders its own Field', async ({ canvasElement }) => {
+  const fields = canvasElement.querySelectorAll('[data-slot=field]')
+  await expect(fields).toHaveLength(2)
+  await expect(fields[1]).toHaveAttribute('data-invalid', 'true')
+})

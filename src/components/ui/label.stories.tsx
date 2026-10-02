@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import preview from '#.storybook/preview'
 import { expect, userEvent } from 'storybook/test'
 
 import { Label } from './label'
@@ -6,7 +6,7 @@ import { Label } from './label'
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10892-172'
 const markers = ['none', 'required', 'optional'] as const
 
-const meta = {
+const meta = preview.meta({
   title: 'Components/Label',
   component: Label,
   parameters: {
@@ -20,15 +20,18 @@ const meta = {
     },
   },
   args: { children: 'Label', marker: 'none' },
-  argTypes: { marker: { control: 'inline-radio', options: markers } },
-} satisfies Meta<typeof Label>
+  argTypes: {
+    children: { control: 'text' },
+    marker: { control: 'inline-radio', options: markers },
+    htmlFor: { control: 'text' },
+    asChild: { table: { disable: true } },
+  },
+})
 
-export default meta
-type Story = StoryObj<typeof meta>
+/** Every prop is in Controls. */
+export const Default = meta.story()
 
-export const Default: Story = {}
-
-export const Markers: Story = {
+export const Markers = meta.story({
   render: () => (
     <div className="flex flex-col gap-3">
       {markers.map((marker) => (
@@ -38,10 +41,10 @@ export const Markers: Story = {
       ))}
     </div>
   ),
-}
+})
 
 /** Figma states for each marker (columns: none · required · optional; rows: default · disabled · invalid). */
-export const States: Story = {
+export const States = meta.story({
   render: () => (
     <div className="grid grid-cols-3 gap-6">
       {markers.map((marker) => (
@@ -61,10 +64,10 @@ export const States: Story = {
       ))}
     </div>
   ),
-}
+})
 
 /** Clicking the label focuses its control; a disabled peer dims the label. */
-export const WithControl: Story = {
+export const WithControl = meta.story({
   render: () => (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-2">
@@ -83,8 +86,9 @@ export const WithControl: Story = {
       </div>
     </div>
   ),
-  play: async ({ canvas }) => {
-    await userEvent.click(canvas.getByText('Label', { selector: '[for=label-control]' }))
-    await expect(canvas.getByRole('textbox')).toHaveFocus()
-  },
-}
+})
+
+WithControl.test('clicking the label focuses its control', async ({ canvas }) => {
+  await userEvent.click(canvas.getByText('Label', { selector: '[for=label-control]' }))
+  await expect(canvas.getByRole('textbox')).toHaveFocus()
+})

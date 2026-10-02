@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import preview from '#.storybook/preview'
 import { expect, userEvent } from 'storybook/test'
 
 import { Input } from './input'
@@ -6,7 +6,7 @@ import { Input } from './input'
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=57-154'
 const sizes = ['sm', 'default', 'lg'] as const
 
-const meta = {
+const meta = preview.meta({
   title: 'Components/Input',
   component: Input,
   parameters: {
@@ -26,12 +26,19 @@ const meta = {
     size: 'default',
     marker: 'none',
     disabled: false,
+    'aria-invalid': false,
   },
   argTypes: {
     size: { control: 'inline-radio', options: sizes },
     marker: { control: 'inline-radio', options: ['none', 'required', 'optional'] },
     label: { control: 'text' },
     hint: { control: 'text' },
+    placeholder: { control: 'text' },
+    defaultValue: { control: 'text' },
+    disabled: { control: 'boolean' },
+    'aria-invalid': { control: 'boolean', description: 'Invalid state (Figma state=invalid)' },
+    type: { control: 'select', options: ['text', 'email', 'password', 'number', 'search', 'tel', 'url'] },
+    className: { table: { disable: true } },
   },
   decorators: [
     (Story) => (
@@ -40,27 +47,29 @@ const meta = {
       </div>
     ),
   ],
-} satisfies Meta<typeof Input>
+})
 
-export default meta
-type Story = StoryObj<typeof meta>
+/** Every prop and the interaction state are in Controls. */
+export const Default = meta.story()
 
-export const Default: Story = {
-  play: async ({ canvas }) => {
-    const input = canvas.getByLabelText('Label')
-    await expect(input).toHaveAccessibleDescription('Subtitle')
-    await userEvent.type(input, 'Value')
-    await expect(input).toHaveValue('Value')
-  },
-}
+Default.test('is labelled, described and takes typing', async ({ canvas }) => {
+  const input = canvas.getByLabelText('Label')
+  await expect(input).toHaveAccessibleDescription('Subtitle')
+  await userEvent.type(input, 'Value')
+  await expect(input).toHaveValue('Value')
+})
+
+Default.test('disabled', { args: { disabled: true } }, async ({ canvas }) => {
+  await expect(canvas.getByLabelText('Label')).toBeDisabled()
+})
 
 /** Without a label: the bare control (show label off in Figma). Give it an accessible name. */
-export const Bare: Story = {
+export const Bare = meta.story({
   args: { label: undefined, hint: undefined, 'aria-label': 'Label', placeholder: 'Placeholder' },
-}
+})
 
 /** 32 / 40 / 48 px. */
-export const Sizes: Story = {
+export const Sizes = meta.story({
   render: () => (
     <div className="flex flex-col gap-4">
       {sizes.map((size) => (
@@ -68,45 +77,47 @@ export const Sizes: Story = {
       ))}
     </div>
   ),
-}
+})
 
-/** Figma states as selectors (rows: default · filled · hover · focus · invalid · disabled); hover and focus forced with storybook-addon-pseudo-states. */
-export const States: Story = {
-  parameters: {
-    pseudo: { hover: ['[data-demo="hover"]'], focusVisible: ['[data-demo="focus"]'] },
-  },
+/** Figma states side by side (rows: default · filled · hover · focus · invalid · disabled). For one field, use the State control on Default. */
+export const States = meta.story({
   render: () => (
     <div className="flex flex-col gap-4">
       <Input label="Label" placeholder="Placeholder" />
       <Input label="Label" defaultValue="Value" />
-      <Input label="Label" defaultValue="Value" data-demo="hover" />
-      <Input label="Label" defaultValue="Value" data-demo="focus" />
+      <span className="pseudo-hover-all contents">
+        <Input label="Label" defaultValue="Value" />
+      </span>
+      <span className="pseudo-focus-visible-all contents">
+        <Input label="Label" defaultValue="Value" />
+      </span>
       <Input label="Label" defaultValue="Value" aria-invalid hint="Subtitle" />
       <Input label="Label" defaultValue="Value" disabled hint="Subtitle" />
     </div>
   ),
-}
+})
 
 /** Invalid: hint becomes a FieldError (role=alert) and the label turns destructive. */
-export const Invalid: Story = {
+export const Invalid = meta.story({
   args: { 'aria-invalid': true, defaultValue: 'Value', hint: 'Subtitle' },
-  play: async ({ canvas }) => {
-    await expect(canvas.getByRole('alert')).toHaveTextContent('Subtitle')
-    await expect(canvas.getByLabelText('Label')).toHaveAccessibleDescription('Subtitle')
-  },
-}
+})
 
-export const Markers: Story = {
+Invalid.test('shows the hint as an error', async ({ canvas }) => {
+  await expect(canvas.getByRole('alert')).toHaveTextContent('Subtitle')
+  await expect(canvas.getByLabelText('Label')).toHaveAccessibleDescription('Subtitle')
+})
+
+export const Markers = meta.story({
   render: () => (
     <div className="flex flex-col gap-4">
       <Input label="Label" marker="required" required placeholder="Placeholder" />
       <Input label="Label" marker="optional" placeholder="Placeholder" />
     </div>
   ),
-}
+})
 
 /** A small form: two required fields and a file input. */
-export const Composition: Story = {
+export const Composition = meta.story({
   render: () => (
     <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
       <Input label="Label" type="email" marker="required" required autoComplete="email" />
@@ -114,4 +125,4 @@ export const Composition: Story = {
       <Input type="file" aria-label="Label" />
     </form>
   ),
-}
+})
