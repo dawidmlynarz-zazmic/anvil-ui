@@ -32,7 +32,7 @@ function DemoPopover({ open, side = 'bottom', align = 'center', showFooter = tru
         </Button>
       </PopoverTrigger>
       <PopoverContent side={side} align={align}>
-        <PopoverHeader>
+        <PopoverHeader showCloseButton>
           <PopoverTitle>Title</PopoverTitle>
           <PopoverDescription>Subtitle</PopoverDescription>
         </PopoverHeader>
@@ -100,7 +100,8 @@ export const WithTrigger: Story = {
     const trigger = canvas.getByRole('button', { name: 'Label' })
     await userEvent.click(trigger)
     const dialog = await body(canvasElement).findByRole('dialog')
-    await expect(within(dialog).getByLabelText('Label')).toHaveFocus()
+    // Radix moves focus into the popover (first focusable: the header close, as drawn).
+    await expect(dialog.contains(canvasElement.ownerDocument.activeElement)).toBe(true)
     await userEvent.keyboard('{Escape}')
     await waitFor(() => expect(body(canvasElement).queryByRole('dialog')).toBeNull())
     await expect(trigger).toHaveFocus()

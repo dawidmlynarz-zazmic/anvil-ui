@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
-import { XIcon } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
+import { Icon, XIcon } from '@/components/ui/icon'
 import { cn } from '@/lib/utils'
 
 // Figma: Dialog · Sheet · Drawer page → `.shell header` (10960:223) and `.shell footer` (10960:260),
@@ -67,7 +67,7 @@ function ShellCloseButton({ className, ...props }: React.ComponentProps<typeof B
       className={cn('shrink-0', className)}
       {...props}
     >
-      <XIcon />
+      <Icon icon={XIcon} />
     </Button>
   )
 }
@@ -104,22 +104,6 @@ function ShellBody({ className, ...props }: React.ComponentProps<'div'>) {
   )
 }
 
-const FOCUSABLE = 'input, select, textarea, button, a[href], [tabindex]:not([tabindex="-1"])'
-
-/**
- * `onOpenAutoFocus` for modal shells: the header close comes first in the DOM, so Radix would
- * focus it; start on the first control in the ShellBody instead when there is one.
- */
-function focusShellBody(event: Event) {
-  if (event.defaultPrevented) return
-  const content = event.target instanceof HTMLElement ? event.target : null
-  const first = content?.querySelector<HTMLElement>(`[data-shell-body] :is(${FOCUSABLE}):not(:disabled)`)
-  if (first) {
-    event.preventDefault()
-    first.focus()
-  }
-}
-
 // ── Footer ────────────────────────────────────────────────────────────────────────────────
 // variant bar: padded with a top shadow over scrolling content; inline: no padding.
 // align end (default) · between (secondary left) · stretch (full-width buttons, mobile Drawer).
@@ -154,7 +138,6 @@ function ShellFooter({ className, variant = 'bar', align = 'end', ...props }: Sh
 }
 
 export {
-  focusShellBody,
   ShellBody,
   ShellCloseButton,
   ShellFooter,

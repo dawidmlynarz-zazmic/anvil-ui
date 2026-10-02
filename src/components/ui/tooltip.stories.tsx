@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { Plus } from 'lucide-react'
+import { Icon, PlusIcon } from './icon'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 
 import { Button } from './button'
@@ -15,7 +15,7 @@ function DemoTooltip({ open, side = 'top', text = 'Label' }: DemoProps) {
     <Tooltip open={open}>
       <TooltipTrigger asChild>
         <Button size="icon" variant="outline" intent="neutral" aria-label="Label">
-          <Plus />
+          <Icon icon={PlusIcon} />
         </Button>
       </TooltipTrigger>
       <TooltipContent side={side}>{text}</TooltipContent>

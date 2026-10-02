@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { Folder, FolderPlus, Trash2 } from 'lucide-react'
+import { Icon, FolderIcon, FolderPlusIcon, Trash2Icon } from './icon'
 import { useState } from 'react'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 
@@ -37,16 +37,16 @@ function DemoMenu({ open }: { open?: boolean }) {
         <DropdownMenuLabel>Title</DropdownMenuLabel>
         <DropdownMenuGroup>
           <DropdownMenuItem>
-            <FolderPlus />
+            <Icon icon={FolderPlusIcon} />
             Label 1<DropdownMenuShortcut>⌘N</DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <Folder />
+            <Icon icon={FolderIcon} />
             Label 2
           </DropdownMenuItem>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
-              <Folder />
+              <Icon icon={FolderIcon} />
               Label 3
             </DropdownMenuSubTrigger>
             <DropdownMenuSubContent>
@@ -55,7 +55,7 @@ function DemoMenu({ open }: { open?: boolean }) {
             </DropdownMenuSubContent>
           </DropdownMenuSub>
           <DropdownMenuItem disabled>
-            <Folder />
+            <Icon icon={FolderIcon} />
             Label 4
           </DropdownMenuItem>
         </DropdownMenuGroup>
@@ -71,7 +71,7 @@ function DemoMenu({ open }: { open?: boolean }) {
         </DropdownMenuCheckboxItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem intent="destructive">
-          <Trash2 />
+          <Icon icon={Trash2Icon} />
           Label
         </DropdownMenuItem>
       </DropdownMenuContent>

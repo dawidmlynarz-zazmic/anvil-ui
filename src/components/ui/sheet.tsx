@@ -3,7 +3,6 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { Dialog as SheetPrimitive } from 'radix-ui'
 
 import {
-  focusShellBody,
   ShellBody,
   ShellCloseButton,
   ShellFooter,
@@ -72,44 +71,46 @@ const sheetContentVariants = cva(
 )
 
 type SheetContentProps = React.ComponentProps<typeof SheetPrimitive.Content> &
-  VariantProps<typeof sheetContentVariants>
+  VariantProps<typeof sheetContentVariants> & {
+    showCloseButton?: boolean
+  }
 
-function SheetContent({ className, children, side = 'right', onOpenAutoFocus, ...props }: SheetContentProps) {
+// As in shadcn, the content renders the close button last (Radix's initial focus lands on the first
+// body control); Figma draws it in the header bar, so it is positioned there.
+function SheetContent({
+  className,
+  children,
+  side = 'right',
+  showCloseButton = true,
+  ...props
+}: SheetContentProps) {
   return (
     <SheetPortal>
       <SheetOverlay />
       <SheetPrimitive.Content
         data-slot="sheet-content"
         data-side={side}
+        data-close-button={showCloseButton || undefined}
         className={cn(sheetContentVariants({ side }), className)}
-        onOpenAutoFocus={(event) => {
-          onOpenAutoFocus?.(event)
-          focusShellBody(event)
-        }}
         {...props}
       >
         {children}
+        {showCloseButton && (
+          <SheetPrimitive.Close asChild>
+            <ShellCloseButton data-slot="sheet-close-button" className="absolute top-2 right-2" />
+          </SheetPrimitive.Close>
+        )}
       </SheetPrimitive.Content>
     </SheetPortal>
   )
 }
 
-type SheetHeaderProps = Omit<ShellHeaderProps, 'close'> & {
-  /** Renders the close button at the end of the header (default true). */
-  showCloseButton?: boolean
-}
-
-function SheetHeader({ showCloseButton = true, ...props }: SheetHeaderProps) {
+/** ShellHeader (bar); leaves room for the content's close button. */
+function SheetHeader({ className, ...props }: Omit<ShellHeaderProps, 'close'>) {
   return (
     <ShellHeader
       data-slot="sheet-header"
-      close={
-        showCloseButton ? (
-          <SheetPrimitive.Close asChild>
-            <ShellCloseButton />
-          </SheetPrimitive.Close>
-        ) : undefined
-      }
+      className={cn('in-data-close-button:pr-12', className)}
       {...props}
     />
   )
@@ -154,5 +155,4 @@ export {
   SheetTrigger,
   sheetContentVariants,
   type SheetContentProps,
-  type SheetHeaderProps,
 }

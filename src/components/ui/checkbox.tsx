@@ -1,7 +1,7 @@
 import * as React from 'react'
-import { CheckIcon, MinusIcon } from 'lucide-react'
 import { Checkbox as CheckboxPrimitive } from 'radix-ui'
 
+import { CheckIcon, Icon, MinusIcon } from '@/components/ui/icon'
 import { cn } from '@/lib/utils'
 
 // Figma: Forms page → `checkbox` (8230:1312) on `.checkbox-base` (1629:2099). A bare 20px control;
@@ -37,15 +37,10 @@ function Checkbox({ className, ...props }: React.ComponentProps<typeof CheckboxP
         data-slot="checkbox-indicator"
         className="group/indicator grid place-content-center text-foreground-inverse"
       >
-        {/* Figma: 13px icon, 1.33px stroke in --foreground-inverse. */}
-        <CheckIcon
-          absoluteStrokeWidth
-          strokeWidth={1.33}
-          className="size-3.25 group-data-[state=indeterminate]/indicator:hidden"
-        />
-        <MinusIcon
-          absoluteStrokeWidth
-          strokeWidth={1.33}
+        {/* Figma: 13px icons (the Icon stroke stays 1.33px) in --foreground-inverse. */}
+        <Icon icon={CheckIcon} className="size-3.25 group-data-[state=indeterminate]/indicator:hidden" />
+        <Icon
+          icon={MinusIcon}
           className="hidden size-3.25 group-data-[state=indeterminate]/indicator:block"
         />
       </CheckboxPrimitive.Indicator>

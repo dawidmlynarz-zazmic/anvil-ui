@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
-import { LoaderCircle } from 'lucide-react'
 import { Slot } from 'radix-ui'
 
+import { Icon, LoaderCircleIcon } from '@/components/ui/icon'
 import { cn } from '@/lib/utils'
 
 // Figma: Button page → `button` (917:9268) and `icon button` (8218:5908). Icon button is this
@@ -150,7 +150,7 @@ function Button({
       onClick={loading ? (event: React.MouseEvent<HTMLButtonElement>) => event.preventDefault() : onClick}
       {...props}
     >
-      {loading && <LoaderCircle data-slot="button-spinner" aria-hidden className="animate-spin" />}
+      {loading && <Icon icon={LoaderCircleIcon} data-slot="button-spinner" className="animate-spin" />}
       <Slot.Slottable>{children}</Slot.Slottable>
     </Comp>
   )

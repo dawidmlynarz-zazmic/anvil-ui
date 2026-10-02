@@ -68,6 +68,12 @@ const fieldVariants = cva('group/field flex w-full', {
         '[&>[data-slot=field-label]]:flex-auto',
         'has-[>[data-slot=field-content]]:items-start has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
       ],
+      // shadcn: vertical, switching to horizontal when the FieldGroup container is wide enough.
+      responsive: [
+        'flex-col gap-2 @md/field-group:flex-row @md/field-group:items-center @md/field-group:gap-3 [&>*]:w-full @md/field-group:[&>*]:w-auto [&>.sr-only]:w-auto',
+        '@md/field-group:[&>[data-slot=field-label]]:flex-auto',
+        '@md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
+      ],
     },
   },
   defaultVariants: {
@@ -106,8 +112,11 @@ function FieldLabel({ className, ...props }: React.ComponentProps<typeof Label>)
     <Label
       data-slot="field-label"
       className={cn(
-        // Choice-card styling (label wrapping a Field) is the Anvil ChoiceCard, not FieldLabel.
         'group/field-label peer/field-label flex w-fit group-data-[disabled=true]/field:opacity-50',
+        // shadcn choice card: a FieldLabel wrapping a Field becomes a selectable card. Kept as shadcn
+        // ships it until the Figma `choice card` (10851:5334) is built on top of it.
+        'has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-md has-[>[data-slot=field]]:border [&>*]:data-[slot=field]:p-4',
+        'has-data-[state=checked]:border-primary has-data-[state=checked]:bg-primary/5 dark:has-data-[state=checked]:bg-primary/10',
         // A disabled Select trigger (disabled on the Radix root) dims its label too.
         'group-has-[[data-slot=select-trigger][data-disabled]]/field:opacity-50',
         className,

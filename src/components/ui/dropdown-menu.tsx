@@ -1,7 +1,7 @@
 import * as React from 'react'
-import { CheckIcon, ChevronRightIcon } from 'lucide-react'
 import { DropdownMenu as DropdownMenuPrimitive } from 'radix-ui'
 
+import { CheckIcon, ChevronRightIcon, Icon } from '@/components/ui/icon'
 import { cn } from '@/lib/utils'
 
 // Figma: Dropdown Menu page → `dropdown menu` (8257:3156), `dropdown item` (1650:28172),
@@ -128,7 +128,7 @@ function DropdownMenuRadioItem({
       {children}
       <span className="pointer-events-none absolute right-2 flex size-4 items-center justify-center">
         <DropdownMenuPrimitive.ItemIndicator>
-          <CheckIcon />
+          <Icon icon={CheckIcon} />
         </DropdownMenuPrimitive.ItemIndicator>
       </span>
     </DropdownMenuPrimitive.RadioItem>
@@ -197,7 +197,7 @@ function DropdownMenuSubTrigger({
       {...props}
     >
       {children}
-      <ChevronRightIcon className="ml-auto size-3 text-foreground-subtle" />
+      <Icon icon={ChevronRightIcon} size="xs" className="ml-auto text-foreground-subtle" />
     </DropdownMenuPrimitive.SubTrigger>
   )
 }

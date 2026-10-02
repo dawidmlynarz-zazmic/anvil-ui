@@ -47,13 +47,10 @@ function usePopoverPart(part: 'title' | 'description') {
   return ctx ? (part === 'title' ? ctx.titleId : ctx.descriptionId) : undefined
 }
 
-const FOCUSABLE = 'input, select, textarea, button, a[href], [tabindex]:not([tabindex="-1"])'
-
 function PopoverContent({
   className,
   align = 'center',
   sideOffset = 4,
-  onOpenAutoFocus,
   ...props
 }: React.ComponentProps<typeof PopoverPrimitive.Content>) {
   const id = React.useId()
@@ -75,18 +72,6 @@ function PopoverContent({
         sideOffset={sideOffset}
         aria-labelledby={parts.title ? a11y.titleId : undefined}
         aria-describedby={parts.description ? a11y.descriptionId : undefined}
-        onOpenAutoFocus={(event) => {
-          onOpenAutoFocus?.(event)
-          if (event.defaultPrevented || !(event.target instanceof HTMLElement)) return
-          // The header close comes first; start on the first other control (e.g. a field).
-          const first = event.target.querySelector<HTMLElement>(
-            `:is(${FOCUSABLE}):not([data-slot=shell-close]):not(:disabled)`,
-          )
-          if (first) {
-            event.preventDefault()
-            first.focus()
-          }
-        }}
         className={cn(
           'z-(--z-popover) flex w-72 origin-(--radix-popover-content-transform-origin) flex-col gap-3 rounded-lg bg-popover p-4 text-popover-foreground outline-hidden',
           'inset-ring inset-ring-overlay-4 shadow-elevation-raised',
@@ -106,12 +91,12 @@ function PopoverAnchor({ ...props }: React.ComponentProps<typeof PopoverPrimitiv
 }
 
 type PopoverHeaderProps = Omit<ShellHeaderProps, 'close' | 'variant'> & {
-  /** Renders the close button at the end of the header (default true, as drawn). */
+  /** Renders a close button at the end of the header (Figma `show close`; shadcn has none). */
   showCloseButton?: boolean
 }
 
 /** ShellHeader, variant inline (the popover pads it). */
-function PopoverHeader({ showCloseButton = true, ...props }: PopoverHeaderProps) {
+function PopoverHeader({ showCloseButton = false, ...props }: PopoverHeaderProps) {
   return (
     <ShellHeader
       data-slot="popover-header"
@@ -130,7 +115,7 @@ function PopoverHeader({ showCloseButton = true, ...props }: PopoverHeaderProps)
 
 function PopoverTitle({ className, ...props }: React.ComponentProps<'h2'>) {
   const id = usePopoverPart('title')
-  return <h2 id={id} data-slot="popover-title" className={cn(shellTitleClassName, className)} {...props} />
+  return <div id={id} data-slot="popover-title" className={cn(shellTitleClassName, className)} {...props} />
 }
 
 function PopoverDescription({ className, ...props }: React.ComponentProps<'p'>) {

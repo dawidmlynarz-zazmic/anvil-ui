@@ -3,7 +3,6 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { Dialog as DialogPrimitive } from 'radix-ui'
 
 import {
-  focusShellBody,
   ShellBody,
   ShellCloseButton,
   ShellFooter,
@@ -13,6 +12,7 @@ import {
   type ShellFooterProps,
   type ShellHeaderProps,
 } from '@/components/anvil/shell'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 // Figma: Dialog · Sheet · Drawer page → `dialog` (8255:1298). Centered modal: ShellHeader (bar) +
@@ -70,50 +70,46 @@ const dialogContentVariants = cva(
 )
 
 type DialogContentProps = React.ComponentProps<typeof DialogPrimitive.Content> &
-  VariantProps<typeof dialogContentVariants>
+  VariantProps<typeof dialogContentVariants> & {
+    showCloseButton?: boolean
+  }
 
+// As in shadcn, the content renders the close button last (so Radix's initial focus lands on the
+// first control in the body); Figma draws it in the header bar, so it is positioned there.
 function DialogContent({
   className,
   size = 'default',
   children,
-  onOpenAutoFocus,
+  showCloseButton = true,
   ...props
 }: DialogContentProps) {
   return (
-    <DialogPortal>
+    <DialogPortal data-slot="dialog-portal">
       <DialogOverlay />
       <DialogPrimitive.Content
         data-slot="dialog-content"
         data-size={size}
+        data-close-button={showCloseButton || undefined}
         className={cn(dialogContentVariants({ size }), className)}
-        onOpenAutoFocus={(event) => {
-          onOpenAutoFocus?.(event)
-          focusShellBody(event)
-        }}
         {...props}
       >
         {children}
+        {showCloseButton && (
+          <DialogPrimitive.Close asChild>
+            <ShellCloseButton data-slot="dialog-close-button" className="absolute top-2 right-2" />
+          </DialogPrimitive.Close>
+        )}
       </DialogPrimitive.Content>
     </DialogPortal>
   )
 }
 
-type DialogHeaderProps = Omit<ShellHeaderProps, 'close'> & {
-  /** Renders the close button at the end of the header (default true). */
-  showCloseButton?: boolean
-}
-
-function DialogHeader({ showCloseButton = true, ...props }: DialogHeaderProps) {
+/** ShellHeader (bar); leaves room for the content's close button. */
+function DialogHeader({ className, ...props }: Omit<ShellHeaderProps, 'close'>) {
   return (
     <ShellHeader
       data-slot="dialog-header"
-      close={
-        showCloseButton ? (
-          <DialogPrimitive.Close asChild>
-            <ShellCloseButton />
-          </DialogPrimitive.Close>
-        ) : undefined
-      }
+      className={cn('in-data-close-button:pr-12', className)}
       {...props}
     />
   )
@@ -124,8 +120,25 @@ function DialogBody(props: React.ComponentProps<'div'>) {
   return <ShellBody data-slot="dialog-body" {...props} />
 }
 
-function DialogFooter(props: ShellFooterProps) {
-  return <ShellFooter data-slot="dialog-footer" {...props} />
+function DialogFooter({
+  showCloseButton = false,
+  children,
+  ...props
+}: ShellFooterProps & {
+  showCloseButton?: boolean
+}) {
+  return (
+    <ShellFooter data-slot="dialog-footer" {...props}>
+      {children}
+      {showCloseButton && (
+        <DialogPrimitive.Close asChild>
+          <Button size="sm" variant="outline" intent="neutral">
+            Close
+          </Button>
+        </DialogPrimitive.Close>
+      )}
+    </ShellFooter>
+  )
 }
 
 function DialogTitle({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Title>) {
@@ -165,5 +178,4 @@ export {
   DialogTrigger,
   dialogContentVariants,
   type DialogContentProps,
-  type DialogHeaderProps,
 }

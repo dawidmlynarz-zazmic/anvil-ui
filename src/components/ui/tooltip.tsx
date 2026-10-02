@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 
 // Figma: Tooltip page → `tooltip` (27:95). Short, non-interactive label on hover or focus; use a
 // hover card for rich previews and Popover for interactive content. --background-inverse with
-// text/xs/medium --foreground-inverse, 4/8px padding, 10×4 arrow, shadow/md. `side` → Radix side.
+// text/xs/medium --foreground-inverse, 4/8px padding, arrow, shadow/md. `side` → Radix side.
 // Figma `variant` (default · fixed width · inline) is layout only: text wraps at max-w-xs, and the
 // arrow is always shown.
 
@@ -26,8 +26,7 @@ function TooltipTrigger({ ...props }: React.ComponentProps<typeof TooltipPrimiti
 
 function TooltipContent({
   className,
-  // Room for the 4px arrow so its tip doesn't touch the trigger.
-  sideOffset = 4,
+  sideOffset = 0,
   children,
   ...props
 }: React.ComponentProps<typeof TooltipPrimitive.Content>) {
@@ -44,7 +43,8 @@ function TooltipContent({
         {...props}
       >
         {children}
-        <TooltipPrimitive.Arrow width={10} height={4} className="fill-background-inverse" />
+        {/* shadcn's arrow (a rotated square inside the content), in the tooltip color. */}
+        <TooltipPrimitive.Arrow className="z-(--z-tooltip) size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-2xs bg-background-inverse fill-background-inverse" />
       </TooltipPrimitive.Content>
     </TooltipPrimitive.Portal>
   )

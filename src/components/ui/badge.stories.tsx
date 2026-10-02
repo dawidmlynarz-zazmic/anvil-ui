@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { Clock, Sparkles } from 'lucide-react'
+import { Icon, ClockIcon, SparklesIcon } from './icon'
 import type { ReactNode } from 'react'
 import { expect } from 'storybook/test'
 
@@ -99,11 +99,11 @@ export const WithIcons: Story = {
   render: () => (
     <Surface>
       <Badge>
-        <Sparkles />
+        <Icon icon={SparklesIcon} />
         Label
       </Badge>
       <Badge variant="outline">
-        <Clock />
+        <Icon icon={ClockIcon} />
         Label
       </Badge>
       <Badge variant="subtle">12</Badge>
