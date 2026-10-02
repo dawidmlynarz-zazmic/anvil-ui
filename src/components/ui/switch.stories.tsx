@@ -29,7 +29,7 @@ const meta = {
   render: (args) => (
     <div className="flex items-center gap-2">
       <Switch id="sw" {...args} />
-      <Label htmlFor="sw">Stream responses</Label>
+      <Label htmlFor="sw">Label</Label>
     </div>
   ),
 } satisfies Meta<typeof Switch>
@@ -39,8 +39,8 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   play: async ({ canvas, args }) => {
-    const toggle = canvas.getByRole('switch', { name: 'Stream responses' })
-    await userEvent.click(canvas.getByText('Stream responses'))
+    const toggle = canvas.getByRole('switch', { name: 'Label' })
+    await userEvent.click(canvas.getByText('Label'))
     await expect(toggle).toBeChecked()
     await expect(args.onCheckedChange).toHaveBeenCalledWith(true)
     toggle.focus()
@@ -55,14 +55,14 @@ export const Sizes: Story = {
       {(['default', 'sm'] as const).map((size) => (
         <div key={size} className="flex items-center gap-2">
           <Switch id={`sw-${size}`} size={size} defaultChecked />
-          <Label htmlFor={`sw-${size}`}>Size {size}</Label>
+          <Label htmlFor={`sw-${size}`}>Label</Label>
         </div>
       ))}
     </div>
   ),
 }
 
-/** Figma `size` × `checked` × `state`; hover and focus forced with storybook-addon-pseudo-states. */
+/** Figma `size` × `checked` × `state` (columns: default off · default on · sm off · sm on; rows: default · hover · focus · disabled); hover and focus forced with storybook-addon-pseudo-states. */
 export const States: Story = {
   parameters: {
     pseudo: { hover: ['[data-demo="hover"]'], focusVisible: ['[data-demo="focus"]'] },
@@ -83,9 +83,7 @@ export const States: Story = {
                     data-demo={state}
                     disabled={state === 'disabled'}
                   />
-                  <Label htmlFor={id}>
-                    {size} · {checked ? 'on' : 'off'} · {state}
-                  </Label>
+                  <Label htmlFor={id}>Label</Label>
                 </div>
               )
             })}
@@ -100,10 +98,10 @@ export const States: Story = {
 export const WithField: Story = {
   render: () => (
     <Field orientation="horizontal" className="w-96">
-      <Switch id="memory" defaultChecked />
+      <Switch id="sw-field" defaultChecked />
       <FieldContent>
-        <FieldLabel htmlFor="memory">Conversation memory</FieldLabel>
-        <FieldDescription>The agent remembers earlier conversations with the same user.</FieldDescription>
+        <FieldLabel htmlFor="sw-field">Label</FieldLabel>
+        <FieldDescription>Subtitle</FieldDescription>
       </FieldContent>
     </Field>
   ),

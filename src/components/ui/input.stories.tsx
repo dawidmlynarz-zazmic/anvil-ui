@@ -20,9 +20,9 @@ const meta = {
     },
   },
   args: {
-    label: 'Email',
-    placeholder: 'name@company.com',
-    hint: 'We only use it for sign-in.',
+    label: 'Label',
+    placeholder: 'Placeholder',
+    hint: 'Subtitle',
     size: 'default',
     marker: 'none',
     disabled: false,
@@ -47,16 +47,16 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   play: async ({ canvas }) => {
-    const input = canvas.getByLabelText('Email')
-    await expect(input).toHaveAccessibleDescription('We only use it for sign-in.')
-    await userEvent.type(input, 'ada@zazmic.ai')
-    await expect(input).toHaveValue('ada@zazmic.ai')
+    const input = canvas.getByLabelText('Label')
+    await expect(input).toHaveAccessibleDescription('Subtitle')
+    await userEvent.type(input, 'Value')
+    await expect(input).toHaveValue('Value')
   },
 }
 
 /** Without a label: the bare control (show label off in Figma). Give it an accessible name. */
 export const Bare: Story = {
-  args: { label: undefined, hint: undefined, 'aria-label': 'Search conversations', placeholder: 'Search…' },
+  args: { label: undefined, hint: undefined, 'aria-label': 'Label', placeholder: 'Placeholder' },
 }
 
 /** 32 / 40 / 48 px. */
@@ -64,56 +64,54 @@ export const Sizes: Story = {
   render: () => (
     <div className="flex flex-col gap-4">
       {sizes.map((size) => (
-        <Input key={size} size={size} label={`Size ${size}`} placeholder="Sample text" />
+        <Input key={size} size={size} label="Label" placeholder="Placeholder" />
       ))}
     </div>
   ),
 }
 
-/** Figma states as selectors; hover and focus forced with storybook-addon-pseudo-states. */
+/** Figma states as selectors (rows: default · filled · hover · focus · invalid · disabled); hover and focus forced with storybook-addon-pseudo-states. */
 export const States: Story = {
   parameters: {
     pseudo: { hover: ['[data-demo="hover"]'], focusVisible: ['[data-demo="focus"]'] },
   },
   render: () => (
     <div className="flex flex-col gap-4">
-      <Input label="Default" placeholder="Sample text" />
-      <Input label="Filled" defaultValue="Sample text" />
-      <Input label="Hover" defaultValue="Sample text" data-demo="hover" />
-      <Input label="Focus" defaultValue="Sample text" data-demo="focus" />
-      <Input label="Invalid" defaultValue="Sample text" aria-invalid hint="Explain what to fix." />
-      <Input label="Disabled" defaultValue="Sample text" disabled hint="Helpful description." />
+      <Input label="Label" placeholder="Placeholder" />
+      <Input label="Label" defaultValue="Value" />
+      <Input label="Label" defaultValue="Value" data-demo="hover" />
+      <Input label="Label" defaultValue="Value" data-demo="focus" />
+      <Input label="Label" defaultValue="Value" aria-invalid hint="Subtitle" />
+      <Input label="Label" defaultValue="Value" disabled hint="Subtitle" />
     </div>
   ),
 }
 
 /** Invalid: hint becomes a FieldError (role=alert) and the label turns destructive. */
 export const Invalid: Story = {
-  args: { 'aria-invalid': true, defaultValue: 'ada@', hint: 'Enter a complete email address.' },
+  args: { 'aria-invalid': true, defaultValue: 'Value', hint: 'Subtitle' },
   play: async ({ canvas }) => {
-    await expect(canvas.getByRole('alert')).toHaveTextContent('Enter a complete email address.')
-    await expect(canvas.getByLabelText('Email')).toHaveAccessibleDescription(
-      'Enter a complete email address.',
-    )
+    await expect(canvas.getByRole('alert')).toHaveTextContent('Subtitle')
+    await expect(canvas.getByLabelText('Label')).toHaveAccessibleDescription('Subtitle')
   },
 }
 
 export const Markers: Story = {
   render: () => (
     <div className="flex flex-col gap-4">
-      <Input label="Workspace name" marker="required" required placeholder="Acme" />
-      <Input label="Team" marker="optional" placeholder="Support" />
+      <Input label="Label" marker="required" required placeholder="Placeholder" />
+      <Input label="Label" marker="optional" placeholder="Placeholder" />
     </div>
   ),
 }
 
-/** Typical sign-in form. */
+/** A small form: two required fields and a file input. */
 export const Composition: Story = {
   render: () => (
     <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
-      <Input label="Email" type="email" marker="required" required autoComplete="email" />
-      <Input label="Password" type="password" marker="required" required autoComplete="current-password" />
-      <Input type="file" aria-label="Attachment" />
+      <Input label="Label" type="email" marker="required" required autoComplete="email" />
+      <Input label="Label" type="password" marker="required" required autoComplete="current-password" />
+      <Input type="file" aria-label="Label" />
     </form>
   ),
 }

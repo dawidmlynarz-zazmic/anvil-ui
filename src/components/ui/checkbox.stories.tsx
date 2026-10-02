@@ -30,7 +30,7 @@ const meta = {
   render: (args) => (
     <div className="flex items-center gap-2">
       <Checkbox id="cb" {...args} />
-      <Label htmlFor="cb">Accept terms</Label>
+      <Label htmlFor="cb">Label</Label>
     </div>
   ),
 } satisfies Meta<typeof Checkbox>
@@ -40,8 +40,8 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   play: async ({ canvas, args }) => {
-    const checkbox = canvas.getByRole('checkbox', { name: 'Accept terms' })
-    await userEvent.click(canvas.getByText('Accept terms'))
+    const checkbox = canvas.getByRole('checkbox', { name: 'Label' })
+    await userEvent.click(canvas.getByText('Label'))
     await expect(checkbox).toBeChecked()
     await expect(args.onCheckedChange).toHaveBeenCalledWith(true)
     await userEvent.keyboard(' ')
@@ -49,7 +49,7 @@ export const Default: Story = {
   },
 }
 
-/** Figma `checked` × `state`; hover and focus forced with storybook-addon-pseudo-states. */
+/** Figma `checked` × `state` (columns: false · true · indeterminate; rows: default · hover · focus · invalid · disabled); hover and focus forced with storybook-addon-pseudo-states. */
 export const States: Story = {
   parameters: {
     pseudo: { hover: ['[data-demo="hover"]'], focusVisible: ['[data-demo="focus"]'] },
@@ -69,9 +69,7 @@ export const States: Story = {
                   aria-invalid={state === 'invalid' || undefined}
                   disabled={state === 'disabled'}
                 />
-                <Label htmlFor={id}>
-                  {String(checked)} · {state}
-                </Label>
+                <Label htmlFor={id}>Label</Label>
               </div>
             )
           })}
@@ -85,7 +83,7 @@ export const States: Story = {
 export const Indeterminate: Story = {
   render: () => {
     function Group() {
-      const [tools, setTools] = useState({ search: true, code: false, files: false })
+      const [tools, setTools] = useState({ 'Label 1': true, 'Label 2': false, 'Label 3': false })
       const values = Object.values(tools)
       const all = values.every(Boolean) ? true : values.some(Boolean) ? 'indeterminate' : false
       return (
@@ -94,19 +92,19 @@ export const Indeterminate: Story = {
             <Checkbox
               id="all"
               checked={all}
-              onCheckedChange={(v) => setTools({ search: !!v, code: !!v, files: !!v })}
+              onCheckedChange={(v) => setTools({ 'Label 1': !!v, 'Label 2': !!v, 'Label 3': !!v })}
             />
-            <Label htmlFor="all">All tools</Label>
+            <Label htmlFor="all">Label</Label>
           </div>
           <div className="ml-7 flex flex-col gap-3">
             {(Object.keys(tools) as (keyof typeof tools)[]).map((key) => (
               <div key={key} className="flex items-center gap-2">
                 <Checkbox
-                  id={key}
+                  id={`item-${key.slice(-1)}`}
                   checked={tools[key]}
                   onCheckedChange={(v) => setTools((t) => ({ ...t, [key]: !!v }))}
                 />
-                <Label htmlFor={key}>{key}</Label>
+                <Label htmlFor={`item-${key.slice(-1)}`}>{key}</Label>
               </div>
             ))}
           </div>
@@ -116,10 +114,10 @@ export const Indeterminate: Story = {
     return <Group />
   },
   play: async ({ canvas }) => {
-    const all = canvas.getByRole('checkbox', { name: 'All tools' })
+    const all = canvas.getByRole('checkbox', { name: 'Label' })
     await expect(all).toHaveAttribute('data-state', 'indeterminate')
     await userEvent.click(all)
-    await expect(canvas.getByRole('checkbox', { name: 'files' })).toBeChecked()
+    await expect(canvas.getByRole('checkbox', { name: 'Label 3' })).toBeChecked()
   },
 }
 
@@ -128,17 +126,17 @@ export const WithField: Story = {
   render: () => (
     <div className="flex w-96 flex-col gap-6">
       <Field orientation="horizontal">
-        <Checkbox id="share" defaultChecked />
+        <Checkbox id="cb-field" defaultChecked />
         <FieldContent>
-          <FieldLabel htmlFor="share">Share transcripts with the team</FieldLabel>
-          <FieldDescription>Teammates can read conversations in this workspace.</FieldDescription>
+          <FieldLabel htmlFor="cb-field">Label</FieldLabel>
+          <FieldDescription>Subtitle</FieldDescription>
         </FieldContent>
       </Field>
       <Field orientation="horizontal" data-invalid="true">
-        <Checkbox id="policy" aria-invalid />
+        <Checkbox id="cb-invalid" aria-invalid />
         <FieldContent>
-          <FieldLabel htmlFor="policy">Accept the data policy</FieldLabel>
-          <FieldError>You need to accept the policy to continue.</FieldError>
+          <FieldLabel htmlFor="cb-invalid">Label</FieldLabel>
+          <FieldError>Subtitle</FieldError>
         </FieldContent>
       </Field>
     </div>

@@ -19,7 +19,7 @@ const meta = {
       },
     },
   },
-  args: { children: 'Email address', marker: 'none' },
+  args: { children: 'Label', marker: 'none' },
   argTypes: { marker: { control: 'inline-radio', options: markers } },
 } satisfies Meta<typeof Label>
 
@@ -33,29 +33,29 @@ export const Markers: Story = {
     <div className="flex flex-col gap-3">
       {markers.map((marker) => (
         <Label key={marker} marker={marker}>
-          Label ({marker})
+          Label
         </Label>
       ))}
     </div>
   ),
 }
 
-/** Figma states default · disabled · invalid for each marker. */
+/** Figma states for each marker (columns: none · required · optional; rows: default · disabled · invalid). */
 export const States: Story = {
   render: () => (
     <div className="grid grid-cols-3 gap-6">
       {markers.map((marker) => (
         <div key={marker} className="flex flex-col gap-3">
-          <Label marker={marker}>Default</Label>
+          <Label marker={marker}>Label</Label>
           {/* A dimmed label belongs to a disabled control (and is then exempt from contrast rules). */}
           <div className="group flex items-center gap-2" data-disabled="true">
             <input id={`disabled-${marker}`} type="checkbox" disabled />
             <Label htmlFor={`disabled-${marker}`} marker={marker}>
-              Disabled
+              Label
             </Label>
           </div>
           <Label marker={marker} data-invalid="true">
-            Invalid
+            Label
           </Label>
         </div>
       ))}
@@ -68,23 +68,23 @@ export const WithControl: Story = {
   render: () => (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-2">
-        <Label htmlFor="name" marker="required">
-          Full name
+        <Label htmlFor="label-control" marker="required">
+          Label
         </Label>
         <input
-          id="name"
+          id="label-control"
           required
           className="h-10 rounded-md bg-background px-3 type-text-sm-normal text-foreground inset-ring inset-ring-overlay-16"
         />
       </div>
       <div className="flex items-center gap-2">
-        <input id="terms" type="checkbox" disabled className="peer" />
-        <Label htmlFor="terms">Accept terms (disabled peer)</Label>
+        <input id="label-peer" type="checkbox" disabled className="peer" />
+        <Label htmlFor="label-peer">Label</Label>
       </div>
     </div>
   ),
   play: async ({ canvas }) => {
-    await userEvent.click(canvas.getByText('Full name'))
+    await userEvent.click(canvas.getByText('Label', { selector: '[for=label-control]' }))
     await expect(canvas.getByRole('textbox')).toHaveFocus()
   },
 }

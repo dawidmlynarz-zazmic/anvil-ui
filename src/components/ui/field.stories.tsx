@@ -14,10 +14,10 @@ import {
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10940-109'
 
-// Stand-in controls until Combobox / Switch / Checkbox land; Figma's default control is a Combobox.
+// Native stand-in controls (Figma's default control is a Combobox, not built yet).
 const selectClass =
   'h-10 w-full rounded-md bg-background px-3 type-text-sm-normal text-foreground inset-ring inset-ring-overlay-16 aria-invalid:inset-ring-danger'
-const MODELS = ['Claude Sonnet 4.6', 'Claude Opus 4.6', 'Claude Haiku 4.5']
+const OPTIONS = ['Label 1', 'Label 2', 'Label 3']
 
 const meta = {
   title: 'Components/Field',
@@ -49,13 +49,13 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   render: (args) => (
     <Field {...args}>
-      <FieldLabel htmlFor="model">Model</FieldLabel>
-      <select id="model" className={selectClass}>
-        {MODELS.map((m) => (
+      <FieldLabel htmlFor="field-1">Label</FieldLabel>
+      <select id="field-1" className={selectClass}>
+        {OPTIONS.map((m) => (
           <option key={m}>{m}</option>
         ))}
       </select>
-      <FieldDescription>Helpful description of this setting.</FieldDescription>
+      <FieldDescription>Subtitle</FieldDescription>
     </Field>
   ),
 }
@@ -64,18 +64,18 @@ export const Default: Story = {
 export const Invalid: Story = {
   render: () => (
     <Field data-invalid="true">
-      <FieldLabel htmlFor="model-invalid">Model</FieldLabel>
-      <select id="model-invalid" aria-invalid="true" className={selectClass}>
-        {MODELS.map((m) => (
+      <FieldLabel htmlFor="field-invalid">Label</FieldLabel>
+      <select id="field-invalid" aria-invalid="true" className={selectClass}>
+        {OPTIONS.map((m) => (
           <option key={m}>{m}</option>
         ))}
       </select>
-      <FieldDescription>Helpful description of this setting.</FieldDescription>
-      <FieldError>Explain what to fix.</FieldError>
+      <FieldDescription>Subtitle</FieldDescription>
+      <FieldError>Subtitle</FieldError>
     </Field>
   ),
   play: async ({ canvas }) => {
-    await expect(canvas.getByRole('alert')).toHaveTextContent('Explain what to fix.')
+    await expect(canvas.getByRole('alert')).toHaveTextContent('Subtitle')
   },
 }
 
@@ -84,18 +84,23 @@ export const Horizontal: Story = {
   render: () => (
     <div className="flex flex-col gap-6">
       <Field orientation="horizontal">
-        <input id="notify" type="checkbox" defaultChecked className="size-4 accent-primary" />
+        <input id="field-horizontal" type="checkbox" defaultChecked className="size-4 accent-primary" />
         <FieldContent>
-          <FieldLabel htmlFor="notify">Email notifications</FieldLabel>
-          <FieldDescription>Helpful description of this setting.</FieldDescription>
+          <FieldLabel htmlFor="field-horizontal">Label</FieldLabel>
+          <FieldDescription>Subtitle</FieldDescription>
         </FieldContent>
       </Field>
       <Field orientation="horizontal" data-invalid="true">
-        <input id="notify-invalid" type="checkbox" aria-invalid="true" className="size-4 accent-primary" />
+        <input
+          id="field-horizontal-invalid"
+          type="checkbox"
+          aria-invalid="true"
+          className="size-4 accent-primary"
+        />
         <FieldContent>
-          <FieldLabel htmlFor="notify-invalid">Accept the data policy</FieldLabel>
-          <FieldDescription>Helpful description of this setting.</FieldDescription>
-          <FieldError>Explain what to fix.</FieldError>
+          <FieldLabel htmlFor="field-horizontal-invalid">Label</FieldLabel>
+          <FieldDescription>Subtitle</FieldDescription>
+          <FieldError>Subtitle</FieldError>
         </FieldContent>
       </Field>
     </div>
@@ -106,11 +111,11 @@ export const Horizontal: Story = {
 export const Disabled: Story = {
   render: () => (
     <Field data-disabled="true">
-      <FieldLabel htmlFor="model-disabled">Model</FieldLabel>
-      <select id="model-disabled" disabled className={`${selectClass} opacity-50`}>
-        <option>{MODELS[0]}</option>
+      <FieldLabel htmlFor="field-disabled">Label</FieldLabel>
+      <select id="field-disabled" disabled className={`${selectClass} opacity-50`}>
+        <option>{OPTIONS[0]}</option>
       </select>
-      <FieldDescription>Helpful description of this setting.</FieldDescription>
+      <FieldDescription>Subtitle</FieldDescription>
     </Field>
   ),
 }
@@ -119,10 +124,10 @@ export const Disabled: Story = {
 export const Group: Story = {
   render: () => (
     <FieldSet>
-      <FieldLegend>Agent tools</FieldLegend>
-      <FieldDescription>Choose what the agent may use.</FieldDescription>
+      <FieldLegend>Title</FieldLegend>
+      <FieldDescription>Subtitle</FieldDescription>
       <FieldGroup data-slot="checkbox-group">
-        {['Web search', 'Code execution', 'File access'].map((tool) => (
+        {OPTIONS.map((tool) => (
           <Field key={tool} orientation="horizontal">
             <input id={tool} type="checkbox" className="size-4 accent-primary" />
             <FieldLabel htmlFor={tool}>{tool}</FieldLabel>

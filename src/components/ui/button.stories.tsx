@@ -46,7 +46,7 @@ const meta = {
     },
   },
   args: {
-    children: 'Button',
+    children: 'Label',
     variant: 'default',
     intent: 'brand',
     size: 'default',
@@ -76,7 +76,7 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   play: async ({ canvas, args }) => {
-    const button = canvas.getByRole('button', { name: 'Button' })
+    const button = canvas.getByRole('button', { name: 'Label' })
     await userEvent.click(button)
     await expect(args.onClick).toHaveBeenCalledTimes(1)
     button.blur()
@@ -95,7 +95,7 @@ export const Variants: Story = {
           <Surface intent={intent}>
             {variants.map((variant) => (
               <Button key={variant} variant={variant} intent={intent}>
-                {variant === 'default' ? 'Default' : variant === 'outline' ? 'Outline' : 'Ghost'}
+                Label
               </Button>
             ))}
           </Surface>
@@ -113,13 +113,13 @@ export const Sizes: Story = {
         {sizes.map((size) => (
           <Button key={size} size={size}>
             <Plus />
-            Size {size}
+            Label
           </Button>
         ))}
       </Surface>
       <Surface>
         {iconSizes.map((size) => (
-          <Button key={size} size={size} aria-label={`Add (${size})`}>
+          <Button key={size} size={size} aria-label="Label">
             <Plus />
           </Button>
         ))}
@@ -131,15 +131,15 @@ export const Sizes: Story = {
 export const Shapes: Story = {
   render: () => (
     <Surface>
-      <Button>Default</Button>
-      <Button shape="pill">Pill</Button>
+      <Button>Label</Button>
+      <Button shape="pill">Label</Button>
       <Button variant="outline" intent="neutral" shape="pill">
-        Pill outline
+        Label
       </Button>
-      <Button size="icon" shape="circle" aria-label="Add">
+      <Button size="icon" shape="circle" aria-label="Label">
         <Plus />
       </Button>
-      <Button size="icon" variant="outline" intent="neutral" shape="circle" aria-label="Next">
+      <Button size="icon" variant="outline" intent="neutral" shape="circle" aria-label="Label">
         <ChevronRight />
       </Button>
     </Surface>
@@ -156,6 +156,16 @@ export const States: Story = {
   },
   render: () => (
     <div className="flex flex-col gap-2">
+      <div className="flex items-center gap-2">
+        <Label>{''}</Label>
+        <div className="flex gap-3 px-3">
+          {['default', 'hover', 'focus', 'disabled', 'loading'].map((state) => (
+            <div key={state} className="w-24 type-text-xs-medium text-muted-foreground">
+              {state}
+            </div>
+          ))}
+        </div>
+      </div>
       {intents.map((intent) =>
         variants.map((variant) => (
           <div key={intent + variant} className="flex items-center gap-2">
@@ -164,19 +174,19 @@ export const States: Story = {
             </Label>
             <Surface intent={intent}>
               <Button variant={variant} intent={intent}>
-                Default
+                Label
               </Button>
               <Button variant={variant} intent={intent} data-demo="hover">
-                Hover
+                Label
               </Button>
               <Button variant={variant} intent={intent} data-demo="focus">
-                Focus
+                Label
               </Button>
               <Button variant={variant} intent={intent} disabled>
-                Disabled
+                Label
               </Button>
               <Button variant={variant} intent={intent} loading>
-                Loading
+                Label
               </Button>
             </Surface>
           </div>
@@ -187,9 +197,9 @@ export const States: Story = {
 }
 
 export const Loading: Story = {
-  args: { loading: true, children: 'Saving' },
+  args: { loading: true },
   play: async ({ canvas, args }) => {
-    const button = canvas.getByRole('button', { name: 'Saving' })
+    const button = canvas.getByRole('button', { name: 'Label' })
     await expect(button).toHaveAttribute('aria-busy', 'true')
     await userEvent.click(button, { pointerEventsCheck: 0 })
     await expect(args.onClick).not.toHaveBeenCalled()
@@ -199,7 +209,7 @@ export const Loading: Story = {
 export const Disabled: Story = {
   args: { disabled: true },
   play: async ({ canvas }) => {
-    await expect(canvas.getByRole('button', { name: 'Button' })).toBeDisabled()
+    await expect(canvas.getByRole('button', { name: 'Label' })).toBeDisabled()
   },
 }
 
@@ -208,19 +218,19 @@ export const WithIcons: Story = {
     <Surface>
       <Button>
         <ChevronLeft />
-        Back
+        Label
       </Button>
       <Button variant="outline" intent="neutral">
-        Next
+        Label
         <ArrowRight />
       </Button>
       <Button variant="ghost" intent="brand">
         <Sparkles />
-        Ask agent
+        Label
       </Button>
       <Button intent="destructive">
         <Trash2 />
-        Delete
+        Label
       </Button>
     </Surface>
   ),
@@ -236,13 +246,7 @@ export const IconButtons: Story = {
           <Label>{intent}</Label>
           <Surface intent={intent}>
             {variants.map((variant) => (
-              <Button
-                key={variant}
-                size="icon"
-                variant={variant}
-                intent={intent}
-                aria-label={`Add (${variant})`}
-              >
+              <Button key={variant} size="icon" variant={variant} intent={intent} aria-label="Label">
                 <Plus />
               </Button>
             ))}
@@ -253,26 +257,26 @@ export const IconButtons: Story = {
   ),
 }
 
-/** In context: a footer action row, and `asChild` rendering a link. */
+/** A footer action row, and `asChild` rendering a link. */
 export const Composition: Story = {
   render: () => (
     <div className="flex w-full max-w-md flex-col gap-4">
       <div className="flex items-center justify-end gap-2 rounded-lg border border-border p-4">
         <Button variant="ghost" intent="neutral">
-          Cancel
+          Label
         </Button>
-        <Button>Save changes</Button>
+        <Button>Label</Button>
       </div>
       <Button asChild variant="outline" intent="brand">
         <a href="#docs">
-          Read the docs
+          Label
           <ArrowRight />
         </a>
       </Button>
     </div>
   ),
   play: async ({ canvasElement }) => {
-    const link = within(canvasElement).getByRole('link', { name: 'Read the docs' })
+    const link = within(canvasElement).getByRole('link', { name: 'Label' })
     await expect(link).toHaveAttribute('data-slot', 'button')
   },
 }
