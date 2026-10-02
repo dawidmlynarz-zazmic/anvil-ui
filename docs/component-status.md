@@ -39,4 +39,6 @@ Behavior or API that differs from the shadcn source, and why. Everything else is
 | Checkbox | indeterminate shows a minus icon | Figma draws it; shadcn has no indeterminate icon |
 | Popover | content gets aria-labelledby / -describedby from PopoverTitle / PopoverDescription | Radix role=dialog has no accessible name (axe) |
 | Dialog, Sheet | close positioned into the header bar (still rendered last); `DialogBody` / `SheetBody` slot, focusable only while it scrolls | Figma shell layout; axe scrollable-region-focusable |
+| Slider | the Slider's `aria-label` / `aria-labelledby` are forwarded to every thumb | Radix puts role=slider on the thumbs without a name (axe) |
 | Toast | `theme` prop instead of next-themes | next-themes is not an approved dependency |
+| Slider | Forms 10951:40504 · slider 10946:184 | src/components/ui/slider.tsx | Ready for review (Step 4a·1) | shadcn Slider; `mode` single·range = shape of `value` (shadcn). Track 6px `--muted`, range `--primary`, thumb 16px `--background` + 1px `--primary` stroke; focus-ring on the thumb; disabled 50%. Removed shadcn's hover ring and thumb shadow (not drawn). Added: the Slider's aria-label / aria-labelledby reach every thumb (Radix role=slider had no name) |
