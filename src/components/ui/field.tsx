@@ -1,8 +1,8 @@
-import { useMemo } from 'react'
+import { useId, useMemo, type ReactNode } from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
-import { Label } from '@/components/ui/label'
+import { Label, type LabelProps } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 
 // Figma: Forms page → `field` (10940:109): label + control + description + error for controls
@@ -108,6 +108,8 @@ function FieldLabel({ className, ...props }: React.ComponentProps<typeof Label>)
       className={cn(
         // Choice-card styling (label wrapping a Field) is the Anvil ChoiceCard, not FieldLabel.
         'group/field-label peer/field-label flex w-fit group-data-[disabled=true]/field:opacity-50',
+        // A disabled Select trigger (disabled on the Radix root) dims its label too.
+        'group-has-[[data-slot=select-trigger][data-disabled]]/field:opacity-50',
         className,
       )}
       {...props}
@@ -220,7 +222,74 @@ function FieldError({
   )
 }
 
+// ── Built-in field anatomy ─────────────────────────────────────────────────────────────────
+// Text field (Input), Textarea and Select render Field + FieldLabel + control + FieldDescription
+// (or FieldError when invalid) when given a `label`; without one they are the bare control.
+
+/** Props shared by controls with a built-in label. */
+type FieldAnatomyProps = {
+  /** Renders the field anatomy (Field + FieldLabel + hint) around the control. */
+  label?: ReactNode
+  /** Text under the control: FieldDescription, or FieldError when invalid. Needs `label`. */
+  hint?: ReactNode
+  marker?: LabelProps['marker']
+}
+
+/** Ids that tie the label and hint to the control. */
+function useFieldAnatomy({
+  id,
+  label,
+  hint,
+  describedBy,
+}: {
+  id?: string
+  label?: ReactNode
+  hint?: ReactNode
+  describedBy?: string
+}) {
+  const generatedId = useId()
+  const controlId = id ?? generatedId
+  const hintId = label && hint ? `${controlId}-hint` : undefined
+  const ariaDescribedBy = [hintId, describedBy].filter(Boolean).join(' ') || undefined
+  return { controlId, hintId, ariaDescribedBy }
+}
+
+function FieldAnatomy({
+  controlId,
+  hintId,
+  label,
+  hint,
+  marker,
+  invalid,
+  disabled,
+  children,
+}: FieldAnatomyProps & {
+  controlId: string
+  hintId?: string
+  invalid?: boolean
+  disabled?: boolean
+  children: ReactNode
+}) {
+  if (!label) return children
+  return (
+    <Field data-invalid={invalid || undefined} data-disabled={disabled || undefined}>
+      <FieldLabel htmlFor={controlId} marker={marker}>
+        {label}
+      </FieldLabel>
+      {children}
+      {hint && invalid && <FieldError id={hintId}>{hint}</FieldError>}
+      {hint && !invalid && <FieldDescription id={hintId}>{hint}</FieldDescription>}
+    </Field>
+  )
+}
+
+const isInvalid = (value: unknown) => value === true || value === 'true'
+
 export {
+  FieldAnatomy,
+  useFieldAnatomy,
+  isInvalid,
+  type FieldAnatomyProps,
   Field,
   FieldLabel,
   FieldDescription,
