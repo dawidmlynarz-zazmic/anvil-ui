@@ -201,6 +201,28 @@ Customer Support) are consumers of the library. Use them as real-world usage ref
 - Modal is a behavior, not a component. Context Menu reuses Dropdown Menu items. Hover card is
   a Card inside `HoverCard`. Menu in Figma = `Menubar` in code. Toast = Sonner.
 
+## Architecture (non-negotiable)
+
+```text
+shadcn/ui → foundation and behavior → Anvil design system → styling / customization
+Lucide    → Icon (@/components/ui/icon) → every component and story
+```
+
+- **shadcn is the foundation.** Every component with a shadcn counterpart starts as the
+  unmodified `shadcn add` output (its own commit) and is then restyled. Keep shadcn's exports,
+  Radix parts, props, defaults, focus management, keyboard handling, triggers, dismissal and
+  animations. Customize the styling layer; change behavior only for a concrete reason (Figma
+  draws it differently, the API Contract names it differently, or an a11y test fails) and list
+  it under "Intentional deviations from shadcn" in `docs/component-status.md`.
+- **Overlays keep shadcn's interaction model:** `*Trigger` opens, Radix owns open state, focus
+  trap, initial focus, Escape / outside-click dismissal and focus return; `*Content` renders the
+  close button (`showCloseButton`) last in the DOM so Radix's initial focus lands on the first
+  control. Shells may position it (e.g. into the header bar), not move it in the DOM.
+- **Icons:** import `Icon` and glyphs from `@/components/ui/icon` only (`lucide-react` is
+  banned elsewhere by ESLint). `<Icon icon={PlusIcon} />` is 16px with a constant 1.33px stroke
+  (Figma Icons page), decorative unless `label` is set; `size` xs · default, `tone` for the
+  status / agent tones. Inside components, the container sizes icon children.
+
 ## Per-component workflow
 
 1. Read the Figma page (`get_metadata`), then the component set (`get_design_context`,
