@@ -16,7 +16,7 @@ registry, the tokens package or Code Connect publishing until asked (see `docs/r
 
 React 19 · Vite 8 · TypeScript 6.0 (strict; not 7 until typescript-eslint supports it) ·
 Tailwind CSS v4 (`@tailwindcss/vite`, CSS-first `@theme inline`, no `tailwind.config.js`) ·
-shadcn/ui (Radix) · Storybook 10 (`@storybook/react-vite`) · Vitest browser mode (Playwright) ·
+shadcn/ui (Radix) · Storybook 10 (`@storybook/react-vite`, CSF Next + `Story.test`) · Vitest browser mode (Playwright) ·
 Style Dictionary 5 · pnpm. Node 24 (`.nvmrc`). Pin exact versions when installing.
 Ask before adding any dependency not listed here.
 
@@ -37,7 +37,8 @@ Run `pnpm typecheck && pnpm lint` before saying a task is done.
 ## Repo structure
 
 ```text
-.storybook/            main.ts, preview.tsx (themes, shell + motion toolbars), preview-head.html (fonts)
+.storybook/            main.ts, preview.tsx (CSF Next definePreview: themes, shell + motion toolbars),
+                       interaction-state.tsx (State control), sync-open.tsx (open control), preview-head.html
 tokens/                anvil.tokens.json — DTCG, pulled from Figma via the Figma MCP. Never edit by hand.
 scripts/figma/         export-tokens.js — read-only Plugin API script that produces anvil.tokens.json
 src/styles/
@@ -48,6 +49,7 @@ src/components/
   anvil/               Anvil compositions: shell parts, status badge, choice card, stepper
   agent/               Agent Builder components (later phase)
 src/lib/utils.ts       cn()
+stories/               Welcome (landing page; welcome/catalog.ts lists every area and component)
 stories/foundations/   Colors, Typography, Spacing, Radius, Elevation (MDX, generated from tokens)
 docs/                  api-contract.md, roadmap.md, component-status.md
 ```
@@ -230,10 +232,21 @@ Lucide    → Icon (@/components/ui/icon) → every component and story
 2. `pnpm dlx shadcn@latest add <primitive>` when a shadcn primitive exists.
 3. Restyle with `cva` using contract names and token utilities only (no hex, no px literals
    except 1px borders).
-4. Write `<name>.stories.tsx` (CSF 3): Default with controls, Variants grid, Sizes, States
-   (pseudo-states for hover / focus), With icons, Composition. Overlay stories: controlled
-   `open`, `within(document.body)` in play functions, `parameters.docs.story.inline = false`.
-   Add `parameters.design` with the Figma URL of the component set.
+4. Write `<name>.stories.tsx` in **CSF Next** (`import preview from '#.storybook/preview'`,
+   `preview.meta({...})`, `meta.story({...})`): Default with controls, Variants grid, Sizes, States
+   reference grid, With icons, Composition. Add `parameters.design` with the Figma URL.
+   - **Stories open in their resting state.** Never use `play`: interactions are
+     `Story.test('…', fn)` (run by Vitest in light and dark and from the sidebar, never on view).
+   - **Default** renders from `args` and exposes every real prop as a Control (variant, intent,
+     size, disabled, loading, `aria-invalid`, checked, open, …).
+   - **Hover / focus / pressed:** the global **State** control (`.storybook/interaction-state.tsx`)
+     previews them on any story; reference grids wrap a cell in
+     `<span className="pseudo-hover-all contents">` (also `pseudo-focus-visible-all`,
+     `pseudo-active-all`). Never `parameters.pseudo` (its global leaks into later stories).
+   - **Overlays:** a boolean `open` arg is a live two-way control (`.storybook/sync-open.tsx`);
+     pass `open` / `onOpenChange` to the Root. Default is closed; stories that open on load
+     prevent Radix's initial focus (`onOpenAutoFocus={(e) => e.preventDefault()}`). Query
+     `within(canvasElement.ownerDocument.body)` in tests; `parameters.docs.story.inline = false`.
    Copy is plain and context-agnostic: "Title", "Subtitle" (descriptions, hints, errors),
    "Label" (labels, buttons, options; "Label 1", "Label 2" when several), "Placeholder" /
    "Value" in inputs. Realistic examples belong in the examples playground (roadmap Step 5).
