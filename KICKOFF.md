@@ -51,7 +51,7 @@ docs/component-status.md and stop for review after the batch.
 **When Figma changes:**
 
 ```text
-I re-exported tokens/anvil.tokens.json and updated the API Contract in Figma. Re-run
-pnpm tokens:build, diff the generated CSS, re-export docs/api-contract.md from Figma node
+Variables and the API Contract changed in Figma. Re-pull tokens/anvil.tokens.json with
+scripts/figma/export-tokens.js, re-run pnpm tokens:build, diff the generated CSS, re-export docs/api-contract.md from Figma node
 10925:2, and list every component affected.
 ```
