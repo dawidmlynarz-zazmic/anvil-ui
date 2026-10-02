@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
-import { XIcon } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
+import { Icon, XIcon } from '@/components/ui/icon'
 import { cn } from '@/lib/utils'
 
 // Figma: Dialog · Sheet · Drawer page → `.shell header` (10960:223) and `.shell footer` (10960:260),
@@ -67,8 +67,40 @@ function ShellCloseButton({ className, ...props }: React.ComponentProps<typeof B
       className={cn('shrink-0', className)}
       {...props}
     >
-      <XIcon />
+      <Icon icon={XIcon} />
     </Button>
+  )
+}
+
+// ── Body ──────────────────────────────────────────────────────────────────────────────────
+// Figma content / modal-content slot of bar shells (Dialog, Sheet, Drawer): 16px padding and gap.
+// Scrolls when the shell hits its max height, and becomes focusable only while it overflows so
+// keyboard users can scroll it.
+function ShellBody({ className, ...props }: React.ComponentProps<'div'>) {
+  const ref = React.useRef<HTMLDivElement>(null)
+  const [scrollable, setScrollable] = React.useState(false)
+  React.useLayoutEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const update = () => setScrollable(el.scrollHeight > el.clientHeight)
+    update()
+    const observer = new ResizeObserver(update)
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <div
+      ref={ref}
+      data-slot="shell-body"
+      data-shell-body=""
+      tabIndex={scrollable ? 0 : undefined}
+      className={cn(
+        'flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto p-4 outline-none focus-visible:inset-ring-2 focus-visible:inset-ring-ring',
+        className,
+      )}
+      {...props}
+    />
   )
 }
 
@@ -106,6 +138,7 @@ function ShellFooter({ className, variant = 'bar', align = 'end', ...props }: Sh
 }
 
 export {
+  ShellBody,
   ShellCloseButton,
   ShellFooter,
   ShellHeader,

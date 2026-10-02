@@ -1,5 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { ArrowRight, ChevronLeft, ChevronRight, Plus, Sparkles, Trash2 } from 'lucide-react'
+import {
+  Icon,
+  ArrowRightIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  PlusIcon,
+  SparklesIcon,
+  Trash2Icon,
+} from './icon'
 import type { ReactNode } from 'react'
 import { expect, fn, userEvent, within } from 'storybook/test'
 
@@ -112,7 +120,7 @@ export const Sizes: Story = {
       <Surface>
         {sizes.map((size) => (
           <Button key={size} size={size}>
-            <Plus />
+            <Icon icon={PlusIcon} />
             Label
           </Button>
         ))}
@@ -120,7 +128,7 @@ export const Sizes: Story = {
       <Surface>
         {iconSizes.map((size) => (
           <Button key={size} size={size} aria-label="Label">
-            <Plus />
+            <Icon icon={PlusIcon} />
           </Button>
         ))}
       </Surface>
@@ -137,10 +145,10 @@ export const Shapes: Story = {
         Label
       </Button>
       <Button size="icon" shape="circle" aria-label="Label">
-        <Plus />
+        <Icon icon={PlusIcon} />
       </Button>
       <Button size="icon" variant="outline" intent="neutral" shape="circle" aria-label="Label">
-        <ChevronRight />
+        <Icon icon={ChevronRightIcon} />
       </Button>
     </Surface>
   ),
@@ -217,19 +225,19 @@ export const WithIcons: Story = {
   render: () => (
     <Surface>
       <Button>
-        <ChevronLeft />
+        <Icon icon={ChevronLeftIcon} />
         Label
       </Button>
       <Button variant="outline" intent="neutral">
         Label
-        <ArrowRight />
+        <Icon icon={ArrowRightIcon} />
       </Button>
       <Button variant="ghost" intent="brand">
-        <Sparkles />
+        <Icon icon={SparklesIcon} />
         Label
       </Button>
       <Button intent="destructive">
-        <Trash2 />
+        <Icon icon={Trash2Icon} />
         Label
       </Button>
     </Surface>
@@ -247,7 +255,7 @@ export const IconButtons: Story = {
           <Surface intent={intent}>
             {variants.map((variant) => (
               <Button key={variant} size="icon" variant={variant} intent={intent} aria-label="Label">
-                <Plus />
+                <Icon icon={PlusIcon} />
               </Button>
             ))}
           </Surface>
@@ -270,7 +278,7 @@ export const Composition: Story = {
       <Button asChild variant="outline" intent="brand">
         <a href="#docs">
           Label
-          <ArrowRight />
+          <Icon icon={ArrowRightIcon} />
         </a>
       </Button>
     </div>

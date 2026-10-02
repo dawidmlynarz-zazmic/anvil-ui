@@ -36,5 +36,23 @@ export default tseslint.config(
     files: ['*.{js,mjs,ts}', 'scripts/**/*.{js,mjs}'],
     languageOptions: { globals: globals.node },
   },
+  {
+    // Lucide → Icon → everything else: glyphs come from @/components/ui/icon only.
+    files: ['**/*.{ts,tsx}'],
+    ignores: ['src/components/ui/icon.tsx'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: 'lucide-react',
+              message: "Import glyphs and <Icon> from '@/components/ui/icon' instead of lucide-react.",
+            },
+          ],
+        },
+      ],
+    },
+  },
   ...storybook.configs['flat/recommended'],
 )

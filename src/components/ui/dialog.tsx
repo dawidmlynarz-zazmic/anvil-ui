@@ -3,6 +3,7 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { Dialog as DialogPrimitive } from 'radix-ui'
 
 import {
+  ShellBody,
   ShellCloseButton,
   ShellFooter,
   ShellHeader,
@@ -11,6 +12,7 @@ import {
   type ShellFooterProps,
   type ShellHeaderProps,
 } from '@/components/anvil/shell'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 // Figma: Dialog · Sheet · Drawer page → `dialog` (8255:1298). Centered modal: ShellHeader (bar) +
@@ -68,100 +70,75 @@ const dialogContentVariants = cva(
 )
 
 type DialogContentProps = React.ComponentProps<typeof DialogPrimitive.Content> &
-  VariantProps<typeof dialogContentVariants>
+  VariantProps<typeof dialogContentVariants> & {
+    showCloseButton?: boolean
+  }
 
-const FOCUSABLE = 'input, select, textarea, button, a[href], [tabindex]:not([tabindex="-1"])'
-
+// As in shadcn, the content renders the close button last (so Radix's initial focus lands on the
+// first control in the body); Figma draws it in the header bar, so it is positioned there.
 function DialogContent({
   className,
   size = 'default',
   children,
-  onOpenAutoFocus,
+  showCloseButton = true,
   ...props
 }: DialogContentProps) {
-  // The close button comes first in the DOM (header), so Radix would focus it. Start in the body
-  // instead when it has a control, e.g. the first field of a form.
-  const handleOpenAutoFocus = (event: Event) => {
-    onOpenAutoFocus?.(event)
-    if (event.defaultPrevented) return
-    const content = event.target instanceof HTMLElement ? event.target : null
-    const first = content?.querySelector<HTMLElement>(
-      `[data-slot=dialog-body] :is(${FOCUSABLE}):not(:disabled)`,
-    )
-    if (first) {
-      event.preventDefault()
-      first.focus()
-    }
-  }
-
   return (
-    <DialogPortal>
+    <DialogPortal data-slot="dialog-portal">
       <DialogOverlay />
       <DialogPrimitive.Content
         data-slot="dialog-content"
         data-size={size}
+        data-close-button={showCloseButton || undefined}
         className={cn(dialogContentVariants({ size }), className)}
-        onOpenAutoFocus={handleOpenAutoFocus}
         {...props}
       >
         {children}
+        {showCloseButton && (
+          <DialogPrimitive.Close asChild>
+            <ShellCloseButton data-slot="dialog-close-button" className="absolute top-2 right-2" />
+          </DialogPrimitive.Close>
+        )}
       </DialogPrimitive.Content>
     </DialogPortal>
   )
 }
 
-type DialogHeaderProps = Omit<ShellHeaderProps, 'close'> & {
-  /** Renders the close button at the end of the header (default true). */
-  showCloseButton?: boolean
-}
-
-function DialogHeader({ showCloseButton = true, ...props }: DialogHeaderProps) {
+/** ShellHeader (bar); leaves room for the content's close button. */
+function DialogHeader({ className, ...props }: Omit<ShellHeaderProps, 'close'>) {
   return (
     <ShellHeader
       data-slot="dialog-header"
-      close={
-        showCloseButton ? (
-          <DialogPrimitive.Close asChild>
-            <ShellCloseButton />
-          </DialogPrimitive.Close>
-        ) : undefined
-      }
+      className={cn('in-data-close-button:pr-12', className)}
       {...props}
     />
   )
 }
 
-/** Figma `modal-content` slot: scrolls when the dialog hits the viewport height. */
-function DialogBody({ className, ...props }: React.ComponentProps<'div'>) {
-  // When it overflows, the body becomes focusable so keyboard users can scroll it.
-  const ref = React.useRef<HTMLDivElement>(null)
-  const [scrollable, setScrollable] = React.useState(false)
-  React.useLayoutEffect(() => {
-    const el = ref.current
-    if (!el) return
-    const update = () => setScrollable(el.scrollHeight > el.clientHeight)
-    update()
-    const observer = new ResizeObserver(update)
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [])
+/** Figma `modal-content` slot (ShellBody): 16px padding and gap, scrolls at the viewport height. */
+function DialogBody(props: React.ComponentProps<'div'>) {
+  return <ShellBody data-slot="dialog-body" {...props} />
+}
 
+function DialogFooter({
+  showCloseButton = false,
+  children,
+  ...props
+}: ShellFooterProps & {
+  showCloseButton?: boolean
+}) {
   return (
-    <div
-      ref={ref}
-      data-slot="dialog-body"
-      tabIndex={scrollable ? 0 : undefined}
-      className={cn(
-        'flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto p-4 outline-none focus-visible:inset-ring-2 focus-visible:inset-ring-ring',
-        className,
+    <ShellFooter data-slot="dialog-footer" {...props}>
+      {children}
+      {showCloseButton && (
+        <DialogPrimitive.Close asChild>
+          <Button size="sm" variant="outline" intent="neutral">
+            Close
+          </Button>
+        </DialogPrimitive.Close>
       )}
-      {...props}
-    />
+    </ShellFooter>
   )
-}
-
-function DialogFooter(props: ShellFooterProps) {
-  return <ShellFooter data-slot="dialog-footer" {...props} />
 }
 
 function DialogTitle({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Title>) {
@@ -201,5 +178,4 @@ export {
   DialogTrigger,
   dialogContentVariants,
   type DialogContentProps,
-  type DialogHeaderProps,
 }

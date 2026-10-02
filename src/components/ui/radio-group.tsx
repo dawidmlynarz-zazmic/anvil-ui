@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { RadioGroup as RadioGroupPrimitive } from 'radix-ui'
 
+import { CircleIcon, Icon } from '@/components/ui/icon'
 import { cn } from '@/lib/utils'
 
 // Figma: Forms page → `radio button` (8230:2112) on `.radio-button-base` (8230:2161). Items are bare
@@ -50,9 +51,11 @@ function RadioGroupItem({ className, ...props }: React.ComponentProps<typeof Rad
     >
       <RadioGroupPrimitive.Indicator
         data-slot="radio-group-indicator"
-        // Figma: 8px dot in --primary-foreground.
-        className="size-2 rounded-full bg-primary-foreground"
-      />
+        className="relative flex items-center justify-center"
+      >
+        {/* shadcn's filled CircleIcon; Figma: 8px dot in --primary-foreground. */}
+        <Icon icon={CircleIcon} className="size-2 fill-primary-foreground text-primary-foreground" />
+      </RadioGroupPrimitive.Indicator>
     </RadioGroupPrimitive.Item>
   )
 }

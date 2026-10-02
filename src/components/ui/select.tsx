@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
-import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react'
 import { Select as SelectPrimitive } from 'radix-ui'
 
+import { CheckIcon, ChevronDownIcon, ChevronUpIcon, Icon } from '@/components/ui/icon'
 import { FieldAnatomy, isInvalid, useFieldAnatomy, type FieldAnatomyProps } from '@/components/ui/field'
 import { cn } from '@/lib/utils'
 
@@ -92,7 +92,8 @@ function SelectTrigger({
       >
         {children}
         <SelectPrimitive.Icon asChild>
-          <ChevronDownIcon
+          <Icon
+            icon={ChevronDownIcon}
             data-slot="select-chevron"
             className="transition-transform duration-(--duration-fast)"
           />
@@ -171,7 +172,7 @@ function SelectItem({ className, children, ...props }: React.ComponentProps<type
         className="absolute right-2 flex size-4 items-center justify-center"
       >
         <SelectPrimitive.ItemIndicator>
-          <CheckIcon />
+          <Icon icon={CheckIcon} />
         </SelectPrimitive.ItemIndicator>
       </span>
       <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
@@ -199,7 +200,7 @@ function SelectScrollUpButton({
       className={cn('flex cursor-default items-center justify-center py-1 text-foreground-subtle', className)}
       {...props}
     >
-      <ChevronUpIcon className="size-4" />
+      <Icon icon={ChevronUpIcon} />
     </SelectPrimitive.ScrollUpButton>
   )
 }
@@ -214,7 +215,7 @@ function SelectScrollDownButton({
       className={cn('flex cursor-default items-center justify-center py-1 text-foreground-subtle', className)}
       {...props}
     >
-      <ChevronDownIcon className="size-4" />
+      <Icon icon={ChevronDownIcon} />
     </SelectPrimitive.ScrollDownButton>
   )
 }
