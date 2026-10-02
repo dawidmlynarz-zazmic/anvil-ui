@@ -1,44 +1,80 @@
 import * as React from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
-import { cn } from '@/lib/utils'
 import { Slot } from 'radix-ui'
 
+import { cn } from '@/lib/utils'
+
+// Figma: Badge page → `badge` (1482:30693). Static label for counts and metadata; status colors
+// live in the Anvil StatusBadge (Figma `status badge`). Outline strokes are inset rings
+// (Figma inside stroke). Focus ring only matters when rendered asChild as a link.
 const badgeVariants = cva(
-  'inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3',
+  [
+    'inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-sm px-1 whitespace-nowrap',
+    'transition-[color,background-color,box-shadow] duration-(--duration-fast) ease-out',
+    'outline-none focus-visible:focus-ring',
+    "[&>svg]:pointer-events-none [&>svg]:shrink-0 [&>svg:not([class*='size-'])]:size-3",
+  ],
   {
     variants: {
       variant: {
-        default: 'bg-primary text-primary-foreground [a&]:hover:bg-primary/90',
-        secondary: 'bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90',
-        destructive:
-          'bg-destructive text-white focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40 [a&]:hover:bg-destructive/90',
-        outline: 'border-border text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground',
-        ghost: '[a&]:hover:bg-accent [a&]:hover:text-accent-foreground',
-        link: 'text-primary underline-offset-4 [a&]:hover:underline',
+        default: '',
+        outline: 'inset-ring',
+        subtle: '',
+      },
+      intent: {
+        neutral: '',
+        inverse: '',
+      },
+      size: {
+        default: 'h-6 type-text-sm-medium',
+        sm: 'h-5 type-text-xs-medium',
+        xs: 'h-4.5 type-text-2xs-medium',
       },
     },
+    compoundVariants: [
+      { variant: 'default', intent: 'neutral', className: 'bg-background-inverse text-foreground-inverse' },
+      { variant: 'default', intent: 'inverse', className: 'bg-background text-foreground' },
+      { variant: 'outline', intent: 'neutral', className: 'bg-background text-foreground inset-ring-input' },
+      {
+        variant: 'outline',
+        intent: 'inverse',
+        className: 'bg-transparent text-foreground-inverse inset-ring-overlay-inverse-24',
+      },
+      // Figma: bg --accent (muted-foreground on accent is 3.99:1 in dark) → the accessible muted pair.
+      { variant: 'subtle', intent: 'neutral', className: 'bg-muted text-muted-foreground' },
+      // Figma: text --primary-foreground (white in both modes, invisible on the dark-mode inverse surface).
+      { variant: 'subtle', intent: 'inverse', className: 'bg-overlay-inverse-16 text-foreground-inverse' },
+    ],
     defaultVariants: {
       variant: 'default',
+      intent: 'neutral',
+      size: 'default',
     },
   },
 )
 
+type BadgeProps = React.ComponentProps<'span'> & VariantProps<typeof badgeVariants> & { asChild?: boolean }
+
 function Badge({
   className,
   variant = 'default',
+  intent = 'neutral',
+  size = 'default',
   asChild = false,
   ...props
-}: React.ComponentProps<'span'> & VariantProps<typeof badgeVariants> & { asChild?: boolean }) {
+}: BadgeProps) {
   const Comp = asChild ? Slot.Root : 'span'
 
   return (
     <Comp
       data-slot="badge"
       data-variant={variant}
-      className={cn(badgeVariants({ variant }), className)}
+      data-intent={intent}
+      data-size={size}
+      className={cn(badgeVariants({ variant, intent, size }), className)}
       {...props}
     />
   )
 }
 
-export { Badge, badgeVariants }
+export { Badge, badgeVariants, type BadgeProps }
