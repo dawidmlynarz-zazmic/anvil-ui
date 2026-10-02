@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import preview from '#.storybook/preview'
 import { expect, userEvent } from 'storybook/test'
 
 import { CommandIcon, CopyIcon, Icon, SearchIcon } from './icon'
@@ -30,7 +30,7 @@ function Search({ size }: { size?: 'sm' | 'default' | 'lg' }) {
   )
 }
 
-const meta = {
+const meta = preview.meta({
   title: 'Components/Input Group',
   component: InputGroup,
   parameters: {
@@ -44,7 +44,11 @@ const meta = {
     },
   },
   args: { size: 'default' },
-  argTypes: { size: { control: 'inline-radio', options: ['sm', 'default', 'lg'] } },
+  argTypes: {
+    size: { control: 'inline-radio', options: ['sm', 'default', 'lg'] },
+    className: { table: { disable: true } },
+    children: { table: { disable: true } },
+  },
   decorators: [
     (Story) => (
       <div className="w-72">
@@ -53,24 +57,21 @@ const meta = {
     ),
   ],
   render: (args) => <Search size={args.size ?? undefined} />,
-} satisfies Meta<typeof InputGroup>
-
-export default meta
-type Story = StoryObj<typeof meta>
+})
 
 /** Figma `search`. */
-export const Default: Story = {
-  play: async ({ canvas, canvasElement }) => {
-    const input = canvas.getByRole('textbox', { name: 'Label' })
-    await userEvent.click(canvasElement.querySelector('[data-slot=input-group-addon]')!)
-    await expect(input).toHaveFocus()
-    await userEvent.keyboard('Value')
-    await expect(input).toHaveValue('Value')
-  },
-}
+export const Default = meta.story()
+
+Default.test('clicking an addon focuses the input', async ({ canvas, canvasElement }) => {
+  const input = canvas.getByRole('textbox', { name: 'Label' })
+  await userEvent.click(canvasElement.querySelector('[data-slot=input-group-addon]')!)
+  await expect(input).toHaveFocus()
+  await userEvent.keyboard('Value')
+  await expect(input).toHaveValue('Value')
+})
 
 /** 32 / 40 / 48 px. */
-export const Sizes: Story = {
+export const Sizes = meta.story({
   render: () => (
     <div className="flex flex-col gap-4">
       <Search size="sm" />
@@ -78,11 +79,10 @@ export const Sizes: Story = {
       <Search size="lg" />
     </div>
   ),
-}
+})
 
-/** Figma states as selectors; hover forced with storybook-addon-pseudo-states. */
-export const States: Story = {
-  parameters: { pseudo: { hover: ['[data-demo="hover"]'] } },
+/** Figma states side by side (rows: default · hover · invalid · disabled). For one group, use the State control on Default. */
+export const States = meta.story({
   render: () => (
     <div className="flex flex-col gap-4">
       <InputGroup>
@@ -91,12 +91,14 @@ export const States: Story = {
         </InputGroupAddon>
         <InputGroupInput aria-label="Label 1" placeholder="Placeholder" />
       </InputGroup>
-      <InputGroup data-demo="hover">
-        <InputGroupAddon>
-          <Icon icon={SearchIcon} />
-        </InputGroupAddon>
-        <InputGroupInput aria-label="Label 2" placeholder="Placeholder" />
-      </InputGroup>
+      <span className="pseudo-hover-all contents">
+        <InputGroup>
+          <InputGroupAddon>
+            <Icon icon={SearchIcon} />
+          </InputGroupAddon>
+          <InputGroupInput aria-label="Label 2" placeholder="Placeholder" />
+        </InputGroup>
+      </span>
       <InputGroup>
         <InputGroupAddon>
           <Icon icon={SearchIcon} />
@@ -111,10 +113,10 @@ export const States: Story = {
       </InputGroup>
     </div>
   ),
-}
+})
 
 /** Text addons and an inline button (shadcn Input Group parts). */
-export const TextAndButton: Story = {
+export const TextAndButton = meta.story({
   render: () => (
     <InputGroup>
       <InputGroupAddon>
@@ -128,10 +130,10 @@ export const TextAndButton: Story = {
       </InputGroupAddon>
     </InputGroup>
   ),
-}
+})
 
 /** With a textarea and a block-end addon. */
-export const WithTextarea: Story = {
+export const WithTextarea = meta.story({
   render: () => (
     <InputGroup>
       <InputGroupTextarea aria-label="Label" placeholder="Placeholder" />
@@ -140,4 +142,4 @@ export const WithTextarea: Story = {
       </InputGroupAddon>
     </InputGroup>
   ),
-}
+})

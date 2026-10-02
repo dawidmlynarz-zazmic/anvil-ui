@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import preview from '#.storybook/preview'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 
 import { Button } from './button'
@@ -18,17 +18,35 @@ import {
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10935-40686'
 
-type DemoProps = { side?: SheetContentProps['side']; open?: boolean; description?: string }
+type DemoProps = {
+  side?: SheetContentProps['side']
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
+  /** Story-only: false for stories that open on load, so focus stays put until you interact. */
+  focusOnOpen?: boolean
+  description?: string
+}
 
-function DemoSheet({ side = 'right', open, description = 'Subtitle' }: DemoProps) {
+function DemoSheet({
+  side = 'right',
+  open,
+  onOpenChange,
+  focusOnOpen = true,
+  description = 'Subtitle',
+}: DemoProps) {
   return (
-    <Sheet open={open}>
+    <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetTrigger asChild>
         <Button variant="outline" intent="neutral">
           Label
         </Button>
       </SheetTrigger>
-      <SheetContent side={side}>
+      <SheetContent
+        side={side}
+        onOpenAutoFocus={focusOnOpen ? undefined : (e) => e.preventDefault()}
+        // No description: tell Radix explicitly so it doesn't warn about a missing one.
+        {...(description ? {} : { 'aria-describedby': undefined })}
+      >
         <SheetHeader>
           <SheetTitle>Title</SheetTitle>
           {description && <SheetDescription>{description}</SheetDescription>}
@@ -50,7 +68,7 @@ function DemoSheet({ side = 'right', open, description = 'Subtitle' }: DemoProps
   )
 }
 
-const meta = {
+const meta = preview.meta({
   title: 'Components/Sheet',
   component: DemoSheet,
   parameters: {
@@ -64,40 +82,43 @@ const meta = {
       },
     },
   },
-  args: { open: true, side: 'right' },
+  args: { open: false, side: 'right', description: 'Subtitle' },
   argTypes: {
     side: { control: 'inline-radio', options: ['right', 'left', 'top', 'bottom'] },
     open: { control: 'boolean' },
+    description: { control: 'text' },
+    onOpenChange: { table: { disable: true } },
+    focusOnOpen: { table: { disable: true } },
   },
-} satisfies Meta<typeof DemoSheet>
-
-export default meta
-type Story = StoryObj<typeof meta>
+})
 
 const body = (el: HTMLElement) => within(el.ownerDocument.body)
 
-export const Right: Story = {
-  play: async ({ canvasElement }) => {
-    const sheet = await body(canvasElement).findByRole('dialog', { name: 'Title' })
-    await expect(sheet).toHaveAttribute('data-side', 'right')
-    await expect(sheet).toHaveAccessibleDescription('Subtitle')
-  },
-}
-export const Left: Story = { args: { side: 'left' } }
-export const Top: Story = { args: { side: 'top' } }
-export const Bottom: Story = { args: { side: 'bottom' } }
+/** Closed, like on a page: the trigger (or the `open` control) opens it. */
+export const Default = meta.story()
 
-/** Uncontrolled: the trigger opens it, the header close closes it and focus returns. */
-export const WithTrigger: Story = {
-  args: { open: undefined },
-  parameters: { docs: { story: { inline: true } } },
-  play: async ({ canvas, canvasElement }) => {
+Default.test(
+  'trigger opens, the header close closes and focus returns',
+  async ({ canvas, canvasElement }) => {
     const trigger = canvas.getByRole('button', { name: 'Label' })
     await userEvent.click(trigger)
-    const sheet = await body(canvasElement).findByRole('dialog')
-    await expect(within(sheet).getAllByLabelText('Label')[0]).toHaveFocus()
+    const sheet = await body(canvasElement).findByRole('dialog', { name: 'Title' })
+    await waitFor(() => expect(within(sheet).getAllByLabelText('Label')[0]).toHaveFocus())
     await userEvent.click(within(sheet).getByRole('button', { name: 'Close' }))
     await waitFor(() => expect(body(canvasElement).queryByRole('dialog')).toBeNull())
     await expect(trigger).toHaveFocus()
   },
-}
+)
+
+/** Open on load from the right (focus stays put until you interact). */
+export const Right = meta.story({ args: { open: true, focusOnOpen: false } })
+
+Right.test('slides in from the right with its description', async ({ canvasElement }) => {
+  const sheet = await body(canvasElement).findByRole('dialog', { name: 'Title' })
+  await expect(sheet).toHaveAttribute('data-side', 'right')
+  await expect(sheet).toHaveAccessibleDescription('Subtitle')
+})
+
+export const Left = meta.story({ args: { open: true, focusOnOpen: false, side: 'left' } })
+export const Top = meta.story({ args: { open: true, focusOnOpen: false, side: 'top' } })
+export const Bottom = meta.story({ args: { open: true, focusOnOpen: false, side: 'bottom' } })

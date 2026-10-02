@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import preview from '#.storybook/preview'
 
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
@@ -14,7 +14,7 @@ import {
 const FIGMA_HEADER = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10960-223'
 const FIGMA_FOOTER = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10960-260'
 
-const meta = {
+const meta = preview.meta({
   title: 'Anvil/Shell',
   component: ShellHeader,
   parameters: {
@@ -34,17 +34,43 @@ const meta = {
       </div>
     ),
   ],
-} satisfies Meta<typeof ShellHeader>
-
-export default meta
-type Story = StoryObj<typeof meta>
+})
 
 const Title = ({ children }: { children: string }) => <h2 className={shellTitleClassName}>{children}</h2>
 const Description = ({ children }: { children: string }) => (
   <p className={shellDescriptionClassName}>{children}</p>
 )
 
-export const HeaderBar: Story = {
+type HeaderDemoProps = {
+  variant: 'bar' | 'inline'
+  title: string
+  description: string
+  showClose: boolean
+}
+
+/** One ShellHeader from Controls: `variant`, title, description and the close button. */
+export const Default = meta.story({
+  args: { variant: 'bar', title: 'Title', description: 'Subtitle', showClose: true },
+  argTypes: {
+    variant: { control: 'inline-radio', options: ['bar', 'inline'] },
+    title: { control: 'text' },
+    description: { control: 'text' },
+    showClose: { control: 'boolean' },
+  },
+  render: (args) => {
+    const { variant, title, description, showClose } = args as unknown as HeaderDemoProps
+    return (
+      <div className={cn(variant === 'inline' && 'p-4')}>
+        <ShellHeader variant={variant} close={showClose ? <ShellCloseButton /> : undefined}>
+          <Title>{title}</Title>
+          {description && <Description>{description}</Description>}
+        </ShellHeader>
+      </div>
+    )
+  },
+})
+
+export const HeaderBar = meta.story({
   render: () => (
     <div className="flex flex-col">
       <ShellHeader close={<ShellCloseButton />}>
@@ -56,10 +82,10 @@ export const HeaderBar: Story = {
       </ShellHeader>
     </div>
   ),
-}
+})
 
 /** Inline: no padding — the container pads it (Alert Dialog, Popover, Card). */
-export const HeaderInline: Story = {
+export const HeaderInline = meta.story({
   render: () => (
     <div className="flex flex-col gap-6 p-4">
       <ShellHeader variant="inline" close={<ShellCloseButton />}>
@@ -71,10 +97,10 @@ export const HeaderInline: Story = {
       </ShellHeader>
     </div>
   ),
-}
+})
 
 /** Every `variant` × `align`; actions are size sm Buttons (secondary outline · neutral, primary brand). */
-export const Footer: Story = {
+export const Footer = meta.story({
   parameters: { design: { type: 'figma', url: FIGMA_FOOTER } },
   render: () => (
     <div className="flex flex-col gap-4 py-4">
@@ -95,4 +121,4 @@ export const Footer: Story = {
       )}
     </div>
   ),
-}
+})

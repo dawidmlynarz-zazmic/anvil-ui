@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import preview from '#.storybook/preview'
 import type { ReactNode } from 'react'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 
@@ -24,6 +24,9 @@ const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=8255
 type DemoProps = {
   size?: DialogContentProps['size']
   open?: boolean
+  onOpenChange?: (open: boolean) => void
+  /** Story-only: false for stories that open on load, so focus stays put until you interact. */
+  focusOnOpen?: boolean
   title?: string
   description?: string
   align?: 'end' | 'between' | 'stretch'
@@ -34,13 +37,15 @@ type DemoProps = {
 function DemoDialog({
   size = 'default',
   open,
+  onOpenChange,
+  focusOnOpen = true,
   title = 'Title',
   description,
   align = 'end',
   children,
 }: DemoProps) {
   return (
-    <Dialog open={open}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
         <Button variant="outline" intent="neutral">
           Label
@@ -48,6 +53,7 @@ function DemoDialog({
       </DialogTrigger>
       <DialogContent
         size={size}
+        onOpenAutoFocus={focusOnOpen ? undefined : (e) => e.preventDefault()}
         // No description: tell Radix explicitly so it doesn't warn about a missing one.
         {...(description ? {} : { 'aria-describedby': undefined })}
       >
@@ -69,7 +75,7 @@ function DemoDialog({
   )
 }
 
-const meta = {
+const meta = preview.meta({
   title: 'Components/Dialog',
   component: DemoDialog,
   parameters: {
@@ -83,31 +89,42 @@ const meta = {
       },
     },
   },
-  args: { open: true, size: 'default', description: 'Subtitle', align: 'end' },
+  args: { open: false, size: 'default', description: 'Subtitle', align: 'end' },
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'default', 'lg'] },
     align: { control: 'inline-radio', options: ['end', 'between', 'stretch'] },
     open: { control: 'boolean' },
+    onOpenChange: { table: { disable: true } },
+    focusOnOpen: { table: { disable: true } },
   },
-} satisfies Meta<typeof DemoDialog>
-
-export default meta
-type Story = StoryObj<typeof meta>
+})
 
 const body = (canvasElement: HTMLElement) => within(canvasElement.ownerDocument.body)
 
-export const Default: Story = {
-  play: async ({ canvasElement }) => {
-    const dialog = await body(canvasElement).findByRole('dialog', { name: 'Title' })
-    await expect(dialog).toHaveAccessibleDescription('Subtitle')
-    await expect(within(dialog).getByRole('button', { name: 'Close' })).toBeInTheDocument()
-  },
-}
+/** Closed, like on a page: the trigger (or the `open` control) opens it. */
+export const Default = meta.story()
 
-export const Small: Story = { args: { size: 'sm', description: undefined } }
+Default.test('trigger opens, Escape closes and focus returns', async ({ canvas, canvasElement }) => {
+  const trigger = canvas.getByRole('button', { name: 'Label' })
+  await userEvent.click(trigger)
+  const dialog = await body(canvasElement).findByRole('dialog', { name: 'Title' })
+  await expect(dialog).toHaveAccessibleDescription('Subtitle')
+  await expect(within(dialog).getByLabelText('Label')).toHaveFocus()
+  await expect(within(dialog).getByRole('button', { name: 'Close' })).toBeInTheDocument()
+  await userEvent.keyboard('{Escape}')
+  await waitFor(() => expect(body(canvasElement).queryByRole('dialog')).toBeNull())
+  await expect(trigger).toHaveFocus()
+})
 
-export const Large: Story = {
-  args: { size: 'lg' },
+/** Figma default: open (focus stays put until you interact). */
+export const Open = meta.story({ args: { open: true, focusOnOpen: false } })
+
+export const Small = meta.story({
+  args: { open: true, focusOnOpen: false, size: 'sm', description: undefined },
+})
+
+export const Large = meta.story({
+  args: { open: true, focusOnOpen: false, size: 'lg' },
   render: (args) => (
     <DemoDialog {...args}>
       <Select defaultValue="1">
@@ -122,14 +139,14 @@ export const Large: Story = {
       <Textarea label="Label" defaultValue="Value" />
     </DemoDialog>
   ),
-}
+})
 
 /** Footer align between: secondary on the left. */
-export const FooterBetween: Story = { args: { align: 'between' } }
+export const FooterBetween = meta.story({ args: { open: true, focusOnOpen: false, align: 'between' } })
 
 /** Long content scrolls inside the body; header and footer stay put (footer casts shadow/top). */
-export const Scrolling: Story = {
-  args: { description: undefined },
+export const Scrolling = meta.story({
+  args: { open: true, focusOnOpen: false, description: undefined },
   render: (args) => (
     <DemoDialog {...args}>
       {Array.from({ length: 30 }, (_, i) => (
@@ -139,19 +156,4 @@ export const Scrolling: Story = {
       ))}
     </DemoDialog>
   ),
-}
-
-/** Uncontrolled: the trigger opens it, Escape closes it and focus returns to the trigger. */
-export const WithTrigger: Story = {
-  args: { open: undefined },
-  parameters: { docs: { story: { inline: true } } },
-  play: async ({ canvas, canvasElement }) => {
-    const trigger = canvas.getByRole('button', { name: 'Label' })
-    await userEvent.click(trigger)
-    const dialog = await body(canvasElement).findByRole('dialog')
-    await expect(within(dialog).getByLabelText('Label')).toHaveFocus()
-    await userEvent.keyboard('{Escape}')
-    await waitFor(() => expect(body(canvasElement).queryByRole('dialog')).toBeNull())
-    await expect(trigger).toHaveFocus()
-  },
-}
+})

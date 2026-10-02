@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import preview from '#.storybook/preview'
 import { expect } from 'storybook/test'
 
 import { Button } from './button'
@@ -8,7 +8,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from './tooltip'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=2534-31422'
 
-const meta = {
+const meta = preview.meta({
   title: 'Components/Kbd',
   component: Kbd,
   parameters: {
@@ -22,24 +22,24 @@ const meta = {
     },
   },
   args: { children: 'K' },
-} satisfies Meta<typeof Kbd>
+  argTypes: { children: { control: 'text' } },
+})
 
-export default meta
-type Story = StoryObj<typeof meta>
-
-export const Default: Story = {
+/** The key text is in Controls. */
+export const Default = meta.story({
   render: (args) => (
     <Kbd {...args}>
       <Icon icon={CommandIcon} />
       {args.children}
     </Kbd>
   ),
-  play: async ({ canvasElement }) => {
-    await expect(canvasElement.querySelector('kbd')).toHaveTextContent('K')
-  },
-}
+})
 
-export const Group: Story = {
+Default.test('renders the key', async ({ canvasElement }) => {
+  await expect(canvasElement.querySelector('kbd')).toHaveTextContent('K')
+})
+
+export const Group = meta.story({
   render: () => (
     <KbdGroup>
       <Kbd>Ctrl</Kbd>
@@ -47,10 +47,10 @@ export const Group: Story = {
       <Kbd>K</Kbd>
     </KbdGroup>
   ),
-}
+})
 
 /** Inside a tooltip the key adapts to the inverse surface (shadcn behavior). */
-export const InTooltip: Story = {
+export const InTooltip = meta.story({
   parameters: { docs: { story: { inline: false, height: '160px' } } },
   render: () => (
     <Tooltip open>
@@ -67,4 +67,4 @@ export const InTooltip: Story = {
       </TooltipContent>
     </Tooltip>
   ),
-}
+})

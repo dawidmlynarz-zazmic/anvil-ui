@@ -12,17 +12,17 @@ const dirname = path.dirname(fileURLToPath(import.meta.url))
 // Storybook stories run as Vitest browser tests once per theme, so a11y checks cover light and dark.
 const storybookProject = (theme: 'light' | 'dark') => ({
   extends: true as const,
+  // Read by .storybook/preview.tsx as the initial `theme` global (CSF Next ignores setProjectAnnotations).
+  define: { __ANVIL_TEST_THEME__: JSON.stringify(theme) },
   plugins: [storybookTest({ configDir: path.join(dirname, '.storybook') })],
   test: {
     name: `storybook-${theme}`,
-    provide: { theme },
     browser: {
       enabled: true,
       headless: true,
       provider: playwright(),
       instances: [{ browser: 'chromium' as const }],
     },
-    setupFiles: ['.storybook/vitest.setup.ts'],
   },
 })
 

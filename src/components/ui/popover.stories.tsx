@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import preview from '#.storybook/preview'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 
 import { Button } from './button'
@@ -18,20 +18,34 @@ const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=1093
 
 type DemoProps = {
   open?: boolean
+  onOpenChange?: (open: boolean) => void
+  /** Story-only: false for stories that open on load, so focus stays put until you interact. */
+  focusOnOpen?: boolean
   side?: 'top' | 'right' | 'bottom' | 'left'
   align?: 'start' | 'center' | 'end'
   showFooter?: boolean
 }
 
-function DemoPopover({ open, side = 'bottom', align = 'center', showFooter = true }: DemoProps) {
+function DemoPopover({
+  open,
+  onOpenChange,
+  focusOnOpen = true,
+  side = 'bottom',
+  align = 'center',
+  showFooter = true,
+}: DemoProps) {
   return (
-    <Popover open={open}>
+    <Popover open={open} onOpenChange={onOpenChange}>
       <PopoverTrigger asChild>
         <Button variant="outline" intent="neutral">
           Label
         </Button>
       </PopoverTrigger>
-      <PopoverContent side={side} align={align}>
+      <PopoverContent
+        side={side}
+        align={align}
+        onOpenAutoFocus={focusOnOpen ? undefined : (e) => e.preventDefault()}
+      >
         <PopoverHeader showCloseButton>
           <PopoverTitle>Title</PopoverTitle>
           <PopoverDescription>Subtitle</PopoverDescription>
@@ -52,7 +66,7 @@ function DemoPopover({ open, side = 'bottom', align = 'center', showFooter = tru
   )
 }
 
-const meta = {
+const meta = preview.meta({
   title: 'Components/Popover',
   component: DemoPopover,
   parameters: {
@@ -66,44 +80,45 @@ const meta = {
       },
     },
   },
-  args: { open: true, side: 'bottom', align: 'center', showFooter: true },
+  args: { open: false, side: 'bottom', align: 'center', showFooter: true },
   argTypes: {
     side: { control: 'inline-radio', options: ['top', 'right', 'bottom', 'left'] },
     align: { control: 'inline-radio', options: ['start', 'center', 'end'] },
     open: { control: 'boolean' },
+    showFooter: { control: 'boolean' },
+    onOpenChange: { table: { disable: true } },
+    focusOnOpen: { table: { disable: true } },
   },
-} satisfies Meta<typeof DemoPopover>
-
-export default meta
-type Story = StoryObj<typeof meta>
+})
 
 const body = (el: HTMLElement) => within(el.ownerDocument.body)
 
-export const Default: Story = {
-  play: async ({ canvasElement }) => {
-    const dialog = await body(canvasElement).findByRole('dialog', { name: 'Title' })
-    await expect(dialog).toHaveAccessibleDescription('Subtitle')
-  },
-}
+/** Closed, like on a page: the trigger (or the `open` control) opens it. */
+export const Default = meta.story()
+
+Default.test('trigger opens, Escape closes and focus returns', async ({ canvas, canvasElement }) => {
+  const trigger = canvas.getByRole('button', { name: 'Label' })
+  await userEvent.click(trigger)
+  const dialog = await body(canvasElement).findByRole('dialog', { name: 'Title' })
+  await expect(dialog).toHaveAccessibleDescription('Subtitle')
+  // Radix moves focus into the popover (first focusable: the header close, as drawn).
+  await waitFor(() => expect(dialog.contains(canvasElement.ownerDocument.activeElement)).toBe(true))
+  await userEvent.keyboard('{Escape}')
+  await waitFor(() => expect(body(canvasElement).queryByRole('dialog')).toBeNull())
+  await expect(trigger).toHaveFocus()
+})
+
+/** Figma default: open (focus stays put until you interact). */
+export const Open = meta.story({ args: { open: true, focusOnOpen: false } })
+
+Open.test('opens on load without moving focus', async ({ canvasElement }) => {
+  const dialog = await body(canvasElement).findByRole('dialog', { name: 'Title' })
+  await expect(dialog).toHaveAccessibleDescription('Subtitle')
+  await expect(dialog.contains(canvasElement.ownerDocument.activeElement)).toBe(false)
+})
 
 /** Without a footer (Figma `show footer` off). */
-export const WithoutFooter: Story = { args: { showFooter: false } }
+export const WithoutFooter = meta.story({ args: { open: true, focusOnOpen: false, showFooter: false } })
 
-export const SideTop: Story = { args: { side: 'top' } }
-export const AlignStart: Story = { args: { align: 'start' } }
-
-/** Uncontrolled: the trigger opens it, Escape closes it and focus returns. */
-export const WithTrigger: Story = {
-  args: { open: undefined },
-  parameters: { docs: { story: { inline: true } } },
-  play: async ({ canvas, canvasElement }) => {
-    const trigger = canvas.getByRole('button', { name: 'Label' })
-    await userEvent.click(trigger)
-    const dialog = await body(canvasElement).findByRole('dialog')
-    // Radix moves focus into the popover (first focusable: the header close, as drawn).
-    await expect(dialog.contains(canvasElement.ownerDocument.activeElement)).toBe(true)
-    await userEvent.keyboard('{Escape}')
-    await waitFor(() => expect(body(canvasElement).queryByRole('dialog')).toBeNull())
-    await expect(trigger).toHaveFocus()
-  },
-}
+export const SideTop = meta.story({ args: { open: true, focusOnOpen: false, side: 'top' } })
+export const AlignStart = meta.story({ args: { open: true, focusOnOpen: false, align: 'start' } })

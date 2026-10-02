@@ -1,9 +1,9 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
-import { Icon, ClockIcon, SparklesIcon } from './icon'
+import preview from '#.storybook/preview'
 import type { ReactNode } from 'react'
 import { expect } from 'storybook/test'
 
 import { Badge } from './badge'
+import { Icon, ClockIcon, SparklesIcon } from './icon'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=1482-30693'
 const variants = ['default', 'outline', 'subtle'] as const
@@ -25,7 +25,7 @@ function Surface({ intent, children }: { intent?: string | null; children: React
   )
 }
 
-const meta = {
+const meta = preview.meta({
   title: 'Components/Badge',
   component: Badge,
   parameters: {
@@ -50,19 +50,16 @@ const meta = {
       <Badge {...args} />
     </Surface>
   ),
-} satisfies Meta<typeof Badge>
+})
 
-export default meta
-type Story = StoryObj<typeof meta>
+/** Every prop is in Controls. */
+export const Default = meta.story()
 
-export const Default: Story = {
-  play: async ({ canvas }) => {
-    const badge = canvas.getByText('Label')
-    await expect(badge).toHaveAttribute('data-slot', 'badge')
-  },
-}
+Default.test('renders a badge', async ({ canvas }) => {
+  await expect(canvas.getByText('Label')).toHaveAttribute('data-slot', 'badge')
+})
 
-export const Variants: Story = {
+export const Variants = meta.story({
   render: () => (
     <div className="flex flex-col gap-2">
       {intents.map((intent) => (
@@ -76,10 +73,10 @@ export const Variants: Story = {
       ))}
     </div>
   ),
-}
+})
 
 /** 24 / 20 / 18 px with text sm / xs / 2xs medium. */
-export const Sizes: Story = {
+export const Sizes = meta.story({
   render: () => (
     <div className="flex flex-col gap-2">
       {variants.map((variant) => (
@@ -93,9 +90,9 @@ export const Sizes: Story = {
       ))}
     </div>
   ),
-}
+})
 
-export const WithIcons: Story = {
+export const WithIcons = meta.story({
   render: () => (
     <Surface>
       <Badge>
@@ -109,10 +106,10 @@ export const WithIcons: Story = {
       <Badge variant="subtle">12</Badge>
     </Surface>
   ),
-}
+})
 
 /** A count next to a label, and asChild for linked tags (they get the focus ring). */
-export const Composition: Story = {
+export const Composition = meta.story({
   render: () => (
     <div className="flex flex-col gap-3 p-3">
       <div className="flex items-center gap-2 type-text-sm-medium text-foreground">
@@ -128,7 +125,8 @@ export const Composition: Story = {
       </div>
     </div>
   ),
-  play: async ({ canvas }) => {
-    await expect(canvas.getByRole('link', { name: 'Label 2' })).toHaveAttribute('data-slot', 'badge')
-  },
-}
+})
+
+Composition.test('asChild renders a link styled as a badge', async ({ canvas }) => {
+  await expect(canvas.getByRole('link', { name: 'Label 2' })).toHaveAttribute('data-slot', 'badge')
+})

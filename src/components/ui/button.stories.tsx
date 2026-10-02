@@ -1,4 +1,8 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import preview from '#.storybook/preview'
+import type { ReactNode } from 'react'
+import { expect, fn, userEvent, within } from 'storybook/test'
+
+import { Button } from './button'
 import {
   Icon,
   ArrowRightIcon,
@@ -8,10 +12,6 @@ import {
   SparklesIcon,
   Trash2Icon,
 } from './icon'
-import type { ReactNode } from 'react'
-import { expect, fn, userEvent, within } from 'storybook/test'
-
-import { Button } from './button'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=917-9268'
 const FIGMA_ICON = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=8218-5908'
@@ -40,7 +40,7 @@ const Label = ({ children }: { children: ReactNode }) => (
   <div className="w-24 shrink-0 type-text-xs-medium text-muted-foreground">{children}</div>
 )
 
-const meta = {
+const meta = preview.meta({
   title: 'Components/Button',
   component: Button,
   parameters: {
@@ -77,24 +77,33 @@ const meta = {
       <Button {...args} />
     </Surface>
   ),
-} satisfies Meta<typeof Button>
+})
 
-export default meta
-type Story = StoryObj<typeof meta>
+/** Every prop and the interaction state are in Controls. */
+export const Default = meta.story()
 
-export const Default: Story = {
-  play: async ({ canvas, args }) => {
-    const button = canvas.getByRole('button', { name: 'Label' })
-    await userEvent.click(button)
-    await expect(args.onClick).toHaveBeenCalledTimes(1)
-    button.blur()
-    await userEvent.tab()
-    await expect(button).toHaveFocus()
-  },
-}
+Default.test('clicks and takes keyboard focus', async ({ canvas, args }) => {
+  const button = canvas.getByRole('button', { name: 'Label' })
+  await userEvent.click(button)
+  await expect(args.onClick).toHaveBeenCalledTimes(1)
+  button.blur()
+  await userEvent.tab()
+  await expect(button).toHaveFocus()
+})
+
+Default.test('loading is busy and ignores clicks', { args: { loading: true } }, async ({ canvas, args }) => {
+  const button = canvas.getByRole('button', { name: 'Label' })
+  await expect(button).toHaveAttribute('aria-busy', 'true')
+  await userEvent.click(button, { pointerEventsCheck: 0 })
+  await expect(args.onClick).not.toHaveBeenCalled()
+})
+
+Default.test('disabled', { args: { disabled: true } }, async ({ canvas }) => {
+  await expect(canvas.getByRole('button', { name: 'Label' })).toBeDisabled()
+})
 
 /** Every `variant` × `intent` at the default size. */
-export const Variants: Story = {
+export const Variants = meta.story({
   render: () => (
     <div className="flex flex-col gap-2">
       {intents.map((intent) => (
@@ -111,10 +120,10 @@ export const Variants: Story = {
       ))}
     </div>
   ),
-}
+})
 
 /** Text sizes 24 / 32 / 40 / 48 px and icon sizes; `xs` uses 12px icons. */
-export const Sizes: Story = {
+export const Sizes = meta.story({
   render: () => (
     <div className="flex flex-col gap-4">
       <Surface>
@@ -134,9 +143,9 @@ export const Sizes: Story = {
       </Surface>
     </div>
   ),
-}
+})
 
-export const Shapes: Story = {
+export const Shapes = meta.story({
   render: () => (
     <Surface>
       <Button>Label</Button>
@@ -152,16 +161,10 @@ export const Shapes: Story = {
       </Button>
     </Surface>
   ),
-}
+})
 
-/** Figma `state` values as selectors: hover and focus are forced with storybook-addon-pseudo-states. */
-export const States: Story = {
-  parameters: {
-    pseudo: {
-      hover: ['[data-demo="hover"]'],
-      focusVisible: ['[data-demo="focus"]'],
-    },
-  },
+/** Figma `state` values side by side (reference sheet). For one button, use the State control on Default. */
+export const States = meta.story({
   render: () => (
     <div className="flex flex-col gap-2">
       <div className="flex items-center gap-2">
@@ -184,12 +187,16 @@ export const States: Story = {
               <Button variant={variant} intent={intent}>
                 Label
               </Button>
-              <Button variant={variant} intent={intent} data-demo="hover">
-                Label
-              </Button>
-              <Button variant={variant} intent={intent} data-demo="focus">
-                Label
-              </Button>
+              <span className="pseudo-hover-all contents">
+                <Button variant={variant} intent={intent}>
+                  Label
+                </Button>
+              </span>
+              <span className="pseudo-focus-visible-all contents">
+                <Button variant={variant} intent={intent}>
+                  Label
+                </Button>
+              </span>
               <Button variant={variant} intent={intent} disabled>
                 Label
               </Button>
@@ -202,26 +209,9 @@ export const States: Story = {
       )}
     </div>
   ),
-}
+})
 
-export const Loading: Story = {
-  args: { loading: true },
-  play: async ({ canvas, args }) => {
-    const button = canvas.getByRole('button', { name: 'Label' })
-    await expect(button).toHaveAttribute('aria-busy', 'true')
-    await userEvent.click(button, { pointerEventsCheck: 0 })
-    await expect(args.onClick).not.toHaveBeenCalled()
-  },
-}
-
-export const Disabled: Story = {
-  args: { disabled: true },
-  play: async ({ canvas }) => {
-    await expect(canvas.getByRole('button', { name: 'Label' })).toBeDisabled()
-  },
-}
-
-export const WithIcons: Story = {
+export const WithIcons = meta.story({
   render: () => (
     <Surface>
       <Button>
@@ -242,10 +232,10 @@ export const WithIcons: Story = {
       </Button>
     </Surface>
   ),
-}
+})
 
 /** Icon-only buttons (Figma `icon button`): always pass an accessible label. */
-export const IconButtons: Story = {
+export const IconButtons = meta.story({
   parameters: { design: { type: 'figma', url: FIGMA_ICON } },
   render: () => (
     <div className="flex flex-col gap-2">
@@ -263,10 +253,10 @@ export const IconButtons: Story = {
       ))}
     </div>
   ),
-}
+})
 
 /** A footer action row, and `asChild` rendering a link. */
-export const Composition: Story = {
+export const Composition = meta.story({
   render: () => (
     <div className="flex w-full max-w-md flex-col gap-4">
       <div className="flex items-center justify-end gap-2 rounded-lg border border-border p-4">
@@ -283,8 +273,9 @@ export const Composition: Story = {
       </Button>
     </div>
   ),
-  play: async ({ canvasElement }) => {
-    const link = within(canvasElement).getByRole('link', { name: 'Label' })
-    await expect(link).toHaveAttribute('data-slot', 'button')
-  },
-}
+})
+
+Composition.test('asChild renders a link styled as a button', async ({ canvasElement }) => {
+  const link = within(canvasElement).getByRole('link', { name: 'Label' })
+  await expect(link).toHaveAttribute('data-slot', 'button')
+})

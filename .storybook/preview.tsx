@@ -1,10 +1,20 @@
 import { useEffect, useLayoutEffect, type ReactNode } from 'react'
-import type { Decorator, Preview } from '@storybook/react-vite'
-import { withThemeByClassName } from '@storybook/addon-themes'
+import { definePreview, type Decorator } from '@storybook/react-vite'
+import addonA11y from '@storybook/addon-a11y'
+import addonDocs from '@storybook/addon-docs'
+import addonThemes, { withThemeByClassName } from '@storybook/addon-themes'
+import addonPseudoStates from 'storybook-addon-pseudo-states'
 
 import { Toaster } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import '@/styles/globals.css'
+
+import { STATE_ARG, withInteractionState } from './interaction-state'
+import { withSyncedOpen } from './sync-open'
+
+// Set per Vitest project (vite.config.ts): storybook-light / storybook-dark.
+declare const __ANVIL_TEST_THEME__: 'light' | 'dark' | undefined
+const testTheme = typeof __ANVIL_TEST_THEME__ === 'undefined' ? undefined : __ANVIL_TEST_THEME__
 
 type Shell = 'full-screen' | 'side-panel' | 'popover' | 'mobile'
 
@@ -48,8 +58,17 @@ const withAnvilProviders: Decorator = (Story, context) => (
   </AnvilProviders>
 )
 
-const preview: Preview = {
+// Stories open in their default state. Interactions live in `Story.test()` (run by Vitest and from
+// the sidebar), never in `play`, so viewing a story never clicks, types, focuses or opens anything.
+// Hover / focus / pressed are previewed with the per-story "State" control (interaction-state.tsx);
+// storybook-addon-pseudo-states only rewrites the stylesheets: its toolbar global is not registered
+// (main.ts), because globals persist across stories. Overlays: a boolean `open` arg is a live
+// control (sync-open.tsx); stories that open on load prevent Radix's initial focus.
+export default definePreview({
+  addons: [addonDocs(), addonA11y(), addonThemes(), addonPseudoStates()],
   decorators: [
+    withSyncedOpen,
+    withInteractionState,
     withAnvilProviders,
     withThemeByClassName({
       themes: { light: '', dark: 'dark' },
@@ -88,14 +107,24 @@ const preview: Preview = {
   initialGlobals: {
     shell: 'full-screen',
     motion: 'on',
+    ...(testTheme ? { theme: testTheme } : {}),
   },
+  argTypes: {
+    [STATE_ARG]: {
+      name: 'State',
+      description:
+        'Preview an interaction state (Storybook only, not a prop). Default is the resting state; real focus and hover still work.',
+      control: 'inline-radio',
+      options: ['default', 'hover', 'focus-visible', 'focus', 'active'],
+      table: { category: 'Interaction state', defaultValue: { summary: 'default' } },
+    },
+  },
+  args: { [STATE_ARG]: 'default' },
   parameters: {
     a11y: { test: 'error' },
-    controls: { matchers: { color: /(background|color)$/i, date: /Date$/i } },
+    controls: { matchers: { color: /(background|color)$/i, date: /Date$/i }, sort: 'requiredFirst' },
     options: {
       storySort: { order: ['Welcome', 'Foundations', 'Components', 'Anvil', 'Agent'] },
     },
   },
-}
-
-export default preview
+})

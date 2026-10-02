@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import preview from '#.storybook/preview'
 import { REGEXP_ONLY_DIGITS } from 'input-otp'
 import { expect, userEvent } from 'storybook/test'
 
@@ -17,7 +17,7 @@ function Slots({ count = 6 }: { count?: number }) {
   )
 }
 
-const meta = {
+const meta = preview.meta({
   title: 'Components/Input OTP',
   component: InputOTP,
   parameters: {
@@ -30,32 +30,50 @@ const meta = {
       },
     },
   },
-  args: { maxLength: 6, pattern: REGEXP_ONLY_DIGITS, children: <Slots />, 'aria-label': 'Label' },
-  argTypes: { children: { table: { disable: true } }, disabled: { control: 'boolean' } },
-} satisfies Meta<typeof InputOTP>
-
-export default meta
-type Story = StoryObj<typeof meta>
+  args: {
+    maxLength: 6,
+    pattern: REGEXP_ONLY_DIGITS,
+    children: <Slots />,
+    'aria-label': 'Label',
+    disabled: false,
+    'aria-invalid': false,
+  },
+  argTypes: {
+    disabled: { control: 'boolean' },
+    'aria-invalid': { control: 'boolean', description: 'Invalid state (Figma state=invalid)' },
+    defaultValue: { control: 'text' },
+    maxLength: { control: { type: 'number', min: 1, max: 6 } },
+    children: { table: { disable: true } },
+    pattern: { table: { disable: true } },
+    render: { table: { disable: true } },
+    className: { table: { disable: true } },
+    containerClassName: { table: { disable: true } },
+  },
+})
 
 /** Figma state=empty: the first slot is active once focused. */
-export const Default: Story = {
-  play: async ({ canvas, canvasElement }) => {
-    const input = canvas.getByRole('textbox', { name: 'Label' })
-    await userEvent.click(input)
-    await userEvent.keyboard('294')
-    await expect(input).toHaveValue('294')
-    await expect(canvasElement.querySelectorAll('[data-slot=input-otp-slot]')[3]).toHaveAttribute(
-      'data-active',
-      'true',
-    )
-  },
-}
+export const Default = meta.story()
+
+Default.test('typing fills the slots and moves the active slot', async ({ canvas, canvasElement }) => {
+  const input = canvas.getByRole('textbox', { name: 'Label' })
+  await userEvent.click(input)
+  await userEvent.keyboard('294')
+  await expect(input).toHaveValue('294')
+  await expect(canvasElement.querySelectorAll('[data-slot=input-otp-slot]')[3]).toHaveAttribute(
+    'data-active',
+    'true',
+  )
+})
+
+Default.test('disabled', { args: { disabled: true } }, async ({ canvas }) => {
+  await expect(canvas.getByRole('textbox', { name: 'Label' })).toBeDisabled()
+})
 
 /** Figma state=filled. */
-export const Filled: Story = { args: { defaultValue: '294170' } }
+export const Filled = meta.story({ args: { defaultValue: '294170' } })
 
 /** Figma state=invalid: every slot gets the danger stroke; the digits stay. */
-export const Invalid: Story = {
+export const Invalid = meta.story({
   render: () => (
     <Field data-invalid="true" className="w-fit">
       <FieldLabel htmlFor="otp-invalid">Label</FieldLabel>
@@ -72,12 +90,12 @@ export const Invalid: Story = {
       <FieldError id="otp-error">Subtitle</FieldError>
     </Field>
   ),
-}
+})
 
-export const Disabled: Story = { args: { disabled: true, defaultValue: '294' } }
+export const Disabled = meta.story({ args: { disabled: true, defaultValue: '294' } })
 
 /** Two groups with a separator (shadcn pattern). */
-export const WithSeparator: Story = {
+export const WithSeparator = meta.story({
   args: {
     children: (
       <>
@@ -95,10 +113,10 @@ export const WithSeparator: Story = {
       </>
     ),
   },
-}
+})
 
 /** In a Field: label and description around the slots. */
-export const WithField: Story = {
+export const WithField = meta.story({
   render: () => (
     <Field className="w-fit">
       <FieldLabel htmlFor="otp-field">Label</FieldLabel>
@@ -108,4 +126,4 @@ export const WithField: Story = {
       <FieldDescription id="otp-hint">Subtitle</FieldDescription>
     </Field>
   ),
-}
+})
