@@ -3,7 +3,7 @@
   "$extensions": {
     "com.figma": {
       "fileKey": "2170cRKZD9nhz325op4rL1",
-      "exportedAt": "2026-10-02T11:27:05.822Z",
+      "exportedAt": "2026-10-02T12:17:54.425Z",
       "collections": {
         "primitives": {
           "modes": [
@@ -4456,7 +4456,7 @@
       },
       "tight": {
         "$type": "number",
-        "$value": -1,
+        "$value": -0.5,
         "$extensions": {
           "com.figma": {
             "codeSyntax": "var(--tracking-tight)",
@@ -4464,15 +4464,15 @@
               "LETTER_SPACING"
             ],
             "modes": {
-              "desktop": -1,
-              "mobile": -1
+              "desktop": -0.5,
+              "mobile": -0.5
             }
           }
         }
       },
       "tighter": {
         "$type": "number",
-        "$value": -2,
+        "$value": -1,
         "$extensions": {
           "com.figma": {
             "codeSyntax": "var(--tracking-tighter)",
@@ -4480,8 +4480,8 @@
               "LETTER_SPACING"
             ],
             "modes": {
-              "desktop": -2,
-              "mobile": -2
+              "desktop": -1,
+              "mobile": -1
             }
           }
         }
