@@ -72,6 +72,54 @@ function ShellCloseButton({ className, ...props }: React.ComponentProps<typeof B
   )
 }
 
+// ── Body ──────────────────────────────────────────────────────────────────────────────────
+// Figma content / modal-content slot of bar shells (Dialog, Sheet, Drawer): 16px padding and gap.
+// Scrolls when the shell hits its max height, and becomes focusable only while it overflows so
+// keyboard users can scroll it.
+function ShellBody({ className, ...props }: React.ComponentProps<'div'>) {
+  const ref = React.useRef<HTMLDivElement>(null)
+  const [scrollable, setScrollable] = React.useState(false)
+  React.useLayoutEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const update = () => setScrollable(el.scrollHeight > el.clientHeight)
+    update()
+    const observer = new ResizeObserver(update)
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <div
+      ref={ref}
+      data-slot="shell-body"
+      data-shell-body=""
+      tabIndex={scrollable ? 0 : undefined}
+      className={cn(
+        'flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto p-4 outline-none focus-visible:inset-ring-2 focus-visible:inset-ring-ring',
+        className,
+      )}
+      {...props}
+    />
+  )
+}
+
+const FOCUSABLE = 'input, select, textarea, button, a[href], [tabindex]:not([tabindex="-1"])'
+
+/**
+ * `onOpenAutoFocus` for modal shells: the header close comes first in the DOM, so Radix would
+ * focus it; start on the first control in the ShellBody instead when there is one.
+ */
+function focusShellBody(event: Event) {
+  if (event.defaultPrevented) return
+  const content = event.target instanceof HTMLElement ? event.target : null
+  const first = content?.querySelector<HTMLElement>(`[data-shell-body] :is(${FOCUSABLE}):not(:disabled)`)
+  if (first) {
+    event.preventDefault()
+    first.focus()
+  }
+}
+
 // ── Footer ────────────────────────────────────────────────────────────────────────────────
 // variant bar: padded with a top shadow over scrolling content; inline: no padding.
 // align end (default) · between (secondary left) · stretch (full-width buttons, mobile Drawer).
@@ -106,6 +154,8 @@ function ShellFooter({ className, variant = 'bar', align = 'end', ...props }: Sh
 }
 
 export {
+  focusShellBody,
+  ShellBody,
   ShellCloseButton,
   ShellFooter,
   ShellHeader,

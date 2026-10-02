@@ -1,7 +1,24 @@
 import * as React from 'react'
-import { cn } from '@/lib/utils'
-import { XIcon } from 'lucide-react'
+import { cva, type VariantProps } from 'class-variance-authority'
 import { Dialog as SheetPrimitive } from 'radix-ui'
+
+import {
+  focusShellBody,
+  ShellBody,
+  ShellCloseButton,
+  ShellFooter,
+  ShellHeader,
+  shellDescriptionClassName,
+  shellTitleClassName,
+  type ShellFooterProps,
+  type ShellHeaderProps,
+} from '@/components/anvil/shell'
+import { cn } from '@/lib/utils'
+
+// Figma: Dialog · Sheet · Drawer page → `sheet` (10935:40686). Panel that slides in from a screen
+// edge for secondary tasks, filters and settings; use instead of Dialog when the user should keep
+// the page context. ShellHeader (bar) + body (Figma `content` slot) + ShellFooter (bar).
+// `side` right · left (400px, full height) · top · bottom (full width). Overlay is a sibling.
 
 function Sheet({ ...props }: React.ComponentProps<typeof SheetPrimitive.Root>) {
   return <SheetPrimitive.Root data-slot="sheet" {...props} />
@@ -24,7 +41,8 @@ function SheetOverlay({ className, ...props }: React.ComponentProps<typeof Sheet
     <SheetPrimitive.Overlay
       data-slot="sheet-overlay"
       className={cn(
-        'fixed inset-0 z-50 bg-black/50 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0',
+        'fixed inset-0 z-(--z-overlay) bg-overlay',
+        'duration-(--duration-base) data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0',
         className,
       )}
       {...props}
@@ -32,64 +50,83 @@ function SheetOverlay({ className, ...props }: React.ComponentProps<typeof Sheet
   )
 }
 
-function SheetContent({
-  className,
-  children,
-  side = 'right',
-  showCloseButton = true,
-  ...props
-}: React.ComponentProps<typeof SheetPrimitive.Content> & {
-  side?: 'top' | 'right' | 'bottom' | 'left'
-  showCloseButton?: boolean
-}) {
+const sheetContentVariants = cva(
+  [
+    'fixed z-(--z-modal) flex flex-col bg-background text-foreground outline-none',
+    'inset-ring inset-ring-overlay-16 shadow-elevation-modal',
+    'transition ease-out data-[state=closed]:animate-out data-[state=closed]:duration-(--duration-base) data-[state=open]:animate-in data-[state=open]:duration-(--duration-slow)',
+  ],
+  {
+    variants: {
+      side: {
+        right:
+          'inset-y-0 right-0 h-full w-full max-w-100 data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right',
+        left: 'inset-y-0 left-0 h-full w-full max-w-100 data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left',
+        top: 'inset-x-0 top-0 h-auto max-h-[80dvh] data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top',
+        bottom:
+          'inset-x-0 bottom-0 h-auto max-h-[80dvh] data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom',
+      },
+    },
+    defaultVariants: { side: 'right' },
+  },
+)
+
+type SheetContentProps = React.ComponentProps<typeof SheetPrimitive.Content> &
+  VariantProps<typeof sheetContentVariants>
+
+function SheetContent({ className, children, side = 'right', onOpenAutoFocus, ...props }: SheetContentProps) {
   return (
     <SheetPortal>
       <SheetOverlay />
       <SheetPrimitive.Content
         data-slot="sheet-content"
-        className={cn(
-          'fixed z-50 flex flex-col gap-4 bg-background shadow-lg transition ease-in-out data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:animate-in data-[state=open]:duration-500',
-          side === 'right' &&
-            'inset-y-0 right-0 h-full w-3/4 border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm',
-          side === 'left' &&
-            'inset-y-0 left-0 h-full w-3/4 border-r data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm',
-          side === 'top' &&
-            'inset-x-0 top-0 h-auto border-b data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top',
-          side === 'bottom' &&
-            'inset-x-0 bottom-0 h-auto border-t data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom',
-          className,
-        )}
+        data-side={side}
+        className={cn(sheetContentVariants({ side }), className)}
+        onOpenAutoFocus={(event) => {
+          onOpenAutoFocus?.(event)
+          focusShellBody(event)
+        }}
         {...props}
       >
         {children}
-        {showCloseButton && (
-          <SheetPrimitive.Close className="absolute top-4 right-4 rounded-xs opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none data-[state=open]:bg-secondary">
-            <XIcon className="size-4" />
-            <span className="sr-only">Close</span>
-          </SheetPrimitive.Close>
-        )}
       </SheetPrimitive.Content>
     </SheetPortal>
   )
 }
 
-function SheetHeader({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div data-slot="sheet-header" className={cn('flex flex-col gap-1.5 p-4', className)} {...props} />
+type SheetHeaderProps = Omit<ShellHeaderProps, 'close'> & {
+  /** Renders the close button at the end of the header (default true). */
+  showCloseButton?: boolean
 }
 
-function SheetFooter({ className, ...props }: React.ComponentProps<'div'>) {
+function SheetHeader({ showCloseButton = true, ...props }: SheetHeaderProps) {
   return (
-    <div data-slot="sheet-footer" className={cn('mt-auto flex flex-col gap-2 p-4', className)} {...props} />
+    <ShellHeader
+      data-slot="sheet-header"
+      close={
+        showCloseButton ? (
+          <SheetPrimitive.Close asChild>
+            <ShellCloseButton />
+          </SheetPrimitive.Close>
+        ) : undefined
+      }
+      {...props}
+    />
   )
+}
+
+/** Figma `content` slot (ShellBody): 16px padding and gap, scrolls. */
+function SheetBody(props: React.ComponentProps<'div'>) {
+  return <ShellBody data-slot="sheet-body" {...props} />
+}
+
+function SheetFooter(props: ShellFooterProps) {
+  return <ShellFooter data-slot="sheet-footer" {...props} />
 }
 
 function SheetTitle({ className, ...props }: React.ComponentProps<typeof SheetPrimitive.Title>) {
   return (
-    <SheetPrimitive.Title
-      data-slot="sheet-title"
-      className={cn('font-semibold text-foreground', className)}
-      {...props}
-    />
+    <SheetPrimitive.Title data-slot="sheet-title" className={cn(shellTitleClassName, className)} {...props} />
   )
 }
 
@@ -97,7 +134,7 @@ function SheetDescription({ className, ...props }: React.ComponentProps<typeof S
   return (
     <SheetPrimitive.Description
       data-slot="sheet-description"
-      className={cn('text-sm text-muted-foreground', className)}
+      className={cn(shellDescriptionClassName, className)}
       {...props}
     />
   )
@@ -105,11 +142,17 @@ function SheetDescription({ className, ...props }: React.ComponentProps<typeof S
 
 export {
   Sheet,
-  SheetTrigger,
+  SheetBody,
   SheetClose,
   SheetContent,
-  SheetHeader,
-  SheetFooter,
-  SheetTitle,
   SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetOverlay,
+  SheetPortal,
+  SheetTitle,
+  SheetTrigger,
+  sheetContentVariants,
+  type SheetContentProps,
+  type SheetHeaderProps,
 }

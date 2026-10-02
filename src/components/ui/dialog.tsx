@@ -3,6 +3,8 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { Dialog as DialogPrimitive } from 'radix-ui'
 
 import {
+  focusShellBody,
+  ShellBody,
   ShellCloseButton,
   ShellFooter,
   ShellHeader,
@@ -70,8 +72,6 @@ const dialogContentVariants = cva(
 type DialogContentProps = React.ComponentProps<typeof DialogPrimitive.Content> &
   VariantProps<typeof dialogContentVariants>
 
-const FOCUSABLE = 'input, select, textarea, button, a[href], [tabindex]:not([tabindex="-1"])'
-
 function DialogContent({
   className,
   size = 'default',
@@ -79,21 +79,6 @@ function DialogContent({
   onOpenAutoFocus,
   ...props
 }: DialogContentProps) {
-  // The close button comes first in the DOM (header), so Radix would focus it. Start in the body
-  // instead when it has a control, e.g. the first field of a form.
-  const handleOpenAutoFocus = (event: Event) => {
-    onOpenAutoFocus?.(event)
-    if (event.defaultPrevented) return
-    const content = event.target instanceof HTMLElement ? event.target : null
-    const first = content?.querySelector<HTMLElement>(
-      `[data-slot=dialog-body] :is(${FOCUSABLE}):not(:disabled)`,
-    )
-    if (first) {
-      event.preventDefault()
-      first.focus()
-    }
-  }
-
   return (
     <DialogPortal>
       <DialogOverlay />
@@ -101,7 +86,10 @@ function DialogContent({
         data-slot="dialog-content"
         data-size={size}
         className={cn(dialogContentVariants({ size }), className)}
-        onOpenAutoFocus={handleOpenAutoFocus}
+        onOpenAutoFocus={(event) => {
+          onOpenAutoFocus?.(event)
+          focusShellBody(event)
+        }}
         {...props}
       >
         {children}
@@ -131,33 +119,9 @@ function DialogHeader({ showCloseButton = true, ...props }: DialogHeaderProps) {
   )
 }
 
-/** Figma `modal-content` slot: scrolls when the dialog hits the viewport height. */
-function DialogBody({ className, ...props }: React.ComponentProps<'div'>) {
-  // When it overflows, the body becomes focusable so keyboard users can scroll it.
-  const ref = React.useRef<HTMLDivElement>(null)
-  const [scrollable, setScrollable] = React.useState(false)
-  React.useLayoutEffect(() => {
-    const el = ref.current
-    if (!el) return
-    const update = () => setScrollable(el.scrollHeight > el.clientHeight)
-    update()
-    const observer = new ResizeObserver(update)
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [])
-
-  return (
-    <div
-      ref={ref}
-      data-slot="dialog-body"
-      tabIndex={scrollable ? 0 : undefined}
-      className={cn(
-        'flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto p-4 outline-none focus-visible:inset-ring-2 focus-visible:inset-ring-ring',
-        className,
-      )}
-      {...props}
-    />
-  )
+/** Figma `modal-content` slot (ShellBody): 16px padding and gap, scrolls at the viewport height. */
+function DialogBody(props: React.ComponentProps<'div'>) {
+  return <ShellBody data-slot="dialog-body" {...props} />
 }
 
 function DialogFooter(props: ShellFooterProps) {

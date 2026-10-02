@@ -1,4 +1,4 @@
-import { useEffect, type ReactNode } from 'react'
+import { useEffect, useLayoutEffect, type ReactNode } from 'react'
 import type { Decorator, Preview } from '@storybook/react-vite'
 import { withThemeByClassName } from '@storybook/addon-themes'
 
@@ -23,6 +23,12 @@ function AnvilProviders({
   useEffect(() => {
     document.documentElement.classList.toggle('no-motion', motion === 'off')
   }, [motion])
+
+  // The themes addon sets .dark after mount, so the first frame paints light and colors animate
+  // into dark. Apply the class before paint as well (same class, so the two agree).
+  useLayoutEffect(() => {
+    document.documentElement.classList.toggle('dark', theme === 'dark')
+  }, [theme])
 
   return (
     <TooltipProvider>
