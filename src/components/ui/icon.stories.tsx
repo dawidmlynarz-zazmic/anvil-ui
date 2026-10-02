@@ -1,0 +1,147 @@
+import type { Meta, StoryObj } from '@storybook/react-vite'
+import { expect } from 'storybook/test'
+
+import { Button } from './button'
+import {
+  ArrowRightIcon,
+  BellIcon,
+  CheckIcon,
+  ChevronDownIcon,
+  CircleAlertIcon,
+  CopyIcon,
+  Icon,
+  InfoIcon,
+  type LucideIcon,
+  PlusIcon,
+  SearchIcon,
+  SettingsIcon,
+  SparklesIcon,
+  Trash2Icon,
+  XIcon,
+} from './icon'
+
+const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=6294-8671'
+const GLYPHS: [string, LucideIcon][] = [
+  ['check', CheckIcon],
+  ['x', XIcon],
+  ['plus', PlusIcon],
+  ['chevron-down', ChevronDownIcon],
+  ['arrow-right', ArrowRightIcon],
+  ['search', SearchIcon],
+  ['settings', SettingsIcon],
+  ['bell', BellIcon],
+  ['copy', CopyIcon],
+  ['trash-2', Trash2Icon],
+  ['info', InfoIcon],
+  ['circle-alert', CircleAlertIcon],
+  ['sparkles', SparklesIcon],
+]
+const tones = ['neutral', 'brand', 'info', 'success', 'warning', 'destructive', 'agent'] as const
+
+const meta = {
+  title: 'Foundations/Icon',
+  component: Icon,
+  parameters: {
+    layout: 'padded',
+    design: { type: 'figma', url: FIGMA },
+    docs: {
+      description: {
+        component:
+          'The one icon abstraction: Lucide glyphs rendered at 16px with a constant 1.33px stroke (Figma Icons page). Import the component and glyphs from `@/components/ui/icon` — never from `lucide-react` (ESLint enforces it). Decorative by default (`aria-hidden`); pass `label` when the icon alone carries meaning. Without `size`, a container such as Button sizes it; `size` xs (12) · default (16) forces it. `tone` uses the status / agent base tones.',
+      },
+    },
+  },
+  args: { icon: SparklesIcon },
+  argTypes: {
+    icon: { table: { disable: true } },
+    size: { control: 'inline-radio', options: [undefined, 'xs', 'default'] },
+    tone: { control: 'select', options: tones },
+    label: { control: 'text' },
+  },
+} satisfies Meta<typeof Icon>
+
+export default meta
+type Story = StoryObj<typeof meta>
+
+export const Default: Story = {
+  play: async ({ canvasElement }) => {
+    const svg = canvasElement.querySelector('[data-slot=icon]')!
+    await expect(svg).toHaveAttribute('aria-hidden', 'true')
+    await expect(svg.getAttribute('width')).toBe('16')
+    await expect(svg.getAttribute('stroke-width')).toBe('1.33')
+  },
+}
+
+/** A few Lucide glyphs at the default 16px (the Figma library holds the full Lucide set). */
+export const Glyphs: Story = {
+  render: () => (
+    <div className="grid grid-cols-[repeat(auto-fill,minmax(7rem,1fr))] gap-4">
+      {GLYPHS.map(([name, glyph]) => (
+        <div
+          key={name}
+          className="flex flex-col items-center gap-2 rounded-md p-3 inset-ring inset-ring-overlay-8"
+        >
+          <Icon icon={glyph} />
+          <span className="type-code-xs text-muted-foreground">{name}</span>
+        </div>
+      ))}
+    </div>
+  ),
+}
+
+/** `size` xs (12px) · default (16px); the stroke stays 1.33px. */
+export const Sizes: Story = {
+  render: () => (
+    <div className="flex items-center gap-4 text-foreground">
+      <Icon icon={SparklesIcon} size="xs" />
+      <Icon icon={SparklesIcon} size="default" />
+    </div>
+  ),
+}
+
+/** `tone` maps to the status and agent base tones (Figma: "fills, icons"). */
+export const Tones: Story = {
+  render: () => (
+    <div className="flex items-center gap-4">
+      {tones.map((tone) => (
+        <Icon key={tone} icon={CircleAlertIcon} tone={tone} />
+      ))}
+    </div>
+  ),
+}
+
+/** With `label` the icon is announced (role="img"); without it, it is hidden from assistive tech. */
+export const Accessible: Story = {
+  args: { icon: CircleAlertIcon, label: 'Label', tone: 'destructive' },
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole('img', { name: 'Label' })).toBeInTheDocument()
+  },
+}
+
+/** Inside components the container sizes the icon: Button xs → 12px, other sizes → 16px. */
+export const InComponents: Story = {
+  render: () => (
+    <div className="flex items-center gap-3">
+      <Button size="xs">
+        <Icon icon={PlusIcon} />
+        Label
+      </Button>
+      <Button size="sm">
+        <Icon icon={PlusIcon} />
+        Label
+      </Button>
+      <Button size="icon" variant="outline" intent="neutral" aria-label="Label">
+        <Icon icon={SettingsIcon} />
+      </Button>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const [xs, sm] = canvasElement.querySelectorAll('[data-slot=icon]')
+    await expect(xs.getBoundingClientRect().width).toBe(12)
+    await expect(sm.getBoundingClientRect().width).toBe(16)
+    // Constant 1.33px stroke at both sizes (Figma), via non-scaling-stroke.
+    for (const svg of [xs, sm]) {
+      await expect(getComputedStyle(svg.firstElementChild!).vectorEffect).toBe('non-scaling-stroke')
+    }
+  },
+}
