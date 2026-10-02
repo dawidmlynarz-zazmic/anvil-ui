@@ -135,6 +135,9 @@ Customer Support) are consumers of the library. Use them as real-world usage ref
   Figma MCP `use_figma` tool (read-only). Each token carries its WEB code syntax in
   `$extensions["com.figma"].codeSyntax`. Re-pull whenever Figma changes; never edit the JSON by
   hand and never reconstruct values from screenshots. If the pull fails, **stop and ask**.
+- **Pulling:** `use_figma` truncates results at 20 KB, so `export-tokens.js` returns parts. Run it
+  once per `PART` (0…4), save each result verbatim as `part-N.json` in a scratch folder, then
+  `node scripts/figma/to-dtcg.mjs <folder>` (it checks the variable count) and `pnpm tokens:build`.
 - CSS variable names come from each Figma variable's **code syntax (WEB)**, which already uses
   shadcn names: `--background`, `--foreground`, `--primary`, `--primary-foreground`, `--muted`,
   `--accent`, `--destructive`, `--border`, `--input`, `--ring`, `--card`, `--popover`,
@@ -150,9 +153,22 @@ Customer Support) are consumers of the library. Use them as real-world usage ref
   `--radius` (8px): `calc(var(--radius) ± n)`; spacing steps lg–4xl → `--space-*` (never
   `--spacing-*` t-shirt keys; they collide with Tailwind sizing utilities).
 - Register every semantic variable in `@theme inline` as `--color-*`, `--radius-*`, `--shadow-*`,
-  `--font-*` so utilities like `bg-agent-soft` work.
-- Elevation: `elevation/raised` (Popover, menus, Combobox list, Date Picker, hover card) and
-  `elevation/modal` (Dialog, Alert Dialog, Sheet, Drawer). Card is flat (border only).
+  `--font-*` so utilities like `bg-agent-soft` work. Names already in a Tailwind namespace
+  (`--text-*`, `--font-*`, `--tracking-*`, `--radius-none`, `--ease-*`) are declared in `@theme`.
+- `src/styles/theme-reset.css` clears Tailwind's default colors, type scale, weights, tracking,
+  leading, radii, shadows and easings: only Figma values produce utilities (`bg-red-500`,
+  `text-lg`, `font-bold` do not exist). Tailwind `--spacing` (4px) stays.
+- Utilities from Figma styles: text styles → `type-<style>` (e.g. `type-heading-2xl`,
+  `type-text-sm-medium`, `type-code-xs`); `shadow/*` → `shadow-*` (`shadow/inner` →
+  `inset-shadow-xs`); `elevation/*` → `shadow-elevation-raised` / `shadow-elevation-modal`;
+  `focus/ring` → the `focus-ring` utility in `globals.css`.
+- Other build transforms: numbers → px, except z-index and grid columns (unitless) and motion
+  durations (ms); font families get a system fallback stack; a calc() code syntax is checked
+  against the Figma value on every build (the build fails on drift). `.light` re-declares the
+  light colors, for light panels inside a `.dark` tree.
+- Elevation: `elevation/raised` → `shadow-elevation-raised` (Popover, menus, Combobox list,
+  Date Picker, hover card) and `elevation/modal` → `shadow-elevation-modal` (Dialog, Alert
+  Dialog, Sheet, Drawer). Card is flat (border only).
 - Dark mode: `@custom-variant dark (&:is(.dark *));` with `.dark` on `<html>`.
 
 ## API rules (full list in `docs/api-contract.md`)

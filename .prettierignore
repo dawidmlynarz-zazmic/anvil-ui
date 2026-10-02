@@ -6,3 +6,5 @@ tokens/
 src/styles/tokens/
 *.md
 *.mdx
+stories/foundations/*.generated.ts
+scripts/figma/export-tokens.js
