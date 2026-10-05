@@ -15,7 +15,7 @@ export const menuContentClassName = cn(
 /** Figma `dropdown item`: 36px, radius md; highlighted → --muted, disabled → 50% (as drawn).
  * `intent="destructive"` text uses --danger-medium (Figma --danger is 3.25:1 on dark). */
 export const menuItemClassName = cn(
-  'group/item relative flex h-9 cursor-default items-center gap-2 rounded-md px-2 type-text-sm-normal text-foreground outline-hidden select-none',
+  'group/item relative flex h-9 cursor-pointer items-center gap-2 rounded-md px-2 type-text-sm-normal text-foreground outline-hidden select-none',
   'data-[highlighted]:bg-muted data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[inset]:pl-8',
   'data-[intent=destructive]:text-danger-medium',
   "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
