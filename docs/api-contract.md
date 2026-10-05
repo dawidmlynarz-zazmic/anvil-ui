@@ -146,6 +146,7 @@ Focus uses the focus/ring effect style; disabled uses 50% opacity (shadcn `disab
 
 - Anvil compositions: `@/components/anvil/<name>` (e.g. `@/components/anvil/stepper`, `@/components/anvil/shell`).
 - Agent Builder components: `@/components/agent/<name>` (e.g. `@/components/agent/prompt-input`), as written in each Core Kit component description.
+- Agent Builder domain status uses `status` (§1). Exception: shadcn's chat-set **Attachment** keeps its own public `state` prop (idle · uploading · processing · error · done) — it is shadcn's API, not a Figma interaction state (decided 5 Oct 2026).
 
 ## 8 · Changelog (latest)
 

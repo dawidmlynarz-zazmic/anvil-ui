@@ -56,6 +56,51 @@
   }
 }
 
+/*
+ * Agent Builder motion (Figma Core Kit frame loops). Static under reduced motion and the
+ * Storybook motion toolbar (.no-motion).
+ * pulse-dot: frame 1 → 2 → 3 = 8px dot → 11px at 40% → 8px.
+ * typing-dot: each dot rises 4px to full colour in turn (frames 1–3), resting at 35%.
+ */
+@utility animate-pulse-dot {
+  animation: pulse-dot 1.2s var(--ease-in-out) infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    scale: 1;
+    opacity: 1;
+  }
+  50% {
+    scale: 1.375;
+    opacity: 0.4;
+  }
+}
+
+@utility animate-typing-dot {
+  animation: typing-dot 1.2s var(--ease-in-out) infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@keyframes typing-dot {
+  0%,
+  66%,
+  100% {
+    translate: 0 0;
+    opacity: 0.35;
+  }
+  33% {
+    translate: 0 calc(var(--spacing) * -1);
+    opacity: 1;
+  }
+}
+
 /* Fades the start and end of a horizontal scroller (attachment group). */
 @utility scroll-fade-x {
   mask-image: linear-gradient(

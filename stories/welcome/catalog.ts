@@ -17,6 +17,8 @@ const a = (name: string, group = 'Primitives'): CatalogItem => ({
   title: `Agent Builder/${group}/${name}`,
 })
 const ag = (name: string): CatalogItem => ({ name, title: `Agent Builder/${name}` })
+const kit = (section: string, names: string[]): CatalogItem[] =>
+  names.map((name) => ({ name, title: `Agent Builder/Core Kit/${section}/${name}` }))
 
 export const catalog: CatalogArea[] = [
   {
@@ -128,10 +130,118 @@ export const catalog: CatalogArea[] = [
       a('Attachment'),
       a('Marker'),
       a('Message Scroller'),
-      ag('Core Kit'),
       ag('Agent Patterns'),
       ag('Surfaces'),
       ag('Templates'),
     ],
+  },
+  {
+    id: 'kit-shell',
+    name: 'Core Kit · Shell',
+    description: 'The chat around the thread: welcome, model picker, sharing and projects.',
+    items: kit('Shell', [
+      'Starter Prompt Card',
+      'Welcome State',
+      'Model and Tools Picker',
+      'Share Dialog',
+      'Project Setup',
+      'Project Header',
+    ]),
+  },
+  {
+    id: 'kit-input',
+    name: 'Core Kit · Input',
+    description: 'Composing a prompt: text, files, voice and suggested replies.',
+    items: [
+      ...kit('Input', ['Prompt Input']),
+      // Figma prompt attachment = the Attachment primitive.
+      { name: 'Prompt Attachment', title: 'Agent Builder/Primitives/Attachment' },
+      ...kit('Input', [
+        'Voice Waveform',
+        'Live Voice Session',
+        'Quick Reply',
+        'Quick Reply Group',
+        'Follow-up Suggestions',
+        'Attachment Menu',
+        'Drop Overlay',
+        'Mic Button',
+        'Response Controls',
+        'Clarifying Question',
+      ]),
+    ],
+  },
+  {
+    id: 'kit-messages',
+    name: 'Core Kit · Messages',
+    description: 'A turn in the thread and what it contains.',
+    items: kit('Messages', [
+      'Message Row',
+      'Message Edit',
+      'Message Actions',
+      'Regenerate Menu',
+      'Content Block',
+      'File Output Card',
+      'Tool Log Line',
+      'Streaming Placeholder',
+    ]),
+  },
+  {
+    id: 'kit-states',
+    name: 'Core Kit · Agent states',
+    description: 'What the agent is doing right now: thinking, typing, calling tools.',
+    items: kit('Agent States', [
+      'Pulse Dot',
+      'Text Shimmer',
+      'Typing Indicator',
+      'Thinking Panel',
+      'Tool Call Item',
+      'Tool Call Accordion',
+    ]),
+  },
+  {
+    id: 'kit-sources',
+    name: 'Core Kit · Sources',
+    description: 'Citations and the sources behind an answer.',
+    items: kit('Sources', [
+      'Citation Chip',
+      'Citation Hovercard',
+      'Citation Drawer',
+      'Citation Source Item',
+      'Source Card',
+    ]),
+  },
+  {
+    id: 'kit-system',
+    name: 'Core Kit · System & context',
+    description: 'Notices, approvals, memory and connected apps.',
+    items: kit('System & Context', [
+      'System Banner',
+      'Approval Card',
+      'Memory Chip',
+      'Memory Manager',
+      'Connector Card',
+      'Instructions Banner',
+      'Memory in Use',
+    ]),
+  },
+  {
+    id: 'kit-widgets',
+    name: 'Core Kit · Widgets & artifacts',
+    description: 'Rich output inside the thread: metrics, tables, media and artifacts.',
+    items: kit('Widgets & Artifacts', [
+      'Artifact Panel',
+      'Widget Metric Card',
+      'Widget Metric Group',
+      'Widget Table',
+      'Widget Media',
+      'Widget Audio',
+      'Image Generation Card',
+    ]),
+  },
+  {
+    id: 'kit-feedback',
+    name: 'Core Kit · Feedback & surveys',
+    description: 'Asking the user how it went.',
+    items: kit('Feedback & Surveys', ['Feedback Reason', 'Rating', 'NPS', 'Survey', 'Poll']),
   },
 ]

@@ -124,7 +124,7 @@ export default definePreview({
     a11y: { test: 'error' },
     controls: { matchers: { color: /(background|color)$/i, date: /Date$/i }, sort: 'requiredFirst' },
     options: {
-      // Groups in a fixed order (Agent Builder sub-groups follow the Figma pages), components A–Z
+      // Groups in a fixed order (Agent Builder sub-groups and Core Kit sections follow Figma), components A–Z
       // inside a group, stories in file order. Plain JS, no outside references: Storybook evaluates
       // this function's source on its own.
       storySort: (a, b) => {
@@ -139,6 +139,22 @@ export default definePreview({
           const sa = agent.indexOf(pa[1])
           const sb = agent.indexOf(pb[1])
           if (sa !== sb) return (sa === -1 ? 99 : sa) - (sb === -1 ? 99 : sb)
+        }
+        // Core Kit sections follow the Figma page.
+        const kit = [
+          'Shell',
+          'Input',
+          'Messages',
+          'Agent States',
+          'Sources',
+          'System & Context',
+          'Widgets & Artifacts',
+          'Feedback & Surveys',
+        ]
+        if (pa[1] === 'Core Kit' && pb[1] === 'Core Kit' && pa[2] !== pb[2]) {
+          const ka = kit.indexOf(pa[2])
+          const kb = kit.indexOf(pb[2])
+          if (ka !== kb) return (ka === -1 ? 99 : ka) - (kb === -1 ? 99 : kb)
         }
         if (pa[0] === 'Welcome' || pa[0] === 'Foundations' || a.title === b.title) return 0
         return a.title.localeCompare(b.title)
