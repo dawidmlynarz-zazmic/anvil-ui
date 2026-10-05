@@ -2,36 +2,12 @@ import { useEffect, useState, type MouseEvent, type ReactNode } from 'react'
 import { addons } from 'storybook/preview-api'
 import { NAVIGATE_URL } from 'storybook/internal/core-events'
 
-import {
-  ThinkingPanel,
-  ThinkingPanelContent,
-  ThinkingPanelDuration,
-  ThinkingPanelTitle,
-  ThinkingPanelTrigger,
-} from '@/components/agent/thinking-panel'
-import {
-  ToolCallAccordion,
-  ToolCallAccordionContent,
-  ToolCallAccordionDuration,
-  ToolCallAccordionSummary,
-  ToolCallAccordionTitle,
-  ToolCallAccordionTrigger,
-} from '@/components/agent/tool-call-accordion'
-import {
-  ToolCallItem,
-  ToolCallItemDuration,
-  ToolCallItemName,
-  ToolCallItemSummary,
-  ToolCallItemTrigger,
-} from '@/components/agent/tool-call-item'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
-import { Bubble, BubbleContent } from '@/components/ui/bubble'
 import { Button } from '@/components/ui/button'
 import {
   AccessibilityIcon,
   ArrowRightIcon,
-  ArrowUpIcon,
   BookOpenIcon,
   BotIcon,
   BoxesIcon,
@@ -53,11 +29,10 @@ import {
   type LucideIcon,
 } from '@/components/ui/icon'
 import { Kbd } from '@/components/ui/kbd'
-import { Marker, MarkerContent } from '@/components/ui/marker'
-import { Message, MessageAvatar, MessageContent, MessageGroup } from '@/components/ui/message'
 import { cn } from '@/lib/utils'
 
 import { catalog, type CatalogItem } from './catalog'
+import { ChatDemo } from './ChatDemo'
 
 const FIGMA_URL = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/'
 const REPO_URL = 'https://github.com/dawidmlynarz-zazmic/anvil-ui'
@@ -199,9 +174,7 @@ function Hero({ firstComponent }: { firstComponent?: string }) {
         </div>
         <div className="flex flex-col gap-3">
           <h1 className="type-heading-6xl text-foreground">Anvil UI</h1>
-          <p className="max-w-xl type-heading-xl text-foreground">
-            Built to give us the heavy-duty foundation to forge agents faster.
-          </p>
+          <p className="max-w-xl type-heading-xl text-foreground">Built to forge agents faster</p>
           <p className="max-w-xl type-text-base-normal text-muted-foreground">
             Developers get accessible React components on shadcn/ui, wired to the same tokens as Figma, so
             every conversation, tool call and answer is ready to ship. Product managers get one shared
@@ -226,102 +199,8 @@ function Hero({ firstComponent }: { firstComponent?: string }) {
           </Button>
         </div>
       </div>
-      <ChatMockup />
+      <ChatDemo />
     </div>
-  )
-}
-
-/** A conversation drawn with the real Agent Builder components (Message, Bubble, Thinking Panel…). */
-function ChatMockup() {
-  return (
-    <section
-      aria-label="Example agent conversation"
-      className="flex flex-col overflow-hidden rounded-xl bg-background shadow-elevation-raised inset-ring inset-ring-border"
-    >
-      <header className="flex items-center gap-3 border-b px-4 py-3">
-        <Avatar size="sm">
-          <AvatarFallback tone="agent">
-            <Icon icon={BotIcon} />
-          </AvatarFallback>
-        </Avatar>
-        <div className="flex min-w-0 flex-col">
-          <span className="type-text-sm-semibold text-foreground">Travel assistant</span>
-          <span className="type-text-xs-normal text-muted-foreground">Powered by Anvil UI</span>
-        </div>
-        <Badge variant="subtle" intent="neutral" size="sm" className="ms-auto">
-          Online
-        </Badge>
-      </header>
-      <MessageGroup className="gap-4 p-4">
-        <Marker variant="separator">
-          <MarkerContent>Today</MarkerContent>
-        </Marker>
-        <Message align="end">
-          <MessageContent>
-            <Bubble variant="muted">
-              <BubbleContent>Find me a flight to New York next Tuesday, under $500.</BubbleContent>
-            </Bubble>
-          </MessageContent>
-        </Message>
-        <Message>
-          <MessageAvatar>
-            <Avatar size="xs">
-              <AvatarFallback tone="agent">
-                <Icon icon={BotIcon} />
-              </AvatarFallback>
-            </Avatar>
-          </MessageAvatar>
-          <MessageContent>
-            <ThinkingPanel status="completed">
-              <ThinkingPanelTrigger>
-                <ThinkingPanelTitle>Planned the search</ThinkingPanelTitle>
-                <ThinkingPanelDuration>Thought for 1.8s</ThinkingPanelDuration>
-              </ThinkingPanelTrigger>
-              <ThinkingPanelContent>
-                <p>Search direct and one-stop flights, then compare fares across airlines.</p>
-              </ThinkingPanelContent>
-            </ThinkingPanel>
-            <ToolCallAccordion>
-              <ToolCallAccordionTrigger>
-                <ToolCallAccordionTitle>Used 2 tools</ToolCallAccordionTitle>
-                <ToolCallAccordionSummary>flights.search, fares.compare</ToolCallAccordionSummary>
-                <ToolCallAccordionDuration>3.1s</ToolCallAccordionDuration>
-              </ToolCallAccordionTrigger>
-              <ToolCallAccordionContent>
-                <ToolCallItem status="done">
-                  <ToolCallItemTrigger>
-                    <ToolCallItemName>flights.search</ToolCallItemName>
-                    <ToolCallItemSummary>42 flights found</ToolCallItemSummary>
-                    <ToolCallItemDuration>1.4s</ToolCallItemDuration>
-                  </ToolCallItemTrigger>
-                </ToolCallItem>
-                <ToolCallItem status="done">
-                  <ToolCallItemTrigger>
-                    <ToolCallItemName>fares.compare</ToolCallItemName>
-                    <ToolCallItemSummary>5 airlines compared</ToolCallItemSummary>
-                    <ToolCallItemDuration>1.7s</ToolCallItemDuration>
-                  </ToolCallItemTrigger>
-                </ToolCallItem>
-              </ToolCallAccordionContent>
-            </ToolCallAccordion>
-            <Bubble variant="ghost">
-              <BubbleContent>
-                I found 3 flights under $500. The best fit is Virgin Atlantic at $412, leaving at 9:40 with
-                one short stop.
-              </BubbleContent>
-            </Bubble>
-          </MessageContent>
-        </Message>
-      </MessageGroup>
-      <div className="flex items-center gap-2 border-t px-4 py-3">
-        <span className="min-w-0 flex-1 truncate type-text-sm-normal text-muted-foreground">
-          Ask a follow-up…
-        </span>
-        <Button size="icon-sm" shape="circle" aria-label="Send" tabIndex={-1}>
-          <Icon icon={ArrowUpIcon} />
-        </Button>
-      </div>
-    </section>
   )
 }
 
