@@ -181,7 +181,7 @@ function MessageRow({
               {status === 'streaming' && (
                 <span
                   aria-hidden
-                  className="ms-1 inline-block h-4 w-2 animate-caret rounded-2xs bg-agent align-text-bottom"
+                  className="ms-1 inline-block h-4 w-0.5 animate-caret rounded-full bg-agent align-text-bottom"
                 />
               )}
             </BubbleContent>
