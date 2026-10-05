@@ -3,34 +3,61 @@ import { cva, type VariantProps } from 'class-variance-authority'
 
 import { cn } from '@/lib/utils'
 
-// Figma: Alert page → `alert` (10671:2494). Callout for user attention: default for information and
-// confirmations, destructive for errors. Optional icon (16px, Icon) + title (text/sm/medium, one
-// line) + description (text/sm/normal, muted). --card with a --border stroke, radius lg, padding
-// 16 / 12, gap 12 (icon) and 2 (title → description). Destructive text uses --danger-medium, not
-// Figma's --destructive: red/50 on the dark card is 3.25:1 (as Label, FieldError, Dropdown Menu).
+// Figma: Alert page → `alert` (10671:2494). Callout for user attention. Optional icon (16px, Icon) +
+// title (text/sm/medium, one line) + description (text/sm/normal). Radius lg, padding 16 / 12, gap 12
+// (icon) and 2 (title → description). `tone` (API Contract; Figma `tone`):
+// - neutral (default): --card with a --border stroke, --card-foreground title, muted description.
+// - info · success · warning · destructive · agent: tinted — --{tone}-subtle surface, --{tone}-muted
+//   stroke, --{tone}-strong title, --{tone}-medium icon and description (destructive → --danger-*).
+// shadcn's `variant="destructive"` still works and maps to tone="destructive".
+const tinted = (tone: 'info' | 'success' | 'warning' | 'danger' | 'agent') =>
+  ({
+    info: 'border-info-muted bg-info-subtle text-info-strong [&>svg]:text-info-medium *:data-[slot=alert-description]:text-info-medium',
+    success:
+      'border-success-muted bg-success-subtle text-success-strong [&>svg]:text-success-medium *:data-[slot=alert-description]:text-success-medium',
+    warning:
+      'border-warning-muted bg-warning-subtle text-warning-strong [&>svg]:text-warning-medium *:data-[slot=alert-description]:text-warning-medium',
+    danger:
+      'border-danger-muted bg-danger-subtle text-danger-strong [&>svg]:text-danger-medium *:data-[slot=alert-description]:text-danger-medium',
+    agent:
+      'border-agent-muted bg-agent-subtle text-agent-strong [&>svg]:text-agent-medium *:data-[slot=alert-description]:text-agent-medium',
+  })[tone]
+
 const alertVariants = cva(
-  'relative grid w-full grid-cols-[0_1fr] items-start gap-y-0.5 rounded-lg border border-border bg-card px-4 py-3 type-text-sm-normal has-[>svg]:grid-cols-[calc(var(--spacing)*4)_1fr] has-[>svg]:gap-x-3 [&>svg]:size-4 [&>svg]:translate-y-0.5 [&>svg]:text-current',
+  'relative grid w-full grid-cols-[0_1fr] items-start gap-y-0.5 rounded-lg border px-4 py-3 type-text-sm-normal has-[>svg]:grid-cols-[calc(var(--spacing)*4)_1fr] has-[>svg]:gap-x-3 [&>svg]:size-4 [&>svg]:translate-y-0.5 [&>svg]:text-current',
   {
     variants: {
-      variant: {
-        default: 'text-card-foreground',
-        destructive:
-          'text-danger-medium *:data-[slot=alert-description]:text-danger-medium [&>svg]:text-current',
+      tone: {
+        neutral: 'border-border bg-card text-card-foreground',
+        info: tinted('info'),
+        success: tinted('success'),
+        warning: tinted('warning'),
+        destructive: tinted('danger'),
+        agent: tinted('agent'),
       },
     },
     defaultVariants: {
-      variant: 'default',
+      tone: 'neutral',
     },
   },
 )
 
-function Alert({
-  className,
-  variant,
-  ...props
-}: React.ComponentProps<'div'> & VariantProps<typeof alertVariants>) {
+type AlertProps = React.ComponentProps<'div'> &
+  VariantProps<typeof alertVariants> & {
+    /** shadcn/ui API, kept for compatibility: `destructive` = `tone="destructive"`. Prefer `tone`. */
+    variant?: 'default' | 'destructive'
+  }
+
+function Alert({ className, tone, variant, ...props }: AlertProps) {
+  const resolved = tone ?? (variant === 'destructive' ? 'destructive' : 'neutral')
   return (
-    <div data-slot="alert" role="alert" className={cn(alertVariants({ variant }), className)} {...props} />
+    <div
+      data-slot="alert"
+      data-tone={resolved}
+      role="alert"
+      className={cn(alertVariants({ tone: resolved }), className)}
+      {...props}
+    />
   )
 }
 

@@ -2,12 +2,34 @@ import preview from '#.storybook/preview'
 import { expect } from 'storybook/test'
 
 import { Alert, AlertDescription, AlertTitle } from './alert'
-import { CircleAlertIcon, CircleCheckIcon, Icon, Trash2Icon } from './icon'
+import {
+  CircleAlertIcon,
+  CircleCheckIcon,
+  Icon,
+  InfoIcon,
+  SparklesIcon,
+  Trash2Icon,
+  TriangleAlertIcon,
+  type LucideIcon,
+} from './icon'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10671-2494'
 
+const TONES = ['neutral', 'info', 'success', 'warning', 'destructive', 'agent'] as const
+type Tone = (typeof TONES)[number]
+
+/** A fitting icon per tone (Figma: the icon is an instance-swap property, set per use). */
+const toneIcon: Record<Tone, LucideIcon> = {
+  neutral: CircleCheckIcon,
+  info: InfoIcon,
+  success: CircleCheckIcon,
+  warning: TriangleAlertIcon,
+  destructive: CircleAlertIcon,
+  agent: SparklesIcon,
+}
+
 type DemoProps = {
-  variant?: 'default' | 'destructive'
+  tone?: Tone
   title?: string
   description?: string
   /** Figma `show icon` / `show title` / `show description`: render or omit the part. */
@@ -17,7 +39,7 @@ type DemoProps = {
 }
 
 function DemoAlert({
-  variant = 'default',
+  tone = 'neutral',
   title = 'Title',
   description = 'Subtitle',
   showIcon = true,
@@ -25,8 +47,8 @@ function DemoAlert({
   showDescription = true,
 }: DemoProps) {
   return (
-    <Alert variant={variant}>
-      {showIcon && <Icon icon={variant === 'destructive' ? CircleAlertIcon : CircleCheckIcon} />}
+    <Alert tone={tone}>
+      {showIcon && <Icon icon={toneIcon[tone]} />}
       {showTitle && <AlertTitle>{title}</AlertTitle>}
       {showDescription && <AlertDescription>{description}</AlertDescription>}
     </Alert>
@@ -42,7 +64,7 @@ const meta = preview.meta({
     docs: {
       description: {
         component:
-          'A callout for user attention (shadcn/ui Alert): `variant` default for information and confirmations, destructive for errors. `<Alert>` + optional `<Icon />` + `<AlertTitle>` (one line) + `<AlertDescription>`. It is `role="alert"`, so it is announced when it appears; use Toast for transient feedback.',
+          'A callout for user attention (shadcn/ui Alert). `tone`: neutral (the default card) for general information; info, success, warning and agent for status; destructive for errors. Tinted tones use their `--{tone}-subtle` surface, `-muted` stroke, `-strong` title and `-medium` icon and description. `<Alert tone>` + optional `<Icon />` + `<AlertTitle>` (one line) + `<AlertDescription>`. shadcn\'s `variant="destructive"` still works. It is `role="alert"`, so it is announced when it appears; use Toast for transient feedback.',
       },
     },
   },
@@ -54,7 +76,7 @@ const meta = preview.meta({
     ),
   ],
   args: {
-    variant: 'default',
+    tone: 'neutral',
     title: 'Title',
     description: 'Subtitle',
     showIcon: true,
@@ -62,7 +84,7 @@ const meta = preview.meta({
     showDescription: true,
   },
   argTypes: {
-    variant: { control: 'inline-radio', options: ['default', 'destructive'] },
+    tone: { control: 'inline-radio', options: TONES },
   },
 })
 
@@ -74,14 +96,30 @@ Default.test('is announced with its title and description', async ({ canvas }) =
   await expect(alert).toHaveTextContent('Subtitle')
 })
 
-/** Figma variant=default · destructive. */
-export const Variants = meta.story({
+/** Figma tone=neutral · info · success · warning · destructive · agent. */
+export const Tones = meta.story({
   render: () => (
     <div className="flex flex-col gap-4">
-      <DemoAlert />
-      <DemoAlert variant="destructive" />
+      {TONES.map((tone) => (
+        <DemoAlert key={tone} tone={tone} />
+      ))}
     </div>
   ),
+})
+
+/** shadcn's API: `variant="destructive"` still works and is the destructive tone. */
+export const ShadcnVariant = meta.story({
+  render: () => (
+    <Alert variant="destructive">
+      <Icon icon={CircleAlertIcon} />
+      <AlertTitle>Title</AlertTitle>
+      <AlertDescription>Subtitle</AlertDescription>
+    </Alert>
+  ),
+})
+
+ShadcnVariant.test('variant="destructive" maps to tone="destructive"', async ({ canvas }) => {
+  await expect(canvas.getByRole('alert')).toHaveAttribute('data-tone', 'destructive')
 })
 
 /** Every part is optional: title and icon only, description only. */
@@ -102,7 +140,7 @@ export const Parts = meta.story({
 /** A destructive alert whose description holds a paragraph and a list. */
 export const WithList = meta.story({
   render: () => (
-    <Alert variant="destructive">
+    <Alert tone="destructive">
       <Icon icon={CircleAlertIcon} />
       <AlertTitle>Title</AlertTitle>
       <AlertDescription>
