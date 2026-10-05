@@ -1,11 +1,14 @@
-'use client'
-
 import * as React from 'react'
 import { type VariantProps } from 'class-variance-authority'
-import { cn } from '@/lib/utils'
 import { ToggleGroup as ToggleGroupPrimitive } from 'radix-ui'
 
 import { toggleVariants } from '@/components/ui/toggle'
+import { cn } from '@/lib/utils'
+
+// Figma: Toggle page → `toggle group` (10943:220). A row of Toggles; `type` single · multiple is the
+// Radix prop. Figma variant default: items 4px apart; outline: items joined into one control (shared
+// 1px --input strokes, outer corners rounded). `spacing` (shadcn, × 4px) defaults to that: 1 for
+// default, 0 (joined) for outline.
 
 const ToggleGroupContext = React.createContext<
   VariantProps<typeof toggleVariants> & {
@@ -21,7 +24,7 @@ function ToggleGroup({
   className,
   variant,
   size,
-  spacing = 0,
+  spacing = variant === 'outline' ? 0 : 1,
   children,
   ...props
 }: React.ComponentProps<typeof ToggleGroupPrimitive.Root> &
@@ -36,7 +39,7 @@ function ToggleGroup({
       data-spacing={spacing}
       style={{ '--gap': spacing } as React.CSSProperties}
       className={cn(
-        'group/toggle-group flex w-fit items-center gap-[--spacing(var(--gap))] rounded-md data-[spacing=default]:data-[variant=outline]:shadow-xs',
+        'group/toggle-group flex w-fit items-center gap-[--spacing(var(--gap))] rounded-md',
         className,
       )}
       {...props}
@@ -66,8 +69,9 @@ function ToggleGroupItem({
           variant: context.variant || variant,
           size: context.size || size,
         }),
-        'w-auto min-w-0 shrink-0 px-3 focus:z-10 focus-visible:z-10',
-        'data-[spacing=0]:rounded-none data-[spacing=0]:shadow-none data-[spacing=0]:first:rounded-l-md data-[spacing=0]:last:rounded-r-md data-[spacing=0]:data-[variant=outline]:border-l-0 data-[spacing=0]:data-[variant=outline]:first:border-l',
+        'shrink-0 focus:z-10 focus-visible:z-10',
+        // Joined: square inner corners; outline strokes overlap so neighbours share one 1px line.
+        'data-[spacing=0]:rounded-none data-[spacing=0]:first:rounded-l-md data-[spacing=0]:last:rounded-r-md data-[spacing=0]:data-[variant=outline]:not-first:-ml-px',
         className,
       )}
       {...props}
