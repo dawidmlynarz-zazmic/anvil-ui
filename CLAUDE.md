@@ -267,7 +267,7 @@ Lucide    → Icon (@/components/ui/icon) → every component and story
 
 ## Known Figma gaps (don't invent around them; follow the rule, note it in status)
 
-- No focus state drawn yet on: link, card interactive, sidebar sub item, sidebar tree item →
+- No focus state drawn yet on: card interactive, sidebar sub item, sidebar tree item →
   implement the standard focus ring anyway.
 - No disabled state drawn yet on: accordion item, card interactive, search, sidebar
   conversation item, sidebar tree item → use `disabled:opacity-50`.
