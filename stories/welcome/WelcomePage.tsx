@@ -86,7 +86,7 @@ function StoryLink({
 // Building blocks
 
 const linkClassName =
-  'rounded-xs type-text-sm-link text-foreground-link underline-offset-4 hover:underline focus-visible:focus-ring outline-none'
+  'rounded-sm type-text-sm-link text-foreground-link underline-offset-4 hover:underline focus-visible:focus-ring outline-none'
 
 function Section({
   id,
