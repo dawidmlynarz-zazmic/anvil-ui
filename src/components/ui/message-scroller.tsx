@@ -6,9 +6,14 @@ import {
   useMessageScrollerVisibility,
 } from '@shadcn/react/message-scroller'
 import { cn } from '@/lib/utils'
-import { ArrowDownIcon } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
+import { ArrowDownIcon, Icon } from '@/components/ui/icon'
+
+// Figma has no scroller part: the thread uses --shell-thread-max and the shell's padding. The
+// jump button is an outline · neutral circle icon button (Figma icon button: circle for floating
+// controls) with shadow-sm; it slides in with --duration-base / --ease-out and out with
+// --duration-slow / --ease-in-out.
 
 function MessageScrollerProvider(props: React.ComponentProps<typeof MessageScrollerPrimitive.Provider>) {
   return <MessageScrollerPrimitive.Provider {...props} />
@@ -82,11 +87,13 @@ function MessageScrollerButton({
   className,
   children,
   render,
-  variant = 'secondary',
+  variant = 'outline',
+  intent = 'neutral',
+  shape = 'circle',
   size = 'icon-sm',
   ...props
 }: React.ComponentProps<typeof MessageScrollerPrimitive.Button> &
-  Pick<React.ComponentProps<typeof Button>, 'variant' | 'size'>) {
+  Pick<React.ComponentProps<typeof Button>, 'variant' | 'intent' | 'shape' | 'size'>) {
   return (
     <MessageScrollerPrimitive.Button
       data-slot="message-scroller-button"
@@ -95,15 +102,15 @@ function MessageScrollerButton({
       data-size={size}
       direction={direction}
       className={cn(
-        'absolute inset-s-1/2 -translate-x-1/2 border-border bg-background text-foreground transition-[translate,scale,opacity] duration-200 hover:bg-muted hover:text-foreground data-[active=false]:pointer-events-none data-[active=false]:scale-95 data-[active=false]:opacity-0 data-[active=false]:duration-400 data-[active=false]:ease-[cubic-bezier(0.7,0,0.84,0)] data-[active=true]:translate-y-0 data-[active=true]:scale-100 data-[active=true]:opacity-100 data-[active=true]:ease-[cubic-bezier(0.23,1,0.32,1)] data-[direction=end]:bottom-4 data-[direction=end]:data-[active=false]:translate-y-full data-[direction=start]:top-4 data-[direction=start]:data-[active=false]:-translate-y-full rtl:translate-x-1/2 data-[direction=start]:[&_svg]:rotate-180',
+        'absolute inset-s-1/2 z-10 -translate-x-1/2 shadow-sm transition-[translate,scale,opacity] duration-(--duration-base) data-[active=false]:pointer-events-none data-[active=false]:scale-95 data-[active=false]:opacity-0 data-[active=false]:duration-(--duration-slow) data-[active=false]:ease-in-out data-[active=true]:translate-y-0 data-[active=true]:scale-100 data-[active=true]:opacity-100 data-[active=true]:ease-out data-[direction=end]:bottom-4 data-[direction=end]:data-[active=false]:translate-y-full data-[direction=start]:top-4 data-[direction=start]:data-[active=false]:-translate-y-full rtl:translate-x-1/2 data-[direction=start]:[&_svg]:rotate-180',
         className,
       )}
-      render={render ?? <Button variant={variant} size={size} />}
+      render={render ?? <Button variant={variant} intent={intent} shape={shape} size={size} />}
       {...props}
     >
       {children ?? (
         <>
-          <ArrowDownIcon />
+          <Icon icon={ArrowDownIcon} />
           <span className="sr-only">{direction === 'end' ? 'Scroll to end' : 'Scroll to start'}</span>
         </>
       )}

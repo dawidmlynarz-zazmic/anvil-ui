@@ -67,6 +67,19 @@
   );
 }
 
+/* Fades the bottom of a vertical scroller (message scroller) so content slides under the composer. */
+@utility scroll-fade-b {
+  mask-image: linear-gradient(to bottom, black calc(100% - var(--spacing) * 8), transparent);
+}
+
+@utility scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+@utility scrollbar-gutter-stable {
+  scrollbar-gutter: stable;
+}
+
 @utility scrollbar-none {
   scrollbar-width: none;
   &::-webkit-scrollbar {
