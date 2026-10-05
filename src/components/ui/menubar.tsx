@@ -1,13 +1,31 @@
 import * as React from 'react'
-import { cn } from '@/lib/utils'
-import { CheckIcon, ChevronRightIcon, CircleIcon } from 'lucide-react'
 import { Menubar as MenubarPrimitive } from 'radix-ui'
+
+import { CheckIcon, ChevronRightIcon, Icon } from '@/components/ui/icon'
+import {
+  MenuCheckboxSwitch,
+  menuContentClassName,
+  menuItemClassName,
+  menuLabelClassName,
+  menuSeparatorClassName,
+  menuShortcutClassName,
+} from '@/components/ui/menu-styles'
+import { cn } from '@/lib/utils'
+
+// Figma: Menu page → `menu` (10948:83) and `.menu trigger` (10948:57); the code keeps shadcn's
+// Menubar name (API Contract). Bar: --background, 1px --border stroke, radius md, 4px padding and gap.
+// Trigger: 28px, padding 4 / 8, radius sm, text/sm/medium --foreground; hover and open → --accent
+// fill, focus → focus/ring. Menus are the Dropdown Menu's (shared menu-styles.tsx, same item API:
+// `intent="destructive"`, radio check and checkbox switch at the end).
 
 function Menubar({ className, ...props }: React.ComponentProps<typeof MenubarPrimitive.Root>) {
   return (
     <MenubarPrimitive.Root
       data-slot="menubar"
-      className={cn('flex h-9 items-center gap-1 rounded-md border bg-background p-1 shadow-xs', className)}
+      className={cn(
+        'flex w-fit items-center gap-1 rounded-md border border-border bg-background p-1',
+        className,
+      )}
       {...props}
     />
   )
@@ -34,7 +52,8 @@ function MenubarTrigger({ className, ...props }: React.ComponentProps<typeof Men
     <MenubarPrimitive.Trigger
       data-slot="menubar-trigger"
       className={cn(
-        'flex items-center rounded-sm px-2 py-1 text-sm font-medium outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground',
+        'flex h-7 items-center rounded-sm px-2 py-1 type-text-sm-medium text-foreground outline-hidden select-none',
+        'hover:bg-accent focus-visible:focus-ring data-[highlighted]:bg-accent data-[state=open]:bg-accent',
         className,
       )}
       {...props}
@@ -56,10 +75,7 @@ function MenubarContent({
         align={align}
         alignOffset={alignOffset}
         sideOffset={sideOffset}
-        className={cn(
-          'z-50 min-w-[12rem] origin-(--radix-menubar-content-transform-origin) overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
-          className,
-        )}
+        className={cn(menuContentClassName, 'origin-(--radix-menubar-content-transform-origin)', className)}
         {...props}
       />
     </MenubarPortal>
@@ -69,26 +85,25 @@ function MenubarContent({
 function MenubarItem({
   className,
   inset,
-  variant = 'default',
+  intent = 'neutral',
   ...props
 }: React.ComponentProps<typeof MenubarPrimitive.Item> & {
   inset?: boolean
-  variant?: 'default' | 'destructive'
+  /** Figma type=destructive (shadcn `variant`; `intent` as on Dropdown Menu). */
+  intent?: 'neutral' | 'destructive'
 }) {
   return (
     <MenubarPrimitive.Item
       data-slot="menubar-item"
       data-inset={inset}
-      data-variant={variant}
-      className={cn(
-        "relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[inset]:pl-8 data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 data-[variant=destructive]:focus:text-destructive dark:data-[variant=destructive]:focus:bg-destructive/20 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground data-[variant=destructive]:*:[svg]:text-destructive!",
-        className,
-      )}
+      data-intent={intent}
+      className={cn(menuItemClassName, className)}
       {...props}
     />
   )
 }
 
+/** Figma type=checkbox: a small switch at the end shows the checked state. */
 function MenubarCheckboxItem({
   className,
   children,
@@ -98,23 +113,17 @@ function MenubarCheckboxItem({
   return (
     <MenubarPrimitive.CheckboxItem
       data-slot="menubar-checkbox-item"
-      className={cn(
-        "relative flex cursor-default items-center gap-2 rounded-xs py-1.5 pr-2 pl-8 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-        className,
-      )}
+      className={cn(menuItemClassName, 'pr-2', className)}
       checked={checked}
       {...props}
     >
-      <span className="pointer-events-none absolute left-2 flex size-3.5 items-center justify-center">
-        <MenubarPrimitive.ItemIndicator>
-          <CheckIcon className="size-4" />
-        </MenubarPrimitive.ItemIndicator>
-      </span>
       {children}
+      <MenuCheckboxSwitch slot="menubar-checkbox-switch" />
     </MenubarPrimitive.CheckboxItem>
   )
 }
 
+/** Figma type=radio: a check at the end marks the selected item. */
 function MenubarRadioItem({
   className,
   children,
@@ -123,18 +132,15 @@ function MenubarRadioItem({
   return (
     <MenubarPrimitive.RadioItem
       data-slot="menubar-radio-item"
-      className={cn(
-        "relative flex cursor-default items-center gap-2 rounded-xs py-1.5 pr-2 pl-8 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-        className,
-      )}
+      className={cn(menuItemClassName, 'pr-8', className)}
       {...props}
     >
-      <span className="pointer-events-none absolute left-2 flex size-3.5 items-center justify-center">
+      {children}
+      <span className="pointer-events-none absolute right-2 flex size-4 items-center justify-center">
         <MenubarPrimitive.ItemIndicator>
-          <CircleIcon className="size-2 fill-current" />
+          <Icon icon={CheckIcon} />
         </MenubarPrimitive.ItemIndicator>
       </span>
-      {children}
     </MenubarPrimitive.RadioItem>
   )
 }
@@ -150,7 +156,7 @@ function MenubarLabel({
     <MenubarPrimitive.Label
       data-slot="menubar-label"
       data-inset={inset}
-      className={cn('px-2 py-1.5 text-sm font-medium data-[inset]:pl-8', className)}
+      className={cn(menuLabelClassName, className)}
       {...props}
     />
   )
@@ -160,20 +166,14 @@ function MenubarSeparator({ className, ...props }: React.ComponentProps<typeof M
   return (
     <MenubarPrimitive.Separator
       data-slot="menubar-separator"
-      className={cn('-mx-1 my-1 h-px bg-border', className)}
+      className={cn(menuSeparatorClassName, className)}
       {...props}
     />
   )
 }
 
 function MenubarShortcut({ className, ...props }: React.ComponentProps<'span'>) {
-  return (
-    <span
-      data-slot="menubar-shortcut"
-      className={cn('ml-auto text-xs tracking-widest text-muted-foreground', className)}
-      {...props}
-    />
-  )
+  return <span data-slot="menubar-shortcut" className={cn(menuShortcutClassName, className)} {...props} />
 }
 
 function MenubarSub({ ...props }: React.ComponentProps<typeof MenubarPrimitive.Sub>) {
@@ -192,14 +192,11 @@ function MenubarSubTrigger({
     <MenubarPrimitive.SubTrigger
       data-slot="menubar-sub-trigger"
       data-inset={inset}
-      className={cn(
-        'flex cursor-default items-center rounded-sm px-2 py-1.5 text-sm outline-none select-none focus:bg-accent focus:text-accent-foreground data-[inset]:pl-8 data-[state=open]:bg-accent data-[state=open]:text-accent-foreground',
-        className,
-      )}
+      className={cn(menuItemClassName, 'data-[state=open]:bg-muted', className)}
       {...props}
     >
       {children}
-      <ChevronRightIcon className="ml-auto h-4 w-4" />
+      <Icon icon={ChevronRightIcon} size="xs" className="ml-auto text-foreground-subtle" />
     </MenubarPrimitive.SubTrigger>
   )
 }
@@ -211,10 +208,7 @@ function MenubarSubContent({
   return (
     <MenubarPrimitive.SubContent
       data-slot="menubar-sub-content"
-      className={cn(
-        'z-50 min-w-[8rem] origin-(--radix-menubar-content-transform-origin) overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-lg data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
-        className,
-      )}
+      className={cn(menuContentClassName, 'origin-(--radix-menubar-content-transform-origin)', className)}
       {...props}
     />
   )
