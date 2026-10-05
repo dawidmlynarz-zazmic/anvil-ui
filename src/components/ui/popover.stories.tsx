@@ -38,7 +38,7 @@ function DemoPopover({
     <Popover open={open} onOpenChange={onOpenChange}>
       <PopoverTrigger asChild>
         <Button variant="outline" intent="neutral">
-          Label
+          Open popover
         </Button>
       </PopoverTrigger>
       <PopoverContent
@@ -55,10 +55,10 @@ function DemoPopover({
           <PopoverFooter>
             <PopoverClose asChild>
               <Button size="sm" variant="outline" intent="neutral">
-                Label
+                Cancel
               </Button>
             </PopoverClose>
-            <Button size="sm">Label</Button>
+            <Button size="sm">Save</Button>
           </PopoverFooter>
         )}
       </PopoverContent>
@@ -97,7 +97,7 @@ const body = (el: HTMLElement) => within(el.ownerDocument.body)
 export const Default = meta.story()
 
 Default.test('trigger opens, Escape closes and focus returns', async ({ canvas, canvasElement }) => {
-  const trigger = canvas.getByRole('button', { name: 'Label' })
+  const trigger = canvas.getByRole('button', { name: 'Open popover' })
   await userEvent.click(trigger)
   const dialog = await body(canvasElement).findByRole('dialog', { name: 'Title' })
   await expect(dialog).toHaveAccessibleDescription('Subtitle')

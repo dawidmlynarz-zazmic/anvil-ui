@@ -161,7 +161,7 @@ function Conversation({
           </span>
         </a>
       </SidebarMenuButton>
-      <SidebarMenuAction showOnHover aria-label="Label">
+      <SidebarMenuAction showOnHover aria-label="More actions">
         <Icon icon={EllipsisIcon} />
       </SidebarMenuAction>
     </SidebarMenuItem>
@@ -314,7 +314,7 @@ function PresetContent({ preset }: { preset: Preset }) {
         </SidebarGroup>
         <SidebarGroup>
           <SidebarGroupLabel>Title 2</SidebarGroupLabel>
-          <SidebarGroupAction aria-label="Label">
+          <SidebarGroupAction aria-label="Add">
             <Icon icon={PlusIcon} />
           </SidebarGroupAction>
           <SidebarMenu>
@@ -433,7 +433,7 @@ Default.test(
 
 Default.test('the active conversation is the current page; its actions are reachable', async ({ canvas }) => {
   await expect(canvas.getByRole('link', { name: /Label 4/ })).toHaveAttribute('aria-current', 'page')
-  const actions = canvas.getAllByRole('button', { name: 'Label' })
+  const actions = canvas.getAllByRole('button', { name: 'More actions' })
   await expect(actions.length).toBeGreaterThan(0)
 })
 

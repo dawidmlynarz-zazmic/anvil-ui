@@ -30,44 +30,53 @@ function DemoMenubar({ defaultValue, onSelect }: DemoProps) {
   return (
     <Menubar defaultValue={defaultValue}>
       <MenubarMenu value="1">
-        <MenubarTrigger>Label 1</MenubarTrigger>
+        <MenubarTrigger>File</MenubarTrigger>
         <MenubarContent>
           <MenubarItem onSelect={onSelect}>
-            Label 1<MenubarShortcut>⌘N</MenubarShortcut>
+            New file<MenubarShortcut>⌘N</MenubarShortcut>
           </MenubarItem>
-          <MenubarItem>Label 2</MenubarItem>
+          <MenubarItem>
+            Duplicate<MenubarShortcut>⌘D</MenubarShortcut>
+          </MenubarItem>
           <MenubarSeparator />
           <MenubarSub>
-            <MenubarSubTrigger>Label 3</MenubarSubTrigger>
+            <MenubarSubTrigger>Share</MenubarSubTrigger>
             <MenubarSubContent>
-              <MenubarItem>Label 4</MenubarItem>
-              <MenubarItem>Label 5</MenubarItem>
+              <MenubarItem>Email</MenubarItem>
+              <MenubarItem>Message</MenubarItem>
+              <MenubarItem>Copy link</MenubarItem>
             </MenubarSubContent>
           </MenubarSub>
           <MenubarSeparator />
-          <MenubarItem intent="destructive">Label 6</MenubarItem>
+          <MenubarItem intent="destructive">
+            Delete<MenubarShortcut>⌫</MenubarShortcut>
+          </MenubarItem>
         </MenubarContent>
       </MenubarMenu>
       <MenubarMenu value="2">
-        <MenubarTrigger>Label 2</MenubarTrigger>
+        <MenubarTrigger>Edit</MenubarTrigger>
         <MenubarContent>
-          <MenubarItem>Label 1</MenubarItem>
-          <MenubarItem disabled>Label 2</MenubarItem>
+          <MenubarItem>
+            Copy<MenubarShortcut>⌘C</MenubarShortcut>
+          </MenubarItem>
+          <MenubarItem disabled>
+            Paste<MenubarShortcut>⌘V</MenubarShortcut>
+          </MenubarItem>
         </MenubarContent>
       </MenubarMenu>
       <MenubarMenu value="3">
-        <MenubarTrigger>Label 3</MenubarTrigger>
+        <MenubarTrigger>View</MenubarTrigger>
         <MenubarContent>
-          <MenubarCheckboxItem checked>Label 1</MenubarCheckboxItem>
-          <MenubarCheckboxItem>Label 2</MenubarCheckboxItem>
+          <MenubarCheckboxItem checked>Show toolbar</MenubarCheckboxItem>
+          <MenubarCheckboxItem>Show status bar</MenubarCheckboxItem>
         </MenubarContent>
       </MenubarMenu>
       <MenubarMenu value="4">
-        <MenubarTrigger>Label 4</MenubarTrigger>
+        <MenubarTrigger>Layout</MenubarTrigger>
         <MenubarContent>
           <MenubarRadioGroup value="1">
-            <MenubarRadioItem value="1">Label 1</MenubarRadioItem>
-            <MenubarRadioItem value="2">Label 2</MenubarRadioItem>
+            <MenubarRadioItem value="1">Top</MenubarRadioItem>
+            <MenubarRadioItem value="2">Bottom</MenubarRadioItem>
           </MenubarRadioGroup>
         </MenubarContent>
       </MenubarMenu>
@@ -102,9 +111,9 @@ const body = (canvasElement: HTMLElement) => within(canvasElement.ownerDocument.
 export const Default = meta.story()
 
 Default.test('click opens a menu and an item runs', async ({ canvas, canvasElement, args }) => {
-  await userEvent.click(canvas.getByRole('menuitem', { name: 'Label 1' }))
+  await userEvent.click(canvas.getByRole('menuitem', { name: 'File' }))
   const menu = await body(canvasElement).findByRole('menu')
-  await userEvent.click(within(menu).getByRole('menuitem', { name: /^Label 1/ }))
+  await userEvent.click(within(menu).getByRole('menuitem', { name: /^New file/ }))
   await expect(args.onSelect).toHaveBeenCalledTimes(1)
   await waitFor(() => expect(body(canvasElement).queryByRole('menu')).toBeNull())
 })
@@ -113,11 +122,11 @@ Default.test(
   'keyboard: ArrowDown opens a menu, ArrowRight moves to the next trigger',
   async ({ canvas, canvasElement }) => {
     await userEvent.tab()
-    await expect(canvas.getByRole('menuitem', { name: 'Label 1' })).toHaveFocus()
+    await expect(canvas.getByRole('menuitem', { name: 'File' })).toHaveFocus()
     await userEvent.keyboard('{ArrowDown}')
     await body(canvasElement).findByRole('menu')
     await userEvent.keyboard('{ArrowRight}')
-    await waitFor(() => expect(canvas.getByRole('menuitem', { name: 'Label 2' })).toHaveFocus())
+    await waitFor(() => expect(canvas.getByRole('menuitem', { name: 'Edit' })).toHaveFocus())
     await waitFor(() => expect(body(canvasElement).queryByRole('menu')).toBeNull())
   },
 )

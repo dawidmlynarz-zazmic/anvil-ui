@@ -56,11 +56,11 @@ export const InTooltip = meta.story({
     <Tooltip open>
       <TooltipTrigger asChild>
         <Button variant="outline" intent="neutral">
-          Label
+          Search
         </Button>
       </TooltipTrigger>
       <TooltipContent className="flex items-center gap-2">
-        Label
+        Search
         <Kbd>
           <Icon icon={CommandIcon} />K
         </Kbd>

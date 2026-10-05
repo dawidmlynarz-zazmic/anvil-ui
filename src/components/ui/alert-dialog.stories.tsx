@@ -45,11 +45,12 @@ function DemoAlertDialog({
   onAction,
   focusOnOpen = true,
 }: DemoProps) {
+  const actionLabel = intent === 'destructive' ? 'Delete' : 'Continue'
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogTrigger asChild>
         <Button variant="outline" intent="neutral">
-          Label
+          {intent === 'destructive' ? 'Delete' : 'Open dialog'}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent
@@ -68,9 +69,9 @@ function DemoAlertDialog({
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={loading}>Label</AlertDialogCancel>
+          <AlertDialogCancel disabled={loading}>Cancel</AlertDialogCancel>
           <AlertDialogAction intent={intent} loading={loading} onClick={onAction}>
-            Label
+            {actionLabel}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
@@ -88,7 +89,7 @@ const meta = preview.meta({
       story: { inline: false, height: '320px' },
       description: {
         component:
-          'Blocking confirmation for destructive or irreversible actions (shadcn/ui Alert Dialog on Radix). Inline header (title + description) and footer (Cancel + action, size sm). Figma `variant` destructive → `AlertDialogAction intent="destructive"`; `loading` → `AlertDialogAction loading` with a disabled Cancel. Unlike Dialog it has no close button and an outside click does not dismiss it; focus starts on Cancel.',
+          'Blocking confirmation for destructive or irreversible actions (shadcn/ui Alert Dialog on Radix). Inline header (title + description) and footer (Cancel + Continue, or Delete when destructive; size sm). Figma `variant` destructive → `AlertDialogAction intent="destructive"`; `loading` → `AlertDialogAction loading` with a disabled Cancel. Unlike Dialog it has no close button and an outside click does not dismiss it; focus starts on Cancel.',
       },
     },
   },
@@ -124,11 +125,11 @@ const body = (canvasElement: HTMLElement) => within(canvasElement.ownerDocument.
 export const Default = meta.story()
 
 Default.test('opens on Cancel; Escape closes and focus returns', async ({ canvas, canvasElement }) => {
-  const trigger = canvas.getByRole('button', { name: 'Label' })
+  const trigger = canvas.getByRole('button', { name: 'Open dialog' })
   await userEvent.click(trigger)
   const dialog = await body(canvasElement).findByRole('alertdialog', { name: 'Title' })
   await expect(dialog).toHaveAccessibleDescription('Subtitle')
-  const [cancel] = within(dialog).getAllByRole('button', { name: 'Label' })
+  const cancel = within(dialog).getByRole('button', { name: 'Cancel' })
   await waitFor(() => expect(cancel).toHaveFocus())
   await userEvent.keyboard('{Escape}')
   await waitFor(() => expect(body(canvasElement).queryByRole('alertdialog')).toBeNull())
@@ -136,16 +137,16 @@ Default.test('opens on Cancel; Escape closes and focus returns', async ({ canvas
 })
 
 Default.test('the action runs and closes it', async ({ canvas, canvasElement, args }) => {
-  await userEvent.click(canvas.getByRole('button', { name: 'Label' }))
+  await userEvent.click(canvas.getByRole('button', { name: 'Open dialog' }))
   const dialog = await body(canvasElement).findByRole('alertdialog')
-  const [, action] = within(dialog).getAllByRole('button', { name: 'Label' })
+  const action = within(dialog).getByRole('button', { name: 'Continue' })
   await userEvent.click(action)
   await expect(args.onAction).toHaveBeenCalledTimes(1)
   await waitFor(() => expect(body(canvasElement).queryByRole('alertdialog')).toBeNull())
 })
 
 Default.test('an outside click does not dismiss it', async ({ canvas, canvasElement }) => {
-  await userEvent.click(canvas.getByRole('button', { name: 'Label' }))
+  await userEvent.click(canvas.getByRole('button', { name: 'Open dialog' }))
   await body(canvasElement).findByRole('alertdialog')
   await userEvent.click(canvasElement.ownerDocument.body, { pointerEventsCheck: 0 })
   await expect(body(canvasElement).getByRole('alertdialog')).toBeInTheDocument()
@@ -162,7 +163,8 @@ export const Loading = meta.story({ args: { open: true, focusOnOpen: false, load
 
 Loading.test('the action is busy and keeps it open', async ({ canvasElement, args }) => {
   const dialog = await body(canvasElement).findByRole('alertdialog')
-  const [cancel, action] = within(dialog).getAllByRole('button', { name: 'Label' })
+  const cancel = within(dialog).getByRole('button', { name: 'Cancel' })
+  const action = within(dialog).getByRole('button', { name: 'Continue' })
   await expect(cancel).toBeDisabled()
   await expect(action).toHaveAttribute('aria-busy', 'true')
   action.focus()

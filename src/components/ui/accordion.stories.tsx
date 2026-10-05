@@ -117,7 +117,7 @@ export const CollapsibleSection = meta.story({
           <div className="flex items-center justify-between gap-4">
             <span className="type-text-sm-medium">Title</span>
             <CollapsibleTrigger asChild>
-              <Button size="icon-sm" variant="ghost" intent="neutral" aria-label="Label">
+              <Button size="icon-sm" variant="ghost" intent="neutral" aria-label="Toggle">
                 <Icon icon={ChevronsUpDownIcon} />
               </Button>
             </CollapsibleTrigger>
@@ -135,7 +135,7 @@ export const CollapsibleSection = meta.story({
 })
 
 CollapsibleSection.test('the trigger shows and hides the content', async ({ canvas }) => {
-  const trigger = canvas.getByRole('button', { name: 'Label' })
+  const trigger = canvas.getByRole('button', { name: 'Toggle' })
   await expect(canvas.queryByText('Value 2')).toBeNull()
   await userEvent.click(trigger)
   await expect(trigger).toHaveAttribute('aria-expanded', 'true')

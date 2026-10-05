@@ -15,11 +15,11 @@ type DemoProps = {
   text?: string
 }
 
-function DemoTooltip({ open, onOpenChange, side = 'top', text = 'Label' }: DemoProps) {
+function DemoTooltip({ open, onOpenChange, side = 'top', text = 'Add' }: DemoProps) {
   return (
     <Tooltip open={open} onOpenChange={onOpenChange}>
       <TooltipTrigger asChild>
-        <Button size="icon" variant="outline" intent="neutral" aria-label="Label">
+        <Button size="icon" variant="outline" intent="neutral" aria-label="Add">
           <Icon icon={PlusIcon} />
         </Button>
       </TooltipTrigger>
@@ -42,7 +42,7 @@ const meta = preview.meta({
       },
     },
   },
-  args: { open: false, side: 'top', text: 'Label' },
+  args: { open: false, side: 'top', text: 'Add' },
   argTypes: {
     side: { control: 'inline-radio', options: sides },
     open: { control: 'boolean' },
@@ -58,7 +58,7 @@ export const Default = meta.story()
 
 Default.test('keyboard focus shows it, Escape hides it', async ({ canvasElement }) => {
   await userEvent.tab()
-  await expect(await body(canvasElement).findByRole('tooltip')).toHaveTextContent('Label')
+  await expect(await body(canvasElement).findByRole('tooltip')).toHaveTextContent('Add')
   await userEvent.keyboard('{Escape}')
   await waitFor(() => expect(body(canvasElement).queryByRole('tooltip')).toBeNull())
 })
@@ -67,8 +67,8 @@ Default.test('keyboard focus shows it, Escape hides it', async ({ canvasElement 
 export const Open = meta.story({ args: { open: true } })
 
 Open.test('shows the label without focusing the trigger', async ({ canvas, canvasElement }) => {
-  await expect(await body(canvasElement).findByRole('tooltip')).toHaveTextContent('Label')
-  await expect(canvas.getByRole('button', { name: 'Label' })).not.toHaveFocus()
+  await expect(await body(canvasElement).findByRole('tooltip')).toHaveTextContent('Add')
+  await expect(canvas.getByRole('button', { name: 'Add' })).not.toHaveFocus()
 })
 
 /** Every `side`. */

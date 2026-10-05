@@ -112,9 +112,9 @@ export const Footer = meta.story({
             </div>
             <ShellFooter variant={variant} align={align}>
               <Button size="sm" variant="outline" intent="neutral">
-                Label
+                Cancel
               </Button>
-              <Button size="sm">Label</Button>
+              <Button size="sm">Save</Button>
             </ShellFooter>
           </div>
         )),

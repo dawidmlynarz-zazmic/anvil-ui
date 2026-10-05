@@ -38,7 +38,7 @@ function DemoSheet({
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetTrigger asChild>
         <Button variant="outline" intent="neutral">
-          Label
+          Open sheet
         </Button>
       </SheetTrigger>
       <SheetContent
@@ -58,10 +58,10 @@ function DemoSheet({
         <SheetFooter>
           <SheetClose asChild>
             <Button size="sm" variant="outline" intent="neutral">
-              Label
+              Cancel
             </Button>
           </SheetClose>
-          <Button size="sm">Label</Button>
+          <Button size="sm">Save</Button>
         </SheetFooter>
       </SheetContent>
     </Sheet>
@@ -100,7 +100,7 @@ export const Default = meta.story()
 Default.test(
   'trigger opens, the header close closes and focus returns',
   async ({ canvas, canvasElement }) => {
-    const trigger = canvas.getByRole('button', { name: 'Label' })
+    const trigger = canvas.getByRole('button', { name: 'Open sheet' })
     await userEvent.click(trigger)
     const sheet = await body(canvasElement).findByRole('dialog', { name: 'Title' })
     await waitFor(() => expect(within(sheet).getAllByLabelText('Label')[0]).toHaveFocus())

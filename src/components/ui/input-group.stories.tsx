@@ -124,7 +124,7 @@ export const TextAndButton = meta.story({
       </InputGroupAddon>
       <InputGroupInput aria-label="Label" defaultValue="Value" />
       <InputGroupAddon align="inline-end">
-        <InputGroupButton size="icon-xs" aria-label="Label">
+        <InputGroupButton size="icon-xs" aria-label="Copy">
           <Icon icon={CopyIcon} />
         </InputGroupButton>
       </InputGroupAddon>

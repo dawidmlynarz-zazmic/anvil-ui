@@ -46,9 +46,9 @@ function DemoCard({
       {footer && (
         <CardFooter className="justify-end">
           <Button size="sm" variant="outline" intent="neutral">
-            Label
+            Cancel
           </Button>
-          <Button size="sm">Label</Button>
+          <Button size="sm">Continue</Button>
         </CardFooter>
       )}
     </Card>
@@ -150,7 +150,7 @@ export const Composition = meta.story({
         <CardTitle>Title</CardTitle>
         <CardDescription>Subtitle</CardDescription>
         <CardAction>
-          <Button size="icon-sm" variant="ghost" intent="neutral" aria-label="Label">
+          <Button size="icon-sm" variant="ghost" intent="neutral" aria-label="More actions">
             <Icon icon={EllipsisIcon} />
           </Button>
         </CardAction>
@@ -161,9 +161,9 @@ export const Composition = meta.story({
       </CardContent>
       <CardFooter className="justify-between border-t border-border">
         <Button size="sm" variant="ghost" intent="neutral">
-          Label
+          Cancel
         </Button>
-        <Button size="sm">Label</Button>
+        <Button size="sm">Continue</Button>
       </CardFooter>
     </Card>
   ),
@@ -171,5 +171,5 @@ export const Composition = meta.story({
 
 Composition.test('the action sits in the header', async ({ canvasElement }) => {
   const header = canvasElement.querySelector('[data-slot=card-header]') as HTMLElement
-  await expect(within(header).getByRole('button', { name: 'Label' })).toBeInTheDocument()
+  await expect(within(header).getByRole('button', { name: 'More actions' })).toBeInTheDocument()
 })

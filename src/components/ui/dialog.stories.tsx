@@ -33,7 +33,7 @@ type DemoProps = {
   children?: ReactNode
 }
 
-/** A Dialog with the Figma anatomy: header bar, body, footer bar (Cancel + primary). */
+/** A Dialog with the Figma anatomy: header bar, body, footer bar (Cancel + Save). */
 function DemoDialog({
   size = 'default',
   open,
@@ -48,7 +48,7 @@ function DemoDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
         <Button variant="outline" intent="neutral">
-          Label
+          Open dialog
         </Button>
       </DialogTrigger>
       <DialogContent
@@ -65,10 +65,10 @@ function DemoDialog({
         <DialogFooter align={align}>
           <DialogClose asChild>
             <Button size="sm" variant="outline" intent="neutral">
-              Label
+              Cancel
             </Button>
           </DialogClose>
-          <Button size="sm">Label</Button>
+          <Button size="sm">Save</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -105,7 +105,7 @@ const body = (canvasElement: HTMLElement) => within(canvasElement.ownerDocument.
 export const Default = meta.story()
 
 Default.test('trigger opens, Escape closes and focus returns', async ({ canvas, canvasElement }) => {
-  const trigger = canvas.getByRole('button', { name: 'Label' })
+  const trigger = canvas.getByRole('button', { name: 'Open dialog' })
   await userEvent.click(trigger)
   const dialog = await body(canvasElement).findByRole('dialog', { name: 'Title' })
   await expect(dialog).toHaveAccessibleDescription('Subtitle')

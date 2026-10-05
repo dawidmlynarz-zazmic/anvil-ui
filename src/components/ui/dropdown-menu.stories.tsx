@@ -19,7 +19,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from './dropdown-menu'
-import { FolderIcon, FolderPlusIcon, Icon, Trash2Icon } from './icon'
+import { ArchiveIcon, CopyIcon, FilePlusIcon, Icon, ShareIcon, Trash2Icon } from './icon'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=8257-3156'
 
@@ -38,49 +38,50 @@ function DemoMenu({ open, onOpenChange, side = 'bottom', align = 'start', modal 
     <DropdownMenu open={open} onOpenChange={onOpenChange} modal={modal}>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" intent="neutral">
-          Label
+          Open menu
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent side={side} align={align}>
         <DropdownMenuLabel>Title</DropdownMenuLabel>
         <DropdownMenuGroup>
           <DropdownMenuItem>
-            <Icon icon={FolderPlusIcon} />
-            Label 1<DropdownMenuShortcut>⌘N</DropdownMenuShortcut>
+            <Icon icon={FilePlusIcon} />
+            New file<DropdownMenuShortcut>⌘N</DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <Icon icon={FolderIcon} />
-            Label 2
+            <Icon icon={CopyIcon} />
+            Duplicate<DropdownMenuShortcut>⌘D</DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
-              <Icon icon={FolderIcon} />
-              Label 3
+              <Icon icon={ShareIcon} />
+              Share
             </DropdownMenuSubTrigger>
             <DropdownMenuSubContent>
-              <DropdownMenuItem>Label 1</DropdownMenuItem>
-              <DropdownMenuItem>Label 2</DropdownMenuItem>
+              <DropdownMenuItem>Email</DropdownMenuItem>
+              <DropdownMenuItem>Message</DropdownMenuItem>
+              <DropdownMenuItem>Copy link</DropdownMenuItem>
             </DropdownMenuSubContent>
           </DropdownMenuSub>
           <DropdownMenuItem disabled>
-            <Icon icon={FolderIcon} />
-            Label 4
+            <Icon icon={ArchiveIcon} />
+            Archive
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuLabel>Title</DropdownMenuLabel>
         <DropdownMenuRadioGroup value={radio} onValueChange={setRadio}>
-          <DropdownMenuRadioItem value="1">Label 1</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="2">Label 2</DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value="1">Top</DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value="2">Bottom</DropdownMenuRadioItem>
         </DropdownMenuRadioGroup>
         <DropdownMenuSeparator />
         <DropdownMenuCheckboxItem checked={checked} onCheckedChange={setChecked}>
-          Label
+          Show toolbar
         </DropdownMenuCheckboxItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem intent="destructive">
           <Icon icon={Trash2Icon} />
-          Label
+          Delete<DropdownMenuShortcut>⌫</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -119,7 +120,7 @@ export const Default = meta.story()
 Default.test(
   'trigger opens, arrow keys move the highlight, Escape closes',
   async ({ canvas, canvasElement }) => {
-    const trigger = canvas.getByRole('button', { name: 'Label' })
+    const trigger = canvas.getByRole('button', { name: 'Open menu' })
     await userEvent.click(trigger)
     const menu = await body(canvasElement).findByRole('menu')
     await userEvent.keyboard('{ArrowDown}')
@@ -138,10 +139,10 @@ export const Open = meta.story({ args: { open: true } })
 
 Open.test('shows radio and checkbox items checked, nothing highlighted', async ({ canvasElement }) => {
   const menu = await body(canvasElement).findByRole('menu')
-  await expect(within(menu).getByRole('menuitemradio', { name: 'Label 1' })).toHaveAttribute(
+  await expect(within(menu).getByRole('menuitemradio', { name: 'Top' })).toHaveAttribute(
     'data-state',
     'checked',
   )
-  await expect(within(menu).getByRole('menuitemcheckbox', { name: 'Label' })).toBeChecked()
+  await expect(within(menu).getByRole('menuitemcheckbox', { name: 'Show toolbar' })).toBeChecked()
   await expect(menu.querySelector('[data-highlighted]')).toBeNull()
 })

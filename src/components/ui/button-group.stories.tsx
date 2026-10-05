@@ -16,17 +16,17 @@ type DemoProps = {
 function DemoButtonGroup({ orientation = 'horizontal', variant = 'outline', size = 'default' }: DemoProps) {
   const intent = variant === 'outline' ? 'neutral' : 'brand'
   return (
-    <ButtonGroup orientation={orientation} aria-label="Label">
+    <ButtonGroup orientation={orientation} aria-label="Clipboard">
       <Button variant={variant} intent={intent} size={size}>
-        Label 1
+        Cut
       </Button>
       {variant === 'default' && <ButtonGroupSeparator />}
       <Button variant={variant} intent={intent} size={size}>
-        Label 2
+        Copy
       </Button>
       {variant === 'default' && <ButtonGroupSeparator />}
       <Button variant={variant} intent={intent} size={size}>
-        Label 3
+        Paste
       </Button>
     </ButtonGroup>
   )
@@ -55,7 +55,7 @@ const meta = preview.meta({
 export const Default = meta.story()
 
 Default.test('a named group of buttons that share their strokes', async ({ canvas }) => {
-  const group = canvas.getByRole('group', { name: 'Label' })
+  const group = canvas.getByRole('group', { name: 'Clipboard' })
   const [a, b] = within(group)
     .getAllByRole('button')
     .map((el) => el.getBoundingClientRect())
@@ -74,7 +74,7 @@ export const WithInput = meta.story({
       <ButtonGroup className="w-full">
         <Input aria-label="Label" placeholder="Placeholder" />
         <Button variant="outline" intent="neutral">
-          Label
+          Search
         </Button>
       </ButtonGroup>
       <ButtonGroup className="w-full">
@@ -90,17 +90,17 @@ export const Nested = meta.story({
   render: () => (
     <ButtonGroup>
       <ButtonGroup>
-        <Button variant="outline" intent="neutral" size="icon" aria-label="Label 1">
+        <Button variant="outline" intent="neutral" size="icon" aria-label="Decrease">
           <Icon icon={MinusIcon} />
         </Button>
         <ButtonGroupText>Value</ButtonGroupText>
-        <Button variant="outline" intent="neutral" size="icon" aria-label="Label 2">
+        <Button variant="outline" intent="neutral" size="icon" aria-label="Increase">
           <Icon icon={PlusIcon} />
         </Button>
       </ButtonGroup>
       <ButtonGroup>
         <Button variant="outline" intent="neutral">
-          Label
+          Add
         </Button>
       </ButtonGroup>
     </ButtonGroup>
@@ -111,17 +111,17 @@ export const Nested = meta.story({
 export const SplitButton = meta.story({
   render: () => (
     <ButtonGroup>
-      <Button>Label 1</Button>
+      <Button>Save</Button>
       <ButtonGroupSeparator />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button size="icon" aria-label="Label 2">
+          <Button size="icon" aria-label="More options">
             <Icon icon={ChevronDownIcon} />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem>Label 3</DropdownMenuItem>
-          <DropdownMenuItem>Label 4</DropdownMenuItem>
+          <DropdownMenuItem>Duplicate</DropdownMenuItem>
+          <DropdownMenuItem>Archive</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </ButtonGroup>
@@ -129,7 +129,7 @@ export const SplitButton = meta.story({
 })
 
 SplitButton.test('the menu half opens the menu', async ({ canvas, canvasElement }) => {
-  await userEvent.click(canvas.getByRole('button', { name: 'Label 2' }))
+  await userEvent.click(canvas.getByRole('button', { name: 'More options' }))
   await expect(await within(canvasElement.ownerDocument.body).findByRole('menu')).toBeInTheDocument()
   await userEvent.keyboard('{Escape}')
   await waitFor(() => expect(within(canvasElement.ownerDocument.body).queryByRole('menu')).toBeNull())
