@@ -135,6 +135,18 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'table · type', values: 'contained · ghost', code: '`variant` prop on `Table`' },
+      {
+        property: 'table cells · type',
+        values: 'default · header · link · checkbox · actions · slot',
+        code: 'header = `TableHead`; the others are `TableCell` content (a link, a `Checkbox`, icon `Button`s, any component)',
+      },
+      { property: 'table cells · label', values: 'text', code: 'children' },
+      { property: 'table cells · slot', values: 'slot', code: 'children' },
+      { property: 'table cells · show icon', values: 'boolean', code: 'an `<Icon>` child, or not' },
+      { property: 'table cells · state', values: 'default', code: 'nothing (only default is drawn)' },
+    ],
     docs: {
       description: {
         component:
@@ -143,7 +155,13 @@ const meta = preview.meta({
     },
   },
   args: { variant: 'contained', selectable: true, actions: true, footer: false, caption: false },
-  argTypes: { variant: { control: 'inline-radio', options: ['contained', 'ghost'] } },
+  argTypes: {
+    variant: { control: 'inline-radio', options: ['contained', 'ghost'] },
+    selectable: { control: 'boolean' },
+    actions: { control: 'boolean' },
+    footer: { control: 'boolean' },
+    caption: { control: 'boolean' },
+  },
 })
 
 export const Default = meta.story()

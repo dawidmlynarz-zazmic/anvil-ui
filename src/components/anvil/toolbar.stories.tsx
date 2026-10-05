@@ -39,6 +39,7 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [{ property: 'variant', values: 'default', code: 'nothing (single value)' }],
     docs: {
       description: {
         component:
@@ -47,7 +48,12 @@ const meta = preview.meta({
     },
   },
   args: { orientation: 'horizontal', 'aria-label': 'Label' },
-  argTypes: { orientation: { control: 'inline-radio', options: ['horizontal', 'vertical'] } },
+  argTypes: {
+    orientation: { control: 'inline-radio', options: ['horizontal', 'vertical'] },
+    'aria-label': { control: 'text' },
+    loop: { control: 'boolean' },
+    asChild: { control: false },
+  },
   render: (args) => (
     <Toolbar {...args}>
       <ToolbarGroup>

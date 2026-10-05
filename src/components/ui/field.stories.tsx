@@ -140,6 +140,25 @@ const meta = preview.meta({
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'orientation', values: 'vertical · horizontal', code: '`orientation` prop on `Field`' },
+      {
+        property: 'state',
+        values: 'default · invalid',
+        code: 'selector: `data-invalid` on `Field` (not a prop; `aria-invalid` on the control)',
+      },
+      {
+        property: 'show description / description',
+        values: 'boolean · text',
+        code: 'a `FieldDescription` or not; text is its children',
+      },
+      {
+        property: 'error',
+        values: 'text',
+        code: '`FieldError` children (replaces the description when invalid)',
+      },
+      { property: 'control', values: 'instance', code: 'the control child (Combobox, Switch, Slider, …)' },
+    ],
     docs: {
       description: {
         component: [

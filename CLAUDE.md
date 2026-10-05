@@ -256,6 +256,9 @@ Lucide    → Icon (@/components/ui/icon) → every component and story
      `Story.test('…', fn)` (run by Vitest in light and dark and from the sidebar, never on view).
    - **Default** renders from `args` and exposes every real prop as a Control (variant, intent,
      size, disabled, loading, `aria-invalid`, checked, open, …).
+     Every interactive prop has an explicit `argTypes` entry: unions → `inline-radio` (≤ 4) or
+     `select` with `options`, booleans → `boolean`, text → `text`, callbacks → Events with no
+     control, element slots → `control: false`.
    - **Hover / focus / pressed:** the global **State** control (`.storybook/interaction-state.tsx`)
      previews them on any story; reference grids wrap a cell in
      `<span className="pseudo-hover-all contents">` (also `pseudo-focus-visible-all`,

@@ -120,6 +120,25 @@ const meta = preview.meta({
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'size', values: 'default · compact', code: '`size` prop' },
+      {
+        property: 'state',
+        values: 'empty · typing · file-attached · voice-active · streaming-disabled',
+        code: 'empty / typing = `value`; file-attached = `attachments`; voice-active = `listening`; streaming-disabled = `status="streaming"`',
+      },
+      { property: 'placeholder', values: 'text', code: '`placeholder` prop' },
+      { property: 'input text', values: 'text', code: '`value` / `defaultValue` prop' },
+      { property: 'token count', values: 'text', code: '`tokenCount` prop' },
+      { property: 'show token count', values: 'boolean', code: 'pass `tokenCount` or not' },
+      {
+        property: 'show attach button · leading action',
+        values: 'boolean · instance',
+        code: 'pass `leading` or not (attach button or Attachment Menu)',
+      },
+      { property: 'show voice button', values: 'boolean', code: 'pass `onVoice` or not' },
+      { property: 'show tools menu', values: 'boolean', code: 'pass `tools` or not' },
+    ],
     docs: {
       description: {
         component:
@@ -131,6 +150,11 @@ const meta = preview.meta({
   argTypes: {
     size: { control: 'inline-radio', options: ['default', 'compact'] },
     status: { control: 'inline-radio', options: ['idle', 'streaming'] },
+    listening: { control: 'boolean' },
+    withFiles: { control: 'boolean' },
+    defaultValue: { control: 'text' },
+    onSubmit: { control: false, table: { category: 'Events' } },
+    onStop: { control: false, table: { category: 'Events' } },
   },
 })
 

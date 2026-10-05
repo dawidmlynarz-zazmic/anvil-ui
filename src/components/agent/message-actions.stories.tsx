@@ -73,6 +73,17 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'show copy', values: 'boolean', code: 'render the Copy `MessageAction` or not' },
+      { property: 'show retry', values: 'boolean', code: 'render the Retry `MessageAction` or not' },
+      { property: 'show edit', values: 'boolean', code: 'render the Edit `MessageAction` or not' },
+      {
+        property: 'show feedback',
+        values: 'boolean',
+        code: 'render the feedback `MessageAction`s (with `pressed`) or not',
+      },
+      { property: 'show share', values: 'boolean', code: 'render the Share `MessageAction` or not' },
+    ],
     docs: {
       description: {
         component:
@@ -81,6 +92,13 @@ const meta = preview.meta({
     },
   },
   args: { copy: true, retry: true, edit: false, feedback: true, share: false },
+  argTypes: {
+    copy: { control: 'boolean' },
+    retry: { control: 'boolean' },
+    edit: { control: 'boolean' },
+    feedback: { control: 'boolean' },
+    share: { control: 'boolean' },
+  },
 })
 
 /** Which actions show is in Controls (Figma show … booleans). */

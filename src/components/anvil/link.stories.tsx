@@ -17,6 +17,21 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'intent', values: 'brand · inverse · destructive · neutral', code: '`intent` prop' },
+      { property: 'size', values: 'default · sm', code: '`size` prop' },
+      {
+        property: 'state',
+        values: 'default · hover · disabled · focus',
+        code: 'selectors: `hover:` · `aria-disabled:` (`disabled` prop) · `focus-visible:`',
+      },
+      { property: 'label', values: 'text', code: 'children' },
+      {
+        property: 'show icon left / right · icon left / right',
+        values: 'boolean · instance',
+        code: 'an `<Icon>` child before or after the label',
+      },
+    ],
     docs: {
       description: {
         component:
@@ -36,6 +51,10 @@ const meta = preview.meta({
     intent: { control: 'inline-radio', options: INTENTS },
     size: { control: 'inline-radio', options: ['default', 'sm'] },
     children: { control: 'text' },
+    disabled: { control: 'boolean' },
+    href: { control: 'text' },
+    asChild: { control: false },
+    onClick: { control: false, table: { category: 'Events' } },
   },
   render: (args) =>
     args.intent === 'inverse' ? (

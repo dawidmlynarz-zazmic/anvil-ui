@@ -87,6 +87,22 @@ const meta = preview.meta({
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'show label', values: 'boolean', code: 'pass `label` (on `SelectTrigger`) or not' },
+      { property: 'text', values: 'text', code: '`placeholder` on `SelectValue`, or the selected item' },
+      { property: 'size', values: 'lg · default · sm', code: '`size` prop on `SelectTrigger`' },
+      {
+        property: 'state',
+        values: 'default · disabled · hover · focus · invalid',
+        code: 'selectors: `hover:` · `focus-visible:` · `disabled:` (`disabled` on `Select`) · `aria-invalid` (not a prop)',
+      },
+      {
+        property: 'empty',
+        values: 'on · off',
+        code: 'nothing (design-only): the placeholder shows until a value is picked',
+      },
+      { property: 'open', values: 'false · true', code: '`open` prop on `Select` (`data-[state=open]`)' },
+    ],
     docs: {
       description: {
         component:
@@ -114,7 +130,7 @@ const meta = preview.meta({
     marker: { control: 'inline-radio', options: ['none', 'required', 'optional'] },
     disabled: { control: 'boolean' },
     'aria-invalid': { control: 'boolean', description: 'Invalid state (Figma state=invalid)' },
-    onOpenChange: { table: { disable: true } },
+    onOpenChange: { control: false, table: { category: 'Events' } },
     asChild: { table: { disable: true } },
     className: { table: { disable: true } },
   },

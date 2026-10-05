@@ -15,6 +15,13 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      {
+        property: 'state',
+        values: 'idle · listening · processing · invalid',
+        code: '`status` prop (invalid is `error`)',
+      },
+    ],
     docs: {
       description: {
         component:
@@ -23,7 +30,12 @@ const meta = preview.meta({
     },
   },
   args: { status: 'idle' },
-  argTypes: { status: { control: 'inline-radio', options: STATUSES } },
+  argTypes: {
+    status: { control: 'inline-radio', options: STATUSES },
+    label: { control: 'text' },
+    disabled: { control: 'boolean' },
+    onClick: { control: false, table: { category: 'Events' } },
+  },
 })
 
 /** Status is in Controls. */

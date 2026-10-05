@@ -51,6 +51,21 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'avatar · size', values: 'lg · default · sm · xs', code: '`size` prop' },
+      { property: 'avatar · round', values: 'off · on', code: '`shape` prop (square · circle)' },
+      {
+        property: 'avatar · type',
+        values: 'img · text · icon · brand',
+        code: '`AvatarImage` / `AvatarFallback` (initials) / `AvatarFallback tone="agent"` (icon) / `AvatarFallback tone="neutral"` (brand)',
+      },
+      { property: 'avatar · label', values: 'text', code: '`AvatarFallback` children' },
+      {
+        property: 'avatar group · size',
+        values: 'xs · sm · default',
+        code: '`size` prop on each `Avatar` in `AvatarGroup`',
+      },
+    ],
     docs: {
       description: {
         component:
@@ -63,6 +78,7 @@ const meta = preview.meta({
     size: { control: 'inline-radio', options: sizes },
     shape: { control: 'inline-radio', options: shapes },
     type: { control: 'inline-radio', options: ['img', 'text', 'icon', 'brand'] },
+    label: { control: 'text' },
   },
 })
 

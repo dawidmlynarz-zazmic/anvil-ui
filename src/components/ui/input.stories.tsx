@@ -13,6 +13,31 @@ const meta = preview.meta({
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'size', values: 'lg · default · sm', code: '`size` prop' },
+      {
+        property: 'state',
+        values: 'default · hover · disabled · focus · invalid',
+        code: 'selectors: `hover:` · `disabled:` · `focus-visible:` · `aria-invalid` (not a prop)',
+      },
+      {
+        property: 'show label',
+        values: 'boolean',
+        code: 'pass `label` or not (with it, the field anatomy renders)',
+      },
+      {
+        property: 'input text',
+        values: 'text',
+        code: '`value` / `defaultValue` (or `placeholder` when empty)',
+      },
+      { property: 'show hint / hint', values: 'boolean · text', code: 'pass `hint` or not' },
+      { property: 'show tag', values: 'boolean', code: 'not implemented (no clear spec)' },
+      {
+        property: 'show highlight / show beamer / empty',
+        values: 'boolean · off · on',
+        code: 'nothing (design-only)',
+      },
+    ],
     docs: {
       description: {
         component:

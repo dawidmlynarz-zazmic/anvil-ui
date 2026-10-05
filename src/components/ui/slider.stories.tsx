@@ -14,6 +14,18 @@ const meta = preview.meta({
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      {
+        property: 'mode',
+        values: 'single · range',
+        code: 'the shape of `value` / `defaultValue`: one number or two',
+      },
+      {
+        property: 'state',
+        values: 'default · hover · focus · disabled',
+        code: 'selectors: `hover:` (drawn as default) · `focus-visible:` · `disabled:` / `data-[disabled]:` (not a prop)',
+      },
+    ],
     docs: {
       description: {
         component:
@@ -33,14 +45,17 @@ const meta = preview.meta({
   },
   argTypes: {
     defaultValue: { control: 'object', description: 'One number (single) or two (range)' },
+    value: { control: 'object', description: 'Controlled value; leave unset for an uncontrolled slider' },
     min: { control: 'number' },
     max: { control: 'number' },
     step: { control: 'number' },
     orientation: { control: 'inline-radio', options: ['horizontal', 'vertical'] },
     disabled: { control: 'boolean' },
+    inverted: { control: 'boolean' },
+    minStepsBetweenThumbs: { control: 'number' },
     'aria-label': { control: 'text' },
-    onValueChange: { table: { disable: true } },
-    onValueCommit: { table: { disable: true } },
+    onValueChange: { control: false, table: { category: 'Events' } },
+    onValueCommit: { control: false, table: { category: 'Events' } },
     asChild: { table: { disable: true } },
   },
   decorators: [

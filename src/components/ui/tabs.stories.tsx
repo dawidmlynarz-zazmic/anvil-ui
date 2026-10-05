@@ -69,6 +69,10 @@ const meta = preview.meta({
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'full width', values: 'false · true', code: '`fullWidth` prop on `TabsList`' },
+      { property: 'variant', values: 'contained · line', code: '`variant` prop on `TabsList`' },
+    ],
     docs: {
       description: {
         component:
@@ -88,7 +92,11 @@ const meta = preview.meta({
   argTypes: {
     variant: { control: 'inline-radio', options: ['contained', 'line'] },
     orientation: { control: 'inline-radio', options: ['horizontal', 'vertical'] },
-    onValueChange: { table: { disable: true } },
+    fullWidth: { control: 'boolean' },
+    showIcon: { control: 'boolean' },
+    showBadge: { control: 'boolean' },
+    disabledTab: { control: 'boolean' },
+    onValueChange: { control: false, table: { category: 'Events' } },
   },
 })
 

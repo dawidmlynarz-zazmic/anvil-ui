@@ -72,6 +72,20 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      {
+        property: 'level 1 / level 2 / level 3',
+        values: 'boolean',
+        code: 'render a `BreadcrumbItem` (+ `BreadcrumbSeparator`) or not',
+      },
+      { property: 'active', values: 'boolean', code: 'render the current `BreadcrumbPage` or not' },
+      {
+        property: 'back',
+        values: 'boolean',
+        code: 'render a leading back `Button` (icon-xs, ghost · neutral) or not',
+      },
+      { property: 'type', values: 'default', code: 'nothing (single value)' },
+    ],
     docs: {
       description: {
         component:
@@ -80,7 +94,12 @@ const meta = preview.meta({
     },
   },
   args: { back: false, avatar: true, levels: 2, current: true },
-  argTypes: { levels: { control: 'inline-radio', options: [1, 2, 3] } },
+  argTypes: {
+    levels: { control: 'inline-radio', options: [1, 2, 3] },
+    back: { control: 'boolean' },
+    avatar: { control: 'boolean' },
+    current: { control: 'boolean' },
+  },
 })
 
 export const Default = meta.story()

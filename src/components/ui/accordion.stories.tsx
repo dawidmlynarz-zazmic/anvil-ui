@@ -44,6 +44,21 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    // Figma `accordion` has no properties; the rows are its `accordion item`.
+    figmaProps: [
+      { property: 'accordion item · title', values: 'text', code: '`AccordionTrigger` children' },
+      { property: 'accordion item · body', values: 'text', code: '`AccordionContent` children' },
+      {
+        property: 'accordion item · open',
+        values: 'false · true',
+        code: 'Radix `value` / `defaultValue` on `Accordion` (selector `data-[state=open]:`)',
+      },
+      {
+        property: 'accordion item · state',
+        values: 'default · hover · focus',
+        code: 'selectors: `hover:` · `focus-visible:` (not a prop)',
+      },
+    ],
     docs: {
       description: {
         component:
@@ -54,7 +69,8 @@ const meta = preview.meta({
   args: { type: 'single', collapsible: true, disabledItem: false },
   argTypes: {
     type: { control: 'inline-radio', options: ['single', 'multiple'] },
-    collapsible: { if: { arg: 'type', eq: 'single' } },
+    collapsible: { control: 'boolean', if: { arg: 'type', eq: 'single' } },
+    disabledItem: { control: 'boolean' },
   },
 })
 

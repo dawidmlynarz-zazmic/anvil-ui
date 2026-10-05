@@ -14,6 +14,14 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      {
+        property: 'tone',
+        values: 'brand · agent · success · warning · destructive · neutral',
+        code: '`tone` prop',
+      },
+      { property: 'thickness', values: '4 · 6 · 8', code: '`size` prop (sm · default · lg)' },
+    ],
     docs: {
       description: {
         component:
@@ -31,8 +39,11 @@ const meta = preview.meta({
   args: { value: 60, tone: 'brand', size: 'default', 'aria-label': 'Label' },
   argTypes: {
     value: { control: { type: 'range', min: 0, max: 100 } },
-    tone: { control: 'inline-radio', options: tones },
+    tone: { control: 'select', options: tones },
     size: { control: 'inline-radio', options: sizes },
+    max: { control: 'number' },
+    'aria-label': { control: 'text' },
+    asChild: { control: false },
   },
 })
 

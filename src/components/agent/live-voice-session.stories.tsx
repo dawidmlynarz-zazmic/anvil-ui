@@ -47,6 +47,7 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [{ property: 'state', values: 'listening · speaking · camera', code: '`status` prop' }],
     docs: {
       description: {
         component:
@@ -55,7 +56,13 @@ const meta = preview.meta({
     },
   },
   args: { status: 'listening', onEnd: fn(), onClose: fn(), onShareScreen: fn() },
-  argTypes: { status: { control: 'inline-radio', options: ['listening', 'speaking', 'camera'] } },
+  argTypes: {
+    status: { control: 'inline-radio', options: ['listening', 'speaking', 'camera'] },
+    label: { control: 'text' },
+    onEnd: { control: false, table: { category: 'Events' } },
+    onClose: { control: false, table: { category: 'Events' } },
+    onShareScreen: { control: false, table: { category: 'Events' } },
+  },
 })
 
 /** Status is in Controls. */

@@ -53,6 +53,21 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      {
+        property: 'state',
+        values: 'uploading · ready · invalid',
+        code: '`state` prop (uploading · done · error; code adds idle · processing)',
+      },
+      {
+        property: 'type',
+        values: 'image · document · audio',
+        code: 'content: the `<Icon>` (or image) in `AttachmentMedia` (not a prop)',
+      },
+      { property: 'file name', values: 'text', code: '`AttachmentTitle` children' },
+      { property: 'file size', values: 'text', code: '`AttachmentDescription` children' },
+      { property: 'show remove', values: 'boolean', code: 'render `AttachmentAction` or not' },
+    ],
     docs: {
       description: {
         component:
@@ -65,6 +80,8 @@ const meta = preview.meta({
     state: { control: 'select', options: STATES },
     size: { control: 'inline-radio', options: ['default', 'sm', 'xs'] },
     orientation: { control: 'inline-radio', options: ['horizontal', 'vertical'] },
+    icon: { control: false },
+    onRemove: { control: false, table: { category: 'Events' } },
   },
   render: (args) => <Demo {...args} />,
 })

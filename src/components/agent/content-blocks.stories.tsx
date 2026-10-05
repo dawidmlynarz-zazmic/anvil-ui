@@ -62,6 +62,13 @@ const meta = preview.meta({
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      {
+        property: 'type',
+        values: 'heading · paragraph · bulleted list · numbered list · quote · table · code · math · divider',
+        code: 'the HTML child: `h1`–`h4` · `p` · `ul` · `ol` · `blockquote` · `table` · `pre` · `ContentMath` · `hr`',
+      },
+    ],
     docs: {
       description: {
         component:
@@ -69,6 +76,7 @@ const meta = preview.meta({
       },
     },
   },
+  argTypes: { children: { control: false } },
   render: () => <Blocks />,
 })
 

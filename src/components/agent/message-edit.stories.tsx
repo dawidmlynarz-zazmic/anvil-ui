@@ -16,6 +16,11 @@ const meta = preview.meta({
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'message', values: 'text', code: '`defaultValue` prop on `MessageEditor`' },
+      { property: 'position', values: 'text', code: '`index` / `count` props on `MessageBranch`' },
+      { property: 'state', values: 'editing · branched', code: '`MessageEditor` · `MessageBranch`' },
+    ],
     docs: {
       description: {
         component:
@@ -24,6 +29,12 @@ const meta = preview.meta({
     },
   },
   args: { defaultValue: 'Subtitle', onCancel: fn(), onSend: fn() },
+  argTypes: {
+    defaultValue: { control: 'text' },
+    hint: { control: 'text' },
+    onCancel: { control: false, table: { category: 'Events' } },
+    onSend: { control: false, table: { category: 'Events' } },
+  },
   render: (args) => (
     <div className="flex max-w-(--shell-widget-max) justify-end">
       <MessageEditor {...args} />

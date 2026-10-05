@@ -104,6 +104,23 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      {
+        property: 'open',
+        values: 'false · true',
+        code: '`open` prop on `Combobox` (selector `data-[state=open]:`)',
+      },
+      {
+        property: 'empty',
+        values: 'false · true',
+        code: '`CommandEmpty` shows when the search matches nothing (not a prop)',
+      },
+      {
+        property: 'state',
+        values: 'default · disabled · focus · invalid',
+        code: 'selectors: `disabled:` · `focus-visible:` · `aria-invalid` on `ComboboxTrigger` (not a prop)',
+      },
+    ],
     docs: {
       description: {
         component:
@@ -127,7 +144,7 @@ const meta = preview.meta({
     size: { control: 'inline-radio', options: ['sm', 'default', 'lg'] },
     disabled: { control: 'boolean' },
     'aria-invalid': { control: 'boolean', description: 'Invalid state (Figma state=invalid)' },
-    onOpenChange: { table: { disable: true } },
+    onOpenChange: { control: false, table: { category: 'Events' } },
     focusOnOpen: { table: { disable: true } },
     search: { table: { disable: true } },
     id: { table: { disable: true } },

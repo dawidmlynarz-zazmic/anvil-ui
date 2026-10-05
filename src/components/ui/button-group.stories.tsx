@@ -39,6 +39,7 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=11160-516' },
+    figmaProps: [{ property: 'orientation', values: 'horizontal · vertical', code: '`orientation` prop' }],
     docs: {
       description: {
         component:

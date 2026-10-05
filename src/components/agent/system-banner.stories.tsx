@@ -15,6 +15,13 @@ const meta = preview.meta({
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      {
+        property: 'type',
+        values: 'usage limit · rate limit · offline · long chat · incomplete',
+        code: '`tone` + `icon` props',
+      },
+    ],
     docs: {
       description: {
         component:
@@ -23,7 +30,13 @@ const meta = preview.meta({
     },
   },
   args: { tone: 'warning', children: 'Subtitle', onDismiss: fn() },
-  argTypes: { tone: { control: 'inline-radio', options: ['neutral', 'info', 'warning', 'destructive'] } },
+  argTypes: {
+    tone: { control: 'inline-radio', options: ['neutral', 'info', 'warning', 'destructive'] },
+    children: { control: 'text' },
+    icon: { control: false },
+    action: { control: false },
+    onDismiss: { control: false, table: { category: 'Events' } },
+  },
 })
 
 /** Tone and message are in Controls. */

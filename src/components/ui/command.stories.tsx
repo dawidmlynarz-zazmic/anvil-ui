@@ -112,6 +112,14 @@ const meta = preview.type<{ args: PaletteProps }>().meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'placeholder', values: 'text', code: '`CommandInput` `placeholder` prop' },
+      {
+        property: 'empty',
+        values: 'false · true',
+        code: '`CommandEmpty` shows when the search matches nothing (not a prop)',
+      },
+    ],
     docs: {
       description: {
         component:
@@ -160,7 +168,7 @@ export const Palette = meta.story({
   args: { open: false },
   argTypes: {
     open: { control: 'boolean' },
-    onOpenChange: { table: { disable: true } },
+    onOpenChange: { control: false, table: { category: 'Events' } },
   },
   render: (args) => <DemoPalette open={args.open} onOpenChange={args.onOpenChange} />,
 })

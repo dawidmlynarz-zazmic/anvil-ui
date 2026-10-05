@@ -15,6 +15,14 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'publisher', values: 'text', code: '`publisher` prop' },
+      { property: 'domain', values: 'text', code: '`meta` prop (domain · date)' },
+      { property: 'title', values: 'text', code: '`title` prop' },
+      { property: 'excerpt', values: 'text', code: '`excerpt` prop' },
+      { property: 'credibility', values: 'high · medium · low', code: '`credibility` prop' },
+      { property: 'state', values: 'default · excluded', code: '`excluded` prop' },
+    ],
     docs: {
       description: {
         component:
@@ -33,7 +41,20 @@ const meta = preview.meta({
     excluded: false,
     href: '#source',
   },
-  argTypes: { credibility: { control: 'inline-radio', options: CREDIBILITY } },
+  argTypes: {
+    credibility: { control: 'inline-radio', options: CREDIBILITY },
+    publisher: { control: 'text' },
+    meta: { control: 'text' },
+    tag: { control: 'text' },
+    title: { control: 'text' },
+    excerpt: { control: 'text' },
+    usage: { control: 'text' },
+    excluded: { control: 'boolean' },
+    href: { control: 'text' },
+    icon: { control: false },
+    onExclude: { control: false, table: { category: 'Events' } },
+    onRestore: { control: false, table: { category: 'Events' } },
+  },
   render: (args) => (
     <div className="w-130">
       <SourceCard {...args} onExclude={() => {}} onRestore={() => {}} />

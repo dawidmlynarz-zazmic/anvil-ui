@@ -12,6 +12,7 @@ const meta = preview.meta({
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [{ property: 'length', values: 'short · medium · long', code: '`length` prop' }],
     docs: {
       description: {
         component:
@@ -20,7 +21,11 @@ const meta = preview.meta({
     },
   },
   args: { length: 'short', label: 'Subtitle' },
-  argTypes: { length: { control: 'inline-radio', options: ['short', 'medium', 'long'] } },
+  argTypes: {
+    length: { control: 'inline-radio', options: ['short', 'medium', 'long'] },
+    label: { control: 'text' },
+    icon: { control: false },
+  },
 })
 
 /** Length and label are in Controls. */

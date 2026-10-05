@@ -79,6 +79,11 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'show title bar', values: 'boolean', code: 'render `DrawerHeader` or not' },
+      { property: 'show action bar', values: 'boolean', code: 'render `DrawerFooter` or not' },
+      { property: 'content', values: 'slot', code: '`DrawerBody` children' },
+    ],
     docs: {
       story: { inline: false, height: '480px' },
       description: {
@@ -100,7 +105,9 @@ const meta = preview.meta({
     direction: { control: 'inline-radio', options: ['bottom', 'top', 'left', 'right'] },
     align: { control: 'inline-radio', options: ['end', 'between', 'stretch'] },
     showCloseButton: { control: 'boolean' },
-    onOpenChange: { table: { disable: true } },
+    title: { control: 'text' },
+    description: { control: 'text' },
+    onOpenChange: { control: false, table: { category: 'Events' } },
     focusOnOpen: { table: { disable: true } },
   },
 })

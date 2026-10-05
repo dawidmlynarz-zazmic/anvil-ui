@@ -45,6 +45,8 @@ const meta = preview.meta({
   tags: ['ui-component'],
   component: Button,
   parameters: {
+    layout: 'padded',
+    design: { type: 'figma', url: FIGMA },
     figmaProps: [
       { property: 'variant', values: 'default · outline · ghost', code: '`variant` prop' },
       { property: 'intent', values: 'brand · neutral · inverse · destructive', code: '`intent` prop' },
@@ -62,9 +64,33 @@ const meta = preview.meta({
         values: 'boolean · instance',
         code: 'an `<Icon>` child before or after the label',
       },
+      {
+        property: 'icon button · variant',
+        values: 'default · outline · ghost',
+        code: '`variant` prop',
+      },
+      {
+        property: 'icon button · intent',
+        values: 'brand · neutral · inverse · destructive',
+        code: '`intent` prop',
+      },
+      {
+        property: 'icon button · size',
+        values: 'icon-xs · icon-sm · icon · icon-lg',
+        code: '`size` prop (`icon*` values)',
+      },
+      { property: 'icon button · shape', values: 'default · circle', code: '`shape` prop' },
+      {
+        property: 'icon button · state',
+        values: 'default · hover · disabled · focus',
+        code: 'selectors: `hover:` · `disabled:` · `focus-visible:` (not a prop)',
+      },
+      {
+        property: 'icon button · icon',
+        values: 'instance',
+        code: 'an `<Icon>` child (+ `aria-label` on the Button)',
+      },
     ],
-    layout: 'padded',
-    design: { type: 'figma', url: FIGMA },
     docs: {
       description: {
         component:
@@ -89,6 +115,8 @@ const meta = preview.meta({
     shape: { control: 'inline-radio', options: ['default', 'pill', 'circle'] },
     loading: { control: 'boolean' },
     disabled: { control: 'boolean' },
+    children: { control: 'text' },
+    onClick: { control: false, table: { category: 'Events' } },
     asChild: { table: { disable: true } },
   },
   render: (args) => (

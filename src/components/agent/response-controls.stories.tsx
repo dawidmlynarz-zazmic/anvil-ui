@@ -12,6 +12,7 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [{ property: 'state', values: 'streaming · stopped · incomplete', code: '`status` prop' }],
     docs: {
       description: {
         component:
@@ -20,7 +21,13 @@ const meta = preview.meta({
     },
   },
   args: { status: 'streaming', onStop: fn(), onRegenerate: fn(), onContinue: fn() },
-  argTypes: { status: { control: 'inline-radio', options: ['streaming', 'stopped', 'incomplete'] } },
+  argTypes: {
+    status: { control: 'inline-radio', options: ['streaming', 'stopped', 'incomplete'] },
+    message: { control: 'text' },
+    onStop: { control: false, table: { category: 'Events' } },
+    onRegenerate: { control: false, table: { category: 'Events' } },
+    onContinue: { control: false, table: { category: 'Events' } },
+  },
 })
 
 /** Status is in Controls. */

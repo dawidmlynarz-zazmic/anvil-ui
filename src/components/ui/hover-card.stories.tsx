@@ -57,6 +57,8 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    // Figma: hover card is an example on the Cards page (a card static inside HoverCard); no component properties.
+    figmaProps: [],
     docs: {
       story: { inline: false, height: '280px' },
       description: {
@@ -68,7 +70,9 @@ const meta = preview.meta({
   args: { open: false, side: 'bottom', openDelay: 700 },
   argTypes: {
     side: { control: 'inline-radio', options: ['top', 'right', 'bottom', 'left'] },
-    onOpenChange: { table: { disable: true } },
+    open: { control: 'boolean' },
+    openDelay: { control: 'number' },
+    onOpenChange: { control: false, table: { category: 'Events' } },
   },
 })
 

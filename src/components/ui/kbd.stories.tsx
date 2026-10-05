@@ -15,6 +15,8 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    // Figma: badge/shortcut has no component properties (the key text is the children).
+    figmaProps: [],
     docs: {
       description: {
         component:

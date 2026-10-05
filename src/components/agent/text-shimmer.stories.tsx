@@ -12,6 +12,14 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'label', values: 'text', code: 'children' },
+      {
+        property: 'frame',
+        values: '1 · 2 · 3',
+        code: 'animation frames of the `shimmer` utility (not a prop)',
+      },
+    ],
     docs: {
       description: {
         component:
@@ -20,7 +28,7 @@ const meta = preview.meta({
     },
   },
   args: { children: 'Subtitle' },
-  argTypes: { children: { control: 'text' } },
+  argTypes: { children: { control: 'text' }, asChild: { control: false } },
 })
 
 /** The text is in Controls. */

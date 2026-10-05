@@ -91,6 +91,21 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'title', values: 'text', code: '`title` prop on `CitationDrawerContent`' },
+      { property: 'show search', values: 'boolean', code: 'render `CitationDrawerSearch` or not' },
+      {
+        property: 'source list',
+        values: 'instance',
+        code: '`CitationDrawerList` of `CitationSourceItem` children',
+      },
+      { property: 'layout', values: 'side · bottom', code: '`layout` prop on `CitationDrawerContent`' },
+      {
+        property: 'state',
+        values: 'loading · loaded · empty',
+        code: 'the body you render: `CitationDrawerLoading` · `CitationDrawerList` · `CitationDrawerEmpty` (not a prop)',
+      },
+    ],
     docs: {
       description: {
         component:
@@ -101,6 +116,9 @@ const meta = preview.meta({
   },
   args: { open: false, layout: 'side', search: false, body: 'loaded' },
   argTypes: {
+    open: { control: 'boolean' },
+    onOpenChange: { control: false, table: { category: 'Events' } },
+    search: { control: 'boolean' },
     layout: { control: 'inline-radio', options: ['side', 'bottom'] },
     body: { control: 'inline-radio', options: ['loaded', 'loading', 'empty'] },
     focusOnOpen: { table: { disable: true } },

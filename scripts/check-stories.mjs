@@ -1,6 +1,7 @@
 // Story standards check (run by `pnpm lint`). Every component meta must have a title, exactly one
-// tier tag (.storybook/tiers.ts), parameters.layout and a Figma link (parameters.design), and no
-// story may use `play` (interactions are Story.test). Welcome is the landing page and is exempt.
+// tier tag (.storybook/tiers.ts), parameters.layout, a Figma link (parameters.design), the Figma →
+// code table (parameters.figmaProps; `[]` with a comment when Figma has no properties) and explicit
+// argTypes, and no story may use `play` (interactions are Story.test). Welcome is exempt.
 import { globSync, readFileSync } from 'node:fs'
 
 const TIER_TAGS = ['ui-component', 'agent-primitive', 'agent-block', 'agent-template']
@@ -23,6 +24,9 @@ for (const file of files) {
     problems.push(`${file}: needs exactly one tier tag (${TIER_TAGS.join(' · ')}), has ${tiers.length}`)
   if (!/\blayout: '/.test(source)) problems.push(`${file}: no parameters.layout`)
   if (!/design: \{ type: 'figma'/.test(source)) problems.push(`${file}: no parameters.design (Figma link)`)
+  if (!/^ {4}figmaProps: \[/m.test(source))
+    problems.push(`${file}: no parameters.figmaProps (Figma → code table)`)
+  if (!/^ {2}argTypes: \{/m.test(source)) problems.push(`${file}: no argTypes`)
   if (/^\s+play:/m.test(source)) problems.push(`${file}: uses play (use Story.test instead)`)
 }
 

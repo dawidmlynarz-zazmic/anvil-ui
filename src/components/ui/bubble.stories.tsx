@@ -15,6 +15,20 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    // No Figma Bubble component: the bubble frame inside Core Kit `message row`.
+    figmaProps: [
+      {
+        property: 'message row · role',
+        values: 'user · assistant · system · tool',
+        code: '`variant` prop: user → `muted`, assistant → `ghost` (system → `Marker`, tool → a MessageRow card)',
+      },
+      {
+        property: 'message row · state',
+        values: 'queued · complete · invalid · streaming',
+        code: 'invalid → `aria-invalid` on `BubbleContent`; the rest is MessageRow `status`',
+      },
+      { property: 'message row · message text', values: 'text', code: '`BubbleContent` children' },
+    ],
     docs: {
       description: {
         component:
@@ -26,6 +40,7 @@ const meta = preview.meta({
   argTypes: {
     variant: { control: 'select', options: VARIANTS },
     align: { control: 'inline-radio', options: ['start', 'end'] },
+    children: { control: false },
   },
   render: (args) => (
     <div className="flex w-120 flex-col">

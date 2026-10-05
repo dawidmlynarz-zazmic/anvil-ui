@@ -54,6 +54,9 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'mode', values: 'single · range', code: '`mode` prop (react-day-picker; also `multiple`)' },
+    ],
     docs: {
       description: {
         component:
@@ -72,6 +75,8 @@ const meta = preview.meta({
     mode: { control: 'inline-radio', options: ['single', 'range'] },
     numberOfMonths: { control: 'inline-radio', options: [1, 2] },
     captionLayout: { control: 'inline-radio', options: ['label', 'dropdown'] },
+    showOutsideDays: { control: 'boolean' },
+    disablePast: { control: 'boolean' },
   },
 })
 

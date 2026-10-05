@@ -73,6 +73,15 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'show header', values: 'boolean', code: 'render `PopoverHeader` or not' },
+      { property: 'content', values: 'slot', code: '`PopoverContent` children' },
+      {
+        property: 'show footer',
+        values: 'boolean',
+        code: 'render `PopoverFooter` or not (story `showFooter`)',
+      },
+    ],
     docs: {
       story: { inline: false, height: '360px' },
       description: {
@@ -87,7 +96,7 @@ const meta = preview.meta({
     align: { control: 'inline-radio', options: ['start', 'center', 'end'] },
     open: { control: 'boolean' },
     showFooter: { control: 'boolean' },
-    onOpenChange: { table: { disable: true } },
+    onOpenChange: { control: false, table: { category: 'Events' } },
     focusOnOpen: { table: { disable: true } },
   },
 })

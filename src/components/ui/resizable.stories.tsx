@@ -34,6 +34,14 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      {
+        property: 'orientation',
+        values: 'horizontal · vertical',
+        code: '`orientation` prop on `ResizablePanelGroup`',
+      },
+      { property: 'with handle', values: 'false · true', code: '`withHandle` prop on `ResizableHandle`' },
+    ],
     docs: {
       description: {
         component:
@@ -42,7 +50,10 @@ const meta = preview.meta({
     },
   },
   args: { orientation: 'horizontal', withHandle: true },
-  argTypes: { orientation: { control: 'inline-radio', options: ['horizontal', 'vertical'] } },
+  argTypes: {
+    orientation: { control: 'inline-radio', options: ['horizontal', 'vertical'] },
+    withHandle: { control: 'boolean' },
+  },
 })
 
 export const Default = meta.story()

@@ -14,6 +14,12 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'file name', values: 'text', code: '`name` prop' },
+      { property: 'file meta', values: 'text', code: '`meta` prop' },
+      { property: 'type', values: 'document · presentation · spreadsheet · pdf', code: '`kind` prop' },
+      { property: 'state', values: 'generating · ready', code: '`status` prop' },
+    ],
     docs: {
       description: {
         component:
@@ -36,6 +42,12 @@ const meta = preview.meta({
     kind: { control: 'inline-radio', options: KINDS },
     status: { control: 'inline-radio', options: ['generating', 'ready'] },
     progress: { control: { type: 'range', min: 0, max: 100 } },
+    name: { control: 'text' },
+    meta: { control: 'text' },
+    href: { control: 'text' },
+    onCancel: { control: false, table: { category: 'Events' } },
+    onPreview: { control: false, table: { category: 'Events' } },
+    onDownload: { control: false, table: { category: 'Events' } },
   },
   render: (args) => (
     <div className="w-110">

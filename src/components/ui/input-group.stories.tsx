@@ -37,6 +37,19 @@ const meta = preview.meta({
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'size', values: 'lg · default · sm', code: '`size` prop on `InputGroup`' },
+      {
+        property: 'state',
+        values: 'default · hover · focus',
+        code: 'selectors: `hover:` · `has-[…:focus-visible]:` on the group (not a prop)',
+      },
+      {
+        property: 'show shortcut',
+        values: 'boolean',
+        code: 'an `InputGroupAddon align="inline-end"` with a `Kbd`, or not',
+      },
+    ],
     docs: {
       description: {
         component:

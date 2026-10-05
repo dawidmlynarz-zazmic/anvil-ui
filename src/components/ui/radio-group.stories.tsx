@@ -19,6 +19,23 @@ const meta = preview.meta({
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      {
+        property: 'show label',
+        values: 'boolean',
+        code: 'an inline `Label` next to each `RadioGroupItem`, or not',
+      },
+      {
+        property: 'checked',
+        values: 'true · false',
+        code: '`value` / `defaultValue` on `RadioGroup` (`data-[state=checked]` on the item)',
+      },
+      {
+        property: 'state',
+        values: 'default · hover · disabled · focus',
+        code: 'selectors: `hover:` · `disabled:` · `focus-visible:` (not a prop)',
+      },
+    ],
     docs: {
       description: {
         component:
@@ -37,7 +54,9 @@ const meta = preview.meta({
     },
     disabled: { control: 'boolean' },
     required: { control: 'boolean' },
-    onValueChange: { table: { disable: true } },
+    loop: { control: 'boolean' },
+    name: { control: 'text' },
+    onValueChange: { control: false, table: { category: 'Events' } },
     asChild: { table: { disable: true } },
   },
   render: (args) => (

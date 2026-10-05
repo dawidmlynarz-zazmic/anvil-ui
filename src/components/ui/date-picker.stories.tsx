@@ -49,6 +49,9 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'open', values: 'false · true', code: '`open` prop on `DatePicker` (Popover root)' },
+    ],
     docs: {
       story: { inline: false, height: '420px' },
       description: {
@@ -58,7 +61,12 @@ const meta = preview.meta({
     },
   },
   args: { open: false, withValue: false },
-  argTypes: { onOpenChange: { table: { disable: true } }, id: { table: { disable: true } } },
+  argTypes: {
+    open: { control: 'boolean' },
+    withValue: { control: 'boolean', description: 'Story: start with a value' },
+    onOpenChange: { control: false, table: { category: 'Events' } },
+    id: { table: { disable: true } },
+  },
 })
 
 const body = (canvasElement: HTMLElement) => within(canvasElement.ownerDocument.body)

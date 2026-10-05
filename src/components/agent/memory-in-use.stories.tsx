@@ -31,6 +31,14 @@ const meta = preview.meta({
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'memory', values: 'text', code: 'children' },
+      {
+        property: 'state',
+        values: 'inline · details · not used',
+        code: '`used` prop + `open` prop (details = open popover; not used = `used={false}`)',
+      },
+    ],
     docs: {
       description: {
         component:
@@ -40,6 +48,18 @@ const meta = preview.meta({
     },
   },
   args: { used: true, open: false, title: 'Title', description: 'Subtitle', children: 'Label' },
+  argTypes: {
+    used: { control: 'boolean' },
+    open: { control: 'boolean' },
+    defaultOpen: { control: 'boolean' },
+    title: { control: 'text' },
+    description: { control: 'text' },
+    children: { control: 'text' },
+    actions: { control: false },
+    undo: { control: false },
+    onOpenChange: { control: false, table: { category: 'Events' } },
+    onOpenAutoFocus: { control: false, table: { category: 'Events' } },
+  },
   render: (args) => (
     <MemoryInUse
       {...args}

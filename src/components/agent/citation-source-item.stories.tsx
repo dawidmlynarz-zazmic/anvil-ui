@@ -14,6 +14,23 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'source index', values: 'text', code: '`index` prop' },
+      { property: 'title', values: 'text', code: '`title` prop' },
+      { property: 'domain', values: 'text', code: '`domain` prop' },
+      { property: 'url preview', values: 'text', code: '`path` prop' },
+      { property: 'snippet / show snippet', values: 'text · boolean', code: 'pass `snippet` or not' },
+      {
+        property: 'state',
+        values: 'default · hover · selected · focus',
+        code: 'selectors: `hover:` · `data-[active=true]` (`active` prop) · `focus-visible:` (not a prop)',
+      },
+      {
+        property: 'confidence',
+        values: 'high · medium · low · none',
+        code: '`confidence` + `score` props (omit for none)',
+      },
+    ],
     docs: {
       description: {
         component:
@@ -32,7 +49,18 @@ const meta = preview.meta({
     active: false,
     onClick: fn(),
   },
-  argTypes: { confidence: { control: 'inline-radio', options: ['high', 'medium', 'low'] } },
+  argTypes: {
+    index: { control: 'text' },
+    title: { control: 'text' },
+    domain: { control: 'text' },
+    path: { control: 'text' },
+    snippet: { control: 'text' },
+    confidence: { control: 'inline-radio', options: ['high', 'medium', 'low'] },
+    score: { control: 'text' },
+    active: { control: 'boolean' },
+    href: { control: 'text' },
+    onClick: { control: false, table: { category: 'Events' } },
+  },
   render: (args) => (
     <div className="w-100">
       <CitationSourceItem {...args} />

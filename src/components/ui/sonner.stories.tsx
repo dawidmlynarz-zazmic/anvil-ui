@@ -82,6 +82,21 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'message', values: 'text', code: 'the `toast()` message (first argument)' },
+      { property: 'description', values: 'text', code: '`description` option' },
+      { property: 'show action', values: 'boolean', code: 'pass the `action` option or not' },
+      {
+        property: 'tone',
+        values: 'success · destructive · neutral',
+        code: 'the toast type: `toast.success()` · `toast.error()` · `toast()` / `toast.info()` (story `tone` control)',
+      },
+      {
+        property: 'variant',
+        values: 'compact · extended',
+        code: 'follows the content: a `description` makes it extended (story `variant` control)',
+      },
+    ],
     // Known Figma gap: white text/xs on --success (compact success toast) is 4.29:1 (< 4.5:1); no
     // semantic token gives a darker solid success. Flagged for design; every other check still runs.
     a11y: {
@@ -120,8 +135,11 @@ const meta = preview.meta({
   argTypes: {
     tone: { control: 'inline-radio', options: ['neutral', 'success', 'destructive'] },
     variant: { control: 'inline-radio', options: ['compact', 'extended'] },
-    description: { if: { arg: 'variant', eq: 'extended' } },
-    onAction: { table: { disable: true } },
+    message: { control: 'text' },
+    description: { control: 'text', if: { arg: 'variant', eq: 'extended' } },
+    action: { control: 'boolean' },
+    cancel: { control: 'boolean' },
+    onAction: { control: false, table: { category: 'Events' } },
     theme: { table: { disable: true } },
   },
 })

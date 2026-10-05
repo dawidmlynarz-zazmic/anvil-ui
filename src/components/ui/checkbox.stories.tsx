@@ -16,6 +16,15 @@ const meta = preview.meta({
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'checked', values: 'indeterminate · true · false', code: '`checked` prop' },
+      {
+        property: 'state',
+        values: 'default · hover · disabled · focus · invalid',
+        code: 'selectors: `hover:` · `disabled:` · `focus-visible:` · `aria-invalid` (not a prop)',
+      },
+      { property: 'show label', values: 'boolean', code: 'an inline `Label` beside it or not' },
+    ],
     docs: {
       description: {
         component:
@@ -32,8 +41,9 @@ const meta = preview.meta({
     },
     defaultChecked: { control: 'boolean' },
     disabled: { control: 'boolean' },
+    required: { control: 'boolean' },
     'aria-invalid': { control: 'boolean', description: 'Invalid state (Figma state=invalid)' },
-    onCheckedChange: { table: { disable: true } },
+    onCheckedChange: { control: false, table: { category: 'Events' } },
     asChild: { table: { disable: true } },
   },
   render: (args) => (

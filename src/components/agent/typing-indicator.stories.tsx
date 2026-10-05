@@ -16,6 +16,13 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      {
+        property: 'frame',
+        values: '1 · 2 · 3',
+        code: 'animation frames of `animate-typing-dot` (not a prop)',
+      },
+    ],
     docs: {
       description: {
         component:
@@ -24,6 +31,7 @@ const meta = preview.meta({
     },
   },
   args: { label: 'Typing' },
+  argTypes: { label: { control: 'text' } },
 })
 
 /** The accessible label is in Controls. */

@@ -58,6 +58,8 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    // Figma attachment menu has no component properties.
+    figmaProps: [],
     docs: {
       description: {
         component:
@@ -67,6 +69,13 @@ const meta = preview.meta({
     },
   },
   args: { open: false, onUploadFiles: fn(), onPhotos: fn(), onTakePhoto: fn() },
+  argTypes: {
+    open: { control: 'boolean' },
+    onOpenChange: { control: false, table: { category: 'Events' } },
+    onUploadFiles: { control: false, table: { category: 'Events' } },
+    onPhotos: { control: false, table: { category: 'Events' } },
+    onTakePhoto: { control: false, table: { category: 'Events' } },
+  },
 })
 
 /** Click the paperclip; `open` is a live control. */

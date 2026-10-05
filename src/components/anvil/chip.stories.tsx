@@ -28,6 +28,27 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'variant', values: 'default · outline', code: '`variant` prop' },
+      { property: 'size', values: 'lg · sm · default', code: '`size` prop' },
+      { property: 'pressed', values: 'false · true', code: '`pressed` prop' },
+      {
+        property: 'state',
+        values: 'default · hover · focus · disabled',
+        code: 'selectors: `hover:` · `focus-visible:` · `disabled:` (not a prop)',
+      },
+      { property: 'label', values: 'text', code: 'children' },
+      {
+        property: 'show prefix · content',
+        values: 'boolean · default · logo',
+        code: 'an `<Icon>` or 16px logo child before the label (not a prop)',
+      },
+      {
+        property: 'show icon right · icon right',
+        values: 'boolean · instance',
+        code: 'pass `onRemove` (+ `removeLabel`) for the remove button',
+      },
+    ],
     docs: {
       description: {
         component:
@@ -40,6 +61,9 @@ const meta = preview.meta({
     variant: { control: 'inline-radio', options: ['default', 'outline'] },
     size: { control: 'inline-radio', options: SIZES },
     children: { control: 'text' },
+    pressed: { control: 'boolean' },
+    disabled: { control: 'boolean' },
+    asChild: { control: false },
   },
 })
 
