@@ -33,7 +33,7 @@ Default.test('with a label it is a named status', async ({ canvas }) => {
 export const WithText = meta.story({
   args: { label: undefined },
   render: (args) => (
-    <span className="flex items-center gap-2 type-text-sm-semibold text-agent-medium">
+    <span className="flex items-center gap-2 type-text-sm-semibold text-agent dark:text-agent-medium">
       <PulseDot {...args} />
       Subtitle
     </span>
