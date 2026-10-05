@@ -81,6 +81,7 @@ function DemoAlertDialog({
 
 const meta = preview.meta({
   title: 'Components/Alert Dialog',
+  tags: ['ui-component'],
   component: DemoAlertDialog,
   parameters: {
     layout: 'centered',

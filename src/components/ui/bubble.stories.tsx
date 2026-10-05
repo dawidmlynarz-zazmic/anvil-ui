@@ -10,6 +10,7 @@ const VARIANTS = ['default', 'secondary', 'muted', 'tinted', 'outline', 'ghost',
 
 const meta = preview.meta({
   title: 'Agent Builder/Primitives/Bubble',
+  tags: ['agent-primitive'],
   component: Bubble,
   parameters: {
     layout: 'centered',

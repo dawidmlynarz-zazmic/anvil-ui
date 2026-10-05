@@ -68,6 +68,7 @@ function DemoPopover({
 
 const meta = preview.meta({
   title: 'Components/Popover',
+  tags: ['ui-component'],
   component: DemoPopover,
   parameters: {
     layout: 'centered',

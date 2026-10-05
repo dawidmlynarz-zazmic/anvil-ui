@@ -122,8 +122,18 @@ function Example({ onApprove, onDeny, ...props }: ExampleProps) {
 
 const meta = preview.meta({
   title: 'Agent Builder/Core Kit/System & Context/Approval Card',
+  tags: ['agent-block'],
   component: Example,
   parameters: {
+    figmaProps: [
+      {
+        property: 'state',
+        values: 'pending · approved · denied · executing · failed · expired',
+        code: '`status` prop',
+      },
+      { property: 'title', values: 'text', code: '`title` prop' },
+      { property: 'action', values: 'text', code: '`subtitle` prop' },
+    ],
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
     docs: {

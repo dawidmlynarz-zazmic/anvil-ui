@@ -39,6 +39,7 @@ function DemoAccordion({ type = 'single', collapsible = true, disabledItem = fal
 
 const meta = preview.meta({
   title: 'Components/Accordion',
+  tags: ['ui-component'],
   component: DemoAccordion,
   parameters: {
     layout: 'centered',

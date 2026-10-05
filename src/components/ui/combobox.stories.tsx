@@ -99,6 +99,7 @@ function DemoCombobox({
 
 const meta = preview.meta({
   title: 'Components/Combobox',
+  tags: ['ui-component'],
   component: DemoCombobox,
   parameters: {
     layout: 'centered',

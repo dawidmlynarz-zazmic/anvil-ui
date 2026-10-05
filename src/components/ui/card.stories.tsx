@@ -57,6 +57,7 @@ function DemoCard({
 
 const meta = preview.meta({
   title: 'Components/Card',
+  tags: ['ui-component'],
   component: DemoCard,
   parameters: {
     layout: 'centered',

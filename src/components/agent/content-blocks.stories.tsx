@@ -57,6 +57,7 @@ function Blocks() {
 
 const meta = preview.meta({
   title: 'Agent Builder/Core Kit/Messages/Content Block',
+  tags: ['agent-primitive'],
   component: ContentBlocks,
   parameters: {
     layout: 'padded',

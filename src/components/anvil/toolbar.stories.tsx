@@ -34,6 +34,7 @@ const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=8218
 
 const meta = preview.meta({
   title: 'Custom Components/Toolbar',
+  tags: ['ui-component'],
   component: Toolbar,
   parameters: {
     layout: 'centered',

@@ -10,6 +10,7 @@ const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=1072
 
 const meta = preview.meta({
   title: 'Agent Builder/Core Kit/System & Context/System Banner',
+  tags: ['agent-primitive'],
   component: SystemBanner,
   parameters: {
     layout: 'padded',

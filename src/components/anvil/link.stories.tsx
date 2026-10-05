@@ -12,6 +12,7 @@ const STATES = ['default', 'hover', 'focus', 'disabled'] as const
 
 const meta = preview.meta({
   title: 'Custom Components/Link',
+  tags: ['ui-component'],
   component: Link,
   parameters: {
     layout: 'centered',

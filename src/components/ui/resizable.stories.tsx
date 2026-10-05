@@ -29,6 +29,7 @@ function DemoResizable({ orientation = 'horizontal', withHandle = true }: DemoPr
 
 const meta = preview.meta({
   title: 'Components/Resizable',
+  tags: ['ui-component'],
   component: DemoResizable,
   parameters: {
     layout: 'centered',

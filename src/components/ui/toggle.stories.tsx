@@ -10,6 +10,7 @@ const sizes = ['sm', 'default', 'lg'] as const
 
 const meta = preview.meta({
   title: 'Components/Toggle',
+  tags: ['ui-component'],
   component: Toggle,
   parameters: {
     layout: 'centered',

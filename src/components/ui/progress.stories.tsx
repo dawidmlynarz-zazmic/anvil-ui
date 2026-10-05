@@ -9,6 +9,7 @@ const sizes = ['sm', 'default', 'lg'] as const
 
 const meta = preview.meta({
   title: 'Components/Progress',
+  tags: ['ui-component'],
   component: Progress,
   parameters: {
     layout: 'centered',

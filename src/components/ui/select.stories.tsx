@@ -82,6 +82,7 @@ const openListA11y = { config: { rules: [{ id: 'aria-hidden-focus', enabled: fal
 
 const meta = preview.meta({
   title: 'Components/Select',
+  tags: ['ui-component'],
   component: DemoSelect,
   parameters: {
     layout: 'padded',

@@ -8,6 +8,7 @@ const sizes = ['sm', 'default', 'lg'] as const
 
 const meta = preview.meta({
   title: 'Components/Input',
+  tags: ['ui-component'],
   component: Input,
   parameters: {
     layout: 'padded',

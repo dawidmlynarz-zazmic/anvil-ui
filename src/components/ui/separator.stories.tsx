@@ -38,6 +38,7 @@ function DemoSeparator({
 
 const meta = preview.meta({
   title: 'Components/Separator',
+  tags: ['ui-component'],
   component: DemoSeparator,
   parameters: {
     layout: 'centered',

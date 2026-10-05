@@ -8,6 +8,7 @@ const markers = ['none', 'required', 'optional'] as const
 
 const meta = preview.meta({
   title: 'Components/Label',
+  tags: ['ui-component'],
   component: Label,
   parameters: {
     layout: 'padded',

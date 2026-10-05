@@ -54,6 +54,7 @@ function Demo({ open, onOpenChange, onTryAgain, onModify, modal = false }: DemoP
 
 const meta = preview.meta({
   title: 'Agent Builder/Core Kit/Messages/Regenerate Menu',
+  tags: ['agent-block'],
   component: Demo,
   parameters: {
     layout: 'centered',

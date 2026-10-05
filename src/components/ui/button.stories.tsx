@@ -42,8 +42,27 @@ const Label = ({ children }: { children: ReactNode }) => (
 
 const meta = preview.meta({
   title: 'Components/Button',
+  tags: ['ui-component'],
   component: Button,
   parameters: {
+    figmaProps: [
+      { property: 'variant', values: 'default · outline · ghost', code: '`variant` prop' },
+      { property: 'intent', values: 'brand · neutral · inverse · destructive', code: '`intent` prop' },
+      { property: 'size', values: 'lg · default · sm · xs', code: '`size` prop' },
+      { property: 'shape', values: 'default · pill', code: '`shape` prop' },
+      { property: 'loading', values: 'boolean', code: '`loading` prop' },
+      {
+        property: 'state',
+        values: 'default · hover · disabled · focus',
+        code: 'selectors: `hover:` · `disabled:` · `focus-visible:` (not a prop)',
+      },
+      { property: 'label', values: 'text', code: 'children' },
+      {
+        property: 'show icon left / right · icon left / right',
+        values: 'boolean · instance',
+        code: 'an `<Icon>` child before or after the label',
+      },
+    ],
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
     docs: {
