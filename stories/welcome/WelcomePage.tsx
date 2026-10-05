@@ -2,11 +2,36 @@ import { useEffect, useState, type MouseEvent, type ReactNode } from 'react'
 import { addons } from 'storybook/preview-api'
 import { NAVIGATE_URL } from 'storybook/internal/core-events'
 
+import {
+  ThinkingPanel,
+  ThinkingPanelContent,
+  ThinkingPanelDuration,
+  ThinkingPanelTitle,
+  ThinkingPanelTrigger,
+} from '@/components/agent/thinking-panel'
+import {
+  ToolCallAccordion,
+  ToolCallAccordionContent,
+  ToolCallAccordionDuration,
+  ToolCallAccordionSummary,
+  ToolCallAccordionTitle,
+  ToolCallAccordionTrigger,
+} from '@/components/agent/tool-call-accordion'
+import {
+  ToolCallItem,
+  ToolCallItemDuration,
+  ToolCallItemName,
+  ToolCallItemSummary,
+  ToolCallItemTrigger,
+} from '@/components/agent/tool-call-item'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
+import { Bubble, BubbleContent } from '@/components/ui/bubble'
 import { Button } from '@/components/ui/button'
 import {
   AccessibilityIcon,
   ArrowRightIcon,
+  ArrowUpIcon,
   BookOpenIcon,
   BotIcon,
   BoxesIcon,
@@ -17,6 +42,7 @@ import {
   FlaskConicalIcon,
   Icon,
   LayersIcon,
+  MailIcon,
   MousePointerClickIcon,
   PaletteIcon,
   PanelsTopLeftIcon,
@@ -27,7 +53,8 @@ import {
   type LucideIcon,
 } from '@/components/ui/icon'
 import { Kbd } from '@/components/ui/kbd'
-import { Switch } from '@/components/ui/switch'
+import { Marker, MarkerContent } from '@/components/ui/marker'
+import { Message, MessageAvatar, MessageContent, MessageGroup } from '@/components/ui/message'
 import { cn } from '@/lib/utils'
 
 import { catalog, type CatalogItem } from './catalog'
@@ -158,101 +185,143 @@ function Tile({
 // ---------------------------------------------------------------------------------------------
 // Sections
 
-function Hero({ firstComponent, ready, total }: { firstComponent?: string; ready: number; total: number }) {
+function Hero({ firstComponent }: { firstComponent?: string }) {
   return (
-    <div className="relative overflow-hidden rounded-2xl bg-linear-to-br from-gradient-neutral-start to-gradient-neutral-end inset-ring inset-ring-border">
-      <div className="grid gap-(--space-2xl) p-(--space-2xl) lg:grid-cols-[1.4fr_1fr] lg:items-center">
-        <div className="flex flex-col gap-(--space-lg)">
-          <div className="flex flex-wrap items-center gap-2">
-            <Badge variant="subtle" intent="neutral">
-              Zazmic design system
-            </Badge>
-            <Badge variant="outline" intent="neutral">
-              React · shadcn/ui · Tailwind CSS
-            </Badge>
-          </div>
-          <div className="flex flex-col gap-3">
-            <h1 className="type-heading-6xl text-foreground">Anvil UI</h1>
-            <p className="max-w-xl type-text-base-normal text-muted-foreground">
-              The design system for Zazmic&apos;s conversational AI agents. It gives you shared foundations
-              and accessible React components, with patterns for building agent experiences. The design lives
-              in Figma and the code is built on shadcn/ui.
-            </p>
-          </div>
-          <div className="flex flex-wrap items-center gap-3">
-            {firstComponent && (
-              <Button asChild size="lg">
-                <StoryLink path={firstComponent}>
-                  Browse components
-                  <Icon icon={ArrowRightIcon} />
-                </StoryLink>
-              </Button>
-            )}
-            <Button asChild size="lg" variant="outline" intent="neutral">
-              <a href={FIGMA_URL} target="_blank" rel="noreferrer">
-                <Icon icon={PenToolIcon} />
-                Open the Figma file
-              </a>
-            </Button>
-          </div>
-          <dl className="flex flex-wrap gap-x-(--space-xl) gap-y-3">
-            {[
-              [`${ready} of ${total}`, 'components and foundations ready'],
-              ['2', 'themes (light and dark)'],
-              ['4', 'shell modes'],
-            ].map(([value, label]) => (
-              <div key={label} className="flex flex-col">
-                <dt className="sr-only">{label}</dt>
-                <dd className="type-heading-xl text-foreground">{value}</dd>
-                <dd className="type-text-xs-medium text-muted-foreground">{label}</dd>
-              </div>
-            ))}
-          </dl>
+    <div className="grid gap-(--space-2xl) lg:grid-cols-[1.2fr_1fr] lg:items-center">
+      <div className="flex flex-col gap-(--space-lg)">
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge variant="default" intent="neutral">
+            Zazmic Design System for Agents
+          </Badge>
+          <Badge variant="outline" intent="neutral">
+            React · shadcn/ui · Tailwind CSS
+          </Badge>
         </div>
-        <Sample />
+        <div className="flex flex-col gap-3">
+          <h1 className="type-heading-6xl text-foreground">Anvil UI</h1>
+          <p className="max-w-xl type-heading-xl text-foreground">
+            Built to give us the heavy-duty foundation to forge agents faster.
+          </p>
+          <p className="max-w-xl type-text-base-normal text-muted-foreground">
+            Developers get accessible React components on shadcn/ui, wired to the same tokens as Figma, so
+            every conversation, tool call and answer is ready to ship. Product managers get one shared
+            language for agent experiences, from the first prompt to the final result, so ideas move from
+            concept to product without being rebuilt along the way.
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center gap-3">
+          {firstComponent && (
+            <Button asChild size="lg">
+              <StoryLink path={firstComponent}>
+                Browse components
+                <Icon icon={ArrowRightIcon} />
+              </StoryLink>
+            </Button>
+          )}
+          <Button asChild size="lg" variant="outline" intent="neutral">
+            <a href={FIGMA_URL} target="_blank" rel="noreferrer">
+              <Icon icon={PenToolIcon} />
+              Open the Figma file
+            </a>
+          </Button>
+        </div>
       </div>
+      <ChatMockup />
     </div>
   )
 }
 
-/** A small live composition: real Anvil components, drawn from the tokens. */
-function Sample() {
+/** A conversation drawn with the real Agent Builder components (Message, Bubble, Thinking Panel…). */
+function ChatMockup() {
   return (
-    <div
-      aria-label="Sample of Anvil components"
-      role="group"
-      className="flex flex-col gap-4 rounded-xl bg-popover p-(--space-lg) text-popover-foreground shadow-elevation-raised inset-ring inset-ring-overlay-4"
+    <section
+      aria-label="Example agent conversation"
+      className="flex flex-col overflow-hidden rounded-xl bg-background shadow-elevation-raised inset-ring inset-ring-border"
     >
-      <div className="flex items-center gap-3">
-        <span className="flex size-9 items-center justify-center rounded-full bg-agent text-agent-foreground">
-          <Icon icon={SparklesIcon} />
-        </span>
-        <div className="flex flex-col">
-          <span className="type-text-sm-semibold">Title</span>
-          <span className="type-text-xs-normal text-muted-foreground">Subtitle</span>
+      <header className="flex items-center gap-3 border-b px-4 py-3">
+        <Avatar size="sm">
+          <AvatarFallback tone="agent">
+            <Icon icon={BotIcon} />
+          </AvatarFallback>
+        </Avatar>
+        <div className="flex min-w-0 flex-col">
+          <span className="type-text-sm-semibold text-foreground">Travel assistant</span>
+          <span className="type-text-xs-normal text-muted-foreground">Powered by Anvil UI</span>
         </div>
-        <Badge variant="subtle" intent="neutral" className="ml-auto">
-          Label
+        <Badge variant="subtle" intent="neutral" size="sm" className="ms-auto">
+          Online
         </Badge>
-      </div>
-      <p className="rounded-lg bg-muted p-3 type-text-sm-normal text-foreground">Subtitle</p>
-      <div className="flex items-center gap-3">
-        <Switch id="welcome-sample-switch" defaultChecked aria-label="Label" />
-        <label htmlFor="welcome-sample-switch" className="type-text-sm-medium">
-          Label
-        </label>
-        <span className="ml-auto flex items-center gap-1 type-text-xs-medium text-muted-foreground">
-          <Kbd>⌘</Kbd>
-          <Kbd>K</Kbd>
+      </header>
+      <MessageGroup className="gap-4 p-4">
+        <Marker variant="separator">
+          <MarkerContent>Today</MarkerContent>
+        </Marker>
+        <Message align="end">
+          <MessageContent>
+            <Bubble variant="muted">
+              <BubbleContent>Find me a flight to New York next Tuesday, under $500.</BubbleContent>
+            </Bubble>
+          </MessageContent>
+        </Message>
+        <Message>
+          <MessageAvatar>
+            <Avatar size="xs">
+              <AvatarFallback tone="agent">
+                <Icon icon={BotIcon} />
+              </AvatarFallback>
+            </Avatar>
+          </MessageAvatar>
+          <MessageContent>
+            <ThinkingPanel status="completed">
+              <ThinkingPanelTrigger>
+                <ThinkingPanelTitle>Planned the search</ThinkingPanelTitle>
+                <ThinkingPanelDuration>Thought for 1.8s</ThinkingPanelDuration>
+              </ThinkingPanelTrigger>
+              <ThinkingPanelContent>
+                <p>Search direct and one-stop flights, then compare fares across airlines.</p>
+              </ThinkingPanelContent>
+            </ThinkingPanel>
+            <ToolCallAccordion>
+              <ToolCallAccordionTrigger>
+                <ToolCallAccordionTitle>Used 2 tools</ToolCallAccordionTitle>
+                <ToolCallAccordionSummary>flights.search, fares.compare</ToolCallAccordionSummary>
+                <ToolCallAccordionDuration>3.1s</ToolCallAccordionDuration>
+              </ToolCallAccordionTrigger>
+              <ToolCallAccordionContent>
+                <ToolCallItem status="done">
+                  <ToolCallItemTrigger>
+                    <ToolCallItemName>flights.search</ToolCallItemName>
+                    <ToolCallItemSummary>42 flights found</ToolCallItemSummary>
+                    <ToolCallItemDuration>1.4s</ToolCallItemDuration>
+                  </ToolCallItemTrigger>
+                </ToolCallItem>
+                <ToolCallItem status="done">
+                  <ToolCallItemTrigger>
+                    <ToolCallItemName>fares.compare</ToolCallItemName>
+                    <ToolCallItemSummary>5 airlines compared</ToolCallItemSummary>
+                    <ToolCallItemDuration>1.7s</ToolCallItemDuration>
+                  </ToolCallItemTrigger>
+                </ToolCallItem>
+              </ToolCallAccordionContent>
+            </ToolCallAccordion>
+            <Bubble variant="ghost">
+              <BubbleContent>
+                I found 3 flights under $500. The best fit is Virgin Atlantic at $412, leaving at 9:40 with
+                one short stop.
+              </BubbleContent>
+            </Bubble>
+          </MessageContent>
+        </Message>
+      </MessageGroup>
+      <div className="flex items-center gap-2 border-t px-4 py-3">
+        <span className="min-w-0 flex-1 truncate type-text-sm-normal text-muted-foreground">
+          Ask a follow-up…
         </span>
-      </div>
-      <div className="flex justify-end gap-2">
-        <Button size="sm" variant="ghost" intent="neutral">
-          Label
+        <Button size="icon-sm" shape="circle" aria-label="Send" tabIndex={-1}>
+          <Icon icon={ArrowUpIcon} />
         </Button>
-        <Button size="sm">Label</Button>
       </div>
-    </div>
+    </section>
   )
 }
 
@@ -407,7 +476,15 @@ function CatalogRow({ item, path }: { item: CatalogItem; path?: string }) {
   )
 }
 
-function Explore({ paths }: { paths: Map<string, string> | null }) {
+function Explore({
+  paths,
+  ready,
+  total,
+}: {
+  paths: Map<string, string> | null
+  ready: number
+  total: number
+}) {
   return (
     <Section
       id="explore"
@@ -415,6 +492,19 @@ function Explore({ paths }: { paths: Map<string, string> | null }) {
       title="Everything we're building"
       description="Every area of the system. Ready items open their stories. Planned items follow the roadmap: shadcn counterparts first, then custom Anvil components and Agent Builder."
     >
+      <dl className="flex flex-wrap gap-x-(--space-2xl) gap-y-3">
+        {[
+          [`${ready} of ${total}`, 'components and foundations ready'],
+          ['2', 'themes (light and dark)'],
+          ['4', 'shell modes'],
+        ].map(([value, label]) => (
+          <div key={label} className="flex flex-col">
+            <dt className="sr-only">{label}</dt>
+            <dd className="type-heading-xl text-foreground">{value}</dd>
+            <dd className="type-text-xs-medium text-muted-foreground">{label}</dd>
+          </div>
+        ))}
+      </dl>
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {catalog.map((area) => {
           const ready = area.items.filter((item) => paths?.has(item.title)).length
@@ -507,7 +597,7 @@ const tips: { icon: LucideIcon; title: string; body: ReactNode }[] = [
   {
     icon: BookOpenIcon,
     title: 'Conventions',
-    body: 'Names follow the API contract. Figma states map to CSS selectors, never props. Story copy stays neutral ("Title", "Label"); realistic examples come later in a playground.',
+    body: 'Names follow the API contract. Figma states map to CSS selectors, never props. Content stays neutral ("Title", "Label") and actions say what they do ("Save", "Open dialog"); realistic examples come later in a playground.',
   },
 ]
 
@@ -529,6 +619,49 @@ function UsingStorybook() {
             {tip.body}
           </Tile>
         ))}
+      </div>
+    </Section>
+  )
+}
+
+function Contributors() {
+  return (
+    <Section
+      id="contributors"
+      eyebrow="People"
+      title="Contributors"
+      description="The people shaping Anvil UI. Questions, ideas and feedback are welcome."
+    >
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="flex flex-col gap-4 rounded-xl bg-card p-(--space-lg) text-card-foreground inset-ring inset-ring-border">
+          <div className="flex items-center gap-3">
+            <Avatar size="lg">
+              <AvatarFallback>DM</AvatarFallback>
+            </Avatar>
+            <div className="flex min-w-0 flex-col">
+              <h3 className="type-text-base-semibold">Dawid Młynarz</h3>
+              <p className="type-text-sm-normal text-muted-foreground">Lead Product Designer</p>
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Badge variant="subtle" intent="neutral" size="sm">
+              Founder of the idea
+            </Badge>
+            <Badge variant="subtle" intent="neutral" size="sm">
+              Main contact
+            </Badge>
+            <Badge variant="subtle" intent="neutral" size="sm">
+              Contributor
+            </Badge>
+          </div>
+          <a
+            className={cn(linkClassName, 'inline-flex w-fit items-center gap-1')}
+            href="mailto:dawid.mlynarz@zazmic.ai"
+          >
+            <Icon icon={MailIcon} size="xs" />
+            dawid.mlynarz@zazmic.ai
+          </a>
+        </div>
       </div>
     </Section>
   )
@@ -575,16 +708,13 @@ export function WelcomePage() {
   return (
     <main className="min-h-screen bg-background text-foreground">
       <div className="mx-auto flex max-w-7xl flex-col gap-(--space-4xl) px-(--space-lg) py-(--space-2xl) md:px-(--space-2xl)">
-        <Hero
-          firstComponent={firstComponent ? paths?.get(firstComponent.title) : undefined}
-          ready={ready}
-          total={items.length}
-        />
+        <Hero firstComponent={firstComponent ? paths?.get(firstComponent.title) : undefined} />
         <Audience />
         <Goals />
         <Architecture />
-        <Explore paths={paths} />
+        <Explore paths={paths} ready={ready} total={items.length} />
         <UsingStorybook />
+        <Contributors />
         <Footer />
       </div>
     </main>

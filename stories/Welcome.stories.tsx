@@ -32,3 +32,11 @@ Welcome.test('introduces the system and lists every area', async ({ canvas }) =>
     await waitFor(() => expect(canvas.getByRole('list', { name: area })).toBeInTheDocument())
   }
 })
+
+Welcome.test('names the contributors and the main contact', async ({ canvas }) => {
+  await expect(canvas.getByRole('heading', { name: 'Dawid Młynarz' })).toBeVisible()
+  await expect(canvas.getByRole('link', { name: 'dawid.mlynarz@zazmic.ai' })).toHaveAttribute(
+    'href',
+    'mailto:dawid.mlynarz@zazmic.ai',
+  )
+})
