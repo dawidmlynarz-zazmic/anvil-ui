@@ -48,8 +48,10 @@ function CitationSourceItem({
         <span className="line-clamp-2 type-text-sm-medium text-foreground">{title}</span>
         {(domain || path) && (
           <span className="flex min-w-0 items-center gap-2 whitespace-nowrap text-muted-foreground">
-            {domain && <span className="type-text-xs-normal">{domain}</span>}
-            {path && <span className="truncate type-code-xs">{path}</span>}
+            {domain && (
+              <span className="min-w-0 shrink-0 truncate type-text-xs-normal max-w-1/2">{domain}</span>
+            )}
+            {path && <span className="min-w-0 truncate type-code-xs">{path}</span>}
           </span>
         )}
         {snippet && <span className="line-clamp-2 type-text-xs-normal text-muted-foreground">{snippet}</span>}
@@ -58,7 +60,7 @@ function CitationSourceItem({
     </>
   )
   const classes = cn(
-    'flex w-full max-w-(--shell-widget-max) items-start gap-3 border-s-2 border-transparent px-4 py-3 text-left outline-none',
+    'flex w-full max-w-(--shell-widget-max) items-start gap-3 border-s-2 border-transparent px-4 py-3 text-left wrap-break-word outline-none',
     'transition-colors duration-(--duration-fast) hover:bg-muted focus-visible:focus-ring',
     'data-[active=true]:border-agent data-[active=true]:bg-agent-subtle',
     className,

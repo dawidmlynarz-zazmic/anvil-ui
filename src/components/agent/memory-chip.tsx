@@ -38,7 +38,7 @@ function MemoryChip({
       data-slot="memory-chip"
       data-status={status}
       className={cn(
-        'inline-flex max-w-160 items-center gap-1.5 rounded-full bg-muted py-1 pl-2 type-text-xs-normal',
+        'inline-flex max-w-[min(100%,--spacing(160))] items-center gap-1.5 rounded-full bg-muted py-1 pl-2 type-text-xs-normal',
         action ? 'pr-1' : 'pr-2.5',
         className,
       )}

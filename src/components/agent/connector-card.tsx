@@ -60,16 +60,16 @@ function ConnectorCard({
       data-status={status}
       aria-labelledby={titleId}
       className={cn(
-        'flex w-full max-w-160 flex-col overflow-hidden rounded-xl border bg-card text-card-foreground shadow-sm',
+        'flex w-full max-w-160 flex-col overflow-hidden rounded-xl border bg-card text-card-foreground shadow-sm wrap-break-word',
         className,
       )}
       {...props}
     >
-      <header className="flex items-start gap-3 p-4">
+      <header className="flex flex-wrap items-start gap-3 p-4">
         <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted text-foreground">
           <Icon icon={icon} className="size-4.5" />
         </span>
-        <div className="flex min-w-0 flex-1 flex-col gap-1">
+        <div className="flex min-w-0 grow basis-48 flex-col gap-1">
           <h3 id={titleId} className="type-text-sm-semibold text-foreground">
             {title}
           </h3>

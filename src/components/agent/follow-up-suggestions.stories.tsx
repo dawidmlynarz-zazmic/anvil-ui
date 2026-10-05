@@ -1,6 +1,8 @@
 import preview from '#.storybook/preview'
 import { expect, fn, userEvent } from 'storybook/test'
 
+import { Skeleton } from '@/components/ui/skeleton'
+
 import { FollowUpSuggestion, FollowUpSuggestions } from './follow-up-suggestions'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10668-15663'
@@ -88,4 +90,63 @@ export const Layouts = meta.story({
       <Demo {...args} layout="list" />
     </div>
   ),
+})
+
+/** While the answer is still streaming: skeleton chips hold the space until the suggestions arrive. */
+export const Loading = meta.story({
+  render: () => (
+    <FollowUpSuggestions label="Title" aria-busy="true">
+      {['w-28', 'w-36', 'w-24'].map((width) => (
+        <li key={width}>
+          <Skeleton className={`h-8 ${width} rounded-full`} />
+        </li>
+      ))}
+    </FollowUpSuggestions>
+  ),
+})
+
+Loading.test('is marked busy and offers nothing to click yet', async ({ canvas, canvasElement }) => {
+  await expect(canvasElement.querySelector('[data-slot=follow-up-suggestions]')).toHaveAttribute(
+    'aria-busy',
+    'true',
+  )
+  await expect(canvas.queryAllByRole('button')).toHaveLength(0)
+})
+
+/** After one is sent the set is disabled, so the same follow-up can't be sent twice. */
+export const AfterChoice = meta.story({
+  render: (args) => (
+    <FollowUpSuggestions layout={args.layout} label="Title">
+      {['Label 1', 'Label 2', 'Label 3'].map((label) => (
+        <FollowUpSuggestion key={label} disabled>
+          {label}
+        </FollowUpSuggestion>
+      ))}
+    </FollowUpSuggestions>
+  ),
+})
+
+AfterChoice.test('every suggestion is disabled', async ({ canvas }) => {
+  for (const button of canvas.getAllByRole('button')) await expect(button).toBeDisabled()
+})
+
+const LONG = 'A long follow-up question that wraps onto a second line in a narrow column'
+
+/** Stress test: long suggestions in a narrow column wrap instead of overflowing. */
+export const LongContent = meta.story({
+  render: (args) => (
+    <FollowUpSuggestions layout={args.layout} label="Title" className="max-w-80">
+      <FollowUpSuggestion>{LONG}</FollowUpSuggestion>
+      <FollowUpSuggestion>Label</FollowUpSuggestion>
+    </FollowUpSuggestions>
+  ),
+})
+
+LongContent.test('long suggestions stay inside the column', async ({ canvasElement }) => {
+  const root = canvasElement.querySelector<HTMLElement>('[data-slot=follow-up-suggestions]')!
+  for (const button of root.querySelectorAll<HTMLElement>('button')) {
+    await expect(button.getBoundingClientRect().right).toBeLessThanOrEqual(
+      root.getBoundingClientRect().right + 1,
+    )
+  }
 })

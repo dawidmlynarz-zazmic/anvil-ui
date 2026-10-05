@@ -90,7 +90,7 @@ function ApprovalCard({
         data-status={status}
         aria-labelledby={titleId}
         className={cn(
-          'group/approval flex w-full max-w-160 flex-col overflow-hidden rounded-xl border bg-card text-card-foreground shadow-sm',
+          'group/approval flex w-full max-w-160 flex-col wrap-break-word overflow-hidden rounded-xl border bg-card text-card-foreground shadow-sm',
           className,
         )}
         {...props}
@@ -99,7 +99,7 @@ function ApprovalCard({
           <span className={cn('flex size-8 shrink-0 items-center justify-center rounded-lg', tile.className)}>
             <Icon icon={tile.icon} />
           </span>
-          <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+          <div className="flex min-w-0 grow basis-48 flex-col gap-0.5">
             <h3 id={titleId} className="type-text-sm-semibold text-foreground">
               {title}
             </h3>

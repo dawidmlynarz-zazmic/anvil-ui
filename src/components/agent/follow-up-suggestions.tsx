@@ -64,7 +64,7 @@ function FollowUpSuggestion({ className, children, ...props }: React.ComponentPr
         type="button"
         data-slot="follow-up-suggestion"
         className={cn(
-          'flex items-center text-left text-foreground outline-none transition-colors duration-(--duration-fast) focus-visible:focus-ring',
+          'flex items-center text-left text-foreground outline-none transition-colors duration-(--duration-fast) focus-visible:focus-ring disabled:pointer-events-none disabled:opacity-50',
           layout === 'chips'
             ? 'gap-1 rounded-full bg-muted px-3 py-2 type-text-xs-medium inset-ring inset-ring-input hover:bg-accent'
             : 'w-full gap-2 px-3 py-2 type-text-sm-normal hover:bg-muted focus-visible:ring-offset-0',

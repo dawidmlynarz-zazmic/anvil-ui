@@ -14,7 +14,7 @@ import { Icon, XIcon, type LucideIcon } from '@/components/ui/icon'
 // role="status" (polite); use role="alert" via props for urgent ones.
 
 const systemBannerVariants = cva(
-  'flex w-full max-w-(--shell-thread-max) items-center gap-3 rounded-lg border px-4 py-2.5 type-text-sm-normal',
+  'flex w-full max-w-(--shell-thread-max) items-center gap-3 rounded-lg border px-4 py-2.5 type-text-sm-normal wrap-break-word',
   {
     variants: {
       tone: {
