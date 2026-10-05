@@ -51,7 +51,7 @@ function DemoTable({
             {selectable && (
               <TableHead>
                 <Checkbox
-                  aria-label="Label"
+                  aria-label="Select all"
                   checked={all ? true : selected.length ? 'indeterminate' : false}
                   onCheckedChange={(c) => setSelected(c === true ? ROWS.map((r) => r.id) : [])}
                 />
@@ -62,7 +62,7 @@ function DemoTable({
             <TableHead className="text-right">Title 3</TableHead>
             {actions && (
               <TableHead>
-                <span className="sr-only">Label</span>
+                <span className="sr-only">Actions</span>
               </TableHead>
             )}
           </TableRow>
@@ -96,14 +96,14 @@ function DemoTable({
                 {actions && (
                   <TableCell className="py-2">
                     <div className="flex justify-end gap-1">
-                      <Button size="icon-sm" variant="ghost" intent="neutral" aria-label={`Label ${row.id}`}>
+                      <Button size="icon-sm" variant="ghost" intent="neutral" aria-label={`Edit ${row.name}`}>
                         <Icon icon={PencilIcon} />
                       </Button>
                       <Button
                         size="icon-sm"
                         variant="ghost"
                         intent="destructive"
-                        aria-label={`Label ${row.id}`}
+                        aria-label={`Delete ${row.name}`}
                       >
                         <Icon icon={Trash2Icon} />
                       </Button>
@@ -150,8 +150,11 @@ export const Default = meta.story()
 Default.test('a table with headers; row selection updates the header checkbox', async ({ canvas }) => {
   const table = canvas.getByRole('table')
   await expect(within(table).getAllByRole('columnheader').length).toBeGreaterThan(3)
-  await expect(canvas.getByRole('checkbox', { name: 'Label' })).toHaveAttribute('data-state', 'indeterminate')
-  await userEvent.click(canvas.getByRole('checkbox', { name: 'Label' }))
+  await expect(canvas.getByRole('checkbox', { name: 'Select all' })).toHaveAttribute(
+    'data-state',
+    'indeterminate',
+  )
+  await userEvent.click(canvas.getByRole('checkbox', { name: 'Select all' }))
   await expect(canvas.getByRole('checkbox', { name: 'Label 4' })).toBeChecked()
 })
 
