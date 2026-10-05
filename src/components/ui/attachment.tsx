@@ -5,15 +5,20 @@ import { Slot } from 'radix-ui'
 
 import { Button } from '@/components/ui/button'
 
+// Figma Agent Builder › prompt attachment (10664:11958): --background card, --border stroke,
+// shadow-sm, radius md, 8px padding and gap; 32px --accent tile with a 16px icon; name
+// text/xs/medium, meta text/xs/normal --muted-foreground. Figma state uploading · ready · invalid
+// = shadcn `state` uploading · done · error (--danger-muted stroke, --danger-medium meta). `default`
+// is the Figma size; sm and xs step down.
 const attachmentVariants = cva(
-  'group/attachment relative flex w-fit max-w-full min-w-0 shrink-0 flex-wrap rounded-xl border bg-card text-card-foreground transition-colors focus-within:ring-1 focus-within:ring-ring/50 has-[>a,>button]:hover:bg-muted/50 data-[state=error]:border-destructive/30 data-[state=idle]:border-dashed',
+  'group/attachment relative flex w-fit max-w-full min-w-0 shrink-0 flex-wrap rounded-md border border-border bg-background text-foreground shadow-sm transition-colors has-[>a,>button]:hover:bg-muted has-[[data-slot=attachment-trigger]:focus-visible]:focus-ring data-[state=error]:border-danger-muted data-[state=idle]:border-dashed',
   {
     variants: {
       size: {
         default:
-          'gap-2 text-sm has-data-[slot=attachment-content]:px-2.5 has-data-[slot=attachment-content]:py-2 has-data-[slot=attachment-media]:p-2',
-        sm: 'gap-2.5 text-xs has-data-[slot=attachment-content]:px-2 has-data-[slot=attachment-content]:py-1.5 has-data-[slot=attachment-media]:p-1.5',
-        xs: 'gap-1.5 rounded-lg text-xs has-data-[slot=attachment-content]:px-1.5 has-data-[slot=attachment-content]:py-1 has-data-[slot=attachment-media]:p-1',
+          'gap-2 type-text-xs-normal has-data-[slot=attachment-content]:p-2 has-data-[slot=attachment-media]:p-2',
+        sm: 'gap-2 type-text-xs-normal has-data-[slot=attachment-content]:p-1.5 has-data-[slot=attachment-media]:p-1.5',
+        xs: 'gap-1.5 rounded-sm type-text-xs-normal has-data-[slot=attachment-content]:p-1 has-data-[slot=attachment-media]:p-1',
       },
       orientation: {
         horizontal: 'min-w-40 items-center',
@@ -46,7 +51,7 @@ function Attachment({
 }
 
 const attachmentMediaVariants = cva(
-  "relative flex aspect-square w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-muted text-foreground group-data-[orientation=vertical]/attachment:w-full group-data-[size=sm]/attachment:w-8 group-data-[size=xs]/attachment:w-7 group-data-[size=xs]/attachment:rounded-md group-data-[state=error]/attachment:bg-destructive/10 group-data-[state=error]/attachment:text-destructive group-data-[orientation=vertical]/attachment:*:data-[slot=spinner]:size-6! [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 group-data-[orientation=vertical]/attachment:[&_svg:not([class*='size-'])]:size-6 group-data-[size=xs]/attachment:[&_svg:not([class*='size-'])]:size-3.5",
+  "relative flex aspect-square w-8 shrink-0 items-center justify-center overflow-hidden rounded-md bg-accent text-foreground group-data-[orientation=vertical]/attachment:w-full group-data-[size=sm]/attachment:w-7 group-data-[size=xs]/attachment:w-6 group-data-[size=xs]/attachment:rounded-sm group-data-[state=error]/attachment:bg-danger-subtle group-data-[state=error]/attachment:text-danger-medium group-data-[orientation=vertical]/attachment:*:data-[slot=spinner]:size-6! [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 group-data-[orientation=vertical]/attachment:[&_svg:not([class*='size-'])]:size-6 group-data-[size=xs]/attachment:[&_svg:not([class*='size-'])]:size-3",
   {
     variants: {
       variant: {
@@ -81,7 +86,7 @@ function AttachmentContent({ className, ...props }: React.ComponentProps<'div'>)
     <div
       data-slot="attachment-content"
       className={cn(
-        'max-w-full min-w-0 flex-1 leading-tight group-data-[orientation=vertical]/attachment:px-1',
+        'flex max-w-full min-w-0 flex-1 flex-col gap-0.5 group-data-[orientation=vertical]/attachment:px-1',
         className,
       )}
       {...props}
@@ -94,7 +99,7 @@ function AttachmentTitle({ className, ...props }: React.ComponentProps<'span'>) 
     <span
       data-slot="attachment-title"
       className={cn(
-        'block max-w-full min-w-0 truncate font-medium group-data-[state=processing]/attachment:shimmer group-data-[state=uploading]/attachment:shimmer',
+        'block max-w-full min-w-0 truncate type-text-xs-medium text-foreground group-data-[state=processing]/attachment:shimmer group-data-[state=uploading]/attachment:shimmer',
         className,
       )}
       {...props}
@@ -107,7 +112,7 @@ function AttachmentDescription({ className, ...props }: React.ComponentProps<'sp
     <span
       data-slot="attachment-description"
       className={cn(
-        'mt-0.5 block min-w-0 truncate text-xs text-muted-foreground group-data-[state=error]/attachment:text-destructive/80',
+        'block min-w-0 truncate type-text-xs-normal text-muted-foreground group-data-[state=error]/attachment:text-danger-medium',
         'max-w-full',
         className,
       )}
@@ -121,7 +126,7 @@ function AttachmentActions({ className, ...props }: React.ComponentProps<'div'>)
     <div
       data-slot="attachment-actions"
       className={cn(
-        'relative z-20 flex shrink-0 items-center group-data-[orientation=vertical]/attachment:absolute group-data-[orientation=vertical]/attachment:top-3 group-data-[orientation=vertical]/attachment:right-3 group-data-[orientation=vertical]/attachment:gap-1',
+        'relative z-20 flex shrink-0 items-center group-data-[orientation=vertical]/attachment:absolute group-data-[orientation=vertical]/attachment:top-2 group-data-[orientation=vertical]/attachment:right-2 group-data-[orientation=vertical]/attachment:gap-1',
         className,
       )}
       {...props}
@@ -132,6 +137,7 @@ function AttachmentActions({ className, ...props }: React.ComponentProps<'div'>)
 function AttachmentAction({
   className,
   variant,
+  intent = 'neutral',
   size = 'icon-xs',
   ...props
 }: React.ComponentProps<typeof Button>) {
@@ -139,6 +145,7 @@ function AttachmentAction({
     <Button
       data-slot="attachment-action"
       variant={variant ?? 'ghost'}
+      intent={intent}
       size={size}
       className={cn(className)}
       {...props}
