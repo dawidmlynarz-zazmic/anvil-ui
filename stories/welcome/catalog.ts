@@ -156,11 +156,12 @@ export const catalog: CatalogArea[] = [
       ...kit('Input', ['Prompt Input']),
       // Figma prompt attachment = the Attachment primitive.
       { name: 'Prompt Attachment', title: 'Agent Builder/Primitives/Attachment' },
+      // Quick reply group lives in the Quick Reply story.
+      { name: 'Quick Reply Group', title: 'Agent Builder/Core Kit/Input/Quick Reply' },
       ...kit('Input', [
         'Voice Waveform',
         'Live Voice Session',
         'Quick Reply',
-        'Quick Reply Group',
         'Follow-up Suggestions',
         'Attachment Menu',
         'Drop Overlay',
