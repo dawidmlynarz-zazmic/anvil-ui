@@ -2,6 +2,7 @@ import { useEffect, useState, type MouseEvent, type ReactNode } from 'react'
 import { addons } from 'storybook/preview-api'
 import { NAVIGATE_URL } from 'storybook/internal/core-events'
 
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -17,6 +18,7 @@ import {
   FlaskConicalIcon,
   Icon,
   LayersIcon,
+  MailIcon,
   MousePointerClickIcon,
   PaletteIcon,
   PanelsTopLeftIcon,
@@ -27,10 +29,10 @@ import {
   type LucideIcon,
 } from '@/components/ui/icon'
 import { Kbd } from '@/components/ui/kbd'
-import { Switch } from '@/components/ui/switch'
 import { cn } from '@/lib/utils'
 
 import { catalog, type CatalogItem } from './catalog'
+import { ChatDemo } from './ChatDemo'
 
 const FIGMA_URL = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/'
 const REPO_URL = 'https://github.com/dawidmlynarz-zazmic/anvil-ui'
@@ -158,100 +160,46 @@ function Tile({
 // ---------------------------------------------------------------------------------------------
 // Sections
 
-function Hero({ firstComponent, ready, total }: { firstComponent?: string; ready: number; total: number }) {
+function Hero({ firstComponent }: { firstComponent?: string }) {
   return (
-    <div className="relative overflow-hidden rounded-2xl bg-linear-to-br from-gradient-neutral-start to-gradient-neutral-end inset-ring inset-ring-border">
-      <div className="grid gap-(--space-2xl) p-(--space-2xl) lg:grid-cols-[1.4fr_1fr] lg:items-center">
-        <div className="flex flex-col gap-(--space-lg)">
-          <div className="flex flex-wrap items-center gap-2">
-            <Badge variant="subtle" intent="neutral">
-              Zazmic design system
-            </Badge>
-            <Badge variant="outline" intent="neutral">
-              React · shadcn/ui · Tailwind CSS
-            </Badge>
-          </div>
-          <div className="flex flex-col gap-3">
-            <h1 className="type-heading-6xl text-foreground">Anvil UI</h1>
-            <p className="max-w-xl type-text-base-normal text-muted-foreground">
-              The design system for Zazmic&apos;s conversational AI agents. It gives you shared foundations
-              and accessible React components, with patterns for building agent experiences. The design lives
-              in Figma and the code is built on shadcn/ui.
-            </p>
-          </div>
-          <div className="flex flex-wrap items-center gap-3">
-            {firstComponent && (
-              <Button asChild size="lg">
-                <StoryLink path={firstComponent}>
-                  Browse components
-                  <Icon icon={ArrowRightIcon} />
-                </StoryLink>
-              </Button>
-            )}
-            <Button asChild size="lg" variant="outline" intent="neutral">
-              <a href={FIGMA_URL} target="_blank" rel="noreferrer">
-                <Icon icon={PenToolIcon} />
-                Open the Figma file
-              </a>
+    <div className="grid gap-(--space-2xl) lg:grid-cols-[1.2fr_1fr] lg:items-center">
+      <div className="flex flex-col gap-(--space-lg)">
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge variant="default" intent="neutral">
+            Zazmic Design System for Agents
+          </Badge>
+          <Badge variant="outline" intent="neutral">
+            React · shadcn/ui · Tailwind CSS
+          </Badge>
+        </div>
+        <div className="flex flex-col gap-3">
+          <h1 className="type-heading-6xl text-foreground">Anvil UI</h1>
+          <p className="max-w-xl type-heading-xl text-foreground">Built to forge agents faster</p>
+          <p className="max-w-xl type-text-base-normal text-muted-foreground">
+            Developers get accessible React components on shadcn/ui, wired to the same tokens as Figma, so
+            every conversation, tool call and answer is ready to ship. Product managers get one shared
+            language for agent experiences, from the first prompt to the final result, so ideas move from
+            concept to product without being rebuilt along the way.
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center gap-3">
+          {firstComponent && (
+            <Button asChild size="lg">
+              <StoryLink path={firstComponent}>
+                Browse components
+                <Icon icon={ArrowRightIcon} />
+              </StoryLink>
             </Button>
-          </div>
-          <dl className="flex flex-wrap gap-x-(--space-xl) gap-y-3">
-            {[
-              [`${ready} of ${total}`, 'components and foundations ready'],
-              ['2', 'themes (light and dark)'],
-              ['4', 'shell modes'],
-            ].map(([value, label]) => (
-              <div key={label} className="flex flex-col">
-                <dt className="sr-only">{label}</dt>
-                <dd className="type-heading-xl text-foreground">{value}</dd>
-                <dd className="type-text-xs-medium text-muted-foreground">{label}</dd>
-              </div>
-            ))}
-          </dl>
+          )}
+          <Button asChild size="lg" variant="outline" intent="neutral">
+            <a href={FIGMA_URL} target="_blank" rel="noreferrer">
+              <Icon icon={PenToolIcon} />
+              Open the Figma file
+            </a>
+          </Button>
         </div>
-        <Sample />
       </div>
-    </div>
-  )
-}
-
-/** A small live composition: real Anvil components, drawn from the tokens. */
-function Sample() {
-  return (
-    <div
-      aria-label="Sample of Anvil components"
-      role="group"
-      className="flex flex-col gap-4 rounded-xl bg-popover p-(--space-lg) text-popover-foreground shadow-elevation-raised inset-ring inset-ring-overlay-4"
-    >
-      <div className="flex items-center gap-3">
-        <span className="flex size-9 items-center justify-center rounded-full bg-agent text-agent-foreground">
-          <Icon icon={SparklesIcon} />
-        </span>
-        <div className="flex flex-col">
-          <span className="type-text-sm-semibold">Title</span>
-          <span className="type-text-xs-normal text-muted-foreground">Subtitle</span>
-        </div>
-        <Badge variant="subtle" intent="neutral" className="ml-auto">
-          Label
-        </Badge>
-      </div>
-      <p className="rounded-lg bg-muted p-3 type-text-sm-normal text-foreground">Subtitle</p>
-      <div className="flex items-center gap-3">
-        <Switch id="welcome-sample-switch" defaultChecked aria-label="Label" />
-        <label htmlFor="welcome-sample-switch" className="type-text-sm-medium">
-          Label
-        </label>
-        <span className="ml-auto flex items-center gap-1 type-text-xs-medium text-muted-foreground">
-          <Kbd>⌘</Kbd>
-          <Kbd>K</Kbd>
-        </span>
-      </div>
-      <div className="flex justify-end gap-2">
-        <Button size="sm" variant="ghost" intent="neutral">
-          Label
-        </Button>
-        <Button size="sm">Label</Button>
-      </div>
+      <ChatDemo />
     </div>
   )
 }
@@ -407,7 +355,15 @@ function CatalogRow({ item, path }: { item: CatalogItem; path?: string }) {
   )
 }
 
-function Explore({ paths }: { paths: Map<string, string> | null }) {
+function Explore({
+  paths,
+  ready,
+  total,
+}: {
+  paths: Map<string, string> | null
+  ready: number
+  total: number
+}) {
   return (
     <Section
       id="explore"
@@ -415,6 +371,19 @@ function Explore({ paths }: { paths: Map<string, string> | null }) {
       title="Everything we're building"
       description="Every area of the system. Ready items open their stories. Planned items follow the roadmap: shadcn counterparts first, then custom Anvil components and Agent Builder."
     >
+      <dl className="flex flex-wrap gap-x-(--space-2xl) gap-y-3">
+        {[
+          [`${ready} of ${total}`, 'components and foundations ready'],
+          ['2', 'themes (light and dark)'],
+          ['4', 'shell modes'],
+        ].map(([value, label]) => (
+          <div key={label} className="flex flex-col">
+            <dt className="sr-only">{label}</dt>
+            <dd className="type-heading-xl text-foreground">{value}</dd>
+            <dd className="type-text-xs-medium text-muted-foreground">{label}</dd>
+          </div>
+        ))}
+      </dl>
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {catalog.map((area) => {
           const ready = area.items.filter((item) => paths?.has(item.title)).length
@@ -507,7 +476,7 @@ const tips: { icon: LucideIcon; title: string; body: ReactNode }[] = [
   {
     icon: BookOpenIcon,
     title: 'Conventions',
-    body: 'Names follow the API contract. Figma states map to CSS selectors, never props. Story copy stays neutral ("Title", "Label"); realistic examples come later in a playground.',
+    body: 'Names follow the API contract. Figma states map to CSS selectors, never props. Content stays neutral ("Title", "Label") and actions say what they do ("Save", "Open dialog"); realistic examples come later in a playground.',
   },
 ]
 
@@ -529,6 +498,49 @@ function UsingStorybook() {
             {tip.body}
           </Tile>
         ))}
+      </div>
+    </Section>
+  )
+}
+
+function Contributors() {
+  return (
+    <Section
+      id="contributors"
+      eyebrow="People"
+      title="Contributors"
+      description="The people shaping Anvil UI. Questions, ideas and feedback are welcome."
+    >
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="flex flex-col gap-4 rounded-xl bg-card p-(--space-lg) text-card-foreground inset-ring inset-ring-border">
+          <div className="flex items-center gap-3">
+            <Avatar size="lg">
+              <AvatarFallback>DM</AvatarFallback>
+            </Avatar>
+            <div className="flex min-w-0 flex-col">
+              <h3 className="type-text-base-semibold">Dawid Młynarz</h3>
+              <p className="type-text-sm-normal text-muted-foreground">Lead Product Designer</p>
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Badge variant="subtle" intent="neutral" size="sm">
+              Founder of the idea
+            </Badge>
+            <Badge variant="subtle" intent="neutral" size="sm">
+              Main contact
+            </Badge>
+            <Badge variant="subtle" intent="neutral" size="sm">
+              Contributor
+            </Badge>
+          </div>
+          <a
+            className={cn(linkClassName, 'inline-flex w-fit items-center gap-1')}
+            href="mailto:dawid.mlynarz@zazmic.ai"
+          >
+            <Icon icon={MailIcon} size="xs" />
+            dawid.mlynarz@zazmic.ai
+          </a>
+        </div>
       </div>
     </Section>
   )
@@ -575,16 +587,13 @@ export function WelcomePage() {
   return (
     <main className="min-h-screen bg-background text-foreground">
       <div className="mx-auto flex max-w-7xl flex-col gap-(--space-4xl) px-(--space-lg) py-(--space-2xl) md:px-(--space-2xl)">
-        <Hero
-          firstComponent={firstComponent ? paths?.get(firstComponent.title) : undefined}
-          ready={ready}
-          total={items.length}
-        />
+        <Hero firstComponent={firstComponent ? paths?.get(firstComponent.title) : undefined} />
         <Audience />
         <Goals />
         <Architecture />
-        <Explore paths={paths} />
+        <Explore paths={paths} ready={ready} total={items.length} />
         <UsingStorybook />
+        <Contributors />
         <Footer />
       </div>
     </main>
