@@ -22,7 +22,7 @@ Every component property uses one of these names. A property that is not on this
 | align | Variant | start · center · end | Radix align | new (Tooltip, Popover, Dropdown) |
 | orientation | Variant | horizontal · vertical | Radix orientation | new (Tabs, Radio group, Separator) |
 | checked | Variant | false · true · indeterminate | Radix checked → data-[state=checked] | Checkbox type · Radio selected · Switch selected |
-| pressed | Boolean | true / false | Radix pressed → data-[state=on] | Chip, if it becomes a Toggle |
+| pressed | Boolean | true / false | Radix pressed → data-[state=on] | Chip (on Toggle; Figma `pressed=true` variants added 5 Oct 2026) |
 | open | Boolean | true / false | Radix open → data-[state=open] | Select state=active · Combobox state=open/closed (now a false · true axis) |
 | disabled | Boolean | true / false | disabled / data-[disabled] | state=disabled (kept as state for visuals, see section 2) |
 | loading | Boolean | true / false | loading prop (Anvil extension) | Alert dialog state=working |

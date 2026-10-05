@@ -37,7 +37,7 @@ export const catalog: CatalogArea[] = [
       c('Toggle'),
       c('Toggle Group'),
       c('Toolbar'),
-      c('Chip'),
+      c('Chip', 'Anvil/Chip'),
       c('Link', 'Anvil/Link'),
       c('Badge'),
       c('Kbd'),
