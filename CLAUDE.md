@@ -236,6 +236,10 @@ Lucide    → Icon (@/components/ui/icon) → every component and story
 4. Write `<name>.stories.tsx` in **CSF Next** (`import preview from '#.storybook/preview'`,
    `preview.meta({...})`, `meta.story({...})`): Default with controls, Variants grid, Sizes, States
    reference grid, With icons, Composition. Add `parameters.design` with the Figma URL.
+   - **Titles** place it in the sidebar: `Components/<Name>` (shadcn primitives), `Anvil/<Name>`,
+     or `Agent Builder/<Primitives | Core Kit | Agent Patterns | Surfaces | Templates>/<Name>`
+     (Figma pages; shadcn's chat set is Primitives). Groups keep that order, names sort A–Z
+     (`storySort` in `preview.tsx`); add new items to `stories/welcome/catalog.ts`.
    - **Stories open in their resting state.** Never use `play`: interactions are
      `Story.test('…', fn)` (run by Vitest in light and dark and from the sidebar, never on view).
    - **Default** renders from `args` and exposes every real prop as a Control (variant, intent,
