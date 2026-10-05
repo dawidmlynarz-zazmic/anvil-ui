@@ -222,7 +222,7 @@ export const catalog: CatalogArea[] = [
       'Memory Manager',
       'Connector Card',
       'Instructions Banner',
-      'Memory in Use',
+      'Memory In Use',
     ]),
   },
   {
