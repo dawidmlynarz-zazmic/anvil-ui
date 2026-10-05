@@ -32,6 +32,12 @@ const meta = preview.meta({
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'variant', values: 'default · outline · subtle', code: '`variant` prop' },
+      { property: 'intent', values: 'neutral · inverse', code: '`intent` prop' },
+      { property: 'size', values: 'default · sm · xs', code: '`size` prop' },
+      { property: 'label', values: 'text', code: 'children' },
+    ],
     docs: {
       description: {
         component:
@@ -44,6 +50,7 @@ const meta = preview.meta({
     variant: { control: 'inline-radio', options: variants },
     intent: { control: 'inline-radio', options: intents },
     size: { control: 'inline-radio', options: sizes },
+    children: { control: 'text' },
     asChild: { table: { disable: true } },
   },
   render: (args) => (

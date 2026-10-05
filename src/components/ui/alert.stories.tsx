@@ -62,6 +62,21 @@ const meta = preview.meta({
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      {
+        property: 'tone',
+        values: 'neutral · destructive · info · success · warning · agent',
+        code: '`tone` prop',
+      },
+      { property: 'title', values: 'text', code: '`AlertTitle` children' },
+      { property: 'description', values: 'text', code: '`AlertDescription` children' },
+      {
+        property: 'show icon / title / description',
+        values: 'boolean',
+        code: 'render the `<Icon>`, `AlertTitle` or `AlertDescription` or not',
+      },
+      { property: 'icon', values: 'instance', code: 'an `<Icon>` child' },
+    ],
     docs: {
       description: {
         component:
@@ -86,6 +101,11 @@ const meta = preview.meta({
   },
   argTypes: {
     tone: { control: 'inline-radio', options: TONES },
+    title: { control: 'text' },
+    description: { control: 'text' },
+    showIcon: { control: 'boolean' },
+    showTitle: { control: 'boolean' },
+    showDescription: { control: 'boolean' },
   },
 })
 

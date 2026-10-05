@@ -47,6 +47,7 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [{ property: 'variant', values: 'default · outline', code: '`variant` prop' }],
     docs: {
       description: {
         component:
@@ -59,6 +60,7 @@ const meta = preview.meta({
     type: { control: 'inline-radio', options: ['single', 'multiple'] },
     variant: { control: 'inline-radio', options: ['default', 'outline'] },
     size: { control: 'inline-radio', options: ['sm', 'default', 'lg'] },
+    disabled: { control: 'boolean' },
   },
 })
 

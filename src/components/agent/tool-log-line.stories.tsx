@@ -45,6 +45,7 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [{ property: 'status', values: 'running · done · failed', code: '`status` prop' }],
     docs: {
       description: {
         component:
@@ -53,7 +54,11 @@ const meta = preview.meta({
     },
   },
   args: { status: 'running', onDetails: fn(), onRetry: fn() },
-  argTypes: { status: { control: 'inline-radio', options: ['running', 'done', 'failed'] } },
+  argTypes: {
+    status: { control: 'inline-radio', options: ['running', 'done', 'failed'] },
+    onDetails: { control: false, table: { category: 'Events' } },
+    onRetry: { control: false, table: { category: 'Events' } },
+  },
 })
 
 /** Status is in Controls. */

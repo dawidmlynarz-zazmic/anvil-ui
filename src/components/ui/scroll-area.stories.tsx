@@ -40,6 +40,13 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      {
+        property: 'orientation',
+        values: 'vertical · horizontal',
+        code: 'which `ScrollBar` is shown (`<ScrollBar orientation="horizontal" />` for sideways content)',
+      },
+    ],
     docs: {
       description: {
         component:

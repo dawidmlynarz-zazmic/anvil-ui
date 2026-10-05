@@ -77,6 +77,18 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      {
+        property: 'type',
+        values: 'full · compact',
+        code: 'full: page `PaginationLink`s + `PaginationEllipsis`; compact: a "Page n of m" item (story `type`)',
+      },
+      {
+        property: 'current',
+        values: 'first · middle · last',
+        code: '`isActive` on the current `PaginationLink`; `aria-disabled` on Previous / Next at the ends',
+      },
+    ],
     docs: {
       description: {
         component:
@@ -88,6 +100,7 @@ const meta = preview.meta({
   argTypes: {
     type: { control: 'inline-radio', options: ['full', 'compact'] },
     page: { control: { type: 'number', min: 1, max: 12 } },
+    total: { control: 'number' },
   },
   // Remount when the page control changes (the demo keeps its own page after clicks).
   decorators: [(Story, { args }) => <Story key={`${args.page}-${args.type}`} />],

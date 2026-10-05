@@ -97,6 +97,13 @@ const meta = preview.meta({
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      {
+        property: 'state',
+        values: 'suggest · connected · reconnect · connecting',
+        code: '`status` prop',
+      },
+    ],
     docs: {
       description: {
         component:
@@ -105,7 +112,15 @@ const meta = preview.meta({
     },
   },
   args: { status: 'suggest' as const, title: 'Title', description: 'Subtitle', onConnect: fn() },
-  argTypes: { status: { control: 'inline-radio', options: STATUSES } },
+  argTypes: {
+    status: { control: 'inline-radio', options: STATUSES },
+    title: { control: 'text' },
+    description: { control: 'text' },
+    badge: { control: 'text' },
+    icon: { control: false },
+    footer: { control: false },
+    onConnect: { control: false, table: { category: 'Events' } },
+  },
 })
 
 /** Status, title and description are in Controls. */

@@ -59,6 +59,17 @@ const meta = preview.meta({
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'status', values: 'running · done · failed', code: '`status` prop' },
+      {
+        property: 'state',
+        values: 'collapsed · expanded',
+        code: '`open` / `defaultOpen` prop (`data-[state=open]`)',
+      },
+      { property: 'tool name', values: 'text', code: '`ToolCallItemName` children' },
+      { property: 'summary', values: 'text', code: '`ToolCallItemSummary` children' },
+      { property: 'duration', values: 'text', code: '`ToolCallItemDuration` children' },
+    ],
     docs: {
       description: {
         component:
@@ -67,7 +78,13 @@ const meta = preview.meta({
     },
   },
   args: { status: 'running', open: false },
-  argTypes: { status: { control: 'inline-radio', options: STATUSES } },
+  argTypes: {
+    status: { control: 'inline-radio', options: STATUSES },
+    open: { control: 'boolean' },
+    defaultOpen: { control: 'boolean' },
+    disabled: { control: 'boolean' },
+    onOpenChange: { control: false, table: { category: 'Events' } },
+  },
 })
 
 /** Status and open are in Controls. */

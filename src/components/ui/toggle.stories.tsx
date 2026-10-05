@@ -15,6 +15,21 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'icon', values: 'instance', code: 'an `<Icon>` child' },
+      { property: 'variant', values: 'default · outline', code: '`variant` prop' },
+      { property: 'size', values: 'sm · default · lg', code: '`size` prop' },
+      {
+        property: 'pressed',
+        values: 'false · true',
+        code: '`pressed` / `defaultPressed` prop (`data-[state=on]`)',
+      },
+      {
+        property: 'state',
+        values: 'default · hover · focus · disabled',
+        code: 'selectors: `hover:` · `focus-visible:` · `disabled:` (not a prop)',
+      },
+    ],
     docs: {
       description: {
         component:
@@ -34,6 +49,14 @@ const meta = preview.meta({
   argTypes: {
     variant: { control: 'inline-radio', options: variants },
     size: { control: 'inline-radio', options: sizes },
+    pressed: {
+      control: 'boolean',
+      description: 'Controlled pressed state; leave unset for an uncontrolled toggle',
+    },
+    defaultPressed: { control: 'boolean' },
+    disabled: { control: 'boolean' },
+    'aria-label': { control: 'text' },
+    onPressedChange: { control: false, table: { category: 'Events' } },
     children: { table: { disable: true } },
     asChild: { table: { disable: true } },
   },

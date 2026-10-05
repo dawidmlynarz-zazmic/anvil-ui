@@ -67,6 +67,13 @@ const meta = preview.meta({
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      {
+        property: 'state',
+        values: 'collapsed · expanded · running',
+        code: 'collapsed / expanded = `open` prop (`data-[state=open]`); running = `status="running"`',
+      },
+    ],
     docs: {
       description: {
         component:
@@ -75,7 +82,13 @@ const meta = preview.meta({
     },
   },
   args: { status: 'done', open: false },
-  argTypes: { status: { control: 'inline-radio', options: ['done', 'running'] } },
+  argTypes: {
+    status: { control: 'inline-radio', options: ['done', 'running'] },
+    open: { control: 'boolean' },
+    defaultOpen: { control: 'boolean' },
+    disabled: { control: 'boolean' },
+    onOpenChange: { control: false, table: { category: 'Events' } },
+  },
 })
 
 /** Status and open are in Controls. */

@@ -95,6 +95,41 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'dropdown menu · variant', values: 'default', code: 'nothing (single variant)' },
+      {
+        property: 'dropdown menu · show title / title',
+        values: 'boolean · text',
+        code: 'a `DropdownMenuLabel` or not',
+      },
+      {
+        property: 'dropdown menu · show slot 1–3 / slot 1–3',
+        values: 'boolean · slot',
+        code: '`DropdownMenuContent` children (items, groups, separators)',
+      },
+      {
+        property: 'dropdown item · type',
+        values: 'default · radio · checkbox · destructive',
+        code: '`DropdownMenuItem` · `DropdownMenuRadioItem` · `DropdownMenuCheckboxItem` · `DropdownMenuItem intent="destructive"`',
+      },
+      {
+        property: 'dropdown item · state',
+        values: 'default · highlighted · disabled',
+        code: 'selectors: `data-[highlighted]:` · `data-[disabled]:` (not a prop; `disabled` prop on the item)',
+      },
+      { property: 'dropdown item · label', values: 'text', code: 'children' },
+      {
+        property: 'dropdown item · show prefix / prefix',
+        values: 'boolean · slot',
+        code: 'an `<Icon>` child before the label',
+      },
+      {
+        property: 'dropdown item · show suffix / suffix',
+        values: 'boolean · slot',
+        code: 'a `DropdownMenuShortcut` (or the radio check / checkbox switch) after the label',
+      },
+      { property: 'dropdown item · help', values: 'boolean', code: 'nothing (no help part in code)' },
+    ],
     docs: {
       story: { inline: false, height: '520px' },
       description: {
@@ -109,7 +144,7 @@ const meta = preview.meta({
     side: { control: 'inline-radio', options: ['top', 'right', 'bottom', 'left'] },
     align: { control: 'inline-radio', options: ['start', 'center', 'end'] },
     modal: { control: 'boolean' },
-    onOpenChange: { table: { disable: true } },
+    onOpenChange: { control: false, table: { category: 'Events' } },
   },
 })
 

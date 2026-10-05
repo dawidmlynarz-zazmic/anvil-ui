@@ -15,6 +15,8 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    // No Figma component: Spinner has none (Core Kit pulse dot and typing indicator are built on it).
+    figmaProps: [],
     docs: {
       description: {
         component:
@@ -26,6 +28,7 @@ const meta = preview.meta({
   argTypes: {
     size: { control: 'inline-radio', options: ['xs', 'default'] },
     tone: { control: 'select', options: TONES },
+    label: { control: 'text' },
   },
 })
 

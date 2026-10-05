@@ -43,6 +43,13 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'label', values: 'text', code: 'children' },
+      { property: 'vertical', values: 'off · on', code: '`orientation` prop (horizontal · vertical)' },
+      { property: 'content', values: 'none · text', code: 'pass children or not' },
+      { property: 'content position', values: 'center · start · end', code: '`align` prop' },
+      { property: 'style', values: 'solid · dashed', code: '`variant` prop' },
+    ],
     docs: {
       description: {
         component:
@@ -59,7 +66,8 @@ const meta = preview.meta({
       options: ['start', 'center', 'end'],
       if: { arg: 'orientation', eq: 'horizontal' },
     },
-    label: { if: { arg: 'orientation', eq: 'horizontal' } },
+    label: { control: 'text', if: { arg: 'orientation', eq: 'horizontal' } },
+    decorative: { control: 'boolean' },
   },
 })
 

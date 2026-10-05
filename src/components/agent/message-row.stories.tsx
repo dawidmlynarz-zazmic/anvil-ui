@@ -120,6 +120,28 @@ const meta = preview.meta({
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'role', values: 'user · assistant · system · tool', code: '`role` prop' },
+      {
+        property: 'state',
+        values: 'queued · complete · invalid · streaming',
+        code: '`status` prop (invalid is `failed`)',
+      },
+      { property: 'message text', values: 'text', code: 'children' },
+      { property: 'author name', values: 'text', code: '`author` prop' },
+      { property: 'timestamp', values: 'text', code: '`timestamp` prop' },
+      {
+        property: 'show avatar · avatar',
+        values: 'boolean · instance',
+        code: '`avatar` prop (agent avatar by default)',
+      },
+      { property: 'show author', values: 'boolean', code: 'pass `author` or not' },
+      { property: 'show timestamp', values: 'boolean', code: 'pass `timestamp` or not' },
+      { property: 'show thinking', values: 'boolean', code: 'pass `thinking` or not' },
+      { property: 'show widget slot · widget', values: 'boolean · instance', code: 'pass `widget` or not' },
+      { property: 'show citations', values: 'boolean', code: 'pass `citations` or not' },
+      { property: 'show action toolbar', values: 'boolean', code: 'pass `actions` or not' },
+    ],
     docs: {
       description: {
         component:
@@ -131,6 +153,7 @@ const meta = preview.meta({
   argTypes: {
     role: { control: 'inline-radio', options: ROLES },
     status: { control: 'inline-radio', options: STATUSES },
+    onRetry: { control: false, table: { category: 'Events' } },
   },
 })
 

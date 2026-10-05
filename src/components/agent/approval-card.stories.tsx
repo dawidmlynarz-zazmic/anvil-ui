@@ -125,6 +125,8 @@ const meta = preview.meta({
   tags: ['agent-block'],
   component: Example,
   parameters: {
+    layout: 'padded',
+    design: { type: 'figma', url: FIGMA },
     figmaProps: [
       {
         property: 'state',
@@ -134,8 +136,6 @@ const meta = preview.meta({
       { property: 'title', values: 'text', code: '`title` prop' },
       { property: 'action', values: 'text', code: '`subtitle` prop' },
     ],
-    layout: 'padded',
-    design: { type: 'figma', url: FIGMA },
     docs: {
       description: {
         component:
@@ -151,7 +151,16 @@ const meta = preview.meta({
     onApprove: fn(),
     onDeny: fn(),
   },
-  argTypes: { status: { control: 'select', options: STATUSES } },
+  argTypes: {
+    status: { control: 'select', options: STATUSES },
+    title: { control: 'text' },
+    subtitle: { control: 'text' },
+    badge: { control: 'text' },
+    note: { control: 'text' },
+    footer: { control: false },
+    onApprove: { control: false, table: { category: 'Events' } },
+    onDeny: { control: false, table: { category: 'Events' } },
+  },
   render: ({ onApprove, onDeny, ...args }) => (
     <ApprovalCard
       {...args}

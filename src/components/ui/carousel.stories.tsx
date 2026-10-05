@@ -67,6 +67,19 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      {
+        property: 'show controls',
+        values: 'boolean',
+        code: 'render `CarouselPrevious` / `CarouselNext` or not',
+      },
+      { property: 'show dots', values: 'boolean', code: 'render `CarouselDots` or not' },
+      {
+        property: 'current',
+        values: 'start · middle · end',
+        code: 'the selected slide (Embla state; controls `disabled:` at the ends), not a prop',
+      },
+    ],
     docs: {
       description: {
         component:
@@ -75,7 +88,13 @@ const meta = preview.meta({
     },
   },
   args: { orientation: 'horizontal', controls: true, dots: true, loop: false, slides: 5 },
-  argTypes: { orientation: { control: 'inline-radio', options: ['horizontal', 'vertical'] } },
+  argTypes: {
+    orientation: { control: 'inline-radio', options: ['horizontal', 'vertical'] },
+    controls: { control: 'boolean' },
+    dots: { control: 'boolean' },
+    loop: { control: 'boolean' },
+    slides: { control: 'number' },
+  },
 })
 
 /** Figma current=start: Previous disabled, the third slide peeks. */

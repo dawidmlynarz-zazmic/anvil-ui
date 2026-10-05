@@ -91,6 +91,13 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      {
+        property: 'open',
+        values: 'false · true',
+        code: 'Radix `value` / `defaultValue` on `Menubar` (the open menu); trigger `data-[state=open]:`',
+      },
+    ],
     docs: {
       story: { inline: false, height: '360px' },
       description: {
@@ -102,7 +109,7 @@ const meta = preview.meta({
   args: { onSelect: fn() },
   argTypes: {
     defaultValue: { table: { disable: true } },
-    onSelect: { table: { disable: true } },
+    onSelect: { control: false, table: { category: 'Events' } },
   },
 })
 

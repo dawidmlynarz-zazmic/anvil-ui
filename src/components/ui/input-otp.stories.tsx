@@ -24,6 +24,13 @@ const meta = preview.meta({
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      {
+        property: 'state',
+        values: 'empty · partial · filled · invalid',
+        code: '`value` length (empty · partial · filled) and `aria-invalid` (not a prop)',
+      },
+    ],
     docs: {
       description: {
         component:
@@ -44,6 +51,8 @@ const meta = preview.meta({
     'aria-invalid': { control: 'boolean', description: 'Invalid state (Figma state=invalid)' },
     defaultValue: { control: 'text' },
     maxLength: { control: { type: 'number', min: 1, max: 6 } },
+    onChange: { control: false, table: { category: 'Events' } },
+    onComplete: { control: false, table: { category: 'Events' } },
     children: { table: { disable: true } },
     pattern: { table: { disable: true } },
     render: { table: { disable: true } },

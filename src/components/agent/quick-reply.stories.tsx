@@ -12,6 +12,21 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    // quick reply group has no properties (`QuickReplyGroup`).
+    figmaProps: [
+      { property: 'label', values: 'text', code: 'children' },
+      { property: 'show icon', values: 'boolean', code: '`icon` prop (`null` hides it)' },
+      {
+        property: 'type',
+        values: 'suggestion · filter · applied',
+        code: '`QuickReply` / `QuickReplyFilter` (applied is `pressed`)',
+      },
+      {
+        property: 'state',
+        values: 'default · hover · focus · disabled',
+        code: 'selectors: `hover:` · `focus-visible:` · `disabled:` (not a prop)',
+      },
+    ],
     docs: {
       description: {
         component:
@@ -20,6 +35,12 @@ const meta = preview.meta({
     },
   },
   args: { children: 'Label', disabled: false, onClick: fn() },
+  argTypes: {
+    children: { control: 'text' },
+    disabled: { control: 'boolean' },
+    icon: { control: false },
+    onClick: { control: false, table: { category: 'Events' } },
+  },
 })
 
 /** A suggestion; the label and disabled are in Controls. */

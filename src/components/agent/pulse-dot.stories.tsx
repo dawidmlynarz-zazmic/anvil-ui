@@ -12,6 +12,13 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      {
+        property: 'frame',
+        values: '1 · 2 · 3',
+        code: 'animation frames of `animate-pulse-dot` (not a prop)',
+      },
+    ],
     docs: {
       description: {
         component:

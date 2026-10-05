@@ -35,6 +35,15 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'text', values: 'text', code: 'children of `TooltipContent` (story `text` control)' },
+      { property: 'side', values: 'top · left · right · bottom', code: '`side` prop on `TooltipContent`' },
+      {
+        property: 'variant',
+        values: 'default · fixed width · inline',
+        code: 'nothing (layout only: width follows the content)',
+      },
+    ],
     docs: {
       story: { inline: false, height: '200px' },
       description: {
@@ -48,7 +57,7 @@ const meta = preview.meta({
     side: { control: 'inline-radio', options: sides },
     open: { control: 'boolean' },
     text: { control: 'text' },
-    onOpenChange: { table: { disable: true } },
+    onOpenChange: { control: false, table: { category: 'Events' } },
   },
 })
 

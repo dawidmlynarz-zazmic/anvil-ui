@@ -12,6 +12,21 @@ const meta = preview.meta({
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'show label', values: 'boolean', code: 'pass `label` or not' },
+      { property: 'value', values: 'text', code: '`value` / `defaultValue`' },
+      { property: 'hint / show hint', values: 'text · boolean', code: 'pass `hint` or not' },
+      {
+        property: 'state',
+        values: 'default · hover · focus · disabled · invalid',
+        code: 'selectors: `hover:` · `focus-visible:` · `disabled:` · `aria-invalid` (not a prop)',
+      },
+      {
+        property: 'empty',
+        values: 'on · off',
+        code: 'nothing (design-only): the placeholder shows while it is empty',
+      },
+    ],
     docs: {
       description: {
         component:
@@ -33,7 +48,9 @@ const meta = preview.meta({
     hint: { control: 'text' },
     placeholder: { control: 'text' },
     defaultValue: { control: 'text' },
+    rows: { control: 'number' },
     disabled: { control: 'boolean' },
+    required: { control: 'boolean' },
     'aria-invalid': { control: 'boolean', description: 'Invalid state (Figma state=invalid)' },
     className: { table: { disable: true } },
   },

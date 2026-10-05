@@ -13,6 +13,15 @@ const meta = preview.meta({
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'label', values: 'text', code: 'children' },
+      { property: 'marker', values: 'none · required · optional', code: '`marker` prop' },
+      {
+        property: 'state',
+        values: 'default · disabled · invalid',
+        code: 'selectors: `peer-disabled:` / Field `data-disabled` · `peer-aria-invalid:` / Field `data-invalid` (not a prop)',
+      },
+    ],
     docs: {
       description: {
         component:

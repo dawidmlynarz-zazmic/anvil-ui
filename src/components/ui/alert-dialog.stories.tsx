@@ -86,6 +86,14 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      {
+        property: 'variant',
+        values: 'default · destructive',
+        code: '`AlertDialogAction` `intent` prop (brand · destructive)',
+      },
+      { property: 'loading', values: 'false · true', code: '`AlertDialogAction` `loading` prop' },
+    ],
     docs: {
       story: { inline: false, height: '320px' },
       description: {
@@ -112,10 +120,12 @@ const meta = preview.meta({
     },
     loading: { control: 'boolean', description: 'Figma `loading`: action spinner, Cancel disabled' },
     size: { control: 'inline-radio', options: ['default', 'sm'] },
+    title: { control: 'text' },
+    description: { control: 'text' },
     open: { control: 'boolean' },
     media: { control: 'boolean', description: 'AlertDialogMedia (icon above the title)' },
-    onOpenChange: { table: { disable: true } },
-    onAction: { table: { disable: true } },
+    onOpenChange: { control: false, table: { category: 'Events' } },
+    onAction: { control: false, table: { category: 'Events' } },
     focusOnOpen: { table: { disable: true } },
   },
 })

@@ -75,6 +75,12 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'show title bar', values: 'boolean', code: 'render `SheetHeader` or not' },
+      { property: 'show action bar', values: 'boolean', code: 'render `SheetFooter` or not' },
+      { property: 'content', values: 'slot', code: '`SheetBody` children' },
+      { property: 'side', values: 'right · left · top · bottom', code: '`side` prop on `SheetContent`' },
+    ],
     docs: {
       story: { inline: false, height: '560px' },
       description: {
@@ -88,7 +94,7 @@ const meta = preview.meta({
     side: { control: 'inline-radio', options: ['right', 'left', 'top', 'bottom'] },
     open: { control: 'boolean' },
     description: { control: 'text' },
-    onOpenChange: { table: { disable: true } },
+    onOpenChange: { control: false, table: { category: 'Events' } },
     focusOnOpen: { table: { disable: true } },
   },
 })

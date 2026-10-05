@@ -21,6 +21,16 @@ const meta = preview.meta({
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA_HEADER },
+    // Private Figma parts (.shell header, .shell footer): variant properties only.
+    figmaProps: [
+      { property: '.shell header · variant', values: 'bar · inline', code: '`ShellHeader` `variant` prop' },
+      { property: '.shell footer · variant', values: 'bar · inline', code: '`ShellFooter` `variant` prop' },
+      {
+        property: '.shell footer · align',
+        values: 'end · between · stretch',
+        code: '`ShellFooter` `align` prop',
+      },
+    ],
     docs: {
       description: {
         component:
@@ -35,6 +45,11 @@ const meta = preview.meta({
       </div>
     ),
   ],
+  argTypes: {
+    variant: { control: 'inline-radio', options: ['bar', 'inline'] },
+    close: { control: false },
+    children: { control: false },
+  },
 })
 
 const Title = ({ children }: { children: string }) => <h2 className={shellTitleClassName}>{children}</h2>

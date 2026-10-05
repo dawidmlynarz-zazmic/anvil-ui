@@ -12,6 +12,7 @@ const meta = preview.meta({
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [{ property: 'state', values: 'ready · invalid', code: '`status` prop' }],
     docs: {
       description: {
         component:
@@ -20,7 +21,11 @@ const meta = preview.meta({
     },
   },
   args: { status: 'ready', detail: 'Subtitle' },
-  argTypes: { status: { control: 'inline-radio', options: ['ready', 'invalid'] } },
+  argTypes: {
+    status: { control: 'inline-radio', options: ['ready', 'invalid'] },
+    title: { control: 'text' },
+    detail: { control: 'text' },
+  },
   render: (args) => (
     <div className="max-w-(--shell-thread-max)">
       <DropOverlay {...args} />

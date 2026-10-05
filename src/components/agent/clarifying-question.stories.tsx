@@ -14,6 +14,13 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      {
+        property: 'state',
+        values: 'unanswered · answered',
+        code: '`value` / `defaultValue` set or not (not a prop)',
+      },
+    ],
     docs: {
       description: {
         component:
@@ -22,6 +29,16 @@ const meta = preview.meta({
     },
   },
   args: { title: 'Title', description: 'Subtitle', options: OPTIONS, onValueChange: fn(), onSkip: fn() },
+  argTypes: {
+    title: { control: 'text' },
+    description: { control: 'text' },
+    hint: { control: 'text' },
+    options: { control: 'object' },
+    value: { control: 'text' },
+    defaultValue: { control: 'text' },
+    onValueChange: { control: false, table: { category: 'Events' } },
+    onSkip: { control: false, table: { category: 'Events' } },
+  },
   render: (args) => (
     <div className="w-140">
       <ClarifyingQuestion {...args} />

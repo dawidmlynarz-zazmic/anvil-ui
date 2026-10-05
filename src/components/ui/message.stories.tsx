@@ -46,6 +46,13 @@ const meta = preview.meta({
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      {
+        property: 'message row · role',
+        values: 'user · assistant · system · tool',
+        code: '`align` end (user) · start (assistant); system → `Marker`; the full row is Message Row',
+      },
+    ],
     docs: {
       description: {
         component:

@@ -34,6 +34,24 @@ const meta = preview.meta({
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      {
+        property: 'label / show label',
+        values: 'text · boolean',
+        code: 'pass `label` or not (`showLabel` in this story)',
+      },
+      {
+        property: 'suggestion 1 – 4',
+        values: 'text',
+        code: '`FollowUpSuggestion` children',
+      },
+      {
+        property: 'show suggestion 3 / 4',
+        values: 'boolean',
+        code: 'how many `FollowUpSuggestion`s you render (`count` in this story)',
+      },
+      { property: 'layout', values: 'chips · list', code: '`layout` prop' },
+    ],
     docs: {
       description: {
         component:
@@ -45,6 +63,8 @@ const meta = preview.meta({
   argTypes: {
     layout: { control: 'inline-radio', options: ['chips', 'list'] },
     count: { control: { type: 'range', min: 1, max: 4 } },
+    showLabel: { control: 'boolean' },
+    onSelect: { control: false, table: { category: 'Events' } },
   },
 })
 

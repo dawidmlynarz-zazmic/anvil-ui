@@ -49,6 +49,20 @@ const meta = preview.meta({
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'status', values: 'active · completed · failed', code: '`status` prop' },
+      {
+        property: 'state',
+        values: 'collapsed · expanded',
+        code: '`open` / `defaultOpen` prop (`data-[state=open]`)',
+      },
+      { property: 'summary title', values: 'text', code: '`ThinkingPanelTitle` children' },
+      { property: 'duration label', values: 'text', code: '`ThinkingPanelDuration` children' },
+      { property: 'reasoning body', values: 'text', code: '`ThinkingPanelContent` children' },
+      { property: 'show pulse indicator', values: 'boolean', code: 'render the part or not' },
+      { property: 'show duration', values: 'boolean', code: 'render `ThinkingPanelDuration` or not' },
+      { property: 'show step list', values: 'boolean', code: 'render `ThinkingPanelSteps` or not' },
+    ],
     docs: {
       description: {
         component:
@@ -57,7 +71,14 @@ const meta = preview.meta({
     },
   },
   args: { status: 'active', open: false, steps: false },
-  argTypes: { status: { control: 'inline-radio', options: STATUSES } },
+  argTypes: {
+    status: { control: 'inline-radio', options: STATUSES },
+    open: { control: 'boolean' },
+    defaultOpen: { control: 'boolean' },
+    disabled: { control: 'boolean' },
+    steps: { control: 'boolean' },
+    onOpenChange: { control: false, table: { category: 'Events' } },
+  },
 })
 
 /** Status, open and steps are in Controls. */

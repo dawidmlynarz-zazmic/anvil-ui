@@ -61,6 +61,8 @@ const meta = preview.meta({
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
+    // Figma: no scroller component; the thread is drawn on Agent Builder › Surfaces.
+    figmaProps: [],
     docs: {
       description: {
         component:
@@ -71,6 +73,10 @@ const meta = preview.meta({
   args: { count: 12, autoScroll: true, defaultScrollPosition: 'end' },
   argTypes: {
     count: { control: { type: 'range', min: 1, max: 40 } },
+    autoScroll: { control: 'boolean' },
+    scrollEdgeThreshold: { control: 'number' },
+    scrollPreviousItemPeek: { control: 'number' },
+    scrollMargin: { control: 'number' },
     defaultScrollPosition: { control: 'inline-radio', options: ['end', 'start', 'last-anchor'] },
   },
 })

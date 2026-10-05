@@ -80,6 +80,31 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    // Figma `context menu` is an example, not a component; its items are Dropdown Menu `dropdown item`s.
+    figmaProps: [
+      {
+        property: 'dropdown item · type',
+        values: 'default · radio · checkbox · destructive',
+        code: '`ContextMenuItem` / `ContextMenuRadioItem` / `ContextMenuCheckboxItem` / `ContextMenuItem intent="destructive"`',
+      },
+      {
+        property: 'dropdown item · state',
+        values: 'default · highlighted · disabled',
+        code: 'selectors: `data-[highlighted]:` · `data-[disabled]:` (not a prop)',
+      },
+      { property: 'dropdown item · label', values: 'text', code: 'children' },
+      { property: 'dropdown item · help', values: 'boolean', code: 'nothing (no help part in code)' },
+      {
+        property: 'dropdown item · show prefix · prefix',
+        values: 'boolean · slot',
+        code: 'an `<Icon>` child before the label',
+      },
+      {
+        property: 'dropdown item · show suffix · suffix',
+        values: 'boolean · slot',
+        code: '`ContextMenuShortcut` (or the radio check / checkbox switch) after the label',
+      },
+    ],
     docs: {
       story: { inline: false, height: '520px' },
       description: {
@@ -89,7 +114,7 @@ const meta = preview.meta({
     },
   },
   args: { modal: true, onSelect: fn() },
-  argTypes: { onSelect: { table: { disable: true } } },
+  argTypes: { modal: { control: 'boolean' }, onSelect: { control: false, table: { category: 'Events' } } },
 })
 
 const body = (canvasElement: HTMLElement) => within(canvasElement.ownerDocument.body)

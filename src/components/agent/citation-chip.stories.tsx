@@ -17,6 +17,22 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'source index', values: 'text', code: '`index` prop' },
+      { property: 'domain', values: 'text', code: '`domain` prop' },
+      { property: 'show favicon · favicon', values: 'boolean · instance', code: 'pass `favicon` or not' },
+      { property: 'display', values: 'index · domain', code: 'pass `domain` or not (not a prop)' },
+      {
+        property: 'state',
+        values: 'default · hover · selected',
+        code: 'selectors: `hover:` · `data-[active=true]` (`active` prop) / `data-[state=open]` (not a prop)',
+      },
+      {
+        property: 'confidence',
+        values: 'high · medium · low · none',
+        code: '`confidence` prop (omit for none)',
+      },
+    ],
     docs: {
       description: {
         component:
@@ -29,6 +45,9 @@ const meta = preview.meta({
     index: { control: 'text' },
     domain: { control: 'text' },
     confidence: { control: 'inline-radio', options: ['high', 'medium', 'low'] },
+    favicon: { control: false },
+    active: { control: 'boolean' },
+    onClick: { control: false, table: { category: 'Events' } },
   },
 })
 

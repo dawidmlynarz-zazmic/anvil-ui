@@ -33,6 +33,12 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'domain', values: 'text', code: '`domain` prop on `CitationHoverCardContent`' },
+      { property: 'title', values: 'text', code: '`title` prop on `CitationHoverCardContent`' },
+      { property: 'url preview', values: 'text', code: '`url` prop on `CitationHoverCardContent`' },
+      { property: 'snippet', values: 'text', code: '`snippet` prop on `CitationHoverCardContent`' },
+    ],
     docs: {
       description: {
         component:
@@ -42,6 +48,10 @@ const meta = preview.meta({
     },
   },
   args: { open: false },
+  argTypes: {
+    open: { control: 'boolean' },
+    onOpenChange: { control: false, table: { category: 'Events' } },
+  },
 })
 
 /** Hover or focus the chip; `open` is a live control. */

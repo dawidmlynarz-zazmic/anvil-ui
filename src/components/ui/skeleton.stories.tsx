@@ -12,6 +12,7 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [{ property: 'shape', values: 'line · block · circle', code: '`shape` prop' }],
     docs: {
       description: {
         component:

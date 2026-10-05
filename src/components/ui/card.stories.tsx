@@ -62,17 +62,37 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      {
+        property: 'size',
+        values: 'default · sm · lg',
+        code: '`size` prop (card static and card interactive)',
+      },
+      {
+        property: 'slot 1 / 2 / 3 · show slot 1 / 2 / 3',
+        values: 'slot · boolean',
+        code: 'children: stacked parts (`CardHeader`, `CardContent`, `CardFooter`); render each or not',
+      },
+      {
+        property: 'card interactive · state',
+        values: 'default · hover',
+        code: 'selector: `hover:` on an `asChild` link or button (not a prop)',
+      },
+    ],
     docs: {
       description: {
         component:
-          'A flat container for related content (shadcn/ui Card): `CardHeader` (title, description, optional `CardAction`) → `CardContent` (a Figma slot) → `CardFooter` (actions), on the inline shell parts. Figma `variant` compact · default · relaxed → `size` sm · default · lg (8 / 16 / 24 padding and gap). Interactive card: render it as a link or button with `asChild` — it gets the stronger stroke, shadow/sm, shadow/md on hover and a focus ring. Card is flat; for a floating preview use Hover Card.',
+          'A flat container for related content (shadcn/ui Card): `CardHeader` (title, description, optional `CardAction`) → `CardContent` (a Figma slot) → `CardFooter` (actions), on the inline shell parts. Figma `size` sm · default · lg → `size` (8 / 16 / 24 padding and gap). Interactive card: render it as a link or button with `asChild` — it gets the stronger stroke, shadow/sm, shadow/md on hover and a focus ring. Card is flat; for a floating preview use Hover Card.',
       },
     },
   },
   args: { size: 'default', interactive: false, title: 'Title', description: 'Subtitle', footer: true },
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'default', 'lg'] },
-    footer: { if: { arg: 'interactive', truthy: false } },
+    interactive: { control: 'boolean' },
+    title: { control: 'text' },
+    description: { control: 'text' },
+    footer: { control: 'boolean', if: { arg: 'interactive', truthy: false } },
   },
 })
 
@@ -85,7 +105,7 @@ Default.test('a static card is not focusable', async ({ canvasElement }) => {
   await expect(card).not.toHaveFocus()
 })
 
-/** Figma card static: variant compact · default · relaxed = size sm · default · lg. */
+/** Figma card static: size sm · default · lg = `size`. */
 export const Sizes = meta.story({
   render: () => (
     <div className="flex flex-col gap-4">

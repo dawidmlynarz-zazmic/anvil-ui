@@ -14,6 +14,8 @@ const meta = preview.meta({
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
+    // Figma memory manager has no component properties.
+    figmaProps: [],
     docs: {
       description: {
         component:
@@ -26,6 +28,16 @@ const meta = preview.meta({
     description: 'Subtitle',
     note: 'Subtitle',
     onEnabledChange: fn(),
+  },
+  argTypes: {
+    title: { control: 'text' },
+    description: { control: 'text' },
+    note: { control: 'text' },
+    enabled: { control: 'boolean' },
+    defaultEnabled: { control: 'boolean' },
+    search: { control: false },
+    action: { control: false },
+    onEnabledChange: { control: false, table: { category: 'Events' } },
   },
   render: (args) => (
     <MemoryManager

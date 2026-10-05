@@ -45,6 +45,8 @@ const meta = preview.meta({
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
+    // Figma: the Icons (Lucide) page has glyphs only, no component properties.
+    figmaProps: [],
     docs: {
       description: {
         component:

@@ -50,6 +50,11 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'title', values: 'text', code: '`EmptyTitle` children' },
+      { property: 'description', values: 'text', code: '`EmptyDescription` children' },
+      { property: 'show actions', values: 'boolean', code: 'render `EmptyContent` (actions) or not' },
+    ],
     docs: {
       description: {
         component:
@@ -58,7 +63,11 @@ const meta = preview.meta({
     },
   },
   args: { media: 'default', link: false, bordered: false },
-  argTypes: { media: { control: 'inline-radio', options: ['default', 'icon'] } },
+  argTypes: {
+    media: { control: 'inline-radio', options: ['default', 'icon'] },
+    link: { control: 'boolean' },
+    bordered: { control: 'boolean' },
+  },
 })
 
 export const Default = meta.story()

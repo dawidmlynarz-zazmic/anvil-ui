@@ -15,6 +15,8 @@ const meta = preview.meta({
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
+    // Figma: no Marker component; the message row draws it with role system (see Message Row).
+    figmaProps: [],
     docs: {
       description: {
         component:

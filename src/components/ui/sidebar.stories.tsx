@@ -392,6 +392,51 @@ const meta = preview.meta({
   parameters: {
     layout: 'fullscreen',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      {
+        property: 'sidebar · preset',
+        values: 'assistant · assistant pro · agent workspace · platform',
+        code: 'nothing (design-only): compositions of the parts (story `preset` control)',
+      },
+      {
+        property: 'sidebar · mode',
+        values: 'expanded · icon · offcanvas',
+        code: '`collapsible` prop (icon · offcanvas) + `open` on `SidebarProvider` (expanded)',
+      },
+      { property: 'menu item · label', values: 'text', code: 'children of `SidebarMenuButton`' },
+      { property: 'menu item · icon', values: 'instance', code: 'an `<Icon>` child' },
+      { property: 'menu item · show badge', values: 'boolean', code: 'render `SidebarMenuBadge` or not' },
+      {
+        property: 'menu item · show chevron',
+        values: 'boolean',
+        code: 'a `Collapsible` section with sub items, or not',
+      },
+      {
+        property: 'menu item · collapsed',
+        values: 'off · on',
+        code: "nothing on the item: the sidebar's icon collapse (`group-data-[collapsible=icon]`)",
+      },
+      {
+        property: 'menu item · state',
+        values: 'default · hover · active · focus · disabled',
+        code: 'selectors: `hover:` · `data-[active=true]` (`isActive` prop) · `focus-visible:` · `disabled:` (not a prop)',
+      },
+      {
+        property: 'conversation item · title / meta',
+        values: 'text',
+        code: 'children of `SidebarMenuButton` (a composition)',
+      },
+      {
+        property: 'conversation item · status',
+        values: 'none · running · needs input · pinned',
+        code: 'a status mark in the composition (not a prop)',
+      },
+      {
+        property: 'conversation item · state',
+        values: 'default · hover · active · focus',
+        code: 'selectors: `hover:` · `data-[active=true]` (`isActive` prop) · `focus-visible:` (not a prop)',
+      },
+    ],
     docs: {
       story: { inline: false, height: '660px' },
       description: {
@@ -402,11 +447,12 @@ const meta = preview.meta({
   },
   args: { open: true, preset: 'assistant', collapsible: 'icon', variant: 'sidebar', side: 'left' },
   argTypes: {
+    open: { control: 'boolean' },
     preset: { control: 'inline-radio', options: ['assistant', 'platform', 'workspace'] },
     collapsible: { control: 'inline-radio', options: ['offcanvas', 'icon', 'none'] },
     variant: { control: 'inline-radio', options: ['sidebar', 'floating', 'inset'] },
     side: { control: 'inline-radio', options: ['left', 'right'] },
-    onOpenChange: { table: { disable: true } },
+    onOpenChange: { control: false, table: { category: 'Events' } },
   },
 })
 

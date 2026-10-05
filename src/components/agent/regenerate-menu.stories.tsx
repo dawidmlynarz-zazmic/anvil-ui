@@ -59,6 +59,8 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    // regenerate menu has no Figma properties.
+    figmaProps: [],
     docs: {
       description: {
         component:
@@ -68,6 +70,13 @@ const meta = preview.meta({
     },
   },
   args: { open: false, modal: false, onTryAgain: fn(), onModify: fn() },
+  argTypes: {
+    open: { control: 'boolean' },
+    modal: { control: 'boolean' },
+    onOpenChange: { control: false, table: { category: 'Events' } },
+    onTryAgain: { control: false, table: { category: 'Events' } },
+    onModify: { control: false, table: { category: 'Events' } },
+  },
 })
 
 /** Click Retry; `open` is a live control. */

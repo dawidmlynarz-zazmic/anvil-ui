@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils'
 
 // Figma: Cards page → `card static` (8568:1493) and `card interactive` (8553:1394). A flat container
 // (border only, CLAUDE.md → Elevation): --background, 1px --overlay-8 stroke, radius md, min width
-// 320. Figma `variant` compact · default · relaxed is padding density → `size` sm · default · lg
+// 320. Figma `size` sm · default · lg is padding density → `size`
 // (8 / 16 / 24 padding and gap), the API Contract's size vocabulary; the parts read it from
 // --card-padding. Header and footer follow the inline .shell header / .shell footer.
 // Interactive card = the Card rendered as a link or button (`asChild`): --overlay-16 stroke +

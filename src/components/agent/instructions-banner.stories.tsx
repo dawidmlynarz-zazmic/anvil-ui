@@ -15,6 +15,13 @@ const meta = preview.meta({
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      {
+        property: 'type',
+        values: 'project · persona · notice',
+        code: '`tone` prop (info · agent · neutral)',
+      },
+    ],
     docs: {
       description: {
         component:
@@ -23,7 +30,18 @@ const meta = preview.meta({
     },
   },
   args: { tone: 'info' as const, title: 'Title', detail: 'Subtitle', onDismiss: fn() },
-  argTypes: { tone: { control: 'inline-radio', options: ['info', 'agent', 'neutral'] } },
+  argTypes: {
+    tone: { control: 'inline-radio', options: ['info', 'agent', 'neutral'] },
+    title: { control: 'text' },
+    detail: { control: 'text' },
+    icon: { control: false },
+    action: { control: false },
+    children: { control: 'text' },
+    defaultOpen: { control: 'boolean' },
+    open: { control: 'boolean' },
+    onOpenChange: { control: false, table: { category: 'Events' } },
+    onDismiss: { control: false, table: { category: 'Events' } },
+  },
   render: (args) => (
     <InstructionsBanner
       {...args}

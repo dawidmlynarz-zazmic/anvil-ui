@@ -82,6 +82,12 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'size', values: 'default · sm · lg', code: '`size` prop on `DialogContent`' },
+      { property: 'show title bar', values: 'boolean', code: 'render `DialogHeader` or not' },
+      { property: 'show action bar', values: 'boolean', code: 'render `DialogFooter` or not' },
+      { property: 'modal-content', values: 'slot', code: '`DialogBody` children' },
+    ],
     docs: {
       story: { inline: false, height: '420px' },
       description: {
@@ -95,7 +101,10 @@ const meta = preview.meta({
     size: { control: 'inline-radio', options: ['sm', 'default', 'lg'] },
     align: { control: 'inline-radio', options: ['end', 'between', 'stretch'] },
     open: { control: 'boolean' },
-    onOpenChange: { table: { disable: true } },
+    title: { control: 'text' },
+    description: { control: 'text' },
+    children: { control: false },
+    onOpenChange: { control: false, table: { category: 'Events' } },
     focusOnOpen: { table: { disable: true } },
   },
 })

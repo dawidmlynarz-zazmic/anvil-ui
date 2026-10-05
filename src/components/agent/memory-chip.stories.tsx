@@ -22,6 +22,10 @@ const meta = preview.meta({
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
+    figmaProps: [
+      { property: 'memory', values: 'text', code: 'children' },
+      { property: 'state', values: 'saved · updated · forgotten', code: '`status` prop' },
+    ],
     docs: {
       description: {
         component:
@@ -30,7 +34,12 @@ const meta = preview.meta({
     },
   },
   args: { status: 'saved' as const, children: 'Subtitle' },
-  argTypes: { status: { control: 'inline-radio', options: STATUSES } },
+  argTypes: {
+    status: { control: 'inline-radio', options: STATUSES },
+    children: { control: 'text' },
+    label: { control: 'text' },
+    action: { control: false },
+  },
   render: (args) => <MemoryChip {...args} action={manage} />,
 })
 
