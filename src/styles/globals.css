@@ -26,6 +26,54 @@
   @apply ring-2 ring-ring ring-offset-2 ring-offset-background;
 }
 
+/*
+ * Utilities shadcn's chat set expects (shadcn ships them in its own stylesheet).
+ * shimmer: Figma Core Kit › text shimmer — --muted-foreground text with a --foreground highlight
+ * sweeping across, looping. Static under reduced motion (and the Storybook motion toolbar).
+ */
+@utility shimmer {
+  color: transparent;
+  background-image: linear-gradient(
+    90deg,
+    var(--muted-foreground) 40%,
+    var(--foreground) 50%,
+    var(--muted-foreground) 60%
+  );
+  background-size: 250% 100%;
+  background-clip: text;
+  animation: shimmer 2s linear infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+
+/* Fades the start and end of a horizontal scroller (attachment group). */
+@utility scroll-fade-x {
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black calc(var(--spacing) * 4),
+    black calc(100% - var(--spacing) * 4),
+    transparent
+  );
+}
+
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
