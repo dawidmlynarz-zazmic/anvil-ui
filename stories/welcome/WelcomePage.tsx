@@ -53,6 +53,11 @@ function useStorybookPaths() {
           if (entry.type === 'docs') map.set(entry.title, `/docs/${entry.id}`)
           else if (entry.subtype !== 'test') map.set(entry.title, `/story/${entry.id}`)
         }
+        // A group item (e.g. "Agent Builder/Core Kit") links to the first page inside it.
+        for (const [title, path] of [...map]) {
+          const parent = title.slice(0, title.lastIndexOf('/'))
+          if (parent && !map.has(parent)) map.set(parent, path)
+        }
         if (!cancelled) setPaths(map)
       })
       .catch(() => !cancelled && setPaths(new Map()))
@@ -449,6 +454,19 @@ function Explore({ paths }: { paths: Map<string, string> | null }) {
 }
 
 const tips: { icon: LucideIcon; title: string; body: ReactNode }[] = [
+  {
+    icon: LayersIcon,
+    title: 'Sidebar',
+    body: (
+      <>
+        <strong className="text-foreground">Foundations</strong> (tokens),{' '}
+        <strong className="text-foreground">Components</strong> (shadcn/ui, A–Z),{' '}
+        <strong className="text-foreground">Anvil</strong> (shared parts) and{' '}
+        <strong className="text-foreground">Agent Builder</strong>, grouped like the Figma pages: Primitives,
+        Core Kit, Agent Patterns, Surfaces and Templates.
+      </>
+    ),
+  },
   {
     icon: SunMoonIcon,
     title: 'Toolbar',

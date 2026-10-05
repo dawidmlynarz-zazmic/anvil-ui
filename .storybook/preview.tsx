@@ -124,7 +124,25 @@ export default definePreview({
     a11y: { test: 'error' },
     controls: { matchers: { color: /(background|color)$/i, date: /Date$/i }, sort: 'requiredFirst' },
     options: {
-      storySort: { order: ['Welcome', 'Foundations', 'Components', 'Anvil', 'Agent'] },
+      // Groups in a fixed order (Agent Builder sub-groups follow the Figma pages), components A–Z
+      // inside a group, stories in file order. Plain JS, no outside references: Storybook evaluates
+      // this function's source on its own.
+      storySort: (a, b) => {
+        const groups = ['Welcome', 'Foundations', 'Components', 'Anvil', 'Agent Builder']
+        const agent = ['Primitives', 'Core Kit', 'Agent Patterns', 'Surfaces', 'Templates']
+        const pa = a.title.split('/')
+        const pb = b.title.split('/')
+        const ga = groups.indexOf(pa[0])
+        const gb = groups.indexOf(pb[0])
+        if (ga !== gb) return (ga === -1 ? 99 : ga) - (gb === -1 ? 99 : gb)
+        if (pa[0] === 'Agent Builder' && pa[1] !== pb[1]) {
+          const sa = agent.indexOf(pa[1])
+          const sb = agent.indexOf(pb[1])
+          if (sa !== sb) return (sa === -1 ? 99 : sa) - (sb === -1 ? 99 : sb)
+        }
+        if (pa[0] === 'Welcome' || pa[0] === 'Foundations' || a.title === b.title) return 0
+        return a.title.localeCompare(b.title)
+      },
     },
   },
 })

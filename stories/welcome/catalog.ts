@@ -12,7 +12,11 @@ export type CatalogArea = {
 
 const c = (name: string, title = `Components/${name}`): CatalogItem => ({ name, title })
 const f = (name: string): CatalogItem => ({ name, title: `Foundations/${name}` })
-const a = (name: string): CatalogItem => ({ name, title: `Agent/${name}` })
+const a = (name: string, group = 'Primitives'): CatalogItem => ({
+  name,
+  title: `Agent Builder/${group}/${name}`,
+})
+const ag = (name: string): CatalogItem => ({ name, title: `Agent Builder/${name}` })
 
 export const catalog: CatalogArea[] = [
   {
@@ -108,16 +112,18 @@ export const catalog: CatalogArea[] = [
   {
     id: 'agent',
     name: 'Agent Builder',
-    description: 'Parts for conversational agents: messages, attachments, markers and surfaces.',
+    description:
+      'Parts for conversational agents. Primitives (shadcn chat set) build the Core Kit; patterns, surfaces and templates compose it.',
     items: [
       a('Message'),
       a('Bubble'),
       a('Attachment'),
       a('Marker'),
       a('Message Scroller'),
-      a('Agent Patterns'),
-      a('Surfaces'),
-      a('Templates'),
+      ag('Core Kit'),
+      ag('Agent Patterns'),
+      ag('Surfaces'),
+      ag('Templates'),
     ],
   },
 ]
