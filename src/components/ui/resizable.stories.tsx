@@ -18,7 +18,7 @@ function DemoResizable({ orientation = 'horizontal', withHandle = true }: DemoPr
         <ResizablePanel defaultSize="50" minSize="20">
           <div className="flex h-full items-center justify-center type-text-sm-medium">Label 1</div>
         </ResizablePanel>
-        <ResizableHandle withHandle={withHandle} aria-label="Label" />
+        <ResizableHandle withHandle={withHandle} aria-label="Resize" />
         <ResizablePanel defaultSize="50" minSize="20">
           <div className="flex h-full items-center justify-center type-text-sm-medium">Label 2</div>
         </ResizablePanel>
@@ -47,7 +47,7 @@ const meta = preview.meta({
 export const Default = meta.story()
 
 Default.test('the handle is a focusable separator that arrow keys move', async ({ canvas }) => {
-  const handle = canvas.getByRole('separator', { name: 'Label' })
+  const handle = canvas.getByRole('separator', { name: 'Resize' })
   const before = Number(handle.getAttribute('aria-valuenow'))
   handle.focus()
   await userEvent.keyboard('{ArrowRight}')

@@ -28,14 +28,14 @@ function DemoEmpty({ media = 'default', link = false, bordered = false }: DemoPr
       <EmptyContent>
         <Button variant="default" intent="neutral">
           <Icon icon={PlusIcon} />
-          Label
+          Add
         </Button>
         {link && (
           <a
             href="#more"
             className="rounded-sm type-text-xs-link text-foreground-link outline-none focus-visible:focus-ring"
           >
-            Label
+            Learn more
           </a>
         )}
       </EmptyContent>
@@ -64,7 +64,7 @@ export const Default = meta.story()
 
 Default.test('title, description and the next action', async ({ canvas }) => {
   await expect(canvas.getByText('Title')).toBeVisible()
-  await expect(canvas.getByRole('button', { name: 'Label' })).toBeEnabled()
+  await expect(canvas.getByRole('button', { name: 'Add' })).toBeEnabled()
 })
 
 /** shadcn EmptyMedia variant="icon", a dashed outline and the optional link. */
