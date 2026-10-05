@@ -3,8 +3,8 @@ import { Slot } from 'radix-ui'
 
 import { cn } from '@/lib/utils'
 
-// Figma Agent Builder › Core Kit › text shimmer (10734:2762): status text in --muted-foreground with
-// a --foreground highlight sweeping across (frames 1–3, looping), text/sm/medium. The `shimmer`
+// Figma Agent Builder › Core Kit › text shimmer (10734:2762): status text in --foreground-subtle with
+// a soft --foreground highlight sweeping across (frames 1–3, looping), text/sm/medium. The `shimmer`
 // utility (globals.css) draws it and stops under reduced motion. `asChild` shimmers another element.
 function TextShimmer({
   asChild = false,

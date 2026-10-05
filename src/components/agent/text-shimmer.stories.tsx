@@ -14,7 +14,7 @@ const meta = preview.meta({
     docs: {
       description: {
         component:
-          'Status text with a moving highlight while the agent works (`@/components/agent/text-shimmer`): "Searching…", a running tool call. text/sm/medium, `--muted-foreground` with a `--foreground` sweep; static under reduced motion. `asChild` applies it to another element (e.g. a heading). The text stays readable to assistive tech.',
+          'Status text with a moving highlight while the agent works (`@/components/agent/text-shimmer`): "Searching…", a running tool call. text/sm/medium, `--foreground-subtle` with a soft `--foreground` sweep; static under reduced motion. `asChild` applies it to another element (e.g. a heading). The text stays readable to assistive tech.',
       },
     },
   },
