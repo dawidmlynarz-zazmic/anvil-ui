@@ -236,7 +236,8 @@ Lucide    → Icon (@/components/ui/icon) → every component and story
 4. Write `<name>.stories.tsx` in **CSF Next** (`import preview from '#.storybook/preview'`,
    `preview.meta({...})`, `meta.story({...})`): Default with controls, Variants grid, Sizes, States
    reference grid, With icons, Composition. Add `parameters.design` with the Figma URL.
-   - **Titles** place it in the sidebar: `Components/<Name>` (shadcn primitives), `Anvil/<Name>`,
+   - **Titles** place it in the sidebar: `Components/<Name>` (shadcn primitives), `Custom Components/<Name>`
+     (Anvil components with no shadcn counterpart, code in `components/anvil`),
      or `Agent Builder/<Primitives | Core Kit | Agent Patterns | Surfaces | Templates>/<Name>`
      (Figma pages; shadcn's chat set is Primitives). Core Kit adds the Figma section:
      `Agent Builder/Core Kit/<Shell | Input | Messages | Agent States | Sources | System & Context |

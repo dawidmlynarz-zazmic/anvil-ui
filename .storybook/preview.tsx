@@ -128,7 +128,7 @@ export default definePreview({
       // inside a group, stories in file order. Plain JS, no outside references: Storybook evaluates
       // this function's source on its own.
       storySort: (a, b) => {
-        const groups = ['Welcome', 'Foundations', 'Components', 'Anvil', 'Agent Builder']
+        const groups = ['Welcome', 'Foundations', 'Components', 'Custom Components', 'Agent Builder']
         const agent = ['Primitives', 'Core Kit', 'Agent Patterns', 'Surfaces', 'Templates']
         const pa = a.title.split('/')
         const pb = b.title.split('/')

@@ -430,9 +430,9 @@ const tips: { icon: LucideIcon; title: string; body: ReactNode }[] = [
       <>
         <strong className="text-foreground">Foundations</strong> (tokens),{' '}
         <strong className="text-foreground">Components</strong> (shadcn/ui, A–Z),{' '}
-        <strong className="text-foreground">Anvil</strong> (shared parts) and{' '}
-        <strong className="text-foreground">Agent Builder</strong>, grouped like the Figma pages: Primitives,
-        Core Kit, Agent Patterns, Surfaces and Templates.
+        <strong className="text-foreground">Custom Components</strong> (Anvil-only parts, outside the shadcn
+        sync) and <strong className="text-foreground">Agent Builder</strong>, grouped like the Figma pages:
+        Primitives, Core Kit, Agent Patterns, Surfaces and Templates.
       </>
     ),
   },

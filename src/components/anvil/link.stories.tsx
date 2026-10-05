@@ -11,7 +11,7 @@ const INTENTS = ['brand', 'neutral', 'destructive', 'inverse'] as const
 const STATES = ['default', 'hover', 'focus', 'disabled'] as const
 
 const meta = preview.meta({
-  title: 'Anvil/Link',
+  title: 'Custom Components/Link',
   component: Link,
   parameters: {
     layout: 'centered',
