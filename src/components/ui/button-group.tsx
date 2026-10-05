@@ -5,8 +5,8 @@ import { Slot } from 'radix-ui'
 import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
 
-// No Figma component (the Toolbar builds on it later): shadcn Button Group on the drawn Buttons,
-// Inputs and Selects. Joins its children into one control: inner corners square, and — because
+// Figma: Button page → `button group` (11160:516, orientation horizontal · vertical): shadcn Button
+// Group on the drawn Buttons, Inputs and Selects; the Toolbar groups its actions with it. Joins its children into one control: inner corners square, and — because
 // Anvil strokes are inset rings, not borders — neighbours overlap by 1px so they share one line.
 // Nested groups sit 8px apart. ButtonGroupText is a --muted segment with the outline stroke.
 
