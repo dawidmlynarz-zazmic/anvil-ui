@@ -1,9 +1,15 @@
 import * as React from 'react'
-import { cn } from '@/lib/utils'
 import useEmblaCarousel, { type UseEmblaCarouselType } from 'embla-carousel-react'
-import { ArrowLeft, ArrowRight } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
+import { ChevronLeftIcon, ChevronRightIcon, Icon } from '@/components/ui/icon'
+import { cn } from '@/lib/utils'
+
+// Figma: Carousel page → `carousel` (10945:121) and `.carousel slide` (10945:49). shadcn Carousel on
+// Embla: slides 16px apart; Previous / Next are 32px circular outline · neutral Buttons 12px beside
+// the viewport (above / below when vertical), disabled at the ends (canScrollPrev / canScrollNext).
+// CarouselDots (Anvil addition, Figma dots): one per snap, 16px below — active 8px --foreground,
+// others 6px --border-strong, 6px apart; each is a button that scrolls to its slide.
 
 type CarouselApi = UseEmblaCarouselType[1]
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>
@@ -24,6 +30,10 @@ type CarouselContextProps = {
   scrollNext: () => void
   canScrollPrev: boolean
   canScrollNext: boolean
+  /** Index of the selected snap and the number of snaps (for CarouselDots). */
+  selectedIndex: number
+  snapCount: number
+  scrollTo: (index: number) => void
 } & CarouselProps
 
 const CarouselContext = React.createContext<CarouselContextProps | null>(null)
@@ -56,12 +66,18 @@ function Carousel({
   )
   const [canScrollPrev, setCanScrollPrev] = React.useState(false)
   const [canScrollNext, setCanScrollNext] = React.useState(false)
+  const [selectedIndex, setSelectedIndex] = React.useState(0)
+  const [snapCount, setSnapCount] = React.useState(0)
 
   const onSelect = React.useCallback((api: CarouselApi) => {
     if (!api) return
     setCanScrollPrev(api.canScrollPrev())
     setCanScrollNext(api.canScrollNext())
+    setSelectedIndex(api.selectedScrollSnap())
+    setSnapCount(api.scrollSnapList().length)
   }, [])
+
+  const scrollTo = React.useCallback((index: number) => api?.scrollTo(index), [api])
 
   const scrollPrev = React.useCallback(() => {
     api?.scrollPrev()
@@ -91,11 +107,13 @@ function Carousel({
 
   React.useEffect(() => {
     if (!api) return
-    onSelect(api)
+    // First sync from a callback (React compiler: no synchronous setState in an effect).
+    queueMicrotask(() => onSelect(api))
     api.on('reInit', onSelect)
     api.on('select', onSelect)
 
     return () => {
+      api?.off('reInit', onSelect)
       api?.off('select', onSelect)
     }
   }, [api, onSelect])
@@ -111,6 +129,9 @@ function Carousel({
         scrollNext,
         canScrollPrev,
         canScrollNext,
+        selectedIndex,
+        snapCount,
+        scrollTo,
       }}
     >
       <div
@@ -161,7 +182,9 @@ function CarouselItem({ className, ...props }: React.ComponentProps<'div'>) {
 function CarouselPrevious({
   className,
   variant = 'outline',
-  size = 'icon',
+  intent = 'neutral',
+  size = 'icon-sm',
+  shape = 'circle',
   ...props
 }: React.ComponentProps<typeof Button>) {
   const { orientation, scrollPrev, canScrollPrev } = useCarousel()
@@ -170,19 +193,21 @@ function CarouselPrevious({
     <Button
       data-slot="carousel-previous"
       variant={variant}
+      intent={intent}
       size={size}
+      shape={shape}
       className={cn(
-        'absolute size-8 rounded-full',
+        'absolute',
         orientation === 'horizontal'
-          ? 'top-1/2 -left-12 -translate-y-1/2'
-          : '-top-12 left-1/2 -translate-x-1/2 rotate-90',
+          ? 'top-1/2 -left-11 -translate-y-1/2'
+          : '-top-11 left-1/2 -translate-x-1/2 rotate-90',
         className,
       )}
       disabled={!canScrollPrev}
       onClick={scrollPrev}
       {...props}
     >
-      <ArrowLeft />
+      <Icon icon={ChevronLeftIcon} />
       <span className="sr-only">Previous slide</span>
     </Button>
   )
@@ -191,7 +216,9 @@ function CarouselPrevious({
 function CarouselNext({
   className,
   variant = 'outline',
-  size = 'icon',
+  intent = 'neutral',
+  size = 'icon-sm',
+  shape = 'circle',
   ...props
 }: React.ComponentProps<typeof Button>) {
   const { orientation, scrollNext, canScrollNext } = useCarousel()
@@ -200,22 +227,55 @@ function CarouselNext({
     <Button
       data-slot="carousel-next"
       variant={variant}
+      intent={intent}
       size={size}
+      shape={shape}
       className={cn(
-        'absolute size-8 rounded-full',
+        'absolute',
         orientation === 'horizontal'
-          ? 'top-1/2 -right-12 -translate-y-1/2'
-          : '-bottom-12 left-1/2 -translate-x-1/2 rotate-90',
+          ? 'top-1/2 -right-11 -translate-y-1/2'
+          : '-bottom-11 left-1/2 -translate-x-1/2 rotate-90',
         className,
       )}
       disabled={!canScrollNext}
       onClick={scrollNext}
       {...props}
     >
-      <ArrowRight />
+      <Icon icon={ChevronRightIcon} />
       <span className="sr-only">Next slide</span>
     </Button>
   )
 }
 
-export { type CarouselApi, Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext }
+/** Figma dots: one button per snap; the current one is larger and --foreground. */
+function CarouselDots({ className, ...props }: React.ComponentProps<'div'>) {
+  const { selectedIndex, snapCount, scrollTo } = useCarousel()
+  if (snapCount < 2) return null
+  return (
+    <div data-slot="carousel-dots" className={cn('mt-4 flex justify-center', className)} {...props}>
+      {Array.from({ length: snapCount }, (_, i) => (
+        <button
+          key={i}
+          type="button"
+          aria-label={`Go to slide ${i + 1}`}
+          aria-current={i === selectedIndex || undefined}
+          onClick={() => scrollTo(i)}
+          className="group/dot flex size-3 items-center justify-center rounded-full outline-none focus-visible:focus-ring"
+        >
+          <span className="size-1.5 rounded-full bg-border-strong transition-[width,height,background-color] duration-(--duration-fast) group-aria-[current=true]/dot:size-2 group-aria-[current=true]/dot:bg-foreground" />
+        </button>
+      ))}
+    </div>
+  )
+}
+
+export {
+  type CarouselApi,
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+  CarouselDots,
+  useCarousel,
+}
