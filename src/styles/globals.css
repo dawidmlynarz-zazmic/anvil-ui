@@ -12,6 +12,11 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Toast (Sonner): Figma `variant` compact = a toast without a description, extended = with one.
+   Match the toast itself or any of its parts. */
+@custom-variant toast-compact (&:where([data-sonner-toast]:not(:has([data-description])), [data-sonner-toast]:not(:has([data-description])) *));
+@custom-variant toast-extended (&:where([data-sonner-toast]:has([data-description]), [data-sonner-toast]:has([data-description]) *));
+
 /*
  * focus/ring (Figma effect style): 2px --background gap + 2px --ring outside it.
  * Ring utilities compose with the element's own shadow (e.g. shadow-xs on inputs), so use this
