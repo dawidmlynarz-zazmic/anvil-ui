@@ -12,14 +12,15 @@ import { cn } from '@/lib/utils'
 // --overlay-8, 8px above and below) · links (Link brand). Math: `ContentMath` (--muted, radius md,
 // 12px, text/xs; Figma's --muted-foreground formula / --foreground-subtle caption are one step
 // lighter in code — --foreground / --muted-foreground — since --foreground-subtle on --muted is under
-// 4.5:1). Blocks sit 16px apart.
+// 4.5:1). Blocks sit 16px apart. Long words and URLs wrap (overflow-wrap). Code scrolls sideways:
+// give `<pre>` `tabIndex={0}` so keyboard users can scroll it (axe scrollable-region-focusable).
 
 function ContentBlocks({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="content-blocks"
       className={cn(
-        'flex min-w-0 flex-col gap-4 type-text-base-normal text-foreground',
+        'flex min-w-0 flex-col gap-4 type-text-base-normal wrap-break-word text-foreground',
         // headings
         '[&_h1]:type-heading-xl [&_h2]:type-heading-xl [&_h3]:type-text-base-semibold [&_h4]:type-text-base-semibold',
         // lists
@@ -32,7 +33,7 @@ function ContentBlocks({ className, ...props }: React.ComponentProps<'div'>) {
         '[&_th]:border-b [&_th]:bg-muted [&_th]:px-3 [&_th]:py-2.5 [&_th]:text-left [&_th]:type-text-sm-semibold',
         '[&_td]:border-b [&_td]:px-3 [&_td]:py-2.5 [&_td]:type-text-sm-normal [&_tr:last-child>td]:border-b-0',
         // code
-        '[&_pre]:overflow-x-auto [&_pre]:rounded-lg [&_pre]:border [&_pre]:bg-background [&_pre]:p-3 [&_pre]:type-code-xs',
+        '[&_pre]:overflow-x-auto [&_pre]:outline-none [&_pre]:focus-visible:focus-ring [&_pre]:rounded-lg [&_pre]:border [&_pre]:bg-background [&_pre]:p-3 [&_pre]:type-code-xs',
         '[&_:not(pre)>code]:rounded-sm [&_:not(pre)>code]:bg-muted [&_:not(pre)>code]:px-1 [&_:not(pre)>code]:type-code-xs',
         // divider and links
         '[&_hr]:my-2 [&_hr]:h-px [&_hr]:border-0 [&_hr]:bg-overlay-8',

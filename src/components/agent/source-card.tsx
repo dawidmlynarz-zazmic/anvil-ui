@@ -69,7 +69,7 @@ function SourceCard({
       data-slot="source-card"
       data-excluded={excluded || undefined}
       className={cn(
-        'group/source flex w-full max-w-(--shell-widget-max) flex-col gap-3 rounded-xl border bg-card p-4 text-card-foreground shadow-sm',
+        'group/source flex w-full max-w-(--shell-widget-max) flex-col gap-3 rounded-xl border bg-card p-4 text-card-foreground shadow-sm wrap-break-word',
         className,
       )}
       {...props}

@@ -204,3 +204,29 @@ Composition.test('the user turn and the answer are both present', async ({ canva
   await expect(canvas.getByText('You')).toBeVisible()
   await expect(canvas.getByRole('group', { name: 'Message actions' })).toBeVisible()
 })
+
+const LONG =
+  'A long message that wraps onto several lines to check spacing, alignment and wrapping in a narrow column'
+const UNBROKEN = 'https://example.com/a/very/long/path/without/any/spaces/that/must/wrap/inside/the/column'
+
+/** Stress test: long messages and an unbroken URL from both sides of a narrow thread. */
+export const LongContent = meta.story({
+  render: () => (
+    <div data-testid="thread" className="flex w-80 flex-col gap-8">
+      <MessageRow role="user" timestamp="14:02">
+        {`${LONG} ${UNBROKEN}`}
+      </MessageRow>
+      <MessageRow role="assistant" author="Title" timestamp="14:02">
+        {`${LONG} ${UNBROKEN}`}
+      </MessageRow>
+    </div>
+  ),
+})
+
+LongContent.test('messages stay inside the thread', async ({ canvas }) => {
+  const thread = canvas.getByTestId('thread')
+  const { right } = thread.getBoundingClientRect()
+  for (const el of thread.querySelectorAll<HTMLElement>('*')) {
+    await expect(el.getBoundingClientRect().right).toBeLessThanOrEqual(right + 1)
+  }
+})

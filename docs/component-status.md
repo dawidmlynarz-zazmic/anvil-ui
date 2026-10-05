@@ -160,3 +160,26 @@ Behavior or API that differs from the shadcn source, and why. Everything else is
 | Marker | text/xs with 12px icons and a 4px gap (shadcn text-sm, 16px, 8px); separator rules spaced by an 8px gap (shadcn 4px margins); links get the focus ring | Figma message row (system) |
 | Message Scroller | Jump button outline · neutral · circle (shadcn `variant="secondary"`, which Anvil's Button doesn't have) with shadow-sm; motion on Anvil duration / easing tokens (shadcn 200 / 400 ms custom curves); icon via `Icon`; `scroll-fade-b`, `scrollbar-thin`, `scrollbar-gutter-stable` defined in globals.css | Anvil Button API and tokens; utilities the shadcn source expects |
 | Spinner | Rendered through `Icon` (Anvil stroke, `size` / `tone` props) instead of lucide's Loader2Icon directly | Icon rule (CLAUDE.md) |
+
+## Lifecycle states not drawn in Figma
+
+Found by the Storybook alignment audit (2026-10-05). Code does not invent these; they wait for a
+Figma design.
+
+| Component | Missing state | Today |
+| --- | --- | --- |
+| File Output Card | failed generation | `status` is generating · ready only |
+| Memory Manager | empty list · no search results | the list is whatever children you pass |
+| Clarifying Question | expired · skipped (after `onSkip`) | answered or unanswered only |
+| Citation Hovercard | loading · failed to load the preview | content is static props |
+
+Stories added for states the current API already covers: Content Blocks streaming (inside a
+streaming Message Row) and long content; Follow-up Suggestions loading (skeleton chips, `aria-busy`)
+and after a choice (disabled); long-content stress stories (narrow column, unbroken URL) on Approval
+Card, Connector Card, System Banner, Instructions Banner, Memory Chip, Source Card, Citation Source
+Item and Message Row. They found and fixed: long words overflowing (Content Blocks, Approval Card,
+Connector Card, System Banner, Source Card, Citation Source Item: `overflow-wrap`), a long domain
+not truncating (Citation Source Item), header titles squeezed by long badges (Approval Card,
+Connector Card: the title keeps a 12rem basis and the badge wraps), Memory Chip wider than its
+column, a scrolling code block keyboard users could not reach (Content Blocks: give `<pre>`
+`tabIndex={0}`; focus ring added), and Follow-up Suggestions with no disabled look.

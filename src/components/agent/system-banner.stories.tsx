@@ -96,3 +96,25 @@ export const Types = meta.story({
     </div>
   ),
 })
+
+const LONG =
+  'A long title that wraps onto several lines to check spacing, alignment and wrapping in a narrow column'
+const UNBROKEN = 'https://example.com/a/very/long/path/without/any/spaces/that/must/wrap/inside/the/column'
+
+/** Stress test: long text and an unbroken URL in a narrow column wrap or truncate, never overflow. */
+export const LongContent = meta.story({
+  args: { children: `${LONG} ${UNBROKEN}` },
+  decorators: [(Story) => <div className="w-80">{Story()}</div>],
+})
+
+LongContent.test('stays in its column and keeps text readable', async ({ canvasElement }) => {
+  const root = canvasElement.querySelector<HTMLElement>('[data-slot=system-banner]')!
+  const column = root.parentElement!.getBoundingClientRect()
+  for (const el of [root, ...root.querySelectorAll<HTMLElement>('*')]) {
+    await expect(el.getBoundingClientRect().right).toBeLessThanOrEqual(column.right + 1)
+    // A text block squeezed by its neighbours wraps one character per line.
+    if (el.childElementCount === 0 && (el.textContent ?? '').length > 20) {
+      await expect(el.getBoundingClientRect().width).toBeGreaterThanOrEqual(64)
+    }
+  }
+})
