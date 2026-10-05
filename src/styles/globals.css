@@ -101,6 +101,23 @@
   }
 }
 
+/* Message row streaming caret (Figma stream cursor): blinks; steady under reduced motion. */
+@utility animate-caret {
+  animation: caret 1s steps(2, jump-none) infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@keyframes caret {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
 /* Fades the start and end of a horizontal scroller (attachment group). */
 @utility scroll-fade-x {
   mask-image: linear-gradient(
