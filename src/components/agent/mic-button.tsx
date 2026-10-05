@@ -54,11 +54,11 @@ function MicButton({
         <>
           <span
             aria-hidden
-            className="pointer-events-none absolute -inset-1.5 animate-mic-ring rounded-full bg-destructive/25"
+            className="pointer-events-none absolute -inset-1.5 animate-mic-ring rounded-full bg-destructive/30"
           />
           <span
             aria-hidden
-            className="pointer-events-none absolute -inset-3 animate-mic-ring rounded-full bg-destructive/15 [animation-delay:0.4s]"
+            className="pointer-events-none absolute -inset-3 animate-mic-ring rounded-full bg-destructive/20 [animation-delay:0.4s]"
           />
         </>
       )}
