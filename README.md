@@ -63,6 +63,7 @@ scripts/           Figma token export and build scripts
 src/styles/        globals.css and the generated token CSS
 src/components/ui/ shadcn components restyled to Anvil, each with its stories
 src/components/anvil/  Anvil compositions (shell header and footer, …)
+src/hooks/         shadcn hooks (use-mobile)
 stories/           Welcome page and Foundations docs
 docs/              API contract, roadmap, component status
 ```
