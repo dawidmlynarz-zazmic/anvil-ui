@@ -7,6 +7,7 @@ const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=1093
 
 const meta = preview.meta({
   title: 'Components/Textarea',
+  tags: ['ui-component'],
   component: Textarea,
   parameters: {
     layout: 'padded',

@@ -42,6 +42,7 @@ function Demo({ status = 'listening', onEnd, onClose, onShareScreen, label }: De
 
 const meta = preview.meta({
   title: 'Agent Builder/Core Kit/Input/Live Voice Session',
+  tags: ['agent-block'],
   component: Demo,
   parameters: {
     layout: 'centered',

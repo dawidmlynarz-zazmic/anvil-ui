@@ -86,6 +86,7 @@ function Demo({
 
 const meta = preview.meta({
   title: 'Agent Builder/Core Kit/Sources/Citation Drawer',
+  tags: ['agent-block'],
   component: Demo,
   parameters: {
     layout: 'centered',

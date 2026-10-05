@@ -16,6 +16,7 @@ const FIGMA_FOOTER = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-
 
 const meta = preview.meta({
   title: 'Custom Components/Shell',
+  tags: ['ui-component'],
   component: ShellHeader,
   parameters: {
     layout: 'padded',

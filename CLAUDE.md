@@ -243,6 +243,15 @@ Lucide    → Icon (@/components/ui/icon) → every component and story
      `Agent Builder/Core Kit/<Shell | Input | Messages | Agent States | Sources | System & Context |
      Widgets & Artifacts | Feedback & Surveys>/<Name>`. Groups and sections keep that order, names
      sort A–Z (`storySort` in `preview.tsx`); every item is listed in `stories/welcome/catalog.ts`.
+   - **Tier tag:** every meta has exactly one `tags` tier (`.storybook/tiers.ts`): `ui-component`
+     (Tier 1: shadcn components and Anvil-only controls), `agent-primitive` (Tier 2: one message
+     part, indicator, chip or row), `agent-block` (Tier 3: a composed interactive agent feature),
+     `agent-template` (Tier 4: surfaces and templates). The sidebar's tag filter filters by it; the
+     docs page and the Welcome catalog show it. The sidebar itself keeps following Figma.
+   - **Docs page** (autodocs, `.storybook/docs-page.tsx`): title, tier, Figma link, description,
+     controls, then `parameters.figmaProps`: one row per Figma component property
+     (`{ property, values, code }`; names exactly as in Figma) saying what it is in code: a prop, a
+     selector, a slot / child, or nothing. `pnpm lint` runs `scripts/check-stories.mjs`.
    - **Stories open in their resting state.** Never use `play`: interactions are
      `Story.test('…', fn)` (run by Vitest in light and dark and from the sidebar, never on view).
    - **Default** renders from `args` and exposes every real prop as a Control (variant, intent,

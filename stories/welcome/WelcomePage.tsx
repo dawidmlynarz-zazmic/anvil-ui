@@ -31,6 +31,8 @@ import {
 import { Kbd } from '@/components/ui/kbd'
 import { cn } from '@/lib/utils'
 
+import { tierOf } from '../../.storybook/tiers'
+
 import { catalog, type CatalogItem } from './catalog'
 import { ChatDemo } from './ChatDemo'
 
@@ -40,17 +42,30 @@ const REPO_URL = 'https://github.com/dawidmlynarz-zazmic/anvil-ui'
 // ---------------------------------------------------------------------------------------------
 // Storybook index: which catalog items exist, and the path to open for each.
 
-type IndexEntry = { id: string; title: string; type: 'story' | 'docs'; subtype?: string; name: string }
+type IndexEntry = {
+  id: string
+  title: string
+  type: 'story' | 'docs'
+  subtype?: string
+  name: string
+  tags?: string[]
+}
+
+type Tier = NonNullable<ReturnType<typeof tierOf>>
 
 function useStorybookPaths() {
   const [paths, setPaths] = useState<Map<string, string> | null>(null)
+  const [tiers, setTiers] = useState<Map<string, Tier>>(new Map())
   useEffect(() => {
     let cancelled = false
     fetch('index.json')
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
       .then((index: { entries: Record<string, IndexEntry> }) => {
         const map = new Map<string, string>()
+        const tierMap = new Map<string, Tier>()
         for (const entry of Object.values(index.entries)) {
+          const tier = tierOf(entry.tags)
+          if (tier) tierMap.set(entry.title, tier)
           if (map.has(entry.title)) continue
           if (entry.type === 'docs') map.set(entry.title, `/docs/${entry.id}`)
           else if (entry.subtype !== 'test') map.set(entry.title, `/story/${entry.id}`)
@@ -60,14 +75,17 @@ function useStorybookPaths() {
           const parent = title.slice(0, title.lastIndexOf('/'))
           if (parent && !map.has(parent)) map.set(parent, path)
         }
-        if (!cancelled) setPaths(map)
+        if (!cancelled) {
+          setPaths(map)
+          setTiers(tierMap)
+        }
       })
       .catch(() => !cancelled && setPaths(new Map()))
     return () => {
       cancelled = true
     }
   }, [])
-  return paths
+  return { paths, tiers }
 }
 
 /** A link to another Storybook page: navigates the manager (no reload); new-tab still works. */
@@ -340,7 +358,7 @@ function Status({ ready }: { ready: boolean }) {
   )
 }
 
-function CatalogRow({ item, path }: { item: CatalogItem; path?: string }) {
+function CatalogRow({ item, path, tier }: { item: CatalogItem; path?: string; tier?: Tier }) {
   return (
     <li className="flex min-h-8 items-center justify-between gap-2">
       {path ? (
@@ -350,6 +368,14 @@ function CatalogRow({ item, path }: { item: CatalogItem; path?: string }) {
       ) : (
         <span className="type-text-sm-normal text-muted-foreground">{item.name}</span>
       )}
+      {tier && tier.tier > 1 && (
+        <span
+          title={`Tier ${tier.tier} · ${tier.label}`}
+          className="ml-auto rounded-sm bg-agent-subtle px-1 py-0.5 type-text-2xs-medium text-agent-strong dark:text-foreground"
+        >
+          {tier.short}
+        </span>
+      )}
       <Status ready={Boolean(path)} />
     </li>
   )
@@ -357,10 +383,12 @@ function CatalogRow({ item, path }: { item: CatalogItem; path?: string }) {
 
 function Explore({
   paths,
+  tiers,
   ready,
   total,
 }: {
   paths: Map<string, string> | null
+  tiers: Map<string, Tier>
   ready: number
   total: number
 }) {
@@ -411,7 +439,12 @@ function Explore({
               </div>
               <ul className="flex flex-col" aria-label={area.name}>
                 {area.items.map((item) => (
-                  <CatalogRow key={item.title} item={item} path={paths?.get(item.title)} />
+                  <CatalogRow
+                    key={item.title}
+                    item={item}
+                    path={paths?.get(item.title)}
+                    tier={tiers.get(item.title)}
+                  />
                 ))}
               </ul>
             </div>
@@ -432,7 +465,8 @@ const tips: { icon: LucideIcon; title: string; body: ReactNode }[] = [
         <strong className="text-foreground">Components</strong> (shadcn/ui, A–Z),{' '}
         <strong className="text-foreground">Custom Components</strong> (Anvil-only parts, outside the shadcn
         sync) and <strong className="text-foreground">Agent Builder</strong>, grouped like the Figma pages:
-        Primitives, Core Kit, Agent Patterns, Surfaces and Templates.
+        Primitives, Core Kit, Agent Patterns, Surfaces and Templates. Filter by tier with the sidebar&apos;s
+        tag filter: UI Component, Agent Primitive, Agent Block, Agent Template.
       </>
     ),
   },
@@ -579,7 +613,7 @@ function Footer() {
 // ---------------------------------------------------------------------------------------------
 
 export function WelcomePage() {
-  const paths = useStorybookPaths()
+  const { paths, tiers } = useStorybookPaths()
   const items = catalog.flatMap((area) => area.items)
   const ready = items.filter((item) => paths?.has(item.title)).length
   const firstComponent = items.find((item) => item.title.startsWith('Components/') && paths?.has(item.title))
@@ -591,7 +625,7 @@ export function WelcomePage() {
         <Audience />
         <Goals />
         <Architecture />
-        <Explore paths={paths} ready={ready} total={items.length} />
+        <Explore paths={paths} tiers={tiers} ready={ready} total={items.length} />
         <UsingStorybook />
         <Contributors />
         <Footer />

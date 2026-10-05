@@ -49,6 +49,7 @@ function DemoCalendar({
 
 const meta = preview.meta({
   title: 'Components/Calendar',
+  tags: ['ui-component'],
   component: DemoCalendar,
   parameters: {
     layout: 'centered',

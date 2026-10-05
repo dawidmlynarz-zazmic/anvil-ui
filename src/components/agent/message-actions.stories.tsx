@@ -68,6 +68,7 @@ function Demo({ copy = true, retry = true, edit = false, feedback = true, share 
 
 const meta = preview.meta({
   title: 'Agent Builder/Core Kit/Messages/Message Actions',
+  tags: ['agent-block'],
   component: Demo,
   parameters: {
     layout: 'centered',

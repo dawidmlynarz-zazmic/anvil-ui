@@ -10,6 +10,7 @@ const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=2534
 
 const meta = preview.meta({
   title: 'Components/Kbd',
+  tags: ['ui-component'],
   component: Kbd,
   parameters: {
     layout: 'centered',

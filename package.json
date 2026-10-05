@@ -13,7 +13,7 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "tokens:build": "node style-dictionary.config.mjs && node scripts/build-foundations.mjs",
-    "lint": "eslint . && prettier --check .",
+    "lint": "eslint . && prettier --check . && node --disable-warning=ExperimentalWarning scripts/check-stories.mjs",
     "format": "prettier --write .",
     "typecheck": "tsc -b --noEmit",
     "test-storybook": "vitest run --project=storybook-light --project=storybook-dark"

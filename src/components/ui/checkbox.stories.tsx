@@ -11,6 +11,7 @@ const checkedValues = [false, true, 'indeterminate'] as const
 
 const meta = preview.meta({
   title: 'Components/Checkbox',
+  tags: ['ui-component'],
   component: Checkbox,
   parameters: {
     layout: 'padded',

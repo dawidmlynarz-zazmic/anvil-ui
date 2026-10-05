@@ -9,6 +9,7 @@ const KINDS = ['document', 'presentation', 'spreadsheet', 'pdf'] as const
 
 const meta = preview.meta({
   title: 'Agent Builder/Core Kit/Messages/File Output Card',
+  tags: ['agent-block'],
   component: FileOutputCard,
   parameters: {
     layout: 'centered',

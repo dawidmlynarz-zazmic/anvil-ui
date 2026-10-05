@@ -62,6 +62,7 @@ function Group(props: React.ComponentProps<typeof ToolCallAccordion>) {
 
 const meta = preview.meta({
   title: 'Agent Builder/Core Kit/Agent States/Tool Call Accordion',
+  tags: ['agent-block'],
   component: Group,
   parameters: {
     layout: 'padded',

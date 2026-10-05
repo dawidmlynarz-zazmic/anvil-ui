@@ -8,6 +8,7 @@ const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=1066
 
 const meta = preview.meta({
   title: 'Agent Builder/Core Kit/Input/Voice Waveform',
+  tags: ['agent-primitive'],
   component: VoiceWaveform,
   parameters: {
     layout: 'centered',

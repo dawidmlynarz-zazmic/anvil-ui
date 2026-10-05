@@ -48,6 +48,7 @@ function Demo({
 
 const meta = preview.meta({
   title: 'Agent Builder/Primitives/Attachment',
+  tags: ['agent-primitive'],
   component: Demo,
   parameters: {
     layout: 'centered',

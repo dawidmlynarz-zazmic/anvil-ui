@@ -56,6 +56,7 @@ function Demo({ count = 12, ...props }: DemoProps) {
 
 const meta = preview.meta({
   title: 'Agent Builder/Primitives/Message Scroller',
+  tags: ['agent-primitive'],
   component: Demo,
   parameters: {
     layout: 'padded',

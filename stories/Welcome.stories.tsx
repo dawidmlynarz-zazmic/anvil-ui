@@ -8,6 +8,7 @@ import { WelcomePage } from './welcome/WelcomePage'
 // components only.
 const meta = preview.meta({
   title: 'Welcome',
+  tags: ['!autodocs'],
   component: WelcomePage,
   parameters: {
     layout: 'fullscreen',

@@ -19,6 +19,7 @@ function Slots({ count = 6 }: { count?: number }) {
 
 const meta = preview.meta({
   title: 'Components/Input OTP',
+  tags: ['ui-component'],
   component: InputOTP,
   parameters: {
     layout: 'padded',

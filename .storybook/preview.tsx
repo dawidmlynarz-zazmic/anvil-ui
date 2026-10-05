@@ -9,6 +9,7 @@ import { Toaster } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import '@/styles/globals.css'
 
+import { AnvilDocsPage } from './docs-page'
 import { STATE_ARG, withInteractionState } from './interaction-state'
 import { withSyncedOpen } from './sync-open'
 
@@ -66,6 +67,8 @@ const withAnvilProviders: Decorator = (Story, context) => (
 // control (sync-open.tsx); stories that open on load prevent Radix's initial focus.
 export default definePreview({
   addons: [addonDocs(), addonA11y(), addonThemes(), addonPseudoStates()],
+  // Every component gets a docs page (AnvilDocsPage: tier, Figma link, Figma → code table).
+  tags: ['autodocs'],
   decorators: [
     withSyncedOpen,
     withInteractionState,
@@ -122,6 +125,7 @@ export default definePreview({
   args: { [STATE_ARG]: 'default' },
   parameters: {
     a11y: { test: 'error' },
+    docs: { page: AnvilDocsPage },
     controls: { matchers: { color: /(background|color)$/i, date: /Date$/i }, sort: 'requiredFirst' },
     options: {
       // Groups in a fixed order (Agent Builder sub-groups and Core Kit sections follow Figma), components A–Z

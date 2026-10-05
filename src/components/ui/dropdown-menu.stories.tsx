@@ -90,6 +90,7 @@ function DemoMenu({ open, onOpenChange, side = 'bottom', align = 'start', modal 
 
 const meta = preview.meta({
   title: 'Components/Dropdown Menu',
+  tags: ['ui-component'],
   component: DemoMenu,
   parameters: {
     layout: 'centered',

@@ -29,6 +29,7 @@ function Demo({
 
 const meta = preview.meta({
   title: 'Agent Builder/Core Kit/Input/Follow-up Suggestions',
+  tags: ['agent-block'],
   component: Demo,
   parameters: {
     layout: 'padded',

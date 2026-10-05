@@ -52,6 +52,7 @@ function DemoHoverCard({ open, onOpenChange, side = 'bottom', openDelay = 700 }:
 
 const meta = preview.meta({
   title: 'Components/Hover Card',
+  tags: ['ui-component'],
   component: DemoHoverCard,
   parameters: {
     layout: 'centered',

@@ -12,6 +12,7 @@ const CONFIDENCES = ['high', 'medium', 'low', undefined] as const
 
 const meta = preview.meta({
   title: 'Agent Builder/Core Kit/Sources/Citation Chip',
+  tags: ['agent-primitive'],
   component: CitationChip,
   parameters: {
     layout: 'centered',
