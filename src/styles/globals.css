@@ -118,6 +118,42 @@
   }
 }
 
+/* Mic button listening rings: grow and fade out, staggered; steady rings under reduced motion. */
+@utility animate-mic-ring {
+  animation: mic-ring 1.6s var(--ease-out) infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@keyframes mic-ring {
+  from {
+    scale: 0.8;
+    opacity: 1;
+  }
+  to {
+    scale: 1.1;
+    opacity: 0;
+  }
+}
+
+/* Voice waveform: each bar breathes between its Figma frame heights. */
+@utility animate-waveform {
+  animation: waveform 0.9s var(--ease-in-out) infinite alternate;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@keyframes waveform {
+  from {
+    scale: 1 0.35;
+  }
+  to {
+    scale: 1 1;
+  }
+}
+
 /* Fades the start and end of a horizontal scroller (attachment group). */
 @utility scroll-fade-x {
   mask-image: linear-gradient(
