@@ -1,0 +1,71 @@
+import preview from '#.storybook/preview'
+import { expect } from 'storybook/test'
+
+import { Button } from './button'
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from './empty'
+import { Icon, InboxIcon, PlusIcon } from './icon'
+
+const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=1623-6410'
+
+type DemoProps = {
+  /** Figma media: a plain 48px icon, or the shadcn icon tile. */
+  media?: 'default' | 'icon'
+  /** Figma `show link`. */
+  link?: boolean
+  bordered?: boolean
+}
+
+function DemoEmpty({ media = 'default', link = false, bordered = false }: DemoProps) {
+  return (
+    <Empty className={bordered ? 'w-120 border' : 'w-120'}>
+      <EmptyHeader>
+        <EmptyMedia variant={media}>
+          <Icon icon={InboxIcon} />
+        </EmptyMedia>
+        <EmptyTitle>Title</EmptyTitle>
+        <EmptyDescription>Subtitle</EmptyDescription>
+      </EmptyHeader>
+      <EmptyContent>
+        <Button variant="default" intent="neutral">
+          <Icon icon={PlusIcon} />
+          Label
+        </Button>
+        {link && (
+          <a
+            href="#more"
+            className="rounded-sm type-text-xs-link text-foreground-link outline-none focus-visible:focus-ring"
+          >
+            Label
+          </a>
+        )}
+      </EmptyContent>
+    </Empty>
+  )
+}
+
+const meta = preview.meta({
+  title: 'Components/Empty',
+  component: DemoEmpty,
+  parameters: {
+    layout: 'centered',
+    design: { type: 'figma', url: FIGMA },
+    docs: {
+      description: {
+        component:
+          'A placeholder for empty lists and zero-data views (shadcn/ui Empty): `EmptyMedia` (icon or illustration), `EmptyHeader` with `EmptyTitle` and `EmptyDescription`, and `EmptyContent` for actions. Say what is empty and what to do next.',
+      },
+    },
+  },
+  args: { media: 'default', link: false, bordered: false },
+  argTypes: { media: { control: 'inline-radio', options: ['default', 'icon'] } },
+})
+
+export const Default = meta.story()
+
+Default.test('title, description and the next action', async ({ canvas }) => {
+  await expect(canvas.getByText('Title')).toBeVisible()
+  await expect(canvas.getByRole('button', { name: 'Label' })).toBeEnabled()
+})
+
+/** shadcn EmptyMedia variant="icon", a dashed outline and the optional link. */
+export const IconTile = meta.story({ args: { media: 'icon', bordered: true, link: true } })

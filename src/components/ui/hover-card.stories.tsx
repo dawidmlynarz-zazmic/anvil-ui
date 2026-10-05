@@ -38,7 +38,7 @@ function DemoHoverCard({ open, onOpenChange, side = 'bottom', openDelay = 700 }:
       <HoverCardTrigger asChild>
         <a
           href="#source"
-          className="rounded-xs type-text-sm-link text-foreground-link outline-none focus-visible:focus-ring"
+          className="rounded-sm type-text-sm-link text-foreground-link outline-none focus-visible:focus-ring"
         >
           Label
         </a>
