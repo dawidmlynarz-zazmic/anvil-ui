@@ -45,7 +45,7 @@ function BreadcrumbLink({
     <Comp
       data-slot="breadcrumb-link"
       className={cn(
-        'rounded-xs underline-offset-4 outline-none hover:underline focus-visible:focus-ring',
+        'rounded-sm underline-offset-4 outline-none hover:underline focus-visible:focus-ring',
         className,
       )}
       {...props}
