@@ -48,6 +48,7 @@ src/components/
   ui/                  shadcn primitives, restyled to the API Contract
   anvil/               Anvil compositions: shell parts, status badge, choice card, stepper
   agent/               Agent Builder components (later phase)
+src/hooks/             shadcn hooks (use-mobile for Sidebar)
 src/lib/utils.ts       cn()
 stories/               Welcome (landing page; welcome/catalog.ts lists every area and component)
 stories/foundations/   Colors, Typography, Spacing, Radius, Elevation (MDX, generated from tokens)
