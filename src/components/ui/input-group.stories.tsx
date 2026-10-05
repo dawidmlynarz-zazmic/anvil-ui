@@ -31,7 +31,7 @@ function Search({ size }: { size?: 'sm' | 'default' | 'lg' }) {
 }
 
 const meta = preview.meta({
-  title: 'Components/Input Group',
+  title: 'UI Components/Input Group',
   tags: ['ui-component'],
   component: InputGroup,
   parameters: {

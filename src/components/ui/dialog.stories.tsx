@@ -76,7 +76,7 @@ function DemoDialog({
 }
 
 const meta = preview.meta({
-  title: 'Components/Dialog',
+  title: 'UI Components/Dialog',
   tags: ['ui-component'],
   component: DemoDialog,
   parameters: {

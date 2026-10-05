@@ -9,7 +9,7 @@ import { Message, MessageContent, MessageGroup } from './message'
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10663-3597'
 
 const meta = preview.meta({
-  title: 'Agent Builder/Primitives/Marker',
+  title: 'Agent Primitives/Messages/Marker',
   tags: ['agent-primitive'],
   component: Marker,
   parameters: {

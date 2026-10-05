@@ -9,7 +9,7 @@ const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=1066
 const TONES = ['neutral', 'brand', 'info', 'success', 'warning', 'destructive', 'agent'] as const
 
 const meta = preview.meta({
-  title: 'Components/Spinner',
+  title: 'UI Components/Spinner',
   tags: ['ui-component'],
   component: Spinner,
   parameters: {

@@ -43,7 +43,7 @@ function DemoDatePicker({ open, onOpenChange, withValue = false, id }: DemoProps
 }
 
 const meta = preview.meta({
-  title: 'Components/Date Picker',
+  title: 'UI Components/Date Picker',
   tags: ['ui-component'],
   component: DemoDatePicker,
   parameters: {

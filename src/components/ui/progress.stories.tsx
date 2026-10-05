@@ -8,7 +8,7 @@ const tones = ['brand', 'agent', 'success', 'warning', 'destructive', 'neutral']
 const sizes = ['sm', 'default', 'lg'] as const
 
 const meta = preview.meta({
-  title: 'Components/Progress',
+  title: 'UI Components/Progress',
   tags: ['ui-component'],
   component: Progress,
   parameters: {

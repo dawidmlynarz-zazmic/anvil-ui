@@ -121,7 +121,7 @@ function Example({ onApprove, onDeny, ...props }: ExampleProps) {
 }
 
 const meta = preview.meta({
-  title: 'Agent Builder/Core Kit/System & Context/Approval Card',
+  title: 'Agent Blocks/System & Context/Approval Card',
   tags: ['agent-block'],
   component: Example,
   parameters: {

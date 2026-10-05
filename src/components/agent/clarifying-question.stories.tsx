@@ -8,7 +8,7 @@ const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=1073
 const OPTIONS = [1, 2, 3, 4].map((i) => ({ value: `label-${i}`, label: `Label ${i}` }))
 
 const meta = preview.meta({
-  title: 'Agent Builder/Core Kit/Input/Clarifying Question',
+  title: 'Agent Blocks/Input/Clarifying Question',
   tags: ['agent-block'],
   component: ClarifyingQuestion,
   parameters: {

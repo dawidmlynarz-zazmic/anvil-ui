@@ -134,7 +134,7 @@ function DemoField({
 }
 
 const meta = preview.meta({
-  title: 'Components/Field',
+  title: 'UI Components/Field',
   tags: ['ui-component'],
   component: DemoField,
   parameters: {

@@ -9,7 +9,7 @@ const variants = ['default', 'outline'] as const
 const sizes = ['sm', 'default', 'lg'] as const
 
 const meta = preview.meta({
-  title: 'Components/Toggle',
+  title: 'UI Components/Toggle',
   tags: ['ui-component'],
   component: Toggle,
   parameters: {

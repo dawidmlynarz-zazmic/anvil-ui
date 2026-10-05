@@ -10,7 +10,7 @@ import { MessageBranch, MessageEditor } from './message-edit'
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10728-2229'
 
 const meta = preview.meta({
-  title: 'Agent Builder/Core Kit/Messages/Message Edit',
+  title: 'Agent Blocks/Messages/Message Edit',
   tags: ['agent-block'],
   component: MessageEditor,
   parameters: {

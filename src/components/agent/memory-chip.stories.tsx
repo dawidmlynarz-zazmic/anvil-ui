@@ -16,7 +16,7 @@ const manage = (
 )
 
 const meta = preview.meta({
-  title: 'Agent Builder/Core Kit/System & Context/Memory Chip',
+  title: 'Agent Primitives/System & Context/Memory Chip',
   tags: ['agent-primitive'],
   component: MemoryChip,
   parameters: {

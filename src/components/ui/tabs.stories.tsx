@@ -63,7 +63,7 @@ function DemoTabs({
 }
 
 const meta = preview.meta({
-  title: 'Components/Tabs',
+  title: 'UI Components/Tabs',
   tags: ['ui-component'],
   component: DemoTabs,
   parameters: {

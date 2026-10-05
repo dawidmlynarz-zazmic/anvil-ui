@@ -6,7 +6,7 @@ import { TextShimmer } from './text-shimmer'
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10734-2762'
 
 const meta = preview.meta({
-  title: 'Agent Builder/Core Kit/Agent States/Text Shimmer',
+  title: 'Agent Primitives/Agent States/Text Shimmer',
   tags: ['agent-primitive'],
   component: TextShimmer,
   parameters: {

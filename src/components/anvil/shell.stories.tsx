@@ -15,8 +15,8 @@ const FIGMA_HEADER = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-
 const FIGMA_FOOTER = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10960-260'
 
 const meta = preview.meta({
-  title: 'Custom Components/Shell',
-  tags: ['ui-component'],
+  title: 'UI Components/Shell',
+  tags: ['ui-component', 'anvil-custom'],
   component: ShellHeader,
   parameters: {
     layout: 'padded',
