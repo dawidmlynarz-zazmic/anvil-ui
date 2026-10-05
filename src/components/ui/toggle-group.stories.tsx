@@ -6,9 +6,9 @@ import { ToggleGroup, ToggleGroupItem } from './toggle-group'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10943-220'
 const ITEMS = [
-  { value: '1', icon: BoldIcon, label: 'Label 1' },
-  { value: '2', icon: ItalicIcon, label: 'Label 2' },
-  { value: '3', icon: UnderlineIcon, label: 'Label 3' },
+  { value: '1', icon: BoldIcon, label: 'Bold' },
+  { value: '2', icon: ItalicIcon, label: 'Italic' },
+  { value: '3', icon: UnderlineIcon, label: 'Underline' },
 ]
 
 type DemoProps = {
@@ -70,13 +70,13 @@ Default.test('single: one item pressed; arrow keys move focus', async ({ canvas 
   await expect(second).toBeChecked()
   await expect(first).not.toBeChecked()
   await userEvent.keyboard('{ArrowRight}')
-  await expect(canvas.getByRole('radio', { name: 'Label 3' })).toHaveFocus()
+  await expect(canvas.getByRole('radio', { name: 'Underline' })).toHaveFocus()
 })
 
 Default.test('multiple: items press independently', { args: { type: 'multiple' } }, async ({ canvas }) => {
-  await userEvent.click(canvas.getByRole('button', { name: 'Label 2' }))
-  await expect(canvas.getByRole('button', { name: 'Label 1' })).toHaveAttribute('aria-pressed', 'true')
-  await expect(canvas.getByRole('button', { name: 'Label 2' })).toHaveAttribute('aria-pressed', 'true')
+  await userEvent.click(canvas.getByRole('button', { name: 'Italic' }))
+  await expect(canvas.getByRole('button', { name: 'Bold' })).toHaveAttribute('aria-pressed', 'true')
+  await expect(canvas.getByRole('button', { name: 'Italic' })).toHaveAttribute('aria-pressed', 'true')
 })
 
 /** Figma variant=default (4px apart) · outline (joined). */

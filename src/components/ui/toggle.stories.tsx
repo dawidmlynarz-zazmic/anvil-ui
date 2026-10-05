@@ -26,7 +26,7 @@ const meta = preview.meta({
     size: 'default',
     defaultPressed: false,
     disabled: false,
-    'aria-label': 'Label',
+    'aria-label': 'Bold',
     onPressedChange: fn(),
     children: <Icon icon={BoldIcon} />,
   },
@@ -41,7 +41,7 @@ const meta = preview.meta({
 export const Default = meta.story()
 
 Default.test('click and Space toggle it', async ({ canvas, args }) => {
-  const toggle = canvas.getByRole('button', { name: 'Label' })
+  const toggle = canvas.getByRole('button', { name: 'Bold' })
   await expect(toggle).toHaveAttribute('aria-pressed', 'false')
   await userEvent.click(toggle)
   await expect(toggle).toHaveAttribute('aria-pressed', 'true')
@@ -51,7 +51,7 @@ Default.test('click and Space toggle it', async ({ canvas, args }) => {
 })
 
 Default.test('disabled', { args: { disabled: true } }, async ({ canvas }) => {
-  await expect(canvas.getByRole('button', { name: 'Label' })).toBeDisabled()
+  await expect(canvas.getByRole('button', { name: 'Bold' })).toBeDisabled()
 })
 
 /** Figma variant × size × pressed × state (reference sheet; use the State control on Default for one). */
@@ -72,7 +72,7 @@ export const States = meta.story({
                   size={size}
                   defaultPressed={pressed}
                   disabled={state === 'disabled'}
-                  aria-label="Label"
+                  aria-label="Bold"
                   className={state === 'hover' || state === 'focus-visible' ? `pseudo-${state}` : undefined}
                 >
                   <Icon icon={BoldIcon} />
@@ -90,13 +90,13 @@ export const States = meta.story({
 export const WithText = meta.story({
   render: () => (
     <div className="flex gap-2">
-      <Toggle aria-label="Label">
+      <Toggle aria-label="Italic">
         <Icon icon={ItalicIcon} />
-        Label
+        Italic
       </Toggle>
       <Toggle variant="outline" defaultPressed>
         <Icon icon={ItalicIcon} />
-        Label
+        Italic
       </Toggle>
     </div>
   ),

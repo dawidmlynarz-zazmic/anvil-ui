@@ -248,9 +248,13 @@ Lucide    → Icon (@/components/ui/icon) → every component and story
      pass `open` / `onOpenChange` to the Root. Default is closed; stories that open on load
      prevent Radix's initial focus (`onOpenAutoFocus={(e) => e.preventDefault()}`). Query
      `within(canvasElement.ownerDocument.body)` in tests; `parameters.docs.story.inline = false`.
-   Copy is plain and context-agnostic: "Title", "Subtitle" (descriptions, hints, errors),
-   "Label" (labels, buttons, options; "Label 1", "Label 2" when several), "Placeholder" /
-   "Value" in inputs. Realistic examples belong in the examples playground (roadmap Step 5).
+   Copy: **content** is plain and context-agnostic: "Title", "Subtitle" (descriptions, hints,
+   errors), "Label" (field labels, options, tabs, nav items, isolated variant grids; "Label 1",
+   "Label 2" when several), "Placeholder" / "Value" in inputs. **Actions** used in an example
+   say what they do: triggers "Open dialog", footers "Cancel" + "Save" / "Continue" / "Delete",
+   forms "Submit", menu and command items generic commands ("Edit", "Duplicate", "Delete"),
+   icon buttons name the icon's action. Domain-specific examples belong in the examples
+   playground (roadmap Step 5).
 5. Compare against the Figma screenshot in light and dark; fix differences or note them.
 6. Run `pnpm typecheck && pnpm lint && pnpm test-storybook`.
 7. Update `docs/component-status.md` (component · Figma node · status · notes).

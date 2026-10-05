@@ -14,7 +14,7 @@ import {
   CommandSeparator,
   CommandShortcut,
 } from './command'
-import { FolderIcon, FolderPlusIcon, Icon, SettingsIcon } from './icon'
+import { ArchiveIcon, FilePlusIcon, Icon, LinkIcon, SettingsIcon } from './icon'
 import { Kbd } from './kbd'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10942-147'
@@ -24,25 +24,25 @@ function Items() {
     <>
       <CommandGroup heading="Title">
         <CommandItem>
-          <Icon icon={FolderPlusIcon} />
-          Label 1<CommandShortcut>⌘N</CommandShortcut>
+          <Icon icon={FilePlusIcon} />
+          New file<CommandShortcut>⌘N</CommandShortcut>
         </CommandItem>
         <CommandItem>
-          <Icon icon={FolderIcon} />
-          Label 2
+          <Icon icon={LinkIcon} />
+          Copy link
         </CommandItem>
         <CommandItem disabled>
-          <Icon icon={FolderIcon} />
-          Label 3
+          <Icon icon={ArchiveIcon} />
+          Archive
         </CommandItem>
       </CommandGroup>
       <CommandSeparator />
       <CommandGroup heading="Title">
         <CommandItem>
           <Icon icon={SettingsIcon} />
-          Label 4
+          Settings
         </CommandItem>
-        <CommandItem>Label 5</CommandItem>
+        <CommandItem>Log out</CommandItem>
       </CommandGroup>
     </>
   )
@@ -91,7 +91,7 @@ function DemoPalette({ open = false, onOpenChange }: PaletteProps) {
   return (
     <>
       <Button variant="outline" intent="neutral" onClick={() => onOpenChange?.(true)}>
-        Label <Kbd>⌘K</Kbd>
+        Open command palette <Kbd>⌘K</Kbd>
       </Button>
       <CommandDialog open={open} onOpenChange={onOpenChange} title="Title" description="Subtitle">
         <CommandInput placeholder="Placeholder" />
@@ -139,9 +139,9 @@ export const Default = meta.story()
 
 Default.test('typing filters and highlights the match', async ({ canvas }) => {
   const input = canvas.getByRole('combobox')
-  await userEvent.type(input, 'Label 4')
+  await userEvent.type(input, 'Settings')
   await waitFor(() => expect(canvas.getAllByRole('option')).toHaveLength(1))
-  await expect(canvas.getByRole('option', { name: 'Label 4' })).toHaveAttribute('data-selected', 'true')
+  await expect(canvas.getByRole('option', { name: 'Settings' })).toHaveAttribute('data-selected', 'true')
 })
 
 /** Figma empty=true: a query with no results. */

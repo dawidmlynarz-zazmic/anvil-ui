@@ -38,8 +38,8 @@ function show({
     toasterId: TOASTER,
     duration,
     description: variant === 'extended' ? description : undefined,
-    action: action ? { label: 'Label', onClick: () => onAction?.() } : undefined,
-    cancel: cancel ? { label: 'Label', onClick: () => {} } : undefined,
+    action: action ? { label: 'Undo', onClick: () => onAction?.() } : undefined,
+    cancel: cancel ? { label: 'Dismiss', onClick: () => {} } : undefined,
   }
   if (tone === 'success') return toast.success(message, options)
   if (tone === 'destructive') return toast.error(message, options)
@@ -58,7 +58,7 @@ function DemoToast({ theme, ...props }: DemoProps) {
   return (
     <>
       <Button variant="outline" intent="neutral" onClick={() => show(props)}>
-        Label
+        Show toast
       </Button>
       <StoryToaster theme={theme} />
     </>
@@ -97,7 +97,7 @@ const meta = preview.meta({
       story: { inline: false, height: '420px' },
       description: {
         component:
-          'Transient feedback (shadcn/ui Sonner): call `toast()`, `toast.success()` or `toast.error()`; `<Toaster />` is mounted once in the app. Figma `tone` is the toast type (neutral · success · destructive); Figma `variant` follows the content: a message only is compact (solid surface), a message with a `description` is extended (card with cancel + action). Swipe, the close button or the action dismisses it.',
+          'Transient feedback (shadcn/ui Sonner): call `toast()`, `toast.success()` or `toast.error()`; `<Toaster />` is mounted once in the app. Figma `tone` is the toast type (neutral · success · destructive); Figma `variant` follows the content: a message only is compact (solid surface), a message with a `description` is extended (card with Dismiss + Undo). Swipe, the close button or the action dismisses it.',
       },
     },
   },
@@ -133,17 +133,17 @@ export const Default = meta.story()
 Default.test(
   'the trigger shows a toast; its action runs and dismisses it',
   async ({ canvas, canvasElement, args }) => {
-    await userEvent.click(canvas.getByRole('button', { name: 'Label' }))
+    await userEvent.click(canvas.getByRole('button', { name: 'Show toast' }))
     const message = await body(canvasElement).findByText('Title')
     const toastElement = message.closest('[data-sonner-toast]') as HTMLElement
-    await userEvent.click(within(toastElement).getByRole('button', { name: 'Label' }))
+    await userEvent.click(within(toastElement).getByRole('button', { name: 'Undo' }))
     await expect(args.onAction).toHaveBeenCalledTimes(1)
     await waitFor(() => expect(body(canvasElement).queryByText('Title')).toBeNull())
   },
 )
 
 Default.test('the close button dismisses it', async ({ canvas, canvasElement }) => {
-  await userEvent.click(canvas.getByRole('button', { name: 'Label' }))
+  await userEvent.click(canvas.getByRole('button', { name: 'Show toast' }))
   const toastElement = (await body(canvasElement).findByText('Title')).closest(
     '[data-sonner-toast]',
   ) as HTMLElement
@@ -175,5 +175,6 @@ export const Extended = meta.story({
 Extended.test('shows title, description, cancel and action', async ({ canvasElement }) => {
   await waitFor(() => expect(body(canvasElement).getAllByText('Subtitle')).toHaveLength(3))
   const first = body(canvasElement).getAllByText('Subtitle')[0].closest('[data-sonner-toast]') as HTMLElement
-  await expect(within(first).getAllByRole('button', { name: 'Label' })).toHaveLength(2)
+  await expect(within(first).getByRole('button', { name: 'Dismiss' })).toBeInTheDocument()
+  await expect(within(first).getByRole('button', { name: 'Undo' })).toBeInTheDocument()
 })

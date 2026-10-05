@@ -16,7 +16,7 @@ import {
   ContextMenuSubTrigger,
   ContextMenuTrigger,
 } from './context-menu'
-import { CopyIcon, Icon, PencilIcon, ShareIcon, Trash2Icon } from './icon'
+import { ArchiveIcon, CopyIcon, Icon, PencilIcon, ShareIcon, Trash2Icon } from './icon'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10951-40097'
 
@@ -29,43 +29,44 @@ function DemoContextMenu({ modal = true, onSelect }: DemoProps) {
   return (
     <ContextMenu modal={modal}>
       <ContextMenuTrigger className="flex h-40 w-72 items-center justify-center rounded-lg border border-dashed border-border-strong type-text-sm-normal text-muted-foreground">
-        Label
+        Right-click here
       </ContextMenuTrigger>
       <ContextMenuContent>
         <ContextMenuItem onSelect={onSelect}>
           <Icon icon={PencilIcon} />
-          Label 1<ContextMenuShortcut>⌘E</ContextMenuShortcut>
+          Edit<ContextMenuShortcut>⌘E</ContextMenuShortcut>
         </ContextMenuItem>
         <ContextMenuItem>
           <Icon icon={CopyIcon} />
-          Label 2
+          Duplicate<ContextMenuShortcut>⌘D</ContextMenuShortcut>
         </ContextMenuItem>
         <ContextMenuItem disabled>
-          <Icon icon={CopyIcon} />
-          Label 3
+          <Icon icon={ArchiveIcon} />
+          Archive
         </ContextMenuItem>
         <ContextMenuSeparator />
         <ContextMenuSub>
           <ContextMenuSubTrigger>
             <Icon icon={ShareIcon} />
-            Label 4
+            Share
           </ContextMenuSubTrigger>
           <ContextMenuSubContent>
-            <ContextMenuItem>Label 5</ContextMenuItem>
-            <ContextMenuItem>Label 6</ContextMenuItem>
+            <ContextMenuItem>Email</ContextMenuItem>
+            <ContextMenuItem>Message</ContextMenuItem>
+            <ContextMenuItem>Copy link</ContextMenuItem>
           </ContextMenuSubContent>
         </ContextMenuSub>
         <ContextMenuSeparator />
         <ContextMenuLabel>Title</ContextMenuLabel>
         <ContextMenuRadioGroup value="1">
-          <ContextMenuRadioItem value="1">Label 7</ContextMenuRadioItem>
-          <ContextMenuRadioItem value="2">Label 8</ContextMenuRadioItem>
+          <ContextMenuRadioItem value="1">Top</ContextMenuRadioItem>
+          <ContextMenuRadioItem value="2">Bottom</ContextMenuRadioItem>
         </ContextMenuRadioGroup>
-        <ContextMenuCheckboxItem checked>Label 9</ContextMenuCheckboxItem>
+        <ContextMenuCheckboxItem checked>Show toolbar</ContextMenuCheckboxItem>
         <ContextMenuSeparator />
         <ContextMenuItem intent="destructive">
           <Icon icon={Trash2Icon} />
-          Label 10
+          Delete<ContextMenuShortcut>⌫</ContextMenuShortcut>
         </ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>
@@ -96,22 +97,22 @@ const body = (canvasElement: HTMLElement) => within(canvasElement.ownerDocument.
 export const Default = meta.story()
 
 Default.test('right-click opens it; an item runs and closes it', async ({ canvas, canvasElement, args }) => {
-  await userEvent.pointer({ keys: '[MouseRight]', target: canvas.getByText('Label') })
+  await userEvent.pointer({ keys: '[MouseRight]', target: canvas.getByText('Right-click here') })
   const menu = await body(canvasElement).findByRole('menu')
-  await expect(within(menu).getByRole('menuitem', { name: /^Label 3/ })).toHaveAttribute('data-disabled')
-  await expect(within(menu).getByRole('menuitemradio', { name: 'Label 7' })).toBeChecked()
-  await expect(within(menu).getByRole('menuitemcheckbox', { name: 'Label 9' })).toBeChecked()
-  await userEvent.click(within(menu).getByRole('menuitem', { name: /^Label 1(?!0)/ }))
+  await expect(within(menu).getByRole('menuitem', { name: 'Archive' })).toHaveAttribute('data-disabled')
+  await expect(within(menu).getByRole('menuitemradio', { name: 'Top' })).toBeChecked()
+  await expect(within(menu).getByRole('menuitemcheckbox', { name: 'Show toolbar' })).toBeChecked()
+  await userEvent.click(within(menu).getByRole('menuitem', { name: /^Edit/ }))
   await expect(args.onSelect).toHaveBeenCalledTimes(1)
   await waitFor(() => expect(body(canvasElement).queryByRole('menu')).toBeNull())
 })
 
 Default.test('arrow keys open the submenu; Escape closes', async ({ canvas, canvasElement }) => {
-  await userEvent.pointer({ keys: '[MouseRight]', target: canvas.getByText('Label') })
+  await userEvent.pointer({ keys: '[MouseRight]', target: canvas.getByText('Right-click here') })
   const menu = await body(canvasElement).findByRole('menu')
-  within(menu).getByRole('menuitem', { name: 'Label 4' }).focus()
+  within(menu).getByRole('menuitem', { name: 'Share' }).focus()
   await userEvent.keyboard('{ArrowRight}')
-  const subItem = await body(canvasElement).findByRole('menuitem', { name: 'Label 5' })
+  const subItem = await body(canvasElement).findByRole('menuitem', { name: 'Email' })
   await waitFor(() => expect(subItem).toBeVisible())
   await userEvent.keyboard('{Escape}')
   await userEvent.keyboard('{Escape}')

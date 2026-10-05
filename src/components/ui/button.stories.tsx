@@ -136,7 +136,7 @@ export const Sizes = meta.story({
       </Surface>
       <Surface>
         {iconSizes.map((size) => (
-          <Button key={size} size={size} aria-label="Label">
+          <Button key={size} size={size} aria-label="Add">
             <Icon icon={PlusIcon} />
           </Button>
         ))}
@@ -153,10 +153,10 @@ export const Shapes = meta.story({
       <Button variant="outline" intent="neutral" shape="pill">
         Label
       </Button>
-      <Button size="icon" shape="circle" aria-label="Label">
+      <Button size="icon" shape="circle" aria-label="Add">
         <Icon icon={PlusIcon} />
       </Button>
-      <Button size="icon" variant="outline" intent="neutral" shape="circle" aria-label="Label">
+      <Button size="icon" variant="outline" intent="neutral" shape="circle" aria-label="Next">
         <Icon icon={ChevronRightIcon} />
       </Button>
     </Surface>
@@ -216,19 +216,19 @@ export const WithIcons = meta.story({
     <Surface>
       <Button>
         <Icon icon={ChevronLeftIcon} />
-        Label
+        Back
       </Button>
       <Button variant="outline" intent="neutral">
-        Label
+        Next
         <Icon icon={ArrowRightIcon} />
       </Button>
       <Button variant="ghost" intent="brand">
         <Icon icon={SparklesIcon} />
-        Label
+        Generate
       </Button>
       <Button intent="destructive">
         <Icon icon={Trash2Icon} />
-        Label
+        Delete
       </Button>
     </Surface>
   ),
@@ -244,7 +244,7 @@ export const IconButtons = meta.story({
           <Label>{intent}</Label>
           <Surface intent={intent}>
             {variants.map((variant) => (
-              <Button key={variant} size="icon" variant={variant} intent={intent} aria-label="Label">
+              <Button key={variant} size="icon" variant={variant} intent={intent} aria-label="Add">
                 <Icon icon={PlusIcon} />
               </Button>
             ))}
@@ -261,13 +261,13 @@ export const Composition = meta.story({
     <div className="flex w-full max-w-md flex-col gap-4">
       <div className="flex items-center justify-end gap-2 rounded-lg border border-border p-4">
         <Button variant="ghost" intent="neutral">
-          Label
+          Cancel
         </Button>
-        <Button>Label</Button>
+        <Button>Save</Button>
       </div>
       <Button asChild variant="outline" intent="brand">
         <a href="#docs">
-          Label
+          Learn more
           <Icon icon={ArrowRightIcon} />
         </a>
       </Button>
@@ -276,6 +276,6 @@ export const Composition = meta.story({
 })
 
 Composition.test('asChild renders a link styled as a button', async ({ canvasElement }) => {
-  const link = within(canvasElement).getByRole('link', { name: 'Label' })
+  const link = within(canvasElement).getByRole('link', { name: 'Learn more' })
   await expect(link).toHaveAttribute('data-slot', 'button')
 })

@@ -43,7 +43,7 @@ function DemoDrawer({
     <Drawer open={open} onOpenChange={onOpenChange} direction={direction}>
       <DrawerTrigger asChild>
         <Button variant="outline" intent="neutral">
-          Label
+          Open drawer
         </Button>
       </DrawerTrigger>
       <DrawerContent
@@ -62,10 +62,10 @@ function DemoDrawer({
         <DrawerFooter align={align}>
           <DrawerClose asChild>
             <Button size="sm" variant="outline" intent="neutral">
-              Label
+              Cancel
             </Button>
           </DrawerClose>
-          <Button size="sm">Label</Button>
+          <Button size="sm">Save</Button>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
@@ -114,7 +114,7 @@ export const Default = meta.story()
 Default.test(
   'trigger opens, Escape closes and focus stays on the trigger',
   async ({ canvas, canvasElement }) => {
-    const trigger = canvas.getByRole('button', { name: 'Label' })
+    const trigger = canvas.getByRole('button', { name: 'Open drawer' })
     await userEvent.click(trigger)
     const drawer = await body(canvasElement).findByRole('dialog', { name: 'Title' })
     await expect(drawer).toHaveAccessibleDescription('Subtitle')
@@ -126,7 +126,7 @@ Default.test(
 )
 
 Default.test('the header close button closes it', async ({ canvas, canvasElement }) => {
-  await userEvent.click(canvas.getByRole('button', { name: 'Label' }))
+  await userEvent.click(canvas.getByRole('button', { name: 'Open drawer' }))
   const drawer = await body(canvasElement).findByRole('dialog', { name: 'Title' })
   await userEvent.click(within(drawer).getByRole('button', { name: 'Close' }))
   await waitFor(() => expect(body(canvasElement).queryByRole('dialog')).toBeNull())

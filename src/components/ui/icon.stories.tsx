@@ -124,13 +124,13 @@ export const InComponents = meta.story({
     <div className="flex items-center gap-3">
       <Button size="xs">
         <Icon icon={PlusIcon} />
-        Label
+        Add
       </Button>
       <Button size="sm">
         <Icon icon={PlusIcon} />
-        Label
+        Add
       </Button>
-      <Button size="icon" variant="outline" intent="neutral" aria-label="Label">
+      <Button size="icon" variant="outline" intent="neutral" aria-label="Settings">
         <Icon icon={SettingsIcon} />
       </Button>
     </div>

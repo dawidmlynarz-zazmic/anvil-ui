@@ -31,7 +31,7 @@ function DemoBreadcrumb({ back = false, avatar = true, levels = 2, current = tru
       <BreadcrumbList>
         {back && (
           <BreadcrumbItem>
-            <Button size="icon-xs" variant="ghost" intent="neutral" aria-label="Label">
+            <Button size="icon-xs" variant="ghost" intent="neutral" aria-label="Back">
               <Icon icon={ChevronLeftIcon} />
             </Button>
           </BreadcrumbItem>
