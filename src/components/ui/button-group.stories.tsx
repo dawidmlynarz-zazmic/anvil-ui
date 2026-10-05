@@ -37,10 +37,11 @@ const meta = preview.meta({
   component: DemoButtonGroup,
   parameters: {
     layout: 'centered',
+    design: { type: 'figma', url: 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=11160-516' },
     docs: {
       description: {
         component:
-          'Joins related Buttons, Inputs and Selects into one control (shadcn/ui Button Group): inner corners square and neighbouring strokes shared. Not drawn in Figma as its own component — it composes the drawn Button and Input. Use `ButtonGroupSeparator` between solid buttons, `ButtonGroupText` for a label segment, and nest groups to space them 8px apart. Use Toggle Group when the buttons are on/off states.',
+          'Joins related Buttons, Inputs and Selects into one control (shadcn/ui Button Group; Figma Button page › button group, orientation horizontal · vertical): inner corners square and neighbouring strokes shared. Use `ButtonGroupSeparator` between solid buttons, `ButtonGroupText` for a label segment, and nest groups to space them 8px apart. Use Toggle Group when the buttons are on/off states.',
       },
     },
   },
