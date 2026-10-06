@@ -40,7 +40,7 @@ function Example({ onConnect, ...props }: ExampleProps) {
               </Button>
             }
           >
-            Subtitle
+            Connecting to Drive…
           </ActionStatus>
         ) : (
           <ShellFooter variant="card">
@@ -75,16 +75,16 @@ function Example({ onConnect, ...props }: ExampleProps) {
     >
       {status === 'suggest' && (
         <>
-          <ConnectorCardPermission>Label 1</ConnectorCardPermission>
-          <ConnectorCardPermission>Label 2</ConnectorCardPermission>
-          <ConnectorCardPermission>Label 3</ConnectorCardPermission>
+          <ConnectorCardPermission>Read files you choose</ConnectorCardPermission>
+          <ConnectorCardPermission>Create documents</ConnectorCardPermission>
+          <ConnectorCardPermission>Never deletes or shares files</ConnectorCardPermission>
         </>
       )}
       {status === 'connected' && (
         <>
-          <ConnectorCardItem meta="Subtitle">Label 1</ConnectorCardItem>
-          <ConnectorCardItem meta="Subtitle">Label 2</ConnectorCardItem>
-          <ConnectorCardItem meta="Subtitle">Label 3</ConnectorCardItem>
+          <ConnectorCardItem meta="Edited today">q3-launch-plan.pdf</ConnectorCardItem>
+          <ConnectorCardItem meta="Edited yesterday">launch-deck.pptx</ConnectorCardItem>
+          <ConnectorCardItem meta="Edited Mon">pricing-research.xlsx</ConnectorCardItem>
         </>
       )}
     </ConnectorCard>
@@ -105,6 +105,28 @@ const meta = preview.meta({
         code: '`status` prop',
       },
     ],
+    guide: {
+      use: [
+        'When the agent needs an app it can’t reach yet: suggest the connection in the thread, right where it’s needed.',
+        'List what the connection allows in `ConnectorCardPermission` rows before the user connects.',
+        'Keep the card after connecting: `status` connected shows the first results as `ConnectorCardItem` rows; reconnect asks again when access expired.',
+      ],
+      avoid: [
+        'Approving a single action with side effects (sending, paying, deleting): use Approval Card.',
+        'Managing all connected apps: that belongs in settings, not in the thread.',
+        'A missing permission the user can’t fix here: explain it with Alert instead.',
+      ],
+      content: [
+        'Title: the verb and the app (“Connect Drive”). Description: why the agent needs it, in one sentence.',
+        'Permissions: plain capabilities (“Read files you choose”, “Create documents”); include what it never does.',
+        'Buttons: Connect, Reconnect or Continue; Not now to dismiss without connecting.',
+      ],
+      a11y: [
+        'The card is an `article` named by its title; the status badge says the state in text.',
+        'While connecting, Action Status is `role="status"`, so progress and the outcome are announced.',
+        'The app icon is decorative; the title names the app.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -112,7 +134,12 @@ const meta = preview.meta({
       },
     },
   },
-  args: { status: 'suggest' as const, title: 'Title', description: 'Subtitle', onConnect: fn() },
+  args: {
+    status: 'suggest' as const,
+    title: 'Connect Drive',
+    description: 'I need Drive to read the Q3 launch plan and save the deck there.',
+    onConnect: fn(),
+  },
   argTypes: {
     status: { control: 'inline-radio', options: STATUSES },
     title: { control: 'text' },
@@ -128,7 +155,7 @@ const meta = preview.meta({
 export const Default = meta.story()
 
 Default.test('connect calls back', async ({ args, canvas }) => {
-  await expect(canvas.getByRole('article', { name: 'Title' })).toHaveTextContent('Not connected')
+  await expect(canvas.getByRole('article', { name: 'Connect Drive' })).toHaveTextContent('Not connected')
   await userEvent.click(canvas.getByRole('button', { name: 'Connect' }))
   await expect(args.onConnect).toHaveBeenCalledOnce()
 })

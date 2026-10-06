@@ -33,6 +33,23 @@ const meta = preview.meta({
         code: '`confidence` prop (omit for none)',
       },
     ],
+    guide: {
+      use: [
+        'Inline, right after the claim it supports, to open its source (Citation Hovercard or Citation Drawer).',
+        '`active` for the source currently shown in the drawer; `confidence` when it is known.',
+      ],
+      avoid: [
+        'A list of sources: use Source Card or Citation Source Item. Tags or filters: use Chip or Badge.',
+      ],
+      content: [
+        'The index matches the order of the sources list; the domain is short (“marketpulse.example”).',
+        'Show confidence only when the model reports it; omit it otherwise.',
+      ],
+      a11y: [
+        'A button named by its source and confidence (“Source 1 High confidence”); Enter opens it.',
+        'The confidence dot is part of the name, so it is not color only.',
+      ],
+    },
     docs: {
       description: {
         component:

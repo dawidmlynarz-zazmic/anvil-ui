@@ -8,6 +8,13 @@ import { ToolLogLine } from './tool-log-line'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10735-2892'
 
+/** web_search through its lifecycle. */
+const LABEL = {
+  running: 'Searching the web…',
+  done: 'Searched 6 sites · 4.2s',
+  failed: 'Couldn’t reach the web. Try again.',
+} as const
+
 function Demo({
   status = 'running',
   onDetails,
@@ -33,7 +40,7 @@ function Demo({
         ) : undefined
       }
     >
-      Subtitle
+      {LABEL[status]}
     </ToolLogLine>
   )
 }
@@ -46,6 +53,25 @@ const meta = preview.meta({
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [{ property: 'status', values: 'running · done · failed', code: '`status` prop' }],
+    guide: {
+      use: [
+        'A one-line status for each tool the agent runs inside an answer: “Searching the web…”, “Read q3-launch-plan.pdf”.',
+        'Quick, low-stakes steps where the user only needs to know what happened; Details opens more when done, Retry when failed.',
+      ],
+      avoid: [
+        'Tool calls the user may want to inspect (inputs, outputs, timing): use Tool Call Item. Several steps grouped under one summary: use Tool Call Accordion.',
+        'Actions with side effects the user approved: use Action Status on the Approval Card.',
+      ],
+      content: [
+        'Running: a present participle with an ellipsis (“Searching the web…”). Done: past tense with the result (“Searched 6 sites · 4.2s”).',
+        'Name the object, not the tool id: “Read q3-launch-plan.pdf”, not “read_file”. Failures say what to do next.',
+      ],
+      a11y: [
+        'The status icon is decorative: the label must say the state in words (“Searching…”, “Searched…”, “Couldn’t…”), never color alone.',
+        'Put the lines in a live region (or announce completion in the message) so screen readers hear progress; the shimmer is decorative.',
+        'Details and Retry are real buttons with visible labels.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -70,6 +96,7 @@ export const Statuses = meta.story({
     <div className="flex flex-col gap-2">
       <Demo status="running" />
       <Demo status="done" />
+      <ToolLogLine status="done">Read q3-launch-plan.pdf</ToolLogLine>
       <Demo status="failed" />
     </div>
   ),

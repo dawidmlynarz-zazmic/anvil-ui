@@ -17,6 +17,25 @@ const meta = preview.meta({
       { property: 'nps · scale', values: '0–10', code: '`scale="numbers"` `min={0}` `max={10}`' },
       { property: 'labels', values: 'text', code: '`lowLabel`, `highLabel` (numbers)' },
     ],
+    guide: {
+      use: [
+        'Asking for a score after an answer or a session: stars or faces for a quick rating, `numbers` 1–5 for CSAT, 0–10 for NPS.',
+        'Inside the Rating and NPS feedback blocks, which add the question, the follow-up and Submit.',
+      ],
+      avoid: [
+        'A one-tap verdict on a single answer: use the Good / Bad response buttons in Message Actions.',
+        'Choosing between named options: use Radio Group or Choice Card. A value on a continuous range: use Slider.',
+      ],
+      content: [
+        'End labels say what the extremes mean (“Not helpful” · “Very helpful”), not just numbers.',
+        'Ask one specific question in the group’s name: “How helpful was this answer?”.',
+      ],
+      a11y: [
+        'A radio group (Toggle Group, single): one Tab stop, arrow keys move between scores, each score is a named radio.',
+        'Always pass `aria-label` (or `aria-labelledby` to the visible question).',
+        'Stars and faces have text names, and the selected score is shown by more than color.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -28,9 +47,9 @@ const meta = preview.meta({
     scale: 'numbers' as const,
     min: 1,
     max: 5,
-    lowLabel: 'Subtitle',
-    highLabel: 'Subtitle',
-    'aria-label': 'Label',
+    lowLabel: 'Not helpful',
+    highLabel: 'Very helpful',
+    'aria-label': 'How helpful was this answer?',
     onValueChange: fn(),
   },
   argTypes: {
@@ -62,16 +81,20 @@ Default.test('picks one score', async ({ canvas, args }) => {
 export const Scales = meta.story({
   render: () => (
     <div className="flex w-120 flex-col gap-6">
-      <RatingScale scale="stars" aria-label="Label 1" defaultValue={3} />
-      <RatingScale scale="faces" aria-label="Label 2" />
-      <RatingScale aria-label="Label 3" lowLabel="Subtitle" highLabel="Subtitle" />
+      <RatingScale scale="stars" aria-label="Rate this answer" defaultValue={3} />
+      <RatingScale scale="faces" aria-label="How was your session?" />
       <RatingScale
-        aria-label="Label 4"
+        aria-label="How satisfied are you with Assistant?"
+        lowLabel="Very unsatisfied"
+        highLabel="Very satisfied"
+      />
+      <RatingScale
+        aria-label="How likely are you to recommend Assistant to a colleague?"
         min={0}
         max={10}
         defaultValue={9}
-        lowLabel="Subtitle"
-        highLabel="Subtitle"
+        lowLabel="Not likely"
+        highLabel="Extremely likely"
       />
     </div>
   ),

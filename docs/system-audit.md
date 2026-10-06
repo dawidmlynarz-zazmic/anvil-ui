@@ -234,3 +234,10 @@ context live in each story's tags and title, and the relationships come from the
    Rating comment, Clarifying Question flow).
 6. Figma alignment.
 7. Final consistency pass.
+
+## 8. Open findings (from the content pass)
+
+- **Memory Manager**: each row's Edit and Delete icon buttons share one accessible name; name
+  them after the memory (e.g. "Edit “Prefers concise answers…”"). Fix in the final pass.
+- **Message Edit**: the editor doesn't move focus into the textarea when editing starts.
+- No **Chart** or **Code Block** component yet: guides that need one say so instead of linking.

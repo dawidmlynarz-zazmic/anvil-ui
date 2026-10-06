@@ -25,6 +25,24 @@ const meta = preview.meta({
       },
       { property: 'checked', values: 'true · false', code: '`checked` / `defaultChecked` prop' },
     ],
+    guide: {
+      use: [
+        'A setting that takes effect immediately: notifications, memory, a connected tool.',
+        '`size="sm"` in dense lists; a horizontal Field when the setting needs a description.',
+      ],
+      avoid: [
+        'A choice saved later with a form: use Checkbox. A formatting state in a toolbar: use Toggle.',
+        'One option out of several: use Radio Group.',
+      ],
+      content: [
+        'The label names the setting (“Email notifications”), not the action (“Turn on”).',
+        'The description says what “on” does; the label never changes with the state.',
+      ],
+      a11y: [
+        'It is a `switch`: pair it with a `Label htmlFor`; Space toggles it.',
+        'Put a description in the Field so it is linked to the control.',
+      ],
+    },
     docs: {
       description: {
         component:

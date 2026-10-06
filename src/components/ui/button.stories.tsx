@@ -92,6 +92,26 @@ const meta = preview.meta({
         code: 'an `<Icon>` child (+ `aria-label` on the Button)',
       },
     ],
+    guide: {
+      use: [
+        'For any action: submitting, confirming, opening a layer, starting a task. One `intent="brand"` (primary) button per view or footer.',
+        'Icon-only buttons (`size="icon*"`) for compact, well-known actions in toolbars and message rows; always pass `aria-label`.',
+        '`loading` while the action runs (it keeps the width and disables the button).',
+      ],
+      avoid: [
+        'Navigation to another page: use Link. On/off states: use Toggle or Switch.',
+        'Several primary buttons side by side: keep one brand button; the others outline or ghost.',
+      ],
+      content: [
+        'A verb that says what happens: “Save changes”, “Send”, “Delete”, not “OK” or “Yes”.',
+        'Sentence case, no trailing punctuation; a leading icon only when it adds meaning.',
+      ],
+      a11y: [
+        'A real `<button>` (or `asChild` link): Enter and Space activate it; focus shows the focus ring.',
+        'Icon-only buttons need `aria-label`; toggles add `aria-pressed`.',
+        'Disabled buttons drop out of the tab order; prefer explaining why an action is unavailable.',
+      ],
+    },
     docs: {
       description: {
         component:

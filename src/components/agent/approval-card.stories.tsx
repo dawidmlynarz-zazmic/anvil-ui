@@ -42,16 +42,16 @@ function Footer({
       )
     case 'approved':
       return (
-        <ShellFooter variant="card" note="Subtitle">
+        <ShellFooter variant="card" note="You approved this email · 10:42">
           <Button variant="ghost" intent="neutral" size="sm">
             <Icon icon={ExternalLinkIcon} />
-            Open
+            Open in Mail
           </Button>
         </ShellFooter>
       )
     case 'denied':
       return (
-        <ShellFooter variant="card" note="Subtitle">
+        <ShellFooter variant="card" note="You denied this email. Nothing was sent.">
           <Button variant="ghost" intent="neutral" size="sm">
             <Icon icon={PencilIcon} />
             Edit and retry
@@ -69,7 +69,7 @@ function Footer({
             </Button>
           }
         >
-          Subtitle
+          Sending to 24 recipients…
         </ActionStatus>
       )
     case 'failed':
@@ -83,7 +83,7 @@ function Footer({
             </Button>
           }
         >
-          Subtitle
+          Couldn’t send: Mail disconnected
         </ActionStatus>
       )
     case 'expired':
@@ -96,7 +96,7 @@ function Footer({
             </Button>
           }
         >
-          Subtitle
+          This request expired after 24 hours
         </ActionStatus>
       )
   }
@@ -112,9 +112,9 @@ type ExampleProps = React.ComponentProps<typeof ApprovalCard> & {
 function Example({ onApprove, onDeny, ...props }: ExampleProps) {
   return (
     <ApprovalCard {...props} footer={<Footer status={props.status} onApprove={onApprove} onDeny={onDeny} />}>
-      <ApprovalCardField label="Label 1">Value</ApprovalCardField>
-      <ApprovalCardField label="Label 2">Value</ApprovalCardField>
-      <ApprovalCardField label="Label 3">Value</ApprovalCardField>
+      <ApprovalCardField label="To">Northwind Sync beta list (24)</ApprovalCardField>
+      <ApprovalCardField label="Subject">Your Northwind Sync beta invite</ApprovalCardField>
+      <ApprovalCardField label="Send">Today at 14:00 PT</ApprovalCardField>
     </ApprovalCard>
   )
 }
@@ -135,6 +135,28 @@ const meta = preview.meta({
       { property: 'title', values: 'text', code: '`title` prop' },
       { property: 'action', values: 'text', code: '`subtitle` prop' },
     ],
+    guide: {
+      use: [
+        'Before the agent does something with side effects the user can’t easily undo: sending, paying, deleting, booking, sharing.',
+        'Show exactly what will happen in `ApprovalCardField` rows (recipient, amount, date) so the user approves the details, not the intent.',
+        'Keep the card in the thread after the decision: the footer becomes the outcome (approved note, or the Action Status strip while it runs).',
+      ],
+      avoid: [
+        'Read-only or reversible actions (searching, drafting, summarizing): let the agent act and offer Undo instead.',
+        'Connecting an app: use Connector Card. Asking a question with options: use Clarifying Question.',
+        'Blocking the whole page: this is an inline card, not a dialog; use Alert Dialog only for the user’s own destructive actions.',
+      ],
+      content: [
+        'Title: the action as a verb phrase (“Send the beta invite email”). Subtitle: where and how (“Mail · send_email”).',
+        '`note`: the consequence in one sentence, only when it matters (“It can’t be unsent.”).',
+        'Buttons: Approve and Deny; Edit when the user can change the details first.',
+      ],
+      a11y: [
+        'The card is an `article` named by its title; the status badge repeats the state in text.',
+        'Action Status is `role="status"`, so executing, failed and expired are announced.',
+        'Denied and expired details use `--muted-foreground` instead of opacity to keep 4.5:1 contrast.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -144,9 +166,9 @@ const meta = preview.meta({
   },
   args: {
     status: 'pending' as const,
-    title: 'Title',
-    subtitle: 'Subtitle',
-    note: 'Subtitle',
+    title: 'Send the beta invite email',
+    subtitle: 'Mail · send_email',
+    note: 'This sends a real email to 24 people. It can’t be unsent.',
     onApprove: fn(),
     onDeny: fn(),
   },
@@ -165,9 +187,9 @@ const meta = preview.meta({
       {...args}
       footer={<Footer status={args.status ?? 'pending'} onApprove={onApprove} onDeny={onDeny} />}
     >
-      <ApprovalCardField label="Label 1">Value</ApprovalCardField>
-      <ApprovalCardField label="Label 2">Value</ApprovalCardField>
-      <ApprovalCardField label="Label 3">Value</ApprovalCardField>
+      <ApprovalCardField label="To">Northwind Sync beta list (24)</ApprovalCardField>
+      <ApprovalCardField label="Subject">Your Northwind Sync beta invite</ApprovalCardField>
+      <ApprovalCardField label="Send">Today at 14:00 PT</ApprovalCardField>
     </ApprovalCard>
   ),
 })

@@ -29,6 +29,26 @@ const meta = preview.meta({
       },
       { property: 'message row · message text', values: 'text', code: '`MessageBubbleContent` children' },
     ],
+    guide: {
+      use: [
+        'The surface of one chat message: `muted` for the user, `ghost` (plain text) for the assistant.',
+        '`MessageBubbleGroup` for consecutive messages from the same sender.',
+        '`aria-invalid` on `MessageBubbleContent` for a message that failed to send.',
+      ],
+      avoid: [
+        'A whole message with avatar, actions and status: use Message or Message Row.',
+        'System events (joined, files shared, a new day): use Marker. Rich results: use Card or a widget.',
+      ],
+      content: [
+        'The message text itself, nothing else; actions go in Message Actions below it.',
+        'A failed send keeps the text and says what to do next (“Not sent. Retry”) next to the bubble.',
+      ],
+      a11y: [
+        'Plain content: keep the reading order of the thread (sender, message, actions).',
+        '`asChild` turns the content into a button or link when the whole bubble is clickable.',
+        'The danger border of a failed send is not enough: say it in text too.',
+      ],
+    },
     docs: {
       description: {
         component:

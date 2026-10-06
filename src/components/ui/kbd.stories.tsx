@@ -18,6 +18,24 @@ const meta = preview.meta({
     design: { type: 'figma', url: FIGMA },
     // Figma: badge/shortcut has no component properties (the key text is the children).
     figmaProps: [],
+    guide: {
+      use: [
+        'Show the shortcut for a command in a menu item, Command list, search field or tooltip.',
+        '`KbdGroup` for a key combination; one `Kbd` per key.',
+      ],
+      avoid: [
+        'Something people press on screen: use Button. A count or status: use Badge.',
+        'Inline code or a value: use Code Block or a `<code>` element.',
+      ],
+      content: [
+        'Key names as printed on the keyboard: “Ctrl”, “Shift”, “Enter”, “K”; the ⌘ icon for Mac.',
+        'Only show shortcuts that actually work on the current platform.',
+      ],
+      a11y: [
+        'Renders `<kbd>`; an icon key (⌘) is decorative, so add `sr-only` text (“Command”) when it matters.',
+        'A shortcut is never the only way to reach a command: keep a visible control for it.',
+      ],
+    },
     docs: {
       description: {
         component:

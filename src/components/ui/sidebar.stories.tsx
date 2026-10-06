@@ -82,8 +82,12 @@ function Header({ workspace = false }: { workspace?: boolean }) {
                 <Icon icon={workspace ? FolderIcon : BotIcon} />
               </span>
               <span className="flex min-w-0 flex-1 flex-col">
-                <span className="truncate type-text-sm-semibold text-sidebar-foreground">Title</span>
-                <span className="truncate type-text-xs-normal text-muted-foreground">Subtitle</span>
+                <span className="truncate type-text-sm-semibold text-sidebar-foreground">
+                  {workspace ? 'Northwind Labs' : 'Assistant'}
+                </span>
+                <span className="truncate type-text-xs-normal text-muted-foreground">
+                  {workspace ? 'Q3 launch workspace' : 'Northwind Labs'}
+                </span>
               </span>
               {workspace && <Icon icon={ChevronsUpDownIcon} className="text-muted-foreground" />}
             </div>
@@ -100,13 +104,13 @@ function Footer() {
     <SidebarFooter>
       <SidebarMenu>
         <SidebarMenuItem>
-          <SidebarMenuButton size="lg" className="h-11.5" tooltip="Label">
+          <SidebarMenuButton size="lg" className="h-11.5" tooltip="Maya Chen">
             <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-warning-soft type-text-xs-medium text-warning-strong">
-              L
+              MC
             </span>
             <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-              <span className="truncate type-text-sm-medium">Label</span>
-              <span className="truncate type-text-xs-normal text-muted-foreground">Subtitle</span>
+              <span className="truncate type-text-sm-medium">Maya Chen</span>
+              <span className="truncate type-text-xs-normal text-muted-foreground">Product lead</span>
             </span>
             <Icon icon={ChevronsUpDownIcon} />
           </SidebarMenuButton>
@@ -280,23 +284,23 @@ function PresetContent({ preset }: { preset: Preset }) {
     return (
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Title 1</SidebarGroupLabel>
+          <SidebarGroupLabel>Build</SidebarGroupLabel>
           <SidebarMenu>
-            <NavItem icon={HouseIcon} label="Label 1" />
+            <NavItem icon={HouseIcon} label="Home" />
             <NavSection
               icon={WrenchIcon}
-              label="Label 2"
-              items={['Label 3', 'Label 4', 'Label 5']}
+              label="Capabilities"
+              items={['Connected apps', 'Tools', 'Memory']}
               defaultOpen
             />
           </SidebarMenu>
         </SidebarGroup>
         <SidebarGroup>
-          <SidebarGroupLabel>Title 2</SidebarGroupLabel>
+          <SidebarGroupLabel>Admin</SidebarGroupLabel>
           <SidebarMenu>
-            <NavSection icon={ShieldCheckIcon} label="Label 6" items={['Label 7', 'Label 8']} />
-            <NavItem icon={BookOpenIcon} label="Label 9" badge="3" />
-            <NavItem icon={SettingsIcon} label="Label 10" />
+            <NavSection icon={ShieldCheckIcon} label="Security" items={['Permissions', 'Audit log']} />
+            <NavItem icon={BookOpenIcon} label="Knowledge base" badge="3" />
+            <NavItem icon={SettingsIcon} label="Settings" />
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
@@ -306,23 +310,23 @@ function PresetContent({ preset }: { preset: Preset }) {
     return (
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Title 1</SidebarGroupLabel>
+          <SidebarGroupLabel>Running tasks</SidebarGroupLabel>
           <SidebarMenu>
-            <Conversation title="Label 1" meta="2h" status="running" active />
-            <Conversation title="Label 2" meta="3h" status="needs input" />
+            <Conversation title="Competitor pricing research" meta="2h" status="running" active />
+            <Conversation title="Onboarding email draft" meta="3h" status="needs input" />
           </SidebarMenu>
         </SidebarGroup>
         <SidebarGroup>
-          <SidebarGroupLabel>Title 2</SidebarGroupLabel>
-          <SidebarGroupAction aria-label="Add">
+          <SidebarGroupLabel>Knowledge</SidebarGroupLabel>
+          <SidebarGroupAction aria-label="Add folder">
             <Icon icon={PlusIcon} />
           </SidebarGroupAction>
           <SidebarMenu>
-            <TreeItem label="Label 3" count={12} defaultOpen>
-              <TreeItem label="Label 4" count={4} />
-              <TreeItem label="Label 5" count={8} />
+            <TreeItem label="Q3 launch" count={12} defaultOpen>
+              <TreeItem label="Research" count={4} />
+              <TreeItem label="Launch assets" count={8} />
             </TreeItem>
-            <TreeItem label="Label 6" count={3} />
+            <TreeItem label="Weekly metrics" count={3} />
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
@@ -332,26 +336,26 @@ function PresetContent({ preset }: { preset: Preset }) {
     <SidebarContent>
       <SidebarGroup>
         <SidebarMenu>
-          <NavItem icon={SquarePenIcon} label="Label 1" />
-          <NavItem icon={MessageSquareIcon} label="Label 2" />
+          <NavItem icon={SquarePenIcon} label="New chat" />
+          <NavItem icon={MessageSquareIcon} label="All conversations" />
         </SidebarMenu>
       </SidebarGroup>
       <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-        <SidebarGroupLabel>Title 1</SidebarGroupLabel>
+        <SidebarGroupLabel>Today</SidebarGroupLabel>
         <SidebarMenu>
-          <Conversation title="Label 3" meta="2h" status="pinned" />
-          <Conversation title="Label 4" meta="2h" status="running" active />
-          <Conversation title="Label 5" meta="5h" />
+          <Conversation title="Weekly metrics review" meta="1h" status="pinned" />
+          <Conversation title="Q3 launch plan" meta="2h" status="running" active />
+          <Conversation title="Competitor pricing research" meta="5h" />
         </SidebarMenu>
       </SidebarGroup>
       <SidebarGroup className="group-data-[collapsible=icon]:hidden">
         <SidebarGroupLabel>
-          Title 2
+          Last week
           <Icon icon={ChevronDownIcon} className="ml-auto" />
         </SidebarGroupLabel>
         <SidebarMenu>
-          <Conversation title="Label 6" meta="1d" status="needs input" />
-          <Conversation title="Label 7" meta="1d" />
+          <Conversation title="Onboarding email draft" meta="4d" status="needs input" />
+          <Conversation title="Beta feedback summary" meta="6d" />
         </SidebarMenu>
       </SidebarGroup>
     </SidebarContent>
@@ -377,9 +381,9 @@ function DemoSidebar({
       <SidebarInset>
         <header className="flex h-12 items-center gap-2 border-b border-border px-3">
           <SidebarTrigger />
-          <span className="type-text-sm-medium">Title</span>
+          <span className="type-text-sm-medium">Q3 launch plan</span>
         </header>
-        <div className="p-4 type-text-sm-normal text-muted-foreground">Subtitle</div>
+        <div className="p-4 type-text-sm-normal text-muted-foreground">The conversation appears here.</div>
       </SidebarInset>
     </SidebarProvider>
   )
@@ -438,6 +442,26 @@ const meta = preview.meta({
         code: 'selectors: `hover:` · `data-[active=true]` (`isActive` prop) · `focus-visible:` (not a prop)',
       },
     ],
+    guide: {
+      use: [
+        'The app’s persistent navigation: new chat, recent conversations, projects and the user menu.',
+        '`collapsible="icon"` for a rail that keeps icons (with tooltips) when collapsed; below 768px it becomes a sheet automatically.',
+        'Group conversations by time (“Today”, “Last week”) and mark status (running, needs input, pinned) beside the title.',
+      ],
+      avoid: [
+        'A temporary side panel for a task (sources, settings): use Sheet. Switching views inside a page: use Tabs.',
+        'Hundreds of items to search: add Command (⌘K) rather than a longer list.',
+      ],
+      content: [
+        'Conversation titles are short and specific (“Q3 launch plan”), with a relative time (“2h”) as meta.',
+        'Group labels are plain nouns (“Today”, “Knowledge”); the footer shows the user (“Maya Chen”, “Product lead”).',
+      ],
+      a11y: [
+        'Items are links; mark the current one with `isActive` and `aria-current="page"`.',
+        'Status dots have a text name (`role="img"` + `aria-label` “Running”, “Needs input”), not only color.',
+        '⌘B and `SidebarTrigger` toggle it; icon-only items keep their name via `tooltip` and the visible label for screen readers.',
+      ],
+    },
     docs: {
       story: { inline: false, height: '660px' },
       description: {
@@ -480,7 +504,7 @@ Default.test(
 )
 
 Default.test('the active conversation is the current page; its actions are reachable', async ({ canvas }) => {
-  await expect(canvas.getByRole('link', { name: /Label 4/ })).toHaveAttribute('aria-current', 'page')
+  await expect(canvas.getByRole('link', { name: /Q3 launch plan/ })).toHaveAttribute('aria-current', 'page')
   const actions = canvas.getAllByRole('button', { name: 'More actions' })
   await expect(actions.length).toBeGreaterThan(0)
 })
@@ -492,11 +516,13 @@ export const IconRail = meta.story({ args: { open: false } })
 export const Platform = meta.story({ args: { preset: 'platform' } })
 
 Platform.test('a section expands to its sub items', async ({ canvas }) => {
-  const section = canvas.getByRole('button', { name: 'Label 6' })
+  const section = canvas.getByRole('button', { name: 'Security' })
   await expect(section).toHaveAttribute('aria-expanded', 'false')
   await userEvent.click(section)
-  await expect(canvas.getByRole('link', { name: 'Label 7' })).toBeVisible()
-  await expect(within(canvas.getByRole('link', { name: 'Label 3' })).getByText('Label 3')).toBeInTheDocument()
+  await expect(canvas.getByRole('link', { name: 'Permissions' })).toBeVisible()
+  await expect(
+    within(canvas.getByRole('link', { name: 'Connected apps' })).getByText('Connected apps'),
+  ).toBeInTheDocument()
 })
 
 /** Figma preset=agent workspace: switcher, live tasks and a knowledge tree. */

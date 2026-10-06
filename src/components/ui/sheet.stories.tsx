@@ -82,6 +82,25 @@ const meta = preview.meta({
       { property: 'content', values: 'slot', code: '`SheetBody` children' },
       { property: 'side', values: 'right · left · top · bottom', code: '`side` prop on `SheetContent`' },
     ],
+    guide: {
+      use: [
+        'Secondary tasks that keep the page in view: filters, conversation settings, source details, memory.',
+        'Panels the user opens and closes repeatedly while working in the thread.',
+      ],
+      avoid: [
+        'A focused task that should block the page: use Dialog. Destructive confirmations: use Alert Dialog.',
+        'Below 768px: use Drawer. Persistent navigation: use Sidebar.',
+      ],
+      content: [
+        'Title names the panel (“Conversation settings”, “Sources”); the description is optional.',
+        'Footer actions say what they do (“Apply filters”, “Save”); omit the footer for read-only panels.',
+      ],
+      a11y: [
+        'Built on Radix Dialog: focus trap, Escape and outside click close it, focus returns to the trigger.',
+        'The close button is last in the DOM so initial focus lands on the first control.',
+        'Always render `SheetTitle`, even when hidden visually.',
+      ],
+    },
     docs: {
       story: { inline: false, height: '560px' },
       description: {

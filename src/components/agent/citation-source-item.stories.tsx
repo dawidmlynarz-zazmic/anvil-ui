@@ -7,6 +7,28 @@ const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=1066
 
 const SCORES = { high: '92%', medium: '64%', low: '31%' } as const
 
+/** Sources the assistant cited for “Compare competitor pricing for Northwind Sync”. */
+const SOURCES = [
+  {
+    title: 'SaaS pricing benchmarks 2026',
+    domain: 'marketpulse.example',
+    path: '/reports/saas-pricing',
+    snippet: 'The median per-seat price for team sync tools rose 6% this year, to $9 per user per month.',
+  },
+  {
+    title: 'How teams share files: developer survey',
+    domain: 'devsurvey.example',
+    path: '/2026/file-sync',
+    snippet: '61% of teams pay for a sync tool; most pick a plan by seat count, not storage.',
+  },
+  {
+    title: 'What we learned in the Northwind Sync beta',
+    domain: 'northwind.example',
+    path: '/blog/sync-beta',
+    snippet: 'Beta teams asked for a free tier for up to 3 people.',
+  },
+]
+
 const meta = preview.meta({
   title: 'Molecules/Citation Source Item',
   tags: ['molecule', 'sources'],
@@ -31,6 +53,26 @@ const meta = preview.meta({
         code: '`confidence` + `score` props (omit for none)',
       },
     ],
+    guide: {
+      use: [
+        'One row in the citation drawer or Sources panel: the numbered source the answer cites, with domain, path and an optional snippet.',
+        '`active` for the source selected from an inline citation; `href` when the row opens the page instead.',
+        '`confidence` + `score` when the agent rates how well the source supports the claim.',
+      ],
+      avoid: [
+        'The inline marker inside answer text: use Citation Chip (with Citation Hovercard for a preview). A file the user attached: use Attachment.',
+        'A compact list of sites the agent visited: use Tool Log Line (“Searched 6 sites”).',
+      ],
+      content: [
+        'Title is the page title as published; domain is the bare host (“marketpulse.example”); path is short (“/reports/saas-pricing”).',
+        'The snippet is the exact passage that supports the answer, one or two lines.',
+      ],
+      a11y: [
+        'A button with `aria-pressed` (selected) or a link with `aria-current`; its name starts with “Source 1” so the index is read.',
+        'Confidence is read as text (“High confidence: 92%”), not only shown by color; no score reads “No confidence score”.',
+        'Long titles and URLs wrap or truncate inside the column; never rely on hover to show them.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -40,10 +82,7 @@ const meta = preview.meta({
   },
   args: {
     index: 1,
-    title: 'Title',
-    domain: 'Label',
-    path: '/label/value',
-    snippet: 'Subtitle',
+    ...SOURCES[0],
     confidence: 'high' as const,
     score: '92%',
     active: false,
@@ -72,7 +111,7 @@ const meta = preview.meta({
 export const Default = meta.story()
 
 Default.test('is a toggle button named by its source', async ({ canvas, args }) => {
-  const item = canvas.getByRole('button', { name: /Source 1 Title/ })
+  const item = canvas.getByRole('button', { name: /Source 1 SaaS pricing benchmarks/ })
   await expect(item).toHaveAttribute('aria-pressed', 'false')
   await userEvent.click(item)
   await expect(args.onClick).toHaveBeenCalledOnce()
@@ -87,10 +126,7 @@ export const Variants = meta.story({
           const item = (
             <CitationSourceItem
               index={1}
-              title="Title"
-              domain="Label"
-              path="/label/value"
-              snippet="Subtitle"
+              {...SOURCES[0]}
               confidence={confidence}
               score={confidence && SCORES[confidence]}
               active={state === 'selected'}
@@ -117,9 +153,9 @@ export const List = meta.story({
         <li key={i}>
           <CitationSourceItem
             index={i}
-            title="Title"
-            domain="Label"
-            path="/label/value"
+            title={SOURCES[i - 1].title}
+            domain={SOURCES[i - 1].domain}
+            path={SOURCES[i - 1].path}
             confidence={(['high', 'medium', 'low'] as const)[i - 1]}
             score={Object.values(SCORES)[i - 1]}
             active={i === 1}
@@ -134,7 +170,10 @@ export const List = meta.story({
 export const AsLink = meta.story({ args: { href: '#source-1', active: true } })
 
 AsLink.test('a link marked current', async ({ canvas }) => {
-  await expect(canvas.getByRole('link', { name: /Source 1 Title/ })).toHaveAttribute('aria-current', 'true')
+  await expect(canvas.getByRole('link', { name: /Source 1 SaaS pricing benchmarks/ })).toHaveAttribute(
+    'aria-current',
+    'true',
+  )
 })
 
 const LONG =

@@ -37,6 +37,24 @@ const meta = preview.meta({
         code: 'selectors: `hover:` · `disabled:` · `focus-visible:` (not a prop)',
       },
     ],
+    guide: {
+      use: [
+        'One choice from two to five options that people should compare side by side.',
+        'Options that need a description each (`aria-describedby` on the item).',
+      ],
+      avoid: [
+        'Many options or a long list: use Select or Combobox. Independent choices: use Checkbox.',
+        'Rich options with icons or details: use Choice Card. Switching a view at once: use Tabs or Toggle Group.',
+      ],
+      content: [
+        'The legend names the decision; options are short, parallel and in a logical order.',
+        'Preselect the safest or most common option when there is one.',
+      ],
+      a11y: [
+        'Name the group with a FieldSet + FieldLegend (or `aria-label`); each item has a `Label htmlFor`.',
+        'Tab enters the group at the checked item; arrow keys move and select.',
+      ],
+    },
     docs: {
       description: {
         component:

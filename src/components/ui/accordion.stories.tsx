@@ -9,7 +9,20 @@ import { ChevronsUpDownIcon, Icon } from './icon'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10946-92'
 const FIGMA_ITEM = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10946-91'
-const ITEMS = ['Label 1', 'Label 2', 'Label 3']
+const ITEMS = [
+  {
+    title: 'What can the assistant access?',
+    body: 'Only the apps you connect in Settings: Calendar, Drive and Mail for this workspace.',
+  },
+  {
+    title: 'How is my data used?',
+    body: 'Your files and messages answer your requests. They are not used to train models.',
+  },
+  {
+    title: 'Can I undo an action?',
+    body: 'Drafts and edits can be undone. Sent emails and deleted files can’t, so I ask first.',
+  },
+]
 
 type DemoProps = {
   /** Radix `type`: one item open at a time, or several. */
@@ -20,10 +33,10 @@ type DemoProps = {
 }
 
 function DemoAccordion({ type = 'single', collapsible = true, disabledItem = false }: DemoProps) {
-  const items = ITEMS.map((label, i) => (
-    <AccordionItem key={label} value={String(i + 1)} disabled={disabledItem && i === ITEMS.length - 1}>
-      <AccordionTrigger>{label}</AccordionTrigger>
-      <AccordionContent>Subtitle {i + 1}</AccordionContent>
+  const items = ITEMS.map(({ title, body }, i) => (
+    <AccordionItem key={title} value={String(i + 1)} disabled={disabledItem && i === ITEMS.length - 1}>
+      <AccordionTrigger>{title}</AccordionTrigger>
+      <AccordionContent>{body}</AccordionContent>
     </AccordionItem>
   ))
   return type === 'multiple' ? (
@@ -60,6 +73,27 @@ const meta = preview.meta({
         code: 'selectors: `hover:` · `focus-visible:` (not a prop)',
       },
     ],
+    guide: {
+      use: [
+        'Long, scannable content where people need one or two sections at a time: FAQs, settings help, grouped tool details.',
+        '`type="multiple"` when sections are independent and people compare them; `single` when only one matters at a time.',
+        'A single expandable section (e.g. “3 sources used”) is Collapsible, not a one-item Accordion.',
+      ],
+      avoid: [
+        'Switching between peer views of the same object: use Tabs.',
+        'Content people must read to proceed (warnings, required fields): keep it visible or use Alert.',
+        'Navigation menus: use Sidebar or Dropdown Menu.',
+      ],
+      content: [
+        'Triggers are short questions or nouns that predict the content (“How is my data used?”).',
+        'Keep each panel to a few sentences; link out for anything longer.',
+      ],
+      a11y: [
+        'Triggers are buttons with `aria-expanded`; Enter and Space toggle, arrow keys move between triggers.',
+        'Don’t hide the only copy of critical information in a closed section.',
+        'Collapsible icon-only triggers need an `aria-label` that says what they reveal.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -78,8 +112,8 @@ const meta = preview.meta({
 export const Default = meta.story()
 
 Default.test('one item open at a time; Enter toggles', async ({ canvas }) => {
-  const first = canvas.getByRole('button', { name: 'Label 1' })
-  const second = canvas.getByRole('button', { name: 'Label 2' })
+  const first = canvas.getByRole('button', { name: ITEMS[0].title })
+  const second = canvas.getByRole('button', { name: ITEMS[1].title })
   await expect(first).toHaveAttribute('aria-expanded', 'true')
   await userEvent.click(second)
   await expect(second).toHaveAttribute('aria-expanded', 'true')
@@ -89,18 +123,18 @@ Default.test('one item open at a time; Enter toggles', async ({ canvas }) => {
 })
 
 Default.test('arrow keys move between triggers', async ({ canvas }) => {
-  canvas.getByRole('button', { name: 'Label 1' }).focus()
+  canvas.getByRole('button', { name: ITEMS[0].title }).focus()
   await userEvent.keyboard('{ArrowDown}')
-  await expect(canvas.getByRole('button', { name: 'Label 2' })).toHaveFocus()
+  await expect(canvas.getByRole('button', { name: ITEMS[1].title })).toHaveFocus()
 })
 
 /** type="multiple": several items open at once. */
 export const Multiple = meta.story({ args: { type: 'multiple' } })
 
 Multiple.test('opening one keeps the others open', async ({ canvas }) => {
-  await userEvent.click(canvas.getByRole('button', { name: 'Label 2' }))
-  await expect(canvas.getByRole('button', { name: 'Label 1' })).toHaveAttribute('aria-expanded', 'true')
-  await expect(canvas.getByRole('button', { name: 'Label 2' })).toHaveAttribute('aria-expanded', 'true')
+  await userEvent.click(canvas.getByRole('button', { name: ITEMS[1].title }))
+  await expect(canvas.getByRole('button', { name: ITEMS[0].title })).toHaveAttribute('aria-expanded', 'true')
+  await expect(canvas.getByRole('button', { name: ITEMS[1].title })).toHaveAttribute('aria-expanded', 'true')
 })
 
 /** Figma accordion item: open × default · hover · focus (reference; use the State control on Default). */
@@ -113,9 +147,9 @@ export const ItemStates = meta.story({
           <Accordion key={`${open}-${state}`} type="single" collapsible defaultValue={open}>
             <AccordionItem value="1">
               <AccordionTrigger className={state === 'default' ? undefined : `pseudo-${state}`}>
-                Label {open ? i + 4 : i + 1}
+                {ITEMS[i].title}
               </AccordionTrigger>
-              <AccordionContent>Subtitle</AccordionContent>
+              <AccordionContent>{ITEMS[i].body}</AccordionContent>
             </AccordionItem>
           </Accordion>
         )),
@@ -133,17 +167,23 @@ export const CollapsibleSection = meta.story({
       return (
         <Collapsible open={open} onOpenChange={setOpen} className="flex w-80 flex-col gap-2">
           <div className="flex items-center justify-between gap-4">
-            <span className="type-text-sm-medium">Title</span>
+            <span className="type-text-sm-medium">3 sources used</span>
             <CollapsibleTrigger asChild>
-              <Button size="icon-sm" variant="ghost" intent="neutral" aria-label="Toggle">
+              <Button size="icon-sm" variant="ghost" intent="neutral" aria-label="Show all sources">
                 <Icon icon={ChevronsUpDownIcon} />
               </Button>
             </CollapsibleTrigger>
           </div>
-          <div className="rounded-md border border-border px-4 py-2 type-text-sm-normal">Value 1</div>
+          <div className="rounded-md border border-border px-4 py-2 type-text-sm-normal">
+            marketpulse.example
+          </div>
           <CollapsibleContent className="flex flex-col gap-2">
-            <div className="rounded-md border border-border px-4 py-2 type-text-sm-normal">Value 2</div>
-            <div className="rounded-md border border-border px-4 py-2 type-text-sm-normal">Value 3</div>
+            <div className="rounded-md border border-border px-4 py-2 type-text-sm-normal">
+              devsurvey.example
+            </div>
+            <div className="rounded-md border border-border px-4 py-2 type-text-sm-normal">
+              analyticsweekly.example
+            </div>
           </CollapsibleContent>
         </Collapsible>
       )
@@ -153,9 +193,9 @@ export const CollapsibleSection = meta.story({
 })
 
 CollapsibleSection.test('the trigger shows and hides the content', async ({ canvas }) => {
-  const trigger = canvas.getByRole('button', { name: 'Toggle' })
-  await expect(canvas.queryByText('Value 2')).toBeNull()
+  const trigger = canvas.getByRole('button', { name: 'Show all sources' })
+  await expect(canvas.queryByText('devsurvey.example')).toBeNull()
   await userEvent.click(trigger)
   await expect(trigger).toHaveAttribute('aria-expanded', 'true')
-  await expect(canvas.getByText('Value 2')).toBeVisible()
+  await expect(canvas.getByText('devsurvey.example')).toBeVisible()
 })

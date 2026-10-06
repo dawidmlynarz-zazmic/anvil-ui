@@ -20,8 +20,8 @@ type DemoProps = {
 function DemoCard({
   size = 'default',
   interactive = false,
-  title = 'Title',
-  description = 'Subtitle',
+  title = 'Q3 launch plan',
+  description = 'Updated 2 hours ago · 14 messages',
   footer = true,
 }: DemoProps) {
   const body = (
@@ -30,7 +30,9 @@ function DemoCard({
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
-      <CardContent className="type-text-sm-normal text-muted-foreground">Value</CardContent>
+      <CardContent className="type-text-sm-normal text-muted-foreground">
+        Launch Northwind Sync on September 30 with a beta invite email and new pricing.
+      </CardContent>
     </>
   )
   if (interactive) {
@@ -46,9 +48,9 @@ function DemoCard({
       {footer && (
         <CardFooter className="justify-end">
           <Button size="sm" variant="outline" intent="neutral">
-            Cancel
+            Share
           </Button>
-          <Button size="sm">Continue</Button>
+          <Button size="sm">Open project</Button>
         </CardFooter>
       )}
     </Card>
@@ -80,6 +82,27 @@ const meta = preview.meta({
         code: 'selector: `hover:` on an `asChild` link or button (not a prop)',
       },
     ],
+    guide: {
+      use: [
+        'Grouping content about one thing (a project, a report, a connected app) with its own header and actions.',
+        'Interactive (`asChild` link or button) when the whole card opens that thing: a project or conversation in a grid.',
+        'Agent output that stands apart from the thread: summaries, results, previews.',
+      ],
+      avoid: [
+        'Floating previews on hover: use Hover Card. Content above the page: use Dialog or Popover.',
+        'Rows in a dense list: use Item. Simple sections of a page: a heading and Separator are enough.',
+        'Nesting cards inside cards.',
+      ],
+      content: [
+        'Title names the object (“Q3 launch plan”); the description adds one line of context (updated, counts, source).',
+        'Footer actions say what they do (“Open project”); one primary action per card.',
+      ],
+      a11y: [
+        'Static cards are not focusable; interactive cards are one link or button named by their content.',
+        'Don’t put other buttons inside an interactive card; use a static card with a `CardAction` instead.',
+        'Icon-only `CardAction` buttons need an `aria-label`.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -87,7 +110,13 @@ const meta = preview.meta({
       },
     },
   },
-  args: { size: 'default', interactive: false, title: 'Title', description: 'Subtitle', footer: true },
+  args: {
+    size: 'default',
+    interactive: false,
+    title: 'Q3 launch plan',
+    description: 'Updated 2 hours ago · 14 messages',
+    footer: true,
+  },
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'default', 'lg'] },
     interactive: { control: 'boolean' },
@@ -127,8 +156,8 @@ export const Interactive = meta.story({
       <Card asChild size="sm" className="w-90 text-left">
         <button type="button" onClick={(args as { onClick?: () => void }).onClick}>
           <CardHeader>
-            <CardTitle>Title</CardTitle>
-            <CardDescription>Subtitle</CardDescription>
+            <CardTitle>Competitor pricing research</CardTitle>
+            <CardDescription>Updated yesterday · 6 sources</CardDescription>
           </CardHeader>
         </button>
       </Card>
@@ -139,11 +168,11 @@ export const Interactive = meta.story({
 Interactive.test(
   'link and button cards are reachable and named by their content',
   async ({ canvas, args }) => {
-    const link = canvas.getByRole('link', { name: /Title/ })
+    const link = canvas.getByRole('link', { name: /Q3 launch plan/ })
     await expect(link).toHaveAttribute('data-slot', 'card')
     await userEvent.tab()
     await expect(link).toHaveFocus()
-    await userEvent.click(canvas.getByRole('button', { name: /Title/ }))
+    await userEvent.click(canvas.getByRole('button', { name: /Competitor pricing research/ }))
     await expect((args as { onClick: () => void }).onClick).toHaveBeenCalled()
   },
 )
@@ -169,8 +198,8 @@ export const Composition = meta.story({
   render: () => (
     <Card className="w-100">
       <CardHeader className="border-b border-border">
-        <CardTitle>Title</CardTitle>
-        <CardDescription>Subtitle</CardDescription>
+        <CardTitle>Weekly metrics review</CardTitle>
+        <CardDescription>Week of Oct 5 · from Analytics</CardDescription>
         <CardAction>
           <Button size="icon-sm" variant="ghost" intent="neutral" aria-label="More actions">
             <Icon icon={EllipsisIcon} />
@@ -178,14 +207,14 @@ export const Composition = meta.story({
         </CardAction>
       </CardHeader>
       <CardContent className="flex flex-col gap-2 type-text-sm-normal">
-        <p>Value</p>
-        <p className="text-muted-foreground">Subtitle</p>
+        <p>Weekly active users rose to 12,480 (+8.2%); trial conversion dipped to 4.6% (−0.3 pt).</p>
+        <p className="text-muted-foreground">Churn held at 2.1%. Revenue reached $48.2k.</p>
       </CardContent>
       <CardFooter className="justify-between border-t border-border">
         <Button size="sm" variant="ghost" intent="neutral">
-          Cancel
+          Dismiss
         </Button>
-        <Button size="sm">Continue</Button>
+        <Button size="sm">Open report</Button>
       </CardFooter>
     </Card>
   ),

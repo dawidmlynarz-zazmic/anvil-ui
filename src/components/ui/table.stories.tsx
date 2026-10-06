@@ -17,11 +17,15 @@ import {
 } from './table'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=8254-1575'
-const ROWS = Array.from({ length: 5 }, (_, i) => ({
-  id: String(i + 1),
-  name: `Label ${i + 1}`,
-  value: `Value ${i + 1}`,
-}))
+/** Q3 launch tasks (Issue Tracker); hours are the estimate. */
+const ROWS = [
+  { id: '1', name: 'Finalize pricing page', value: 'Sam Ortiz', hours: 12 },
+  { id: '2', name: 'Send beta invites', value: 'Maya Chen', hours: 4 },
+  { id: '3', name: 'Ship onboarding email', value: 'Sam Ortiz', hours: 6 },
+  { id: '4', name: 'Fix sync conflicts on mobile', value: 'Priya Shah', hours: 16 },
+  { id: '5', name: 'Review launch deck', value: 'Leo Park', hours: 8 },
+]
+const TOTAL = ROWS.reduce((sum, row) => sum + row.hours, 0)
 
 type DemoProps = {
   /** Figma `type`. */
@@ -45,7 +49,7 @@ function DemoTable({
   return (
     <div className="w-200">
       <Table variant={variant}>
-        {caption && <TableCaption>Subtitle</TableCaption>}
+        {caption && <TableCaption>Q3 launch tasks from Issue Tracker</TableCaption>}
         <TableHeader>
           <TableRow>
             {selectable && (
@@ -57,9 +61,9 @@ function DemoTable({
                 />
               </TableHead>
             )}
-            <TableHead>Title 1</TableHead>
-            <TableHead>Title 2</TableHead>
-            <TableHead className="text-right">Title 3</TableHead>
+            <TableHead>Task</TableHead>
+            <TableHead>Owner</TableHead>
+            <TableHead className="text-right">Estimate (h)</TableHead>
             {actions && (
               <TableHead>
                 <span className="sr-only">Actions</span>
@@ -92,7 +96,7 @@ function DemoTable({
                   </a>
                 </TableCell>
                 <TableCell>{row.value}</TableCell>
-                <TableCell className="text-right tabular-nums">{Number(row.id) * 120}</TableCell>
+                <TableCell className="text-right tabular-nums">{row.hours}</TableCell>
                 {actions && (
                   <TableCell className="py-2">
                     <div className="flex justify-end gap-1">
@@ -117,8 +121,8 @@ function DemoTable({
         {footer && (
           <TableFooter>
             <TableRow>
-              <TableCell colSpan={(selectable ? 1 : 0) + 2}>Label</TableCell>
-              <TableCell className="text-right tabular-nums">1800</TableCell>
+              <TableCell colSpan={(selectable ? 1 : 0) + 2}>Total</TableCell>
+              <TableCell className="text-right tabular-nums">{TOTAL}</TableCell>
               {actions && <TableCell />}
             </TableRow>
           </TableFooter>
@@ -148,6 +152,26 @@ const meta = preview.meta({
       { property: 'table cells · show icon', values: 'boolean', code: 'an `<Icon>` child, or not' },
       { property: 'table cells · state', values: 'default', code: 'nothing (only default is drawn)' },
     ],
+    guide: {
+      use: [
+        'Structured records the user scans and compares by column: launch tasks, metrics, sources, usage.',
+        'Rows with selection (a Checkbox column, `data-state="selected"`) and row actions (icon Buttons at the end).',
+        '`variant="ghost"` inside a Card or a message; `contained` on a page.',
+      ],
+      avoid: [
+        'A small table inside an assistant answer: use Content Blocks (it renders Markdown tables). Key–value details: use a description list or Item rows.',
+        'Layout of non-tabular content: use a grid or Item list. Data inside a message: use Widget Table; key numbers: Widget Metric Card.',
+      ],
+      content: [
+        'Short, specific column headers in sentence case (“Task”, “Owner”, “Estimate (h)”); include units in the header, not in every cell.',
+        'Right-align numbers with `tabular-nums`; add a `TableCaption` that says what the data is (“Q3 launch tasks from Issue Tracker”).',
+      ],
+      a11y: [
+        'It is a semantic `<table>`: headers are `TableHead` (`<th>`), so screen readers announce the column for each cell.',
+        'Name every row checkbox and action after the row (“Edit Send beta invites”); give the action column a visually hidden header.',
+        'Selection is shown by the checkbox state, not only the row tint.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -175,7 +199,7 @@ Default.test('a table with headers; row selection updates the header checkbox', 
     'indeterminate',
   )
   await userEvent.click(canvas.getByRole('checkbox', { name: 'Select all' }))
-  await expect(canvas.getByRole('checkbox', { name: 'Label 4' })).toBeChecked()
+  await expect(canvas.getByRole('checkbox', { name: 'Fix sync conflicts on mobile' })).toBeChecked()
 })
 
 /** Figma type=ghost. */

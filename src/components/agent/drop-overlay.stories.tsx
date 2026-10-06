@@ -13,6 +13,26 @@ const meta = preview.meta({
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [{ property: 'state', values: 'ready · invalid', code: '`status` prop' }],
+    guide: {
+      use: [
+        'Over the thread or Prompt Input while the user drags files in, so they see where to drop.',
+        'Switch `status` to invalid as soon as the dragged type or size can’t be accepted, before the drop.',
+      ],
+      avoid: [
+        'Showing attached files: use the attachment chips in Prompt Input.',
+        'Errors after an upload (failed, too large on the server): use an Alert or Toast, not this overlay.',
+        'A permanent upload area: this appears only during a drag.',
+      ],
+      content: [
+        'Title: keep the defaults (“Drop files to attach”, “This file type isn’t supported”) unless the target is specific.',
+        '`detail`: the accepted types and size limit (“PDF, DOCX, XLSX up to 25 MB”); when invalid, say what is accepted.',
+      ],
+      a11y: [
+        'It is a polite live region (`role="status"`), so the state change is announced.',
+        'Dragging is pointer-only: keep the Attach button in Prompt Input as the keyboard path.',
+        'Invalid uses an icon and text, not only the red tint.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -20,7 +40,7 @@ const meta = preview.meta({
       },
     },
   },
-  args: { status: 'ready', detail: 'Subtitle' },
+  args: { status: 'ready', detail: 'PDF, DOCX, XLSX up to 25 MB' },
   argTypes: {
     status: { control: 'inline-radio', options: ['ready', 'invalid'] },
     title: { control: 'text' },
@@ -45,7 +65,11 @@ export const States = meta.story({
   render: (args) => (
     <div className="flex max-w-(--shell-thread-max) flex-col gap-4">
       <DropOverlay {...args} status="ready" />
-      <DropOverlay {...args} status="invalid" />
+      <DropOverlay
+        {...args}
+        status="invalid"
+        detail="Only PDF, DOCX and XLSX files up to 25 MB can be attached"
+      />
     </div>
   ),
 })

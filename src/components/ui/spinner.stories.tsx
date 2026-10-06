@@ -18,6 +18,20 @@ const meta = preview.meta({
     design: { type: 'figma', url: FIGMA },
     // No Figma component: Spinner has none (Core Kit pulse dot and typing indicator are built on it).
     figmaProps: [],
+    guide: {
+      use: [
+        'A short wait of unknown length inside a region or next to text: loading a list, refreshing a panel.',
+      ],
+      avoid: [
+        'A button that is working: use its `loading` prop. Content with a known layout: use Skeleton.',
+        'The agent at work: use Pulse Dot, Text Shimmer or Typing Indicator. Known progress: use Progress.',
+      ],
+      content: ['Pair it with a present-participle line when the wait is not obvious: “Loading files…”.'],
+      a11y: [
+        'It is `role="status"` named “Loading”; pass a more specific `aria-label` when the context allows.',
+        'Avoid several spinners at once: each one is a status that may be announced.',
+      ],
+    },
     docs: {
       description: {
         component:

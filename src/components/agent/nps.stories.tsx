@@ -32,6 +32,27 @@ const meta = preview.meta({
         code: '`onDismiss`; `onSubmit({ score, reason })` (Next, disabled, until scored)',
       },
     ],
+    guide: {
+      use: [
+        'Measuring loyalty to the product, at a calm moment (after a completed task, never mid-flow).',
+        'One score on 0–10, then one open follow-up about the reason; `onDismiss` lets the user skip.',
+      ],
+      avoid: [
+        'Rating one answer or task: use Rating. Explaining a bad answer: use Feedback Reason.',
+        'More than one question: use Survey. Choosing between options: use Poll.',
+        'Asking often: show NPS at most once per period per user.',
+      ],
+      content: [
+        'Question: the standard wording with the product name (“How likely are you to recommend Northwind Sync to a colleague?”).',
+        '`lowLabel` / `highLabel`: “Not at all likely” and “Extremely likely”.',
+        '`followUp`: one open question (“What’s the main reason for your score?”).',
+      ],
+      a11y: [
+        'The card is a `group` named by the question; the 0–10 scale is a single-choice radio group named “Score”.',
+        'The follow-up Textarea has a visible label; Next stays disabled until a score is picked.',
+        'Scale ends are labelled in text, not only by position.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -40,10 +61,10 @@ const meta = preview.meta({
     },
   },
   args: {
-    question: 'Title',
-    lowLabel: 'Subtitle',
-    highLabel: 'Subtitle',
-    followUp: 'Label',
+    question: 'How likely are you to recommend Northwind Sync to a colleague?',
+    lowLabel: 'Not at all likely',
+    highLabel: 'Extremely likely',
+    followUp: 'What’s the main reason for your score?',
     onSubmit: fn(),
     onDismiss: fn(),
     onScoreChange: fn(),
@@ -74,9 +95,15 @@ Default.test('Next waits for a score; Submit sends score and reason', async ({ c
   await expect(canvas.getByRole('button', { name: 'Next' })).toBeDisabled()
   await userEvent.click(canvas.getByRole('radio', { name: '9' }))
   await expect(args.onScoreChange).toHaveBeenCalledWith(9)
-  await userEvent.type(canvas.getByRole('textbox', { name: 'Label' }), 'Value')
+  await userEvent.type(
+    canvas.getByRole('textbox', { name: 'What’s the main reason for your score?' }),
+    'Sync saves my team hours every week.',
+  )
   await userEvent.click(canvas.getByRole('button', { name: 'Submit' }))
-  await expect(args.onSubmit).toHaveBeenCalledWith({ score: 9, reason: 'Value' })
+  await expect(args.onSubmit).toHaveBeenCalledWith({
+    score: 9,
+    reason: 'Sync saves my team hours every week.',
+  })
 })
 
 /** Figma state: unanswered and answered. */
@@ -84,7 +111,7 @@ export const States = meta.story({
   render: (args) => (
     <div className="flex w-160 flex-col gap-4">
       <Nps {...args} />
-      <Nps {...args} defaultScore={9} defaultReason="Value" />
+      <Nps {...args} defaultScore={9} defaultReason="Sync saves my team hours every week." />
     </div>
   ),
 })

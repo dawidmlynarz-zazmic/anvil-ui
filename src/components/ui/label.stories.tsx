@@ -23,6 +23,24 @@ const meta = preview.meta({
         code: 'selectors: `peer-disabled:` / Field `data-disabled` · `peer-aria-invalid:` / Field `data-invalid` (not a prop)',
       },
     ],
+    guide: {
+      use: [
+        'The inline label for Checkbox, Radio Group items and Switch.',
+        'A label for a custom control that has no built-in label; `marker` for required or optional.',
+      ],
+      avoid: [
+        'Input, Textarea and Select: pass their `label` prop instead. Inside a Field: use FieldLabel.',
+        'A title for a group of controls: use FieldLegend in a FieldSet.',
+      ],
+      content: [
+        'A short noun or the choice itself, sentence case, no trailing colon.',
+        'Mark the less common case only: required fields when most are optional, or the other way round.',
+      ],
+      a11y: [
+        'Point `htmlFor` at the control `id`: clicking the label focuses or toggles it.',
+        '`marker="required"` is visual: also set `required` on the control.',
+      ],
+    },
     docs: {
       description: {
         component:

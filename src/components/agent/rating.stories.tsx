@@ -24,6 +24,28 @@ const meta = preview.meta({
       { property: 'thanks', values: 'part / meta item', code: '`thanks` prop' },
       { property: 'button', values: 'Add a comment', code: 'pass `onComment` or not' },
     ],
+    guide: {
+      use: [
+        'Right after the agent finishes a task: one quick satisfaction check on that answer or flow.',
+        '`kind` stars or faces for a quick feeling; csat when you report a 1–5 satisfaction score.',
+        'Pass `onComment` to offer Add a comment once rated, for users who want to say more.',
+      ],
+      avoid: [
+        'Asking why an answer was bad (after a thumbs-down): use Feedback Reason.',
+        'Loyalty on a 0–10 scale: use NPS. Several questions in a row: use Survey.',
+        'Asking the user to choose between options: use Poll.',
+      ],
+      content: [
+        'Question: short, about this task, in the agent’s voice (“How did I do?”).',
+        'csat `lowLabel` / `highLabel` name the ends of the scale (“Very unsatisfied”, “Very satisfied”).',
+        '`thanks`: short and specific (“Thanks! This helps me improve.”).',
+      ],
+      a11y: [
+        'The scale is a single-choice radio group named by the question; each option has a text name (“4 of 5”, “Good”).',
+        'The thanks line is `role="status"`, so rating is confirmed to screen readers.',
+        'Faces and stars carry their meaning in their names, not only their shape or colour.',
+      ],
+    },
     docs: {
       description: {
         component:

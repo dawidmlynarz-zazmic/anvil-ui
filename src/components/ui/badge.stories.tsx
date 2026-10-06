@@ -55,6 +55,26 @@ const meta = preview.meta({
       { property: 'status badge · show count · count', values: 'boolean · text', code: '`count` prop' },
       { property: 'status badge · size', values: 'default · sm · xs', code: '`size` prop' },
     ],
+    guide: {
+      use: [
+        'A static label for status, counts or metadata: connection state, unread count, version, provenance.',
+        '`variant="semantic"` with a `tone` for status; `indicator` adds a dot, `count` a trailing number.',
+        '`shape="pill"` for tags and provenance labels.',
+      ],
+      avoid: [
+        'Anything people click or select: use Chip (filters, tags) or Button.',
+        'Keyboard shortcuts: use Kbd. A message that needs a sentence: use Alert.',
+      ],
+      content: [
+        'One or two words in sentence case; status as an adjective or past participle: “Connected”, “Failed”.',
+        'Pick the tone from the meaning (success, warning, destructive), never for decoration.',
+      ],
+      a11y: [
+        'Not interactive and not announced on change: pair a status that changes with a live region.',
+        'The text carries the meaning; the tone color and the dot only repeat it.',
+        'A bare number needs context: “3 unread”, not “3”.',
+      ],
+    },
     docs: {
       description: {
         component:

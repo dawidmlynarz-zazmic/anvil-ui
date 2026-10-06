@@ -51,6 +51,21 @@ const meta = preview.meta({
       { property: 'content position', values: 'center · start · end', code: '`align` prop' },
       { property: 'style', values: 'solid · dashed', code: '`variant` prop' },
     ],
+    guide: {
+      use: [
+        'Divide groups inside menus, toolbars, cards and settings lists.',
+        'A labelled separator for a short break word (“Or”); vertical between inline items.',
+      ],
+      avoid: [
+        'Day breaks and events in a thread: use Marker. A new section: use a heading.',
+        'Separating every row: spacing alone is often enough.',
+      ],
+      content: ['Labels are one or two words; `dashed` for a lighter, optional break.'],
+      a11y: [
+        'Decorative by default (`role="none"`); set `decorative={false}` when it separates content for screen readers too.',
+        'A label is read; its lines are hidden from assistive tech.',
+      ],
+    },
     docs: {
       description: {
         component:

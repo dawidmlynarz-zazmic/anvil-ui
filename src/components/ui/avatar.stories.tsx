@@ -67,6 +67,26 @@ const meta = preview.meta({
         code: '`size` prop on each `Avatar` in `AvatarGroup`',
       },
     ],
+    guide: {
+      use: [
+        'For a person, the assistant or a brand next to their name: message rows, sidebar conversations, mentions, participant lists.',
+        '`AvatarGroup` + `AvatarGroupCount` for several people in little space; `AvatarBadge` for a presence dot.',
+        '`AvatarImage` with an `AvatarFallback` always: the fallback shows while the image loads or if it fails.',
+      ],
+      avoid: [
+        'An icon that stands for a thing, not a party (a file, a tool, a connector): use Icon Tile.',
+        'Status on its own (online, failed): use Badge, or `AvatarBadge` on the avatar it belongs to.',
+      ],
+      content: [
+        'Initials are one or two letters from the name; the assistant uses `tone="agent"` with the bot icon.',
+        'Keep one size per list; reserve `lg` for profile headers and empty states.',
+      ],
+      a11y: [
+        '`AvatarImage` needs `alt` with the name, or `alt=""` when the name is already shown beside it.',
+        '`AvatarGroupCount` reads as "+3": give the group context (a label or a tooltip listing the people).',
+        'A presence dot is color only: say the status in text too (e.g. in the tooltip or row).',
+      ],
+    },
     docs: {
       description: {
         component:

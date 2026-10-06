@@ -38,7 +38,7 @@ function DemoPopover({
     <Popover open={open} onOpenChange={onOpenChange}>
       <PopoverTrigger asChild>
         <Button variant="outline" intent="neutral">
-          Open popover
+          Rename
         </Button>
       </PopoverTrigger>
       <PopoverContent
@@ -47,10 +47,10 @@ function DemoPopover({
         onOpenAutoFocus={focusOnOpen ? undefined : (e) => e.preventDefault()}
       >
         <PopoverHeader showCloseButton>
-          <PopoverTitle>Title</PopoverTitle>
-          <PopoverDescription>Subtitle</PopoverDescription>
+          <PopoverTitle>Rename conversation</PopoverTitle>
+          <PopoverDescription>Shown in the sidebar and in shared links.</PopoverDescription>
         </PopoverHeader>
-        <Input label="Label" defaultValue="Value" />
+        <Input label="Name" defaultValue="Q3 launch plan" />
         {showFooter && (
           <PopoverFooter>
             <PopoverClose asChild>
@@ -83,6 +83,26 @@ const meta = preview.meta({
         code: 'render `PopoverFooter` or not (story `showFooter`)',
       },
     ],
+    guide: {
+      use: [
+        'A small, interactive task anchored to its trigger: renaming a conversation, filtering sources, adjusting a setting in place.',
+        'Content that needs a few controls but not the whole screen; it closes on outside click or Escape.',
+      ],
+      avoid: [
+        'A list of actions: use Dropdown Menu. A read-only preview on hover: use Hover Card. A short label: use Tooltip.',
+        'Long forms or decisions that need full attention: use Dialog (or Sheet for side tasks).',
+        'Picking one value from a list: use Select or Combobox (they are popovers already).',
+      ],
+      content: [
+        'Title says the task (“Rename conversation”); the description, when needed, adds one line of context.',
+        'Footer actions say what they do (“Cancel”, “Save”); skip the footer when changes apply immediately.',
+      ],
+      a11y: [
+        'Content is a `dialog` named by `PopoverTitle` and described by `PopoverDescription`.',
+        'Focus moves into the popover on open and returns to the trigger on close; Escape closes it.',
+        'It does not trap focus: keep it short so Tab doesn’t wander far from the trigger.',
+      ],
+    },
     docs: {
       story: { inline: false, height: '360px' },
       description: {
@@ -108,10 +128,10 @@ const body = (el: HTMLElement) => within(el.ownerDocument.body)
 export const Default = meta.story()
 
 Default.test('trigger opens, Escape closes and focus returns', async ({ canvas, canvasElement }) => {
-  const trigger = canvas.getByRole('button', { name: 'Open popover' })
+  const trigger = canvas.getByRole('button', { name: 'Rename' })
   await userEvent.click(trigger)
-  const dialog = await body(canvasElement).findByRole('dialog', { name: 'Title' })
-  await expect(dialog).toHaveAccessibleDescription('Subtitle')
+  const dialog = await body(canvasElement).findByRole('dialog', { name: 'Rename conversation' })
+  await expect(dialog).toHaveAccessibleDescription('Shown in the sidebar and in shared links.')
   // Radix moves focus into the popover (first focusable: the header close, as drawn).
   await waitFor(() => expect(dialog.contains(canvasElement.ownerDocument.activeElement)).toBe(true))
   await userEvent.keyboard('{Escape}')
@@ -123,8 +143,8 @@ Default.test('trigger opens, Escape closes and focus returns', async ({ canvas, 
 export const Open = meta.story({ args: { open: true, focusOnOpen: false } })
 
 Open.test('opens on load without moving focus', async ({ canvasElement }) => {
-  const dialog = await body(canvasElement).findByRole('dialog', { name: 'Title' })
-  await expect(dialog).toHaveAccessibleDescription('Subtitle')
+  const dialog = await body(canvasElement).findByRole('dialog', { name: 'Rename conversation' })
+  await expect(dialog).toHaveAccessibleDescription('Shown in the sidebar and in shared links.')
   await expect(dialog.contains(canvasElement.ownerDocument.activeElement)).toBe(false)
 })
 

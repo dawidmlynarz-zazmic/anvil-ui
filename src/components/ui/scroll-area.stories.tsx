@@ -48,6 +48,25 @@ const meta = preview.meta({
         code: 'which `ScrollBar` is shown (`<ScrollBar orientation="horizontal" />` for sideways content)',
       },
     ],
+    guide: {
+      use: [
+        'A bounded region that scrolls inside a layout: menus, side panels, long lists, previews.',
+        'Add `<ScrollBar orientation="horizontal" />` for a row of items wider than its box.',
+      ],
+      avoid: [
+        'The page itself: keep native page scrolling. A chat thread: use Message Scroller.',
+        'Paging through slides: use Carousel. Wide data: use Table.',
+      ],
+      content: [
+        'Give it a fixed or max size (`h-*`, `max-h-*`); without one it never scrolls.',
+        'Do not nest two scroll areas that scroll in the same direction.',
+      ],
+      a11y: [
+        'The viewport takes keyboard focus, so arrow keys and Page Up / Down scroll it.',
+        'Name a region with its own purpose (`aria-label`) so focus on it makes sense.',
+        'The bar shows on hover by default; use `type="always"` when people must see there is more.',
+      ],
+    },
     docs: {
       description: {
         component:

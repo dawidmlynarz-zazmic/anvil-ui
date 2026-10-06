@@ -23,6 +23,21 @@ const meta = preview.meta({
         code: '`trend` prop (derived from `values` when omitted)',
       },
     ],
+    guide: {
+      use: [
+        'A trend at a glance next to a metric value, e.g. in a Widget Metric Card.',
+        '`values` oldest first; `trend` is derived from the first and last value unless you set it.',
+      ],
+      avoid: ['Exact values, axes or comparisons: use a full chart. Progress toward a goal: use Progress.'],
+      content: [
+        'Pair it with the value and the change in text: “12,480 · +8.2%”.',
+        'Use `trend="neutral"` when the change is not meaningful, so color does not imply good or bad.',
+      ],
+      a11y: [
+        'Decorative by default; pass `label` (“Up 8% over 8 weeks”) when it is the only place the trend appears.',
+        'Color is not enough: the text beside it states the direction.',
+      ],
+    },
     docs: {
       description: {
         component:

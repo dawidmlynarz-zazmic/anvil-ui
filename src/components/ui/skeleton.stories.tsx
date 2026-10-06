@@ -14,6 +14,24 @@ const meta = preview.meta({
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [{ property: 'shape', values: 'line · block · circle', code: '`shape` prop' }],
+    guide: {
+      use: [
+        'Placeholders in the shape of content that is loading: rows, cards, avatars, text lines.',
+        'Loads that take long enough to notice; for very fast ones, show nothing.',
+      ],
+      avoid: [
+        'The assistant writing a reply: use Streaming Placeholder or Typing Indicator.',
+        'A short action: use the Button `loading` state or Spinner. No results: use Empty State.',
+      ],
+      content: [
+        'Mirror the real layout (sizes, count of lines) so nothing jumps when the content arrives.',
+        'Keep it short: two or three lines stand for a paragraph.',
+      ],
+      a11y: [
+        'Mark the loading region with `aria-busy="true"`, `role="status"` and a label.',
+        'The skeletons themselves are decorative (`aria-hidden`); the pulse stops under reduced motion.',
+      ],
+    },
     docs: {
       description: {
         component:

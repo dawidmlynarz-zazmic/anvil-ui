@@ -39,6 +39,28 @@ const meta = preview.meta({
         code: '`duration`, `transcript` props',
       },
     ],
+    guide: {
+      use: [
+        'When the answer includes an existing image or audio file: a screenshot, a chart export, a recorded summary.',
+        'Audio with a `transcript`, so the content is readable without playing it.',
+        'Show `status` loading while the file arrives and invalid when it can’t be shown, in place.',
+      ],
+      avoid: [
+        'Images the agent is generating from a prompt: use Image Generation Card.',
+        'Documents, decks and spreadsheets: use File Output Card.',
+        'Files the user attached to their message: use Attachment.',
+      ],
+      content: [
+        '`title`: the file name (`hero-image.png`) or what the audio is (“Weekly metrics recap”).',
+        '`meta`: type, size or dimensions (“PNG · 1.2 MB · 1600 × 900”).',
+        '`error`: what went wrong and what to do (“Couldn’t load the recording. Try again later.”).',
+      ],
+      a11y: [
+        'Pass an `<img>` with `alt` text that describes the image, not its file name.',
+        'Play / Pause is one toggle button with `aria-pressed`; Download is a labelled icon button.',
+        'While loading, the card is `aria-busy`; the waveform is decorative, `duration` gives the position in text.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -49,10 +71,10 @@ const meta = preview.meta({
   args: {
     kind: 'image' as const,
     status: 'ready' as const,
-    title: 'Title',
-    meta: 'Subtitle',
+    title: 'hero-image.png',
+    meta: 'PNG · 1.2 MB · 1600 × 900',
     onDownload: fn(),
-    children: <img src={IMAGE} alt="Subtitle" />,
+    children: <img src={IMAGE} alt="Northwind Sync launch hero: a soft blue to violet gradient" />,
   },
   argTypes: {
     kind: { control: 'inline-radio', options: ['image', 'audio'] },
@@ -105,12 +127,12 @@ function AudioDemo() {
   return (
     <WidgetMedia
       kind="audio"
-      title="Title"
+      title="Weekly metrics recap"
       playing={playing}
       progress={playing ? 0.36 : 0}
       duration={playing ? '0:48 / 2:14' : '2:14'}
       onPlayToggle={() => setPlaying((p) => !p)}
-      transcript="Subtitle"
+      transcript="Weekly active users reached 12,480, up 8.2% on last week. Trial conversion dipped to 4.6%."
     />
   )
 }
@@ -121,7 +143,13 @@ export const Audio = meta.story({
   render: () => (
     <div className="flex w-120 flex-col gap-4">
       <AudioDemo />
-      <WidgetMedia kind="audio" status="invalid" title="Title" duration="2:14" error="Subtitle" />
+      <WidgetMedia
+        kind="audio"
+        status="invalid"
+        title="Weekly metrics recap"
+        duration="2:14"
+        error="Couldn’t load the recording. Try again later."
+      />
     </div>
   ),
 })

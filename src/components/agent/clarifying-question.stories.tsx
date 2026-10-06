@@ -21,6 +21,25 @@ const meta = preview.meta({
         code: '`value` / `defaultValue` set or not (not a prop)',
       },
     ],
+    guide: {
+      use: [
+        'When the agent can’t continue without one choice from the user and the options are known (“Which quarter?”, “Which audience?”).',
+        'Two to five short, mutually exclusive options; add Skip when the agent can proceed with a sensible default.',
+      ],
+      avoid: [
+        'Open-ended questions: let the agent ask in a Message Row and the user answer in Prompt Input.',
+        'Confirming an action with side effects: use Approval Card. Connecting an app: use Connector Card.',
+        'Several questions at once: ask them one card at a time.',
+      ],
+      content: [
+        'Title: the question, ending with a question mark. Description: why the agent is asking, in one sentence.',
+        'Options: short answers in sentence case, no trailing punctuation. `hint`: what Skip does.',
+      ],
+      a11y: [
+        'Options are buttons; number keys pick one while focus is inside the card.',
+        'After answering, Change returns to the options so the choice can be revised.',
+      ],
+    },
     docs: {
       description: {
         component:

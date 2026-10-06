@@ -20,6 +20,23 @@ const meta = preview.meta({
         code: 'animation frames of the `shimmer` utility (not a prop)',
       },
     ],
+    guide: {
+      use: [
+        'The status line of a running agent step or tool call: “Searching the web…”.',
+        '`asChild` to shimmer an existing element, such as a step title.',
+      ],
+      avoid: [
+        'Finished steps: show plain text. Paragraphs or body copy: never shimmer them.',
+        'Non-agent loading: use Spinner or Skeleton.',
+      ],
+      content: [
+        'One short line in the present participle with an ellipsis; switch to the past tense when done.',
+      ],
+      a11y: [
+        'The text stays in the DOM and readable; the shimmer is static under reduced motion.',
+        'It is not announced on change: the parent step or panel owns any live status.',
+      ],
+    },
     docs: {
       description: {
         component:

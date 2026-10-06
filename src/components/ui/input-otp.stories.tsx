@@ -32,6 +32,25 @@ const meta = preview.meta({
         code: '`value` length (empty · partial · filled) and `aria-invalid` (not a prop)',
       },
     ],
+    guide: {
+      use: [
+        'Entering a short one-time code: email or SMS verification, two-step sign-in, confirming a sensitive action like connecting Mail.',
+        'Fixed-length codes (usually 6 digits); a separator only when the code is printed in groups.',
+      ],
+      avoid: [
+        'Passwords, long tokens or API keys: use Input (`type="password"` where needed).',
+        'Codes of unknown or variable length: use Input.',
+      ],
+      content: [
+        'Label it (“Verification code”) and say where the code was sent in the description.',
+        'On error keep the digits and say what to do next (“Check your latest email and try again.”); offer a resend action nearby.',
+      ],
+      a11y: [
+        'One real text input drives the slots, so paste, autofill (`autocomplete="one-time-code"`) and screen readers work.',
+        'Label it with `Field` + `FieldLabel` or `aria-label`; link the error with `aria-describedby`.',
+        'Restrict input with `pattern` (digits) so mobile shows a numeric keypad.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -43,7 +62,7 @@ const meta = preview.meta({
     maxLength: 6,
     pattern: REGEXP_ONLY_DIGITS,
     children: <Slots />,
-    'aria-label': 'Label',
+    'aria-label': 'Verification code',
     disabled: false,
     'aria-invalid': false,
   },
@@ -66,7 +85,7 @@ const meta = preview.meta({
 export const Default = meta.story()
 
 Default.test('typing fills the slots and moves the active slot', async ({ canvas, canvasElement }) => {
-  const input = canvas.getByRole('textbox', { name: 'Label' })
+  const input = canvas.getByRole('textbox', { name: 'Verification code' })
   await userEvent.click(input)
   await userEvent.keyboard('294')
   await expect(input).toHaveValue('294')
@@ -77,7 +96,7 @@ Default.test('typing fills the slots and moves the active slot', async ({ canvas
 })
 
 Default.test('disabled', { args: { disabled: true } }, async ({ canvas }) => {
-  await expect(canvas.getByRole('textbox', { name: 'Label' })).toBeDisabled()
+  await expect(canvas.getByRole('textbox', { name: 'Verification code' })).toBeDisabled()
 })
 
 /** Figma state=filled. */
@@ -87,7 +106,7 @@ export const Filled = meta.story({ args: { defaultValue: '294170' } })
 export const Invalid = meta.story({
   render: () => (
     <Field data-invalid="true" className="w-fit">
-      <FieldLabel htmlFor="otp-invalid">Label</FieldLabel>
+      <FieldLabel htmlFor="otp-invalid">Verification code</FieldLabel>
       <InputOTP
         maxLength={6}
         pattern={REGEXP_ONLY_DIGITS}
@@ -98,7 +117,7 @@ export const Invalid = meta.story({
       >
         <Slots />
       </InputOTP>
-      <FieldError id="otp-error">Subtitle</FieldError>
+      <FieldError id="otp-error">That code didn’t work. Check your latest email and try again.</FieldError>
     </Field>
   ),
 })
@@ -130,11 +149,11 @@ export const WithSeparator = meta.story({
 export const WithField = meta.story({
   render: () => (
     <Field className="w-fit">
-      <FieldLabel htmlFor="otp-field">Label</FieldLabel>
+      <FieldLabel htmlFor="otp-field">Verification code</FieldLabel>
       <InputOTP maxLength={6} pattern={REGEXP_ONLY_DIGITS} id="otp-field" aria-describedby="otp-hint">
         <Slots />
       </InputOTP>
-      <FieldDescription id="otp-hint">Subtitle</FieldDescription>
+      <FieldDescription id="otp-hint">Enter the 6-digit code we sent to your email.</FieldDescription>
     </Field>
   ),
 })

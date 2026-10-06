@@ -15,11 +15,11 @@ type DemoProps = {
   text?: string
 }
 
-function DemoTooltip({ open, onOpenChange, side = 'top', text = 'Add' }: DemoProps) {
+function DemoTooltip({ open, onOpenChange, side = 'top', text = 'New chat' }: DemoProps) {
   return (
     <Tooltip open={open} onOpenChange={onOpenChange}>
       <TooltipTrigger asChild>
-        <Button size="icon" variant="outline" intent="neutral" aria-label="Add">
+        <Button size="icon" variant="outline" intent="neutral" aria-label="New chat">
           <Icon icon={PlusIcon} />
         </Button>
       </TooltipTrigger>
@@ -45,6 +45,26 @@ const meta = preview.meta({
         code: 'nothing (layout only: width follows the content)',
       },
     ],
+    guide: {
+      use: [
+        'Naming icon-only buttons (New chat, Copy, Regenerate) and adding their shortcut.',
+        'A short hint about a truncated value or an unfamiliar control.',
+      ],
+      avoid: [
+        'Anything interactive or longer than a sentence: use Popover. Previews of a link, person or source: use Hover Card.',
+        'Essential information or errors: show them on the page (Field description, Alert); touch users never see tooltips.',
+        'Repeating a visible text label.',
+      ],
+      content: [
+        'A few words, sentence case, no trailing period for labels (“New chat”); match the button’s `aria-label`.',
+        'Add the shortcut when there is one (“New chat ⌘N”).',
+      ],
+      a11y: [
+        'Opens on hover and keyboard focus, closes on Escape; content is `role="tooltip"` and describes the trigger.',
+        'It never takes focus and is not a substitute for `aria-label` on icon-only buttons.',
+        'Disabled buttons don’t fire hover events: wrap them in a `span` if they need a tooltip.',
+      ],
+    },
     docs: {
       story: { inline: false, height: '200px' },
       description: {
@@ -53,7 +73,7 @@ const meta = preview.meta({
       },
     },
   },
-  args: { open: false, side: 'top', text: 'Add' },
+  args: { open: false, side: 'top', text: 'New chat' },
   argTypes: {
     side: { control: 'inline-radio', options: sides },
     open: { control: 'boolean' },
@@ -69,7 +89,7 @@ export const Default = meta.story()
 
 Default.test('keyboard focus shows it, Escape hides it', async ({ canvasElement }) => {
   await userEvent.tab()
-  await expect(await body(canvasElement).findByRole('tooltip')).toHaveTextContent('Add')
+  await expect(await body(canvasElement).findByRole('tooltip')).toHaveTextContent('New chat')
   await userEvent.keyboard('{Escape}')
   await waitFor(() => expect(body(canvasElement).queryByRole('tooltip')).toBeNull())
 })
@@ -78,8 +98,8 @@ Default.test('keyboard focus shows it, Escape hides it', async ({ canvasElement 
 export const Open = meta.story({ args: { open: true } })
 
 Open.test('shows the label without focusing the trigger', async ({ canvas, canvasElement }) => {
-  await expect(await body(canvasElement).findByRole('tooltip')).toHaveTextContent('Add')
-  await expect(canvas.getByRole('button', { name: 'Add' })).not.toHaveFocus()
+  await expect(await body(canvasElement).findByRole('tooltip')).toHaveTextContent('New chat')
+  await expect(canvas.getByRole('button', { name: 'New chat' })).not.toHaveFocus()
 })
 
 /** Every `side`. */
@@ -96,5 +116,8 @@ export const Sides = meta.story({
 
 /** Longer text wraps at max-w-xs (Figma variant `fixed width`). */
 export const LongText = meta.story({
-  args: { open: true, text: 'Subtitle Subtitle Subtitle Subtitle Subtitle Subtitle Subtitle Subtitle' },
+  args: {
+    open: true,
+    text: 'New chat. Starts a conversation in “Q3 launch plan” with your saved preferences.',
+  },
 })

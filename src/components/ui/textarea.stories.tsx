@@ -28,6 +28,25 @@ const meta = preview.meta({
         code: 'nothing (design-only): the placeholder shows while it is empty',
       },
     ],
+    guide: {
+      use: [
+        'Multi-line free text: descriptions, feedback, instructions, notes.',
+        'Pass `label` (and `hint`) for the field anatomy; it grows with its content from 80px.',
+      ],
+      avoid: [
+        'A message to the assistant: use Prompt Input. Editing a sent message: use Message Edit.',
+        'A single line: use Input. Wrapping it in another Field: with `label` it already is one.',
+      ],
+      content: [
+        'The label is a short noun; the placeholder shows an example, the hint states a length limit.',
+        'An error says what is wrong and how to fix it.',
+      ],
+      a11y: [
+        'A bare textarea needs `aria-label`; a placeholder is not a label.',
+        'Enter adds a new line here; do not take it over to submit.',
+        '`aria-invalid` turns the hint into a FieldError (`role="alert"`).',
+      ],
+    },
     docs: {
       description: {
         component:

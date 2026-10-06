@@ -90,6 +90,25 @@ const meta = preview.meta({
         code: '`isActive` on the current `PaginationLink`; `aria-disabled` on Previous / Next at the ends',
       },
     ],
+    guide: {
+      use: [
+        'Long lists where people jump to a position or return to it: conversation history, search results, audit logs.',
+        'Compact (“Page 5 of 12”) in narrow spaces like a side panel or a table footer.',
+      ],
+      avoid: [
+        'Chat threads and feeds read top to bottom: load more on scroll or with a “Show more” Button.',
+        'Stepping through a flow: use Stepper. Browsing a few slides or cards: use Carousel.',
+      ],
+      content: [
+        'Show the first, last and current page with its neighbours; ellipses for the rest.',
+        'Pair it with a count of the results (“48 conversations”) so people know the size of the list.',
+      ],
+      a11y: [
+        'A `nav` labelled “pagination”; the current page has `aria-current="page"`.',
+        'Previous and Next have full labels (“Go to next page”) and `aria-disabled` at the ends.',
+        'Move focus to the top of the new results after a page change.',
+      ],
+    },
     docs: {
       description: {
         component:

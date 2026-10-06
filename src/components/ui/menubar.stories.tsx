@@ -33,23 +33,23 @@ function DemoMenubar({ defaultValue, onSelect }: DemoProps) {
         <MenubarTrigger>File</MenubarTrigger>
         <MenubarContent>
           <MenubarItem onSelect={onSelect}>
-            New file<MenubarShortcut>⌘N</MenubarShortcut>
+            New chat<MenubarShortcut>⌘N</MenubarShortcut>
           </MenubarItem>
           <MenubarItem>
-            Duplicate<MenubarShortcut>⌘D</MenubarShortcut>
+            Duplicate conversation<MenubarShortcut>⌘D</MenubarShortcut>
           </MenubarItem>
           <MenubarSeparator />
           <MenubarSub>
             <MenubarSubTrigger>Share</MenubarSubTrigger>
             <MenubarSubContent>
-              <MenubarItem>Email</MenubarItem>
-              <MenubarItem>Message</MenubarItem>
               <MenubarItem>Copy link</MenubarItem>
+              <MenubarItem>Send by email</MenubarItem>
+              <MenubarItem>Export as PDF</MenubarItem>
             </MenubarSubContent>
           </MenubarSub>
           <MenubarSeparator />
           <MenubarItem intent="destructive">
-            Delete<MenubarShortcut>⌫</MenubarShortcut>
+            Delete conversation<MenubarShortcut>⌫</MenubarShortcut>
           </MenubarItem>
         </MenubarContent>
       </MenubarMenu>
@@ -57,26 +57,27 @@ function DemoMenubar({ defaultValue, onSelect }: DemoProps) {
         <MenubarTrigger>Edit</MenubarTrigger>
         <MenubarContent>
           <MenubarItem>
-            Copy<MenubarShortcut>⌘C</MenubarShortcut>
+            Copy last response<MenubarShortcut>⌘C</MenubarShortcut>
           </MenubarItem>
           <MenubarItem disabled>
-            Paste<MenubarShortcut>⌘V</MenubarShortcut>
+            Edit last message<MenubarShortcut>↑</MenubarShortcut>
           </MenubarItem>
         </MenubarContent>
       </MenubarMenu>
       <MenubarMenu value="3">
         <MenubarTrigger>View</MenubarTrigger>
         <MenubarContent>
-          <MenubarCheckboxItem checked>Show toolbar</MenubarCheckboxItem>
-          <MenubarCheckboxItem>Show status bar</MenubarCheckboxItem>
+          <MenubarCheckboxItem checked>Show sources panel</MenubarCheckboxItem>
+          <MenubarCheckboxItem>Show tool activity</MenubarCheckboxItem>
         </MenubarContent>
       </MenubarMenu>
       <MenubarMenu value="4">
-        <MenubarTrigger>Layout</MenubarTrigger>
+        <MenubarTrigger>Model</MenubarTrigger>
         <MenubarContent>
-          <MenubarRadioGroup value="1">
-            <MenubarRadioItem value="1">Top</MenubarRadioItem>
-            <MenubarRadioItem value="2">Bottom</MenubarRadioItem>
+          <MenubarRadioGroup value="balanced">
+            <MenubarRadioItem value="fast">Fast</MenubarRadioItem>
+            <MenubarRadioItem value="balanced">Balanced</MenubarRadioItem>
+            <MenubarRadioItem value="deep">Deep reasoning</MenubarRadioItem>
           </MenubarRadioGroup>
         </MenubarContent>
       </MenubarMenu>
@@ -99,6 +100,26 @@ const meta = preview.meta({
         code: 'Radix `value` / `defaultValue` on `Menubar` (the open menu); trigger `data-[state=open]:`',
       },
     ],
+    guide: {
+      use: [
+        'A desktop app-style bar of menus over a workspace or editor: File, Edit, View, Model.',
+        'When there are many commands that users expect in familiar places, each menu a short, grouped list.',
+      ],
+      avoid: [
+        'A single menu on a button or row: use Dropdown Menu; right-click: Context Menu. Search-driven access: use Command (⌘K).',
+        'A handful of always-visible actions: use Toolbar. Navigation between pages: use Tabs or Sidebar.',
+        'Mobile layouts: there is no room for a bar; move the commands into a Drawer or Dropdown Menu.',
+      ],
+      content: [
+        'Menu names are single nouns (“File”, “View”, “Model”); items name the action and object (“Duplicate conversation”).',
+        'Show the shortcut with `MenubarShortcut` only when it really works; destructive items go last with `intent="destructive"`.',
+      ],
+      a11y: [
+        'Radix gives the bar `role="menubar"` with roving focus: Tab reaches it once, arrow keys move along it and into menus.',
+        'Checkbox and radio items expose `menuitemcheckbox` / `menuitemradio` with their checked state.',
+        'Escape closes the menu and returns focus to its trigger.',
+      ],
+    },
     docs: {
       story: { inline: false, height: '360px' },
       description: {
@@ -122,7 +143,7 @@ export const Default = meta.story()
 Default.test('click opens a menu and an item runs', async ({ canvas, canvasElement, args }) => {
   await userEvent.click(canvas.getByRole('menuitem', { name: 'File' }))
   const menu = await body(canvasElement).findByRole('menu')
-  await userEvent.click(within(menu).getByRole('menuitem', { name: /^New file/ }))
+  await userEvent.click(within(menu).getByRole('menuitem', { name: /^New chat/ }))
   await expect(args.onSelect).toHaveBeenCalledTimes(1)
   await waitFor(() => expect(body(canvasElement).queryByRole('menu')).toBeNull())
 })
@@ -155,7 +176,7 @@ export const TriggerStates = meta.story({
               className={state === 'hover' || state === 'focus-visible' ? `pseudo-${state}` : undefined}
               data-state={state === 'open' ? 'open' : undefined}
             >
-              Label
+              File
             </MenubarTrigger>
           </MenubarMenu>
         </Menubar>

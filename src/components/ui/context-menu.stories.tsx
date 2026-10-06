@@ -28,13 +28,14 @@ type DemoProps = {
 function DemoContextMenu({ modal = true, onSelect }: DemoProps) {
   return (
     <ContextMenu modal={modal}>
-      <ContextMenuTrigger className="flex h-40 w-72 items-center justify-center rounded-lg border border-dashed border-border-strong type-text-sm-normal text-muted-foreground">
-        Right-click here
+      <ContextMenuTrigger className="flex h-40 w-72 flex-col items-center justify-center gap-1 rounded-lg border border-dashed border-border-strong type-text-sm-normal text-muted-foreground">
+        <span className="type-text-sm-medium text-foreground">q3-launch-plan.pdf</span>
+        <span>Right-click for file actions</span>
       </ContextMenuTrigger>
       <ContextMenuContent>
         <ContextMenuItem onSelect={onSelect}>
           <Icon icon={PencilIcon} />
-          Edit<ContextMenuShortcut>⌘E</ContextMenuShortcut>
+          Rename<ContextMenuShortcut>⌘R</ContextMenuShortcut>
         </ContextMenuItem>
         <ContextMenuItem>
           <Icon icon={CopyIcon} />
@@ -51,18 +52,18 @@ function DemoContextMenu({ modal = true, onSelect }: DemoProps) {
             Share
           </ContextMenuSubTrigger>
           <ContextMenuSubContent>
-            <ContextMenuItem>Email</ContextMenuItem>
-            <ContextMenuItem>Message</ContextMenuItem>
+            <ContextMenuItem>Mail</ContextMenuItem>
+            <ContextMenuItem>Chat</ContextMenuItem>
             <ContextMenuItem>Copy link</ContextMenuItem>
           </ContextMenuSubContent>
         </ContextMenuSub>
         <ContextMenuSeparator />
-        <ContextMenuLabel>Title</ContextMenuLabel>
-        <ContextMenuRadioGroup value="1">
-          <ContextMenuRadioItem value="1">Top</ContextMenuRadioItem>
-          <ContextMenuRadioItem value="2">Bottom</ContextMenuRadioItem>
+        <ContextMenuLabel>Sort files by</ContextMenuLabel>
+        <ContextMenuRadioGroup value="name">
+          <ContextMenuRadioItem value="name">Name</ContextMenuRadioItem>
+          <ContextMenuRadioItem value="date">Date added</ContextMenuRadioItem>
         </ContextMenuRadioGroup>
-        <ContextMenuCheckboxItem checked>Show toolbar</ContextMenuCheckboxItem>
+        <ContextMenuCheckboxItem checked>Show file sizes</ContextMenuCheckboxItem>
         <ContextMenuSeparator />
         <ContextMenuItem intent="destructive">
           <Icon icon={Trash2Icon} />
@@ -106,6 +107,25 @@ const meta = preview.meta({
         code: '`ContextMenuShortcut` (or the radio check / checkbox switch) after the label',
       },
     ],
+    guide: {
+      use: [
+        'Shortcuts to actions on an object people point at: a file, a message, a conversation in the list.',
+        'As a convenience for power users, alongside a visible way to reach the same actions.',
+      ],
+      avoid: [
+        'As the only way to reach an action: it is invisible and hard on touch. Pair it with a Dropdown Menu on a “More actions” button.',
+        'Choosing a value for a form: use Select or Combobox.',
+      ],
+      content: [
+        'The same items, order and wording as the object’s Dropdown Menu; destructive items last, after a separator.',
+        'Short verbs (“Rename”, “Download”, “Delete”); shortcuts only when they really exist.',
+      ],
+      a11y: [
+        'Also opens with Shift+F10 or the context-menu key when the area has focus; make the trigger focusable when it matters.',
+        'Arrow keys move, Right opens a submenu, Escape closes and returns focus.',
+        'Radio and checkbox items announce their checked state.',
+      ],
+    },
     docs: {
       story: { inline: false, height: '520px' },
       description: {
@@ -124,22 +144,22 @@ const body = (canvasElement: HTMLElement) => within(canvasElement.ownerDocument.
 export const Default = meta.story()
 
 Default.test('right-click opens it; an item runs and closes it', async ({ canvas, canvasElement, args }) => {
-  await userEvent.pointer({ keys: '[MouseRight]', target: canvas.getByText('Right-click here') })
+  await userEvent.pointer({ keys: '[MouseRight]', target: canvas.getByText('q3-launch-plan.pdf') })
   const menu = await body(canvasElement).findByRole('menu')
   await expect(within(menu).getByRole('menuitem', { name: 'Archive' })).toHaveAttribute('data-disabled')
-  await expect(within(menu).getByRole('menuitemradio', { name: 'Top' })).toBeChecked()
-  await expect(within(menu).getByRole('menuitemcheckbox', { name: 'Show toolbar' })).toBeChecked()
-  await userEvent.click(within(menu).getByRole('menuitem', { name: /^Edit/ }))
+  await expect(within(menu).getByRole('menuitemradio', { name: 'Name' })).toBeChecked()
+  await expect(within(menu).getByRole('menuitemcheckbox', { name: 'Show file sizes' })).toBeChecked()
+  await userEvent.click(within(menu).getByRole('menuitem', { name: /^Rename/ }))
   await expect(args.onSelect).toHaveBeenCalledTimes(1)
   await waitFor(() => expect(body(canvasElement).queryByRole('menu')).toBeNull())
 })
 
 Default.test('arrow keys open the submenu; Escape closes', async ({ canvas, canvasElement }) => {
-  await userEvent.pointer({ keys: '[MouseRight]', target: canvas.getByText('Right-click here') })
+  await userEvent.pointer({ keys: '[MouseRight]', target: canvas.getByText('q3-launch-plan.pdf') })
   const menu = await body(canvasElement).findByRole('menu')
   within(menu).getByRole('menuitem', { name: 'Share' }).focus()
   await userEvent.keyboard('{ArrowRight}')
-  const subItem = await body(canvasElement).findByRole('menuitem', { name: 'Email' })
+  const subItem = await body(canvasElement).findByRole('menuitem', { name: 'Mail' })
   await waitFor(() => expect(subItem).toBeVisible())
   await userEvent.keyboard('{Escape}')
   await userEvent.keyboard('{Escape}')

@@ -47,6 +47,26 @@ const meta = preview.meta({
         code: '`ShellFooter` `align` prop',
       },
     ],
+    guide: {
+      use: [
+        'Building a new overlay or card surface that needs the standard header (title, description, close) and footer (actions).',
+        '`bar` for full-width shells (Dialog, Sheet, Drawer); `inline` inside padded containers (Alert Dialog, Popover, Card); `card` for agent cards.',
+        'Footer `align="between"` when a tertiary action sits on the left; `stretch` on narrow mobile shells.',
+      ],
+      avoid: [
+        'Using these parts directly in app code: use the shell components (Dialog, Sheet, Popover, Card) that wrap them with Radix titles.',
+        'Re-drawing a header or footer row by hand in a new component: compose `ShellHeader` / `ShellFooter` instead.',
+      ],
+      content: [
+        'Titles name the task or object (“Share “Q3 launch plan””, “Delete “Q3 launch plan”?”); the description adds the consequence or context in one sentence.',
+        'Footers: secondary action first, then one primary that says what it does (“Save”, “Delete”, “Approve”).',
+        'A card footer `note` states a consequence only when it matters (“It can’t be unsent.”).',
+      ],
+      a11y: [
+        'Each shell renders its own Title / Description so Radix names and describes the dialog; keep a title even when it is visually hidden.',
+        'The close button is labelled “Close” and stays last in the DOM, so initial focus lands on the first control.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -82,7 +102,12 @@ type HeaderDemoProps = {
 
 /** One ShellHeader from Controls: `variant`, title, description and the close button. */
 export const Default = meta.story({
-  args: { variant: 'bar', title: 'Title', description: 'Subtitle', showClose: true },
+  args: {
+    variant: 'bar',
+    title: 'Share “Q3 launch plan”',
+    description: 'People with the link can view this conversation.',
+    showClose: true,
+  },
   argTypes: {
     variant: { control: 'inline-radio', options: ['bar', 'inline'] },
     title: { control: 'text' },
@@ -106,11 +131,11 @@ export const HeaderBar = meta.story({
   render: () => (
     <div className="flex flex-col">
       <ShellHeader close={<ShellCloseButton />}>
-        <Title>Title</Title>
+        <Title>Connected apps</Title>
       </ShellHeader>
       <ShellHeader close={<ShellCloseButton />}>
-        <Title>Title</Title>
-        <Description>Subtitle</Description>
+        <Title>Share “Q3 launch plan”</Title>
+        <Description>People with the link can view this conversation.</Description>
       </ShellHeader>
     </div>
   ),
@@ -121,11 +146,11 @@ export const HeaderInline = meta.story({
   render: () => (
     <div className="flex flex-col gap-6 p-4">
       <ShellHeader variant="inline" close={<ShellCloseButton />}>
-        <Title>Title</Title>
+        <Title>Rename conversation</Title>
       </ShellHeader>
       <ShellHeader variant="inline">
-        <Title>Title</Title>
-        <Description>Subtitle</Description>
+        <Title>Delete “Q3 launch plan”?</Title>
+        <Description>Its 14 messages and 3 files will be permanently removed.</Description>
       </ShellHeader>
     </div>
   ),
@@ -168,19 +193,21 @@ export const Card = meta.story({
         media={<IconTile icon={SparklesIcon} tone="agent" size="sm" />}
         trailing={
           <Badge variant="semantic" tone="info" size="xs" indicator>
-            Label
+            Pending
           </Badge>
         }
       >
-        <ShellTitle>Title</ShellTitle>
-        <ShellDescription>Subtitle</ShellDescription>
+        <ShellTitle>Send the beta invite email</ShellTitle>
+        <ShellDescription>Mail · send_email</ShellDescription>
       </ShellHeader>
-      <div className="p-4 type-text-sm-normal text-muted-foreground">Subtitle</div>
-      <ShellFooter variant="card" note="Subtitle">
+      <div className="p-4 type-text-sm-normal text-muted-foreground">
+        To 248 beta testers, from Maya Chen, today at 9:00 AM Pacific.
+      </div>
+      <ShellFooter variant="card" note="It can’t be unsent.">
         <Button size="sm" variant="outline" intent="neutral">
-          Cancel
+          Deny
         </Button>
-        <Button size="sm">Save</Button>
+        <Button size="sm">Approve</Button>
       </ShellFooter>
     </div>
   ),

@@ -10,6 +10,8 @@ const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=1073
 
 const STATUSES = ['used', 'not-used', 'saved', 'updated', 'forgotten'] as const
 
+const MEMORY = 'Prefers concise answers with bullet points'
+
 const details = (
   <>
     <Button variant="outline" intent="neutral" size="xs">
@@ -64,6 +66,28 @@ const meta = preview.meta({
       },
       { property: 'action', values: 'button', code: '`action` (Manage in the pill, Undo beside not-used)' },
     ],
+    guide: {
+      use: [
+        'Under an answer, when a remembered fact shaped it (used) or the user chose to answer without it (not-used).',
+        'Right after the assistant saves, updates or forgets a memory, so the change is never silent.',
+        'Give used a `title`, `description` and `actions` (Skip, Edit, Forget) so the user can correct it in place.',
+      ],
+      avoid: [
+        'Reviewing or clearing all memories: use Memory Manager (link to it with Manage).',
+        'Instructions that apply to the whole thread or project: use Instructions Banner.',
+        'Generic success messages: use Sonner (Toast).',
+      ],
+      content: [
+        'The memory: one fact as a short phrase about the user (“Prefers concise answers with bullet points”).',
+        'Popover description: first person and specific (“I kept this answer short because you prefer…”).',
+        'Status labels stay as built (“Saved to memory”, “Memory updated”, “Forgotten”); actions are Manage or Undo.',
+      ],
+      a11y: [
+        'Saved, updated and forgotten are `role="status"`, so the change is announced.',
+        'The used pill is a button that opens a Popover dialog named by `title` and described by `description`.',
+        'The memory text truncates visually but is read in full.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -75,9 +99,9 @@ const meta = preview.meta({
   args: {
     status: 'used' as const,
     open: false,
-    title: 'Title',
-    description: 'Subtitle',
-    children: 'Label',
+    title: 'Memory used',
+    description: 'I kept this answer short because you prefer concise answers with bullet points.',
+    children: MEMORY,
   },
   argTypes: {
     status: { control: 'select', options: STATUSES },
@@ -99,10 +123,12 @@ const meta = preview.meta({
 export const Default = meta.story()
 
 Default.test('the used pill opens the memory details', async ({ canvas, canvasElement }) => {
-  await userEvent.click(canvas.getByRole('button', { name: 'Label' }))
+  await userEvent.click(canvas.getByRole('button', { name: MEMORY }))
   const body = within(canvasElement.ownerDocument.body)
-  const dialog = await body.findByRole('dialog', { name: 'Title' })
-  await expect(dialog).toHaveAccessibleDescription('Subtitle')
+  const dialog = await body.findByRole('dialog', { name: 'Memory used' })
+  await expect(dialog).toHaveAccessibleDescription(
+    'I kept this answer short because you prefer concise answers with bullet points.',
+  )
   await expect(within(dialog).getByRole('button', { name: 'Forget' })).toBeInTheDocument()
 })
 
@@ -111,7 +137,7 @@ export const Details = meta.story({
   args: { open: true },
   render: (args) => (
     <MemoryNotice {...args} actions={details} onOpenAutoFocus={(e) => e.preventDefault()}>
-      Label
+      {MEMORY}
     </MemoryNotice>
   ),
 })
@@ -137,7 +163,7 @@ export const Statuses = meta.story({
 Statuses.test('changes are announced; not used offers Undo', async ({ canvas }) => {
   const notices = canvas.getAllByRole('status')
   await expect(notices).toHaveLength(3)
-  await expect(notices[0]).toHaveTextContent('Saved to memory· Label')
+  await expect(notices[0]).toHaveTextContent(`Saved to memory· ${MEMORY}`)
   await expect(canvas.getByRole('button', { name: 'Undo' })).toBeVisible()
 })
 

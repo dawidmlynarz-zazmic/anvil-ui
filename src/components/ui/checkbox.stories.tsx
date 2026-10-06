@@ -26,6 +26,26 @@ const meta = preview.meta({
       },
       { property: 'show label', values: 'boolean', code: 'an inline `Label` beside it or not' },
     ],
+    guide: {
+      use: [
+        'Independent yes / no choices that are saved with a form: consent, options, items in a list.',
+        'Selecting several items; a parent with `checked="indeterminate"` when only some children are on.',
+        'A horizontal Field when the option needs a description or an error.',
+      ],
+      avoid: [
+        'A setting that applies at once: use Switch. One choice out of several: use Radio Group.',
+        'Filter tokens in a toolbar or above results: use Chip.',
+      ],
+      content: [
+        'The label states the positive choice (“Send me a weekly summary”), never a negation.',
+        'Sentence case, no trailing punctuation; put details in the FieldDescription, not the label.',
+      ],
+      a11y: [
+        'Always pair it with a `Label htmlFor` (or FieldLabel): clicking the label toggles it.',
+        'Space toggles it; group related checkboxes in a FieldSet with a FieldLegend.',
+        'Mark errors with `aria-invalid` and a FieldError, not with color alone.',
+      ],
+    },
     docs: {
       description: {
         component:

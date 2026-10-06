@@ -4,12 +4,13 @@ import { NAVIGATE_URL } from 'storybook/internal/core-events'
 import { addons } from 'storybook/preview-api'
 
 import { docsIdOf, relationshipsOf } from './relationships'
-import { contextsOf, levelOf, shadcnUrl, type FigmaProp } from './taxonomy'
+import { contextsOf, levelOf, shadcnUrl, type FigmaProp, type Guide } from './taxonomy'
 
 // Docs page for every component (autodocs): title; badges for the level, the context and the
-// shadcn/ui counterpart (linked), and the Figma link; the description; Built with / Used in (links
-// to the other components' docs, from the imports); the primary story with its controls; the
-// Figma → code table; then every story.
+// shadcn/ui counterpart (linked), and the Figma link; the description (what it is, anatomy, API);
+// Usage (`parameters.guide`: when to use, when not to, content, accessibility); Relationships
+// (Built with / Used in, from the imports); the primary story with its controls; the Figma → code
+// table; then every story.
 
 /** Renders `code` spans from backticks. */
 function inlineCode(text: string): ReactNode[] {
@@ -83,6 +84,35 @@ function DocsLink({ title }: { title: string }) {
       {name.join(' / ')}
       <span className="sb-unstyled type-text-xs-normal text-muted-foreground"> · {level}</span>
     </a>
+  )
+}
+
+const GUIDE_SECTIONS: { key: keyof Guide; heading: string }[] = [
+  { key: 'use', heading: 'When to use' },
+  { key: 'avoid', heading: 'When not to use' },
+  { key: 'content', heading: 'Content' },
+  { key: 'a11y', heading: 'Accessibility' },
+]
+
+function Usage() {
+  const guide = usePreparedMeta()?.parameters.guide as Guide | undefined
+  if (!guide) return null
+  return (
+    <>
+      <h2 id="usage">Usage</h2>
+      {GUIDE_SECTIONS.map(({ key, heading }) =>
+        guide[key]?.length ? (
+          <div key={key}>
+            <h3 id={`usage-${key}`}>{heading}</h3>
+            <ul>
+              {guide[key]!.map((line) => (
+                <li key={line}>{inlineCode(line)}</li>
+              ))}
+            </ul>
+          </div>
+        ) : null,
+      )}
+    </>
   )
 }
 
@@ -167,6 +197,7 @@ export function AnvilDocsPage() {
       <Meta />
       <Subtitle />
       <Description />
+      <Usage />
       <Relationships />
       <Primary />
       <Controls />

@@ -31,6 +31,24 @@ const meta = preview.meta({
         code: 'selectors: `hover:` · `focus-visible:` · `disabled:` (not a prop)',
       },
     ],
+    guide: {
+      use: [
+        'Turn one tool or format on and off: bold, italic, mute, show details.',
+        'Icon-only toggles in toolbars; with text when the icon alone is unclear.',
+      ],
+      avoid: [
+        'A setting: use Switch. An action that does something once: use Button.',
+        'Several toggles where only one can be on: use Toggle Group. Filters and tags: use Chip.',
+      ],
+      content: [
+        'The label names what is turned on (“Bold”) and stays the same in both states.',
+        'Give icon-only toggles a Tooltip with the same name.',
+      ],
+      a11y: [
+        'It is a button with `aria-pressed`; Space and Enter toggle it.',
+        'Icon-only toggles need `aria-label`; never change the label when it is pressed.',
+      ],
+    },
     docs: {
       description: {
         component:

@@ -12,9 +12,10 @@ import {
   ChevronRightIcon,
   CopyIcon,
   EllipsisIcon,
+  FolderInputIcon,
   Icon,
   ItalicIcon,
-  PencilIcon,
+  Trash2Icon,
   UnderlineIcon,
   XIcon,
 } from '@/components/ui/icon'
@@ -40,6 +41,26 @@ const meta = preview.meta({
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [{ property: 'variant', values: 'default', code: 'nothing (single value)' }],
+    guide: {
+      use: [
+        'A floating bar of actions on the current selection: “3 selected” with Archive, Move, Delete over a list of conversations or files.',
+        'A formatting bar for an editor or canvas (toggle groups for style and alignment).',
+        'Summarise the selection with `ToolbarCount` + `ToolbarLabel` and offer Clear selection first.',
+      ],
+      avoid: [
+        'Actions on one message (Copy, Retry, Good / Bad response): use Message Actions.',
+        'Many commands in nested menus: use Menubar or Dropdown Menu. A form’s Save / Cancel: use ShellFooter.',
+      ],
+      content: [
+        'Buttons are short verbs (“Archive”, “Move”, “Delete”); put the destructive one last with `intent="destructive"`.',
+        'Keep three or four visible actions and put the rest in a More actions menu.',
+      ],
+      a11y: [
+        'Radix Toolbar: one Tab stop, arrow keys (Home / End) move between controls; always pass `aria-label` (“Selected conversations”).',
+        'Icon-only buttons and toggle items need `aria-label`; toggle groups need their own name (“Text style”).',
+        'Toggles expose `aria-pressed`; announce selection changes in text, not only by showing the bar.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -47,7 +68,7 @@ const meta = preview.meta({
       },
     },
   },
-  args: { orientation: 'horizontal', 'aria-label': 'Label' },
+  args: { orientation: 'horizontal', 'aria-label': 'Selected conversations' },
   argTypes: {
     orientation: { control: 'inline-radio', options: ['horizontal', 'vertical'] },
     'aria-label': { control: 'text' },
@@ -60,21 +81,21 @@ const meta = preview.meta({
         <ToolbarButton variant="ghost" size="icon-xs" aria-label="Clear selection">
           <Icon icon={XIcon} />
         </ToolbarButton>
-        <ToolbarCount>1</ToolbarCount>
-        <ToolbarLabel>Selected</ToolbarLabel>
+        <ToolbarCount>3</ToolbarCount>
+        <ToolbarLabel>selected</ToolbarLabel>
       </ToolbarGroup>
       <ToolbarGroup>
         <ToolbarButton>
-          <Icon icon={PencilIcon} />
-          Edit
-        </ToolbarButton>
-        <ToolbarButton>
-          <Icon icon={CopyIcon} />
-          Duplicate
-        </ToolbarButton>
-        <ToolbarButton>
           <Icon icon={ArchiveIcon} />
           Archive
+        </ToolbarButton>
+        <ToolbarButton>
+          <Icon icon={FolderInputIcon} />
+          Move
+        </ToolbarButton>
+        <ToolbarButton intent="destructive">
+          <Icon icon={Trash2Icon} />
+          Delete
         </ToolbarButton>
         <ToolbarButton size="icon-sm" aria-label="More actions">
           <Icon icon={EllipsisIcon} />
@@ -88,11 +109,11 @@ const meta = preview.meta({
 export const Default = meta.story()
 
 Default.test('one Tab stop; arrow keys move between actions', async ({ canvas }) => {
-  await expect(canvas.getByRole('toolbar', { name: 'Label' })).toBeVisible()
+  await expect(canvas.getByRole('toolbar', { name: 'Selected conversations' })).toBeVisible()
   await userEvent.tab()
   await expect(canvas.getByRole('button', { name: 'Clear selection' })).toHaveFocus()
   await userEvent.keyboard('{ArrowRight}')
-  await expect(canvas.getByRole('button', { name: 'Edit' })).toHaveFocus()
+  await expect(canvas.getByRole('button', { name: 'Archive' })).toHaveFocus()
   await userEvent.keyboard('{End}')
   await expect(canvas.getByRole('button', { name: 'More actions' })).toHaveFocus()
 })
@@ -100,8 +121,8 @@ Default.test('one Tab stop; arrow keys move between actions', async ({ canvas })
 /** A formatting bar: toggle groups (multiple and single), a separator and a button. */
 export const Formatting = meta.story({
   render: (args) => (
-    <Toolbar {...args} className="gap-2">
-      <ToolbarToggleGroup type="multiple" aria-label="Label 1" defaultValue={['bold']}>
+    <Toolbar {...args} aria-label="Formatting" className="gap-2">
+      <ToolbarToggleGroup type="multiple" aria-label="Text style" defaultValue={['bold']}>
         <ToolbarToggleItem value="bold" aria-label="Bold">
           <Icon icon={BoldIcon} />
         </ToolbarToggleItem>
@@ -113,7 +134,7 @@ export const Formatting = meta.story({
         </ToolbarToggleItem>
       </ToolbarToggleGroup>
       <ToolbarSeparator />
-      <ToolbarToggleGroup type="single" aria-label="Label 2" defaultValue="left">
+      <ToolbarToggleGroup type="single" aria-label="Alignment" defaultValue="left">
         <ToolbarToggleItem value="left" aria-label="Align left">
           <Icon icon={AlignLeftIcon} />
         </ToolbarToggleItem>
@@ -127,7 +148,7 @@ export const Formatting = meta.story({
       <ToolbarSeparator />
       <ToolbarButton variant="ghost">
         <Icon icon={CopyIcon} />
-        Copy
+        Copy as Markdown
       </ToolbarButton>
     </Toolbar>
   ),
@@ -143,12 +164,12 @@ Formatting.test('toggle items press independently', async ({ canvas }) => {
 /** A ButtonGroup of ToolbarButtons (Figma Button Group). */
 export const WithButtonGroup = meta.story({
   render: (args) => (
-    <Toolbar {...args}>
+    <Toolbar {...args} aria-label="Search results">
       <ToolbarGroup>
-        <ToolbarCount>3</ToolbarCount>
-        <ToolbarLabel>Selected</ToolbarLabel>
+        <ToolbarCount>5</ToolbarCount>
+        <ToolbarLabel>matches</ToolbarLabel>
       </ToolbarGroup>
-      <ButtonGroup aria-label="Label">
+      <ButtonGroup aria-label="Go to match">
         <ToolbarButton>
           <Icon icon={ChevronLeftIcon} />
           Previous

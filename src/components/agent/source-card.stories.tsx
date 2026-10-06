@@ -27,6 +27,27 @@ const meta = preview.meta({
       },
       { property: 'state', values: 'default · excluded', code: '`excluded` prop' },
     ],
+    guide: {
+      use: [
+        'Research and review flows where the user judges each source: its publisher, confidence, how often it was used, and whether to keep it.',
+        'In a list or grid of the sources behind a report, with Exclude so the agent can redo the work without them.',
+      ],
+      avoid: [
+        'Previewing a citation inline in an answer: use Citation Hovercard.',
+        'Listing all sources of one chat answer: use Citation Drawer with Citation Source Items.',
+        'Showing a file the agent produced: use File Output Card.',
+      ],
+      content: [
+        '`publisher`: the publication name; `meta`: domain · date (“marketpulse.example · 14 May 2026”).',
+        '`tag`: the source type in one word (“Report”, “Survey”, “Blog”). `usage`: how it was used (“Cited 3 times”).',
+        '`excerpt`: the passage the agent relied on, quoted as-is.',
+      ],
+      a11y: [
+        'Confidence is a dot plus text (“High confidence”), never color alone.',
+        'Open, Exclude and Restore are icon buttons named “Open source”, “Exclude source”, “Restore source”.',
+        'Excluded shows a text badge, not only a dimmed card.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -35,13 +56,14 @@ const meta = preview.meta({
     },
   },
   args: {
-    publisher: 'Title',
-    meta: 'label.com · 14 May 2026',
-    tag: 'Label',
-    title: 'Title',
-    excerpt: 'Subtitle',
+    publisher: 'MarketPulse',
+    meta: 'marketpulse.example · 14 May 2026',
+    tag: 'Report',
+    title: 'Team plans for sync tools, compared',
+    excerpt:
+      'Most sync tools now price team plans per seat, between $8 and $14 a month, with annual discounts of about 20%.',
     confidence: 'high' as const,
-    usage: 'Label',
+    usage: 'Cited 3 times',
     excluded: false,
     href: '#source',
   },

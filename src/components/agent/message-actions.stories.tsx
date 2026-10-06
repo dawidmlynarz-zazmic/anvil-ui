@@ -41,7 +41,7 @@ const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=1067
  * Switch model. Composed in Message Actions, not a component of its own.
  */
 function RegenerateItems() {
-  const [model, setModel] = useState('label-1')
+  const [model, setModel] = useState('balanced')
   return (
     <>
       <DropdownMenuItem>
@@ -75,8 +75,9 @@ function RegenerateItems() {
         </DropdownMenuSubTrigger>
         <DropdownMenuSubContent className="rounded-xl p-1.5">
           <DropdownMenuRadioGroup value={model} onValueChange={setModel}>
-            <DropdownMenuRadioItem value="label-1">Label 1</DropdownMenuRadioItem>
-            <DropdownMenuRadioItem value="label-2">Label 2</DropdownMenuRadioItem>
+            <DropdownMenuRadioItem value="fast">Fast</DropdownMenuRadioItem>
+            <DropdownMenuRadioItem value="balanced">Balanced</DropdownMenuRadioItem>
+            <DropdownMenuRadioItem value="deep">Deep reasoning</DropdownMenuRadioItem>
           </DropdownMenuRadioGroup>
         </DropdownMenuSubContent>
       </DropdownMenuSub>
@@ -150,6 +151,27 @@ const meta = preview.meta({
       },
       { property: 'show share', values: 'boolean', code: 'render the Share `MessageAction` or not' },
     ],
+    guide: {
+      use: [
+        'The row under an assistant answer: Copy, Retry, Good response, Bad response, Share; Edit on the user’s own message.',
+        '`menu` for actions with options: Retry opens Try again, Modify response (Shorter, More formal…) and Switch model.',
+        '`pressed` for toggles such as feedback; Good and Bad response are exclusive.',
+      ],
+      avoid: [
+        'Bulk actions on a selection (“3 selected”): use Toolbar. Many commands on a conversation: use Dropdown Menu.',
+        'A full rating or survey: use Rating Scale or the feedback blocks after the Bad response click.',
+        'Suggested next prompts: use Quick Reply.',
+      ],
+      content: [
+        'Each `label` names the action (“Copy”, “Retry”, “Good response”, “Bad response”, “Share”); it is the tooltip and the accessible name.',
+        'Show only the actions that apply; keep the order Copy, Retry, Edit, feedback, Share.',
+      ],
+      a11y: [
+        'Built on Toolbar: `role="toolbar"` named “Message actions”, one Tab stop, arrow keys between actions.',
+        'Feedback toggles expose `aria-pressed`; confirm copies with a Toast or a status message, not only an icon change.',
+        'Actions stay visible (or appear on focus), not only on hover, so keyboard users can reach them.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -190,7 +212,10 @@ export const InMessage = meta.story({
       <Message>
         <MessageContent>
           <MessageBubble variant="ghost">
-            <MessageBubbleContent>Subtitle</MessageBubbleContent>
+            <MessageBubbleContent>
+              Northwind Sync launches on September 14. A private beta for 200 teams runs through August, and
+              pricing goes live on launch day.
+            </MessageBubbleContent>
           </MessageBubble>
           <MessageFooter>
             <Demo {...args} />

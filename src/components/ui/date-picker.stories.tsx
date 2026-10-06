@@ -53,6 +53,24 @@ const meta = preview.meta({
     figmaProps: [
       { property: 'open', values: 'false · true', code: '`open` prop on `DatePicker` (Popover root)' },
     ],
+    guide: {
+      use: [
+        'A date field in a form or filter: “Due date”, “Report period”, “Send on”.',
+        'When the value matters more than the month view; the Calendar opens only on demand.',
+      ],
+      avoid: [
+        'When the calendar is the main content: use Calendar inline.',
+        'Relative choices (“Last 7 days”, “This quarter”): use Select or Toggle Group presets.',
+      ],
+      content: [
+        'The trigger shows the formatted value (“Oct 14, 2026”) or a hint (“Pick a date”) when empty.',
+        'Label it with `Field` + `FieldLabel`; add a description for limits (“Weekdays only”).',
+      ],
+      a11y: [
+        'The trigger is a Button; the popover is a `dialog` named by the trigger and traps focus.',
+        'Escape closes it and returns focus to the trigger; arrow keys move between days.',
+      ],
+    },
     docs: {
       story: { inline: false, height: '420px' },
       description: {

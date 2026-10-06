@@ -84,3 +84,18 @@ export const shadcnUrl = (slug: string) => `https://ui.shadcn.com/docs/component
  * Wrap code in backticks.
  */
 export type FigmaProp = { property: string; values?: string; code: string }
+
+/**
+ * A component's usage guide (`parameters.guide`), shown as the docs page's Usage section. Short
+ * bullets; wrap code in backticks. `avoid` names what to use instead.
+ */
+export type Guide = {
+  /** When to use it. */
+  use: string[]
+  /** When not to use it, and what to use instead. */
+  avoid?: string[]
+  /** What the copy should say. */
+  content?: string[]
+  /** Keyboard, screen reader and contrast notes. */
+  a11y?: string[]
+}

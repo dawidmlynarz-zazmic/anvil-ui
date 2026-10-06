@@ -1,14 +1,14 @@
 import preview from '#.storybook/preview'
 import { expect, userEvent } from 'storybook/test'
 
-import { BoldIcon, Icon, ItalicIcon, UnderlineIcon } from './icon'
+import { BlocksIcon, FileTextIcon, GlobeIcon, Icon } from './icon'
 import { ToggleGroup, ToggleGroupItem } from './toggle-group'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10943-220'
 const ITEMS = [
-  { value: '1', icon: BoldIcon, label: 'Bold' },
-  { value: '2', icon: ItalicIcon, label: 'Italic' },
-  { value: '3', icon: UnderlineIcon, label: 'Underline' },
+  { value: '1', icon: GlobeIcon, label: 'Web' },
+  { value: '2', icon: FileTextIcon, label: 'Files' },
+  { value: '3', icon: BlocksIcon, label: 'Connected apps' },
 ]
 
 type DemoProps = {
@@ -30,11 +30,25 @@ function DemoToggleGroup({
     </ToggleGroupItem>
   ))
   return type === 'multiple' ? (
-    <ToggleGroup type="multiple" variant={variant} size={size} disabled={disabled} defaultValue={['1']}>
+    <ToggleGroup
+      aria-label="Search in"
+      type="multiple"
+      variant={variant}
+      size={size}
+      disabled={disabled}
+      defaultValue={['1']}
+    >
       {items}
     </ToggleGroup>
   ) : (
-    <ToggleGroup type="single" variant={variant} size={size} disabled={disabled} defaultValue="1">
+    <ToggleGroup
+      aria-label="Search in"
+      type="single"
+      variant={variant}
+      size={size}
+      disabled={disabled}
+      defaultValue="1"
+    >
       {items}
     </ToggleGroup>
   )
@@ -49,6 +63,25 @@ const meta = preview.meta({
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [{ property: 'variant', values: 'default · outline', code: '`variant` prop' }],
+    guide: {
+      use: [
+        'Compact on/off choices that apply immediately: where the assistant searches (Web · Files · Connected apps), a view mode, text formatting.',
+        '`type="single"` for one-of-many view switches; `multiple` for independent filters.',
+      ],
+      avoid: [
+        'Switching content panels: use Tabs. A setting saved with a form: use Radio Group or Switch.',
+        'Actions that run once (Copy, Regenerate): use Button Group.',
+        'More than ~5 options or long labels: use Select.',
+      ],
+      content: [
+        'Icon-only items need a clear, familiar icon and an `aria-label`; add a Tooltip with the same text.',
+        'Text items are one word each, parallel in form.',
+      ],
+      a11y: [
+        'Single groups are a `radiogroup` of `radio`s; multiple groups are `button`s with `aria-pressed`.',
+        'The group is one tab stop; arrow keys move between items. Name the group with `aria-label`.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -74,13 +107,13 @@ Default.test('single: one item pressed; arrow keys move focus', async ({ canvas 
   await expect(second).toBeChecked()
   await expect(first).not.toBeChecked()
   await userEvent.keyboard('{ArrowRight}')
-  await expect(canvas.getByRole('radio', { name: 'Underline' })).toHaveFocus()
+  await expect(canvas.getByRole('radio', { name: 'Connected apps' })).toHaveFocus()
 })
 
 Default.test('multiple: items press independently', { args: { type: 'multiple' } }, async ({ canvas }) => {
-  await userEvent.click(canvas.getByRole('button', { name: 'Italic' }))
-  await expect(canvas.getByRole('button', { name: 'Bold' })).toHaveAttribute('aria-pressed', 'true')
-  await expect(canvas.getByRole('button', { name: 'Italic' })).toHaveAttribute('aria-pressed', 'true')
+  await userEvent.click(canvas.getByRole('button', { name: 'Files' }))
+  await expect(canvas.getByRole('button', { name: 'Web' })).toHaveAttribute('aria-pressed', 'true')
+  await expect(canvas.getByRole('button', { name: 'Files' })).toHaveAttribute('aria-pressed', 'true')
 })
 
 /** Figma variant=default (4px apart) · outline (joined). */
