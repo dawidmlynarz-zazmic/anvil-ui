@@ -207,7 +207,10 @@ Default.test('typing filters and highlights the match', async ({ canvas }) => {
   const input = canvas.getByRole('combobox')
   await userEvent.type(input, 'Open settings')
   await waitFor(() => expect(canvas.getAllByRole('option')).toHaveLength(1))
-  await expect(canvas.getByRole('option', { name: /^Open settings/ })).toHaveAttribute('data-selected', 'true')
+  await expect(canvas.getByRole('option', { name: /^Open settings/ })).toHaveAttribute(
+    'data-selected',
+    'true',
+  )
 })
 
 /** Figma empty=true: a query with no results. */
