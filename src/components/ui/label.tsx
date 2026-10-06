@@ -4,14 +4,15 @@ import { Label as LabelPrimitive } from 'radix-ui'
 
 import { cn } from '@/lib/utils'
 
-// Figma: Forms page → `label` (10892:172), the one label atom for every form element.
+// Figma: Forms page → `label` (10892:172), the one label atom for every form element: text/sm/medium
+// (Figma updated; was text/xs), markers text/sm (required --danger, optional --muted-foreground).
 // `marker` none · required · optional. Figma `state` follows the control, so it is selectors:
 // disabled → 50% opacity (Field data-disabled, or a disabled peer control);
 // invalid → destructive text (Field data-invalid, data-invalid on the label, or an aria-invalid peer).
 // Invalid text uses --danger-medium, not Figma's --destructive: red/50 on the dark background is
 // 3.25:1; --danger-medium is what Figma's own destructive outline/ghost buttons use for text.
 const labelVariants = cva([
-  'inline-flex items-center gap-1 type-text-xs-medium text-foreground select-none',
+  'inline-flex items-center gap-1 type-text-sm-medium text-foreground select-none',
   'group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50',
   'peer-disabled:cursor-not-allowed peer-disabled:opacity-50',
   'group-data-[invalid=true]/field:text-danger-medium data-[invalid=true]:text-danger-medium peer-aria-invalid:text-danger-medium',
@@ -21,8 +22,8 @@ const markerVariants = cva('', {
   variants: {
     marker: {
       none: 'hidden',
-      required: 'type-text-xs-medium text-danger',
-      optional: 'type-text-xs-normal text-muted-foreground',
+      required: 'type-text-sm-medium text-danger',
+      optional: 'type-text-sm-normal text-muted-foreground',
     },
   },
 })
