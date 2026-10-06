@@ -98,15 +98,7 @@ export const catalog: CatalogArea[] = [
     id: 'feedback',
     name: 'Feedback',
     description: 'Status, progress and messages about what the system or agent is doing.',
-    items: [
-      c('Alert'),
-      c('Toast'),
-      c('Progress'),
-      c('Spinner'),
-      c('Skeleton'),
-      c('Empty'),
-      c('Status Badge'),
-    ],
+    items: [c('Alert'), c('Toast'), c('Progress'), c('Spinner'), c('Skeleton'), c('Empty')],
   },
   {
     section: 'UI Components',

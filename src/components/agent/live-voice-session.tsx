@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'
+import { Badge } from '@/components/ui/badge'
 import { VoiceWaveform } from '@/components/agent/voice-waveform'
 import {
   Icon,
@@ -108,10 +109,9 @@ function LiveVoiceSession({
       {...props}
     >
       <header className="flex items-center gap-2 p-5">
-        <span className="flex h-4.5 items-center gap-1 rounded-sm bg-info-subtle px-1 type-text-2xs-medium text-info-medium">
-          <span className="size-1.5 rounded-full bg-info" />
+        <Badge variant="semantic" tone="info" size="xs" indicator>
           Live
-        </span>
+        </Badge>
         <span className="flex-1 type-text-sm-medium tabular-nums">{elapsed}</span>
         {onClose && (
           <button
