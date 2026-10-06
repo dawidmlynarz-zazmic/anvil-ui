@@ -13,7 +13,7 @@ import { ArrowDownIcon, Icon } from '@/components/ui/icon'
 // Figma has no scroller part: the thread uses --shell-thread-max and the shell's padding. The
 // jump button is an outline · neutral circle icon button (Figma icon button: circle for floating
 // controls) with shadow-sm; it slides in with --duration-base / --ease-out and out with
-// --duration-slow / --ease-in-out.
+// --duration-fast / --ease-in-out.
 
 function MessageScrollerProvider(props: React.ComponentProps<typeof MessageScrollerPrimitive.Provider>) {
   return <MessageScrollerPrimitive.Provider {...props} />
@@ -102,7 +102,7 @@ function MessageScrollerButton({
       data-size={size}
       direction={direction}
       className={cn(
-        'absolute inset-s-1/2 z-10 -translate-x-1/2 shadow-sm transition-[translate,scale,opacity] duration-(--duration-base) data-[active=false]:pointer-events-none data-[active=false]:scale-95 data-[active=false]:opacity-0 data-[active=false]:duration-(--duration-slow) data-[active=false]:ease-in-out data-[active=true]:translate-y-0 data-[active=true]:scale-100 data-[active=true]:opacity-100 data-[active=true]:ease-out data-[direction=end]:bottom-4 data-[direction=end]:data-[active=false]:translate-y-full data-[direction=start]:top-4 data-[direction=start]:data-[active=false]:-translate-y-full rtl:translate-x-1/2 data-[direction=start]:[&_svg]:rotate-180',
+        'absolute inset-s-1/2 z-10 -translate-x-1/2 shadow-sm transition-[translate,scale,opacity] duration-(--duration-base) data-[active=false]:pointer-events-none data-[active=false]:scale-95 data-[active=false]:opacity-0 data-[active=false]:duration-(--duration-fast) data-[active=false]:ease-in-out data-[active=true]:translate-y-0 data-[active=true]:scale-100 data-[active=true]:opacity-100 data-[active=true]:ease-out data-[direction=end]:bottom-4 data-[direction=end]:data-[active=false]:translate-y-full data-[direction=start]:top-4 data-[direction=start]:data-[active=false]:-translate-y-full rtl:translate-x-1/2 data-[direction=start]:[&_svg]:rotate-180',
         className,
       )}
       render={render ?? <Button variant={variant} intent={intent} shape={shape} size={size} />}

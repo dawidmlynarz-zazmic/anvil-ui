@@ -42,7 +42,7 @@ function Switch({ className, size = 'default', ...props }: SwitchProps) {
         data-slot="switch-thumb"
         className={cn(
           'pointer-events-none block rounded-full bg-primary-foreground shadow-sm',
-          'transition-[translate,background-color] duration-(--duration-fast) ease-out',
+          'transition-[translate,background-color] duration-(--duration-fast) ease-out motion-reduce:transition-[background-color]',
           'group-hover/switch:data-[state=unchecked]:bg-muted group-disabled/switch:group-hover/switch:data-[state=unchecked]:bg-primary-foreground',
           'group-data-[size=default]/switch:size-4 group-data-[size=default]/switch:data-[state=checked]:translate-x-3',
           'group-data-[size=sm]/switch:size-3 group-data-[size=sm]/switch:data-[state=checked]:translate-x-2',
