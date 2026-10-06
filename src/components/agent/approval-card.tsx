@@ -12,6 +12,7 @@ import {
   TriangleAlertIcon,
   type LucideIcon,
 } from '@/components/ui/icon'
+import { IconTile } from '@/components/anvil/icon-tile'
 import { PulseDot } from '@/components/agent/pulse-dot'
 
 // Figma Agent Builder › Core Kit › approval card (10728:2418): confirmation before an action with
@@ -28,13 +29,13 @@ type ApprovalStatus = 'pending' | 'approved' | 'denied' | 'executing' | 'failed'
 
 const ApprovalStatusContext = React.createContext<ApprovalStatus>('pending')
 
-const TILE: Record<ApprovalStatus, { icon: LucideIcon; className: string }> = {
-  pending: { icon: ShieldAlertIcon, className: 'bg-warning-subtle text-warning dark:text-warning-medium' },
-  approved: { icon: ShieldCheckIcon, className: 'bg-success-subtle text-success dark:text-success-medium' },
-  denied: { icon: ShieldXIcon, className: 'bg-danger-subtle text-danger dark:text-danger-medium' },
-  executing: { icon: ShieldAlertIcon, className: 'bg-warning-subtle text-warning dark:text-warning-medium' },
-  failed: { icon: ShieldAlertIcon, className: 'bg-warning-subtle text-warning dark:text-warning-medium' },
-  expired: { icon: ShieldAlertIcon, className: 'bg-warning-subtle text-warning dark:text-warning-medium' },
+const TILE: Record<ApprovalStatus, { icon: LucideIcon; tone: 'warning' | 'success' | 'destructive' }> = {
+  pending: { icon: ShieldAlertIcon, tone: 'warning' },
+  approved: { icon: ShieldCheckIcon, tone: 'success' },
+  denied: { icon: ShieldXIcon, tone: 'destructive' },
+  executing: { icon: ShieldAlertIcon, tone: 'warning' },
+  failed: { icon: ShieldAlertIcon, tone: 'warning' },
+  expired: { icon: ShieldAlertIcon, tone: 'warning' },
 }
 
 const BADGE: Record<ApprovalStatus, { label: string; className: string; dot: string }> = {
@@ -96,9 +97,7 @@ function ApprovalCard({
         {...props}
       >
         <header className="flex flex-wrap items-center gap-3 border-b p-4">
-          <span className={cn('flex size-8 shrink-0 items-center justify-center rounded-lg', tile.className)}>
-            <Icon icon={tile.icon} />
-          </span>
+          <IconTile icon={tile.icon} tone={tile.tone} size="sm" />
           <div className="flex min-w-0 grow basis-48 flex-col gap-0.5">
             <h3 id={titleId} className="type-text-sm-semibold text-foreground">
               {title}

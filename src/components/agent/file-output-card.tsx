@@ -14,6 +14,7 @@ import {
   XIcon,
   type LucideIcon,
 } from '@/components/ui/icon'
+import { IconTile } from '@/components/anvil/icon-tile'
 import { Progress } from '@/components/ui/progress'
 
 // Figma Agent Builder › Core Kit › file output card (10729:2552): a file the agent generated. --card,
@@ -26,11 +27,11 @@ import { Progress } from '@/components/ui/progress'
 
 type FileKind = 'document' | 'presentation' | 'spreadsheet' | 'pdf'
 
-const KIND: Record<FileKind, { tile: string; icon: LucideIcon }> = {
-  document: { tile: 'bg-info-subtle text-info', icon: FileTextIcon },
-  presentation: { tile: 'bg-warning-subtle text-warning', icon: PresentationIcon },
-  spreadsheet: { tile: 'bg-success-subtle text-success', icon: FileSpreadsheetIcon },
-  pdf: { tile: 'bg-danger-subtle text-danger', icon: FileTypeIcon },
+const KIND: Record<FileKind, { tone: 'info' | 'warning' | 'success' | 'destructive'; icon: LucideIcon }> = {
+  document: { tone: 'info', icon: FileTextIcon },
+  presentation: { tone: 'warning', icon: PresentationIcon },
+  spreadsheet: { tone: 'success', icon: FileSpreadsheetIcon },
+  pdf: { tone: 'destructive', icon: FileTypeIcon },
 }
 
 function FileOutputCard({
@@ -71,9 +72,7 @@ function FileOutputCard({
       )}
       {...props}
     >
-      <span className={cn('flex size-10 shrink-0 items-center justify-center rounded-lg', KIND[kind].tile)}>
-        <Icon icon={KIND[kind].icon} className="size-4.5" />
-      </span>
+      <IconTile icon={KIND[kind].icon} tone={KIND[kind].tone} />
       <div className="flex min-w-0 flex-1 flex-col gap-1">
         <span className="truncate type-text-sm-semibold text-foreground">{name}</span>
         {meta && (

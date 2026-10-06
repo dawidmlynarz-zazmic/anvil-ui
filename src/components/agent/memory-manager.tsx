@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
 import { Switch } from '@/components/ui/switch'
 import { BrainIcon, Icon, PencilIcon, SearchIcon, Trash2Icon } from '@/components/ui/icon'
+import { IconTile } from '@/components/anvil/icon-tile'
 
 // Figma Agent Builder › Core Kit › memory manager (10730:2779): review and manage what the
 // assistant remembers. --card, border, radius xl, shadow-sm, max 640px. Header (part / card header,
@@ -57,9 +58,7 @@ function MemoryManager({
       {...props}
     >
       <header className="flex items-center gap-3 border-b p-4">
-        <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-agent-subtle text-agent dark:text-agent-medium">
-          <Icon icon={BrainIcon} />
-        </span>
+        <IconTile icon={BrainIcon} tone="agent" size="sm" />
         <div className="flex min-w-0 flex-1 flex-col gap-0.5">
           <h3 id={titleId} className="type-text-sm-semibold text-foreground">
             {title}
