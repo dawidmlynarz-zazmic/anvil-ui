@@ -13,6 +13,8 @@ import { Icon, XIcon } from '@/components/ui/icon'
 // pressed (Radix data-[state=on], Figma `pressed=true`) → --background-inverse / --foreground-inverse.
 // Focus → focus/ring; disabled → 50%. With `onRemove` it is a removable token instead: the label
 // plus its own remove button (Figma icon right), since a button can't hold another button.
+// `shape` pill rounds it fully with 12px sides (contract shape; Quick Reply is a pill chip).
+// `chipVariants` also styles non-toggle chips that act as buttons (Quick Reply).
 
 const chipVariants = cva(
   [
@@ -36,12 +38,14 @@ const chipVariants = cva(
           "h-6 rounded-sm px-2 type-text-sm-medium [&_img]:size-4 [&_svg:not([class*='size-'])]:size-3",
         lg: "h-8 rounded-md px-2 type-text-sm-medium [&_img]:size-4 [&_svg:not([class*='size-'])]:size-4",
       },
+      // After size, so pill wins over the size's radius and padding.
+      shape: { default: '', pill: 'rounded-full px-3' },
     },
     compoundVariants: [
       { interactive: true, variant: 'default', className: 'hover:bg-accent' },
       { interactive: true, variant: 'outline', className: 'hover:bg-button-outline-hover' },
     ],
-    defaultVariants: { variant: 'default', size: 'default', interactive: true },
+    defaultVariants: { variant: 'default', size: 'default', shape: 'default', interactive: true },
   },
 )
 
@@ -64,6 +68,7 @@ function Chip(props: ToggleChipProps | RemovableChipProps) {
     const {
       variant,
       size,
+      shape,
       className,
       children,
       onRemove,
@@ -75,7 +80,7 @@ function Chip(props: ToggleChipProps | RemovableChipProps) {
       <span
         data-slot="chip"
         data-disabled={disabled || undefined}
-        className={cn(chipVariants({ variant, size, interactive: false }), 'pe-0.5', className)}
+        className={cn(chipVariants({ variant, size, shape, interactive: false }), 'pe-0.5', className)}
         {...rest}
       >
         {children}
@@ -91,11 +96,11 @@ function Chip(props: ToggleChipProps | RemovableChipProps) {
       </span>
     )
   }
-  const { variant, size, className, ...rest } = props as ToggleChipProps
+  const { variant, size, shape, className, ...rest } = props as ToggleChipProps
   return (
     <TogglePrimitive.Root
       data-slot="chip"
-      className={cn(chipVariants({ variant, size }), className)}
+      className={cn(chipVariants({ variant, size, shape }), className)}
       {...rest}
     />
   )
