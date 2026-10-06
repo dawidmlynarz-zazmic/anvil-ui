@@ -24,7 +24,7 @@ const meta = preview.meta({
         '`variant="separator"` for a day break; a single inline link for a follow-up such as “Undo”.',
       ],
       avoid: [
-        'An error that needs action: use Alert or System Banner. A message: use Message Bubble.',
+        'An error that needs action: use Alert (size sm is the system banner). A message: use Message Bubble.',
         'A divider outside a thread: use Separator.',
       ],
       content: [

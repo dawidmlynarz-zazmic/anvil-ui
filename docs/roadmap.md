@@ -72,7 +72,7 @@ Ordered so each group completes something usable and later groups build on earli
 | 3 | Surfaces and structure | Card (+ Hover Card example), Tabs, Accordion (+ Collapsible), Separator (restyle), Scroll Area, Toggle / Toggle Group, Button Group (base for Toolbar) | — |
 | 4 | Navigation | Breadcrumb, Pagination, Menubar (Figma Menu), Sidebar | — |
 | 5 | Data display | Avatar, Skeleton, Progress, Empty (Empty state), Table, Calendar + Date Picker, Carousel, Resizable | `react-day-picker`, `date-fns`, `embla-carousel-react`, `react-resizable-panels` |
-| 6 | Agent Builder primitives from shadcn's chat set, where the Figma Core Kit matches | Message, Bubble, Attachment, Marker, Message Scroller (checked against Agent Builder → Core Kit first) | `@shadcn/react` (Message Scroller) |
+| 6 | Agent Builder primitives from shadcn's chat set, where the Figma Core Kit matches | Message, Message Bubble (was Bubble), Attachment, Marker, Message Scroller (checked against Agent Builder → Core Kit first) | `@shadcn/react` (Message Scroller) |
 
 ### 4b — custom components (no shadcn counterpart), built on 4a
 

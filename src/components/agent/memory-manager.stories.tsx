@@ -100,9 +100,15 @@ Default.test('the switch turns memory off', async ({ args, canvas }) => {
 
 Default.test('each memory has edit and delete', async ({ canvas }) => {
   await expect(canvas.getAllByRole('listitem')).toHaveLength(4)
-  await expect(canvas.getAllByRole('button', { name: 'Delete' })).toHaveLength(4)
+  await expect(canvas.getAllByRole('button', { name: /^Delete / })).toHaveLength(4)
   await expect(canvas.getByRole('searchbox', { name: 'Search memories' })).toBeVisible()
 })
 
 /** Memory off: the list stays readable in a muted tone. */
 export const Off = meta.story({ args: { defaultEnabled: false } })
+
+Default.test('each row’s buttons are named after the memory', async ({ canvas }) => {
+  await expect(
+    canvas.getByRole('button', { name: 'Edit Prefers concise answers with bullet points' }),
+  ).toBeInTheDocument()
+})

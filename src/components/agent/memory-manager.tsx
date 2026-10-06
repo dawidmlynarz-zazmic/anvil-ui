@@ -115,10 +115,16 @@ function MemoryManagerItem({
   children,
   ...props
 }: React.ComponentProps<'li'> & { tag?: React.ReactNode; onEdit?: () => void; onDelete?: () => void }) {
+  // Each row's buttons are named after its memory (“Edit Prefers concise answers…”), so a screen
+  // reader can tell the rows' Edit and Delete apart.
+  const id = React.useId()
   return (
     <Item asChild variant="outline" size="sm" className={cn('flex-nowrap gap-2.5', className)}>
       <li data-slot="memory-manager-item" {...props}>
-        <ItemContent className="type-text-sm-normal text-foreground group-data-[enabled=false]/memory:text-muted-foreground">
+        <ItemContent
+          id={`${id}-text`}
+          className="type-text-sm-normal text-foreground group-data-[enabled=false]/memory:text-muted-foreground"
+        >
           {children}
         </ItemContent>
         <ItemActions className="gap-2.5">
@@ -128,12 +134,30 @@ function MemoryManagerItem({
             </Badge>
           )}
           {onEdit && (
-            <Button variant="ghost" intent="neutral" size="icon-xs" aria-label="Edit" onClick={onEdit}>
+            <Button
+              variant="ghost"
+              intent="neutral"
+              size="icon-xs"
+              aria-labelledby={`${id}-edit ${id}-text`}
+              onClick={onEdit}
+            >
+              <span id={`${id}-edit`} className="sr-only">
+                Edit
+              </span>
               <Icon icon={PencilIcon} />
             </Button>
           )}
           {onDelete && (
-            <Button variant="ghost" intent="neutral" size="icon-xs" aria-label="Delete" onClick={onDelete}>
+            <Button
+              variant="ghost"
+              intent="neutral"
+              size="icon-xs"
+              aria-labelledby={`${id}-delete ${id}-text`}
+              onClick={onDelete}
+            >
+              <span id={`${id}-delete`} className="sr-only">
+                Delete
+              </span>
               <Icon icon={Trash2Icon} />
             </Button>
           )}

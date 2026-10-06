@@ -42,7 +42,7 @@ const meta = preview.meta({
         'Actions: “Cancel” and “Send”. Mark edited messages with “Edited”.',
       ],
       a11y: [
-        'The field is a named Textarea (“Edit message”); move focus into it when editing starts. Escape cancels, ⌘/Ctrl+Enter sends.',
+        'The field is a named Textarea (“Edit message”) and takes focus when the editor opens (`autoFocus`, cursor at the end). Escape cancels, ⌘/Ctrl+Enter sends.',
         'Previous / Next version are named buttons, disabled at the ends; the position is text (“Version 3 of 3”).',
         'After cancel or send, return focus to the message’s Edit button.',
       ],
@@ -54,8 +54,10 @@ const meta = preview.meta({
       },
     },
   },
-  args: { defaultValue: 'Summarize the Q3 launch plan', onCancel: fn(), onSend: fn() },
+  // Stories open at rest: no focus on load (the component focuses the field by default).
+  args: { defaultValue: 'Summarize the Q3 launch plan', autoFocus: false, onCancel: fn(), onSend: fn() },
   argTypes: {
+    autoFocus: { control: 'boolean' },
     defaultValue: { control: 'text' },
     hint: { control: 'text' },
     onCancel: { control: false, table: { category: 'Events' } },
@@ -155,4 +157,13 @@ export const Flow = meta.story({
       </div>
     )
   },
+})
+
+Flow.test('Edit moves focus into the field, cursor at the end', async ({ canvas }) => {
+  await userEvent.click(canvas.getByRole('button', { name: /Edit/ }))
+  const field = canvas.getByRole('textbox', { name: 'Edit message' })
+  await expect(field).toHaveFocus()
+  await expect((field as HTMLTextAreaElement).selectionStart).toBe(
+    (field as HTMLTextAreaElement).value.length,
+  )
 })
