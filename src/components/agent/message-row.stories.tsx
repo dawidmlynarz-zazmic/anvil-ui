@@ -145,7 +145,7 @@ const meta = preview.meta({
     docs: {
       description: {
         component:
-          'The unit of a conversation thread (`@/components/agent/message-row`, on Message + Bubble). `role` user · assistant · system · tool × `status` queued · streaming · complete · failed. The answer is `children`; the assistant takes slots in Figma order — `thinking` (Thinking Panel), `citations` (Citation Chips), `widget`, `error` (shown when failed), `actions` (Message Actions). Users get `onRetry` when sending failed; tools a `detail` status. Figma show … booleans = pass the slot or not.',
+          'The unit of a conversation thread (`@/components/agent/message-row`, on Message + MessageBubble). `role` user · assistant · system · tool × `status` queued · streaming · complete · failed. The answer is `children`; the assistant takes slots in Figma order — `thinking` (Thinking Panel), `citations` (Citation Chips), `widget`, `error` (shown when failed), `actions` (Message Actions). Users get `onRetry` when sending failed; tools a `detail` status. Figma show … booleans = pass the slot or not.',
       },
     },
   },

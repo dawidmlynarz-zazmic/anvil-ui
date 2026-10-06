@@ -2,7 +2,7 @@ import { useState } from 'react'
 import preview from '#.storybook/preview'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 
-import { Bubble, BubbleContent } from '@/components/ui/bubble'
+import { MessageBubble, MessageBubbleContent } from '@/components/ui/message-bubble'
 import {
   DropdownMenuItem,
   DropdownMenuLabel,
@@ -189,9 +189,9 @@ export const InMessage = meta.story({
     <div className="w-120">
       <Message>
         <MessageContent>
-          <Bubble variant="ghost">
-            <BubbleContent>Subtitle</BubbleContent>
-          </Bubble>
+          <MessageBubble variant="ghost">
+            <MessageBubbleContent>Subtitle</MessageBubbleContent>
+          </MessageBubble>
           <MessageFooter>
             <Demo {...args} />
           </MessageFooter>

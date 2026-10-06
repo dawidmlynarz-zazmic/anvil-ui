@@ -1,7 +1,7 @@
 import preview from '#.storybook/preview'
 import { expect } from 'storybook/test'
 
-import { Bubble, BubbleContent } from './bubble'
+import { MessageBubble, MessageBubbleContent } from './message-bubble'
 import { CircleAlertIcon, Icon, PaperclipIcon } from './icon'
 import { Marker, MarkerContent, MarkerIcon } from './marker'
 import { Message, MessageContent, MessageGroup } from './message'
@@ -98,9 +98,9 @@ export const InThread = meta.story({
       </Marker>
       <Message align="end">
         <MessageContent>
-          <Bubble variant="muted">
-            <BubbleContent>Subtitle</BubbleContent>
-          </Bubble>
+          <MessageBubble variant="muted">
+            <MessageBubbleContent>Subtitle</MessageBubbleContent>
+          </MessageBubble>
         </MessageContent>
       </Message>
       <Marker className="justify-center">
@@ -111,9 +111,9 @@ export const InThread = meta.story({
       </Marker>
       <Message>
         <MessageContent>
-          <Bubble variant="ghost">
-            <BubbleContent>Subtitle</BubbleContent>
-          </Bubble>
+          <MessageBubble variant="ghost">
+            <MessageBubbleContent>Subtitle</MessageBubbleContent>
+          </MessageBubble>
         </MessageContent>
       </Message>
     </MessageGroup>

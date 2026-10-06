@@ -3,7 +3,7 @@ import * as React from 'react'
 import { cn } from '@/lib/utils'
 import { ShellHeader, ShellTitle } from '@/components/anvil/shell'
 import { Card } from '@/components/ui/card'
-import { Empty, EmptyDescription } from '@/components/ui/empty'
+import { EmptyState, EmptyStateDescription } from '@/components/ui/empty-state'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Table, TableBody } from '@/components/ui/table'
 
@@ -12,7 +12,7 @@ import { Table, TableBody } from '@/components/ui/table'
 // variant card as the toolbar (16 / 12px, title text/base/semibold + row count text/xs muted;
 // `actions` at the end), the UI Table (variant flush, density compact, `striped`; sortable heads
 // via TableHead `sort` / `onSort`; status cells are Badges), Skeleton rows while `loading`
-// (4 × 16px, 12px apart), Empty for `empty`, and Pagination in the footer (top divider, 8px).
+// (4 × 16px, 12px apart), Empty State for `empty`, and Pagination in the footer (top divider, 8px).
 // Figma's table header cell / table cell / table row are the UI Table's parts.
 
 function WidgetTable({
@@ -84,9 +84,9 @@ function WidgetTable({
         </div>
       )}
       {!loading && empty && (
-        <Empty className="border-0 px-4 py-8 md:px-4 md:py-8">
-          <EmptyDescription>{empty}</EmptyDescription>
-        </Empty>
+        <EmptyState className="border-0 px-4 py-8 md:px-4 md:py-8">
+          <EmptyStateDescription>{empty}</EmptyStateDescription>
+        </EmptyState>
       )}
       {pagination && <div className="flex justify-center border-t py-2">{pagination}</div>}
     </Card>

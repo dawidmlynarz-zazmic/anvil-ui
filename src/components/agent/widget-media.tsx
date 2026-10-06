@@ -5,14 +5,14 @@ import { IconTile } from '@/components/anvil/icon-tile'
 import { VoiceWaveform } from '@/components/agent/voice-waveform'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { Empty, EmptyDescription, EmptyMedia } from '@/components/ui/empty'
+import { EmptyState, EmptyStateDescription, EmptyStateMedia } from '@/components/ui/empty-state'
 import { CircleAlertIcon, DownloadIcon, Icon, PauseIcon, PlayIcon } from '@/components/ui/icon'
 import { Item, ItemActions, ItemContent, ItemDescription, ItemTitle } from '@/components/ui/item'
 
 // Figma Agent Builder › Core Kit › widget media (10663:3268) and widget audio (10663:3468), one
 // component (Figma: "widget-media (audio)"). Composed, nothing re-drawn:
 // - `kind` image: Card (radius xl, --border, overflow hidden) → a 16:9 --muted media area (your
-//   `<img>` as children when ready; Empty with "Loading media" or the error otherwise) → an Item
+//   `<img>` as children when ready; Empty State with "Loading media" or the error otherwise) → an Item
 //   footer (16 / 12px): title text/sm/semibold, `meta` text/xs muted, Download (ghost icon-sm).
 // - `kind` audio: Card (radius 2xl) → an Item row (16 / 12px, 12px gap): Play / Pause (a 40px brand
 //   circle Button), title + Voice Waveform with `progress` (played bars --foreground-link), and
@@ -124,21 +124,21 @@ function WidgetMedia({
         {status === 'ready' ? (
           children
         ) : (
-          <Empty className="gap-2 border-0 p-0 md:p-0">
+          <EmptyState className="gap-2 border-0 p-0 md:p-0">
             {invalid && (
-              <EmptyMedia className="mb-0 text-danger dark:text-danger-medium [&_svg]:size-4">
+              <EmptyStateMedia className="mb-0 text-danger dark:text-danger-medium [&_svg]:size-4">
                 <Icon icon={CircleAlertIcon} />
-              </EmptyMedia>
+              </EmptyStateMedia>
             )}
-            <EmptyDescription
+            <EmptyStateDescription
               className={cn(
                 'type-text-xs-medium text-muted-foreground',
                 invalid && 'text-danger dark:text-danger-medium',
               )}
             >
               {invalid ? (error ?? 'Couldn’t load media') : 'Loading media'}
-            </EmptyDescription>
-          </Empty>
+            </EmptyStateDescription>
+          </EmptyState>
         )}
       </div>
       <Item size="sm" className="flex-nowrap rounded-none border-0 px-4 py-3">

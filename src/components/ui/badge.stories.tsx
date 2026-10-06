@@ -57,7 +57,7 @@ const meta = preview.meta({
     docs: {
       description: {
         component:
-          'Compact label for counts, metadata and status (shadcn/ui Badge; Figma badge and status badge are one component in code). `variant` default (solid) · outline · subtle with `intent` neutral · inverse (on inverse surfaces), or semantic with `tone` neutral · info · success · warning · destructive · agent. `indicator` adds a dot in the tone, `count` a trailing number, `shape="pill"` rounds it for tags and provenance labels. Agent components use it for status: Approval Card, Connector Card, citation confidence, Source Card, Live Voice Session, Memory In Use, Toolbar count.',
+          'Compact label for counts, metadata and status (shadcn/ui Badge; Figma badge and status badge are one component in code). `variant` default (solid) · outline · subtle with `intent` neutral · inverse (on inverse surfaces), or semantic with `tone` neutral · info · success · warning · destructive · agent. `indicator` adds a dot in the tone, `count` a trailing number, `shape="pill"` rounds it for tags and provenance labels. Agent components use it for status: Approval Card, Connector Card, citation confidence, Source Card, Memory In Use, Toolbar count.',
       },
     },
   },

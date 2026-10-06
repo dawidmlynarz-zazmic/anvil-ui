@@ -1,7 +1,7 @@
 import preview from '#.storybook/preview'
 import { expect, userEvent } from 'storybook/test'
 
-import { Bubble, BubbleContent } from '@/components/ui/bubble'
+import { MessageBubble, MessageBubbleContent } from '@/components/ui/message-bubble'
 import { Message, MessageContent, MessageHeader } from '@/components/ui/message'
 
 import {
@@ -128,9 +128,9 @@ export const InMessage = meta.story({
             <span>14:02</span>
           </MessageHeader>
           <Panel status="done" />
-          <Bubble variant="ghost">
-            <BubbleContent>Subtitle</BubbleContent>
-          </Bubble>
+          <MessageBubble variant="ghost">
+            <MessageBubbleContent>Subtitle</MessageBubbleContent>
+          </MessageBubble>
         </MessageContent>
       </Message>
     </div>

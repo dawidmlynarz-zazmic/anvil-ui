@@ -1,7 +1,8 @@
 import preview from '#.storybook/preview'
 import { expect } from 'storybook/test'
 
-import { MicButton } from './mic-button'
+import { Button } from '@/components/ui/button'
+import { Icon, MicIcon } from '@/components/ui/icon'
 import { VoiceWaveform } from './voice-waveform'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10664-12496'
@@ -34,12 +35,14 @@ Default.test('with a label it is a named image', async ({ canvas }) => {
   await expect(canvas.getByRole('img', { name: 'Label' })).toBeVisible()
 })
 
-/** Next to the listening Mic Button (Figma pairing). */
-export const WithMicButton = meta.story({
+/** Next to the pressed voice button, as in Prompt Input while listening. */
+export const WithVoiceButton = meta.story({
   args: { label: undefined },
   render: (args) => (
     <div className="flex items-center gap-4 p-4">
-      <MicButton status="listening" />
+      <Button intent="destructive" size="icon-sm" shape="circle" aria-label="Voice input" aria-pressed>
+        <Icon icon={MicIcon} />
+      </Button>
       <VoiceWaveform {...args} />
     </div>
   ),

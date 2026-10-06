@@ -3,13 +3,13 @@ import * as React from 'react'
 import { cn } from '@/lib/utils'
 import { PulseDot } from '@/components/agent/pulse-dot'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { Bubble, BubbleContent } from '@/components/ui/bubble'
+import { MessageBubble, MessageBubbleContent } from '@/components/ui/message-bubble'
 import { BotIcon, CheckIcon, CircleAlertIcon, ClockIcon, Icon } from '@/components/ui/icon'
 import { Marker, MarkerContent, MarkerIcon } from '@/components/ui/marker'
 import { Message, MessageAvatar, MessageContent, MessageFooter, MessageHeader } from '@/components/ui/message'
 
 // Figma Agent Builder › Core Kit › message row (10663:3597): the unit of a conversation thread, built
-// on Message + Bubble. `role` user · assistant · system · tool × `status` queued · streaming ·
+// on Message + MessageBubble. `role` user · assistant · system · tool × `status` queued · streaming ·
 // complete · failed (Figma state; invalid = failed).
 // - user: right-aligned, author "You" + time (+ clock while queued), muted bubble; failed → danger
 //   border and "Failed to send · Retry".
@@ -116,14 +116,14 @@ function MessageRow({
       <Message {...shared} align="end" className={cn('max-w-(--shell-thread-max)', className)}>
         <MessageContent>
           <Meta author={author ?? 'You'} timestamp={timestamp} queued={queued} />
-          <Bubble variant="muted">
-            <BubbleContent
+          <MessageBubble variant="muted">
+            <MessageBubbleContent
               aria-invalid={failed || undefined}
               className={cn(queued && 'text-muted-foreground')}
             >
               {children}
-            </BubbleContent>
-          </Bubble>
+            </MessageBubbleContent>
+          </MessageBubble>
           {failed && (
             <MessageFooter className="gap-1 text-danger-medium">
               <Icon icon={CircleAlertIcon} size="xs" />
@@ -175,8 +175,8 @@ function MessageRow({
         <Meta author={author} timestamp={timestamp} queued={queued} />
         {thinking}
         {children && (
-          <Bubble variant="ghost">
-            <BubbleContent className={cn(queued && 'text-muted-foreground')}>
+          <MessageBubble variant="ghost">
+            <MessageBubbleContent className={cn(queued && 'text-muted-foreground')}>
               {children}
               {status === 'streaming' && (
                 <span
@@ -184,8 +184,8 @@ function MessageRow({
                   className="ms-1 inline-block h-4 w-0.5 animate-caret rounded-full bg-agent align-text-bottom"
                 />
               )}
-            </BubbleContent>
-          </Bubble>
+            </MessageBubbleContent>
+          </MessageBubble>
         )}
         {citations && <div className="flex flex-wrap items-center gap-1">{citations}</div>}
         {widget}

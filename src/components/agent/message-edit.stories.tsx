@@ -2,7 +2,7 @@ import { useState } from 'react'
 import preview from '#.storybook/preview'
 import { expect, fn, userEvent } from 'storybook/test'
 
-import { Bubble, BubbleContent } from '@/components/ui/bubble'
+import { MessageBubble, MessageBubbleContent } from '@/components/ui/message-bubble'
 import { Message, MessageContent } from '@/components/ui/message'
 
 import { MessageBranch, MessageEditor } from './message-edit'
@@ -63,9 +63,9 @@ export const Branched = meta.story({
       <div className="max-w-(--shell-widget-max)">
         <Message align="end">
           <MessageContent>
-            <Bubble variant="muted">
-              <BubbleContent>Subtitle {index}</BubbleContent>
-            </Bubble>
+            <MessageBubble variant="muted">
+              <MessageBubbleContent>Subtitle {index}</MessageBubbleContent>
+            </MessageBubble>
             <MessageBranch
               className="self-end"
               index={index}
@@ -110,9 +110,9 @@ export const Flow = meta.story({
               />
             ) : (
               <>
-                <Bubble variant="muted">
-                  <BubbleContent>{versions[index - 1]}</BubbleContent>
-                </Bubble>
+                <MessageBubble variant="muted">
+                  <MessageBubbleContent>{versions[index - 1]}</MessageBubbleContent>
+                </MessageBubble>
                 <MessageBranch
                   className="self-end"
                   label={versions.length > 1 ? 'Edited' : null}

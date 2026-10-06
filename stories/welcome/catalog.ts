@@ -98,7 +98,7 @@ export const catalog: CatalogArea[] = [
     id: 'feedback',
     name: 'Feedback',
     description: 'Status, progress and messages about what the system or agent is doing.',
-    items: [c('Alert'), c('Toast'), c('Progress'), c('Spinner'), c('Skeleton'), c('Empty')],
+    items: [c('Alert'), c('Toast'), c('Progress'), c('Spinner'), c('Skeleton'), c('Empty State')],
   },
   {
     section: 'UI Components',
@@ -143,7 +143,7 @@ export const catalog: CatalogArea[] = [
     items: [
       // Figma prompt attachment = the shadcn Attachment primitive.
       { name: 'Prompt Attachment', title: 'Agent Primitives/Input/Attachment' },
-      ...prim('Input', ['Quick Reply', 'Mic Button', 'Voice Waveform', 'Drop Overlay']),
+      ...prim('Input', ['Quick Reply', 'Voice Waveform', 'Drop Overlay']),
       // Quick reply group and follow up suggestions live in the Quick Reply stories (audit M1).
       { name: 'Quick Reply Group', title: 'Agent Primitives/Input/Quick Reply' },
       { name: 'Follow-up Suggestions', title: 'Agent Primitives/Input/Quick Reply' },
@@ -160,7 +160,7 @@ export const catalog: CatalogArea[] = [
     description: 'The pieces of a turn: bubbles, markers, content, actions, edits, files and streaming.',
     items: prim('Messages', [
       'Message',
-      'Bubble',
+      'Message Bubble',
       'Marker',
       'Message Scroller',
       'Content Block',
@@ -239,7 +239,7 @@ export const catalog: CatalogArea[] = [
     id: 'blocks-input',
     name: 'Input',
     description: 'The composer, live voice and answering the agent’s questions.',
-    items: block('Input', ['Prompt Input', 'Live Voice Session', 'Clarifying Question']),
+    items: block('Input', ['Prompt Input', 'Clarifying Question']),
   },
   {
     section: 'Agent Blocks',

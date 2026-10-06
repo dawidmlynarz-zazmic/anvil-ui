@@ -1,7 +1,7 @@
 import preview from '#.storybook/preview'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 
-import { Bubble, BubbleContent } from '@/components/ui/bubble'
+import { MessageBubble, MessageBubbleContent } from '@/components/ui/message-bubble'
 
 import { CitationChip } from './citation-chip'
 import { CitationHoverCard, CitationHoverCardContent, CitationHoverCardTrigger } from './citation-hovercard'
@@ -73,11 +73,11 @@ export const InText = meta.story({
   args: { open: undefined },
   render: () => (
     <div className="w-120">
-      <Bubble variant="ghost">
-        <BubbleContent>
+      <MessageBubble variant="ghost">
+        <MessageBubbleContent>
           Subtitle <Demo /> Subtitle
-        </BubbleContent>
-      </Bubble>
+        </MessageBubbleContent>
+      </MessageBubble>
     </div>
   ),
 })

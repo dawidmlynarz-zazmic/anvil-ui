@@ -1,21 +1,20 @@
 import preview from '#.storybook/preview'
 import { expect, userEvent } from 'storybook/test'
 
-import { Bubble, BubbleContent, BubbleGroup, BubbleReactions } from './bubble'
-import { Icon, ThumbsUpIcon } from './icon'
+import { MessageBubble, MessageBubbleContent, MessageBubbleGroup } from './message-bubble'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10663-3597'
 
 const VARIANTS = ['default', 'secondary', 'muted', 'tinted', 'outline', 'ghost', 'destructive'] as const
 
 const meta = preview.meta({
-  title: 'Agent Primitives/Messages/Bubble',
+  title: 'Agent Primitives/Messages/Message Bubble',
   tags: ['element'],
-  component: Bubble,
+  component: MessageBubble,
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
-    // No Figma Bubble component: the bubble frame inside Core Kit `message row`.
+    // No Figma message bubble component: the bubble frame inside Core Kit `message row`.
     figmaProps: [
       {
         property: 'message row · role',
@@ -25,14 +24,14 @@ const meta = preview.meta({
       {
         property: 'message row · state',
         values: 'queued · complete · invalid · streaming',
-        code: 'invalid → `aria-invalid` on `BubbleContent`; the rest is MessageRow `status`',
+        code: 'invalid → `aria-invalid` on `MessageBubbleContent`; the rest is MessageRow `status`',
       },
-      { property: 'message row · message text', values: 'text', code: '`BubbleContent` children' },
+      { property: 'message row · message text', values: 'text', code: '`MessageBubbleContent` children' },
     ],
     docs: {
       description: {
         component:
-          'The surface of one chat message (shadcn/ui Bubble). `Bubble` sets `variant` and `align`; `BubbleContent` holds the text (`asChild` makes it a button or link); `BubbleGroup` stacks consecutive bubbles; `BubbleReactions` pins reactions to an edge. Figma (Agent Builder › message row): user messages are `muted`, assistant text is `ghost`, a failed send adds `aria-invalid` to the content (danger border).',
+          'The surface of one chat message (shadcn/ui Bubble, named Message Bubble in Anvil). `MessageBubble` sets `variant` and `align`; `MessageBubbleContent` holds the text (`asChild` makes it a button or link); `MessageBubbleGroup` stacks consecutive bubbles. Figma (Agent Builder › message row): user messages are `muted`, assistant text is `ghost`, a failed send adds `aria-invalid` to the content (danger border).',
       },
     },
   },
@@ -44,9 +43,9 @@ const meta = preview.meta({
   },
   render: (args) => (
     <div className="flex w-120 flex-col">
-      <Bubble {...args}>
-        <BubbleContent>Subtitle</BubbleContent>
-      </Bubble>
+      <MessageBubble {...args}>
+        <MessageBubbleContent>Subtitle</MessageBubbleContent>
+      </MessageBubble>
     </div>
   ),
 })
@@ -55,7 +54,7 @@ const meta = preview.meta({
 export const Default = meta.story()
 
 Default.test('renders the variant and alignment', async ({ canvasElement }) => {
-  const bubble = canvasElement.querySelector('[data-slot=bubble]')
+  const bubble = canvasElement.querySelector('[data-slot=message-bubble]')
   await expect(bubble).toHaveAttribute('data-variant', 'muted')
   await expect(bubble).toHaveAttribute('data-align', 'start')
   await expect(bubble).toHaveTextContent('Subtitle')
@@ -66,9 +65,9 @@ export const Variants = meta.story({
   render: () => (
     <div className="flex w-120 flex-col gap-3">
       {VARIANTS.map((variant) => (
-        <Bubble key={variant} variant={variant}>
-          <BubbleContent>{variant}</BubbleContent>
-        </Bubble>
+        <MessageBubble key={variant} variant={variant}>
+          <MessageBubbleContent>{variant}</MessageBubbleContent>
+        </MessageBubble>
       ))}
     </div>
   ),
@@ -78,12 +77,12 @@ export const Variants = meta.story({
 export const Alignment = meta.story({
   render: () => (
     <div className="flex w-120 flex-col gap-3">
-      <Bubble variant="muted" align="end">
-        <BubbleContent>Subtitle</BubbleContent>
-      </Bubble>
-      <Bubble variant="ghost">
-        <BubbleContent>Subtitle</BubbleContent>
-      </Bubble>
+      <MessageBubble variant="muted" align="end">
+        <MessageBubbleContent>Subtitle</MessageBubbleContent>
+      </MessageBubble>
+      <MessageBubble variant="ghost">
+        <MessageBubbleContent>Subtitle</MessageBubbleContent>
+      </MessageBubble>
     </div>
   ),
 })
@@ -91,14 +90,14 @@ export const Alignment = meta.story({
 /** Consecutive messages from one sender. */
 export const Group = meta.story({
   render: () => (
-    <BubbleGroup className="w-120">
-      <Bubble variant="muted" align="end">
-        <BubbleContent>Subtitle</BubbleContent>
-      </Bubble>
-      <Bubble variant="muted" align="end">
-        <BubbleContent>Subtitle</BubbleContent>
-      </Bubble>
-    </BubbleGroup>
+    <MessageBubbleGroup className="w-120">
+      <MessageBubble variant="muted" align="end">
+        <MessageBubbleContent>Subtitle</MessageBubbleContent>
+      </MessageBubble>
+      <MessageBubble variant="muted" align="end">
+        <MessageBubbleContent>Subtitle</MessageBubbleContent>
+      </MessageBubble>
+    </MessageBubbleGroup>
   ),
 })
 
@@ -106,15 +105,15 @@ export const Group = meta.story({
 export const Invalid = meta.story({
   render: () => (
     <div className="flex w-120 flex-col">
-      <Bubble variant="muted" align="end">
-        <BubbleContent aria-invalid>Subtitle</BubbleContent>
-      </Bubble>
+      <MessageBubble variant="muted" align="end">
+        <MessageBubbleContent aria-invalid>Subtitle</MessageBubbleContent>
+      </MessageBubble>
     </div>
   ),
 })
 
 Invalid.test('draws the danger border', async ({ canvasElement }) => {
-  const content = canvasElement.querySelector('[data-slot=bubble-content]')!
+  const content = canvasElement.querySelector('[data-slot=message-bubble-content]')!
   const danger = getComputedStyle(document.documentElement).getPropertyValue('--danger').trim()
   const probe = document.createElement('div')
   probe.style.color = danger
@@ -128,16 +127,16 @@ Invalid.test('draws the danger border', async ({ canvasElement }) => {
 export const Interactive = meta.story({
   render: () => (
     <div className="flex w-120 flex-col gap-3">
-      <Bubble variant="muted" align="end">
-        <BubbleContent asChild>
+      <MessageBubble variant="muted" align="end">
+        <MessageBubbleContent asChild>
           <button type="button">Edit</button>
-        </BubbleContent>
-      </Bubble>
-      <Bubble variant="outline">
-        <BubbleContent asChild>
+        </MessageBubbleContent>
+      </MessageBubble>
+      <MessageBubble variant="outline">
+        <MessageBubbleContent asChild>
           <a href="#open">Open</a>
-        </BubbleContent>
-      </Bubble>
+        </MessageBubbleContent>
+      </MessageBubble>
     </div>
   ),
 })
@@ -145,24 +144,4 @@ export const Interactive = meta.story({
 Interactive.test('the content is a focusable button', async ({ canvas }) => {
   await userEvent.tab()
   await expect(canvas.getByRole('button', { name: 'Edit' })).toHaveFocus()
-})
-
-/** Reactions sit on the bottom (or top) edge, at the start or end. */
-export const Reactions = meta.story({
-  render: () => (
-    <div className="flex w-120 flex-col gap-8 py-4">
-      <Bubble variant="muted" align="end">
-        <BubbleContent>Subtitle</BubbleContent>
-        <BubbleReactions align="start">
-          <Icon icon={ThumbsUpIcon} size="xs" />2
-        </BubbleReactions>
-      </Bubble>
-      <Bubble variant="secondary">
-        <BubbleContent>Subtitle</BubbleContent>
-        <BubbleReactions>
-          <Icon icon={ThumbsUpIcon} size="xs" />1
-        </BubbleReactions>
-      </Bubble>
-    </div>
-  ),
 })

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import preview from '#.storybook/preview'
 import { expect, userEvent, waitFor } from 'storybook/test'
 
-import { Bubble, BubbleContent } from './bubble'
+import { MessageBubble, MessageBubbleContent } from './message-bubble'
 import { Button } from './button'
 import { Message, MessageContent } from './message'
 import {
@@ -21,11 +21,11 @@ function Turn({ index }: { index: number }) {
   return (
     <Message align={user ? 'end' : 'start'}>
       <MessageContent>
-        <Bubble variant={user ? 'muted' : 'ghost'}>
-          <BubbleContent>
+        <MessageBubble variant={user ? 'muted' : 'ghost'}>
+          <MessageBubbleContent>
             {user ? 'Subtitle' : 'Subtitle. Subtitle. Subtitle. Subtitle. Subtitle. Subtitle.'}
-          </BubbleContent>
-        </Bubble>
+          </MessageBubbleContent>
+        </MessageBubble>
       </MessageContent>
     </Message>
   )
