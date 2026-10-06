@@ -212,7 +212,9 @@ export const catalog: CatalogArea[] = [
     name: 'Widgets & artifacts',
     description: 'Single pieces of rich output.',
     items: [
-      ...prim('Widgets & Artifacts', ['Widget Metric Card']),
+      ...prim('Widgets & Artifacts', ['Widget Metric Card', 'Widget Media']),
+      // Figma widget audio is Widget Media kind audio.
+      { name: 'Widget Audio', title: 'Agent Primitives/Widgets & Artifacts/Widget Media' },
       // Widget metric group lives in the Widget Metric Card stories.
       { name: 'Widget Metric Group', title: 'Agent Primitives/Widgets & Artifacts/Widget Metric Card' },
     ],
@@ -272,13 +274,7 @@ export const catalog: CatalogArea[] = [
     id: 'blocks-widgets',
     name: 'Widgets & artifacts',
     description: 'Rich output inside the thread: tables, media and artifacts.',
-    items: block('Widgets & Artifacts', [
-      'Artifact Panel',
-      'Widget Table',
-      'Widget Media',
-      'Widget Audio',
-      'Image Generation Card',
-    ]),
+    items: block('Widgets & Artifacts', ['Artifact Panel', 'Widget Table', 'Image Generation Card']),
   },
   {
     section: 'Agent Blocks',
