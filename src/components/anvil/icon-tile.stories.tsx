@@ -21,8 +21,8 @@ const TONES = [
 const SIZES = ['xs', 'sm', 'default', 'lg'] as const
 
 const meta = preview.meta({
-  title: 'UI Components/Icon Tile',
-  tags: ['element', 'anvil-custom'],
+  title: 'Atoms/Icon Tile',
+  tags: ['atom'],
   component: IconTile,
   parameters: {
     layout: 'centered',

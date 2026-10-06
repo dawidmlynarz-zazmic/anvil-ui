@@ -88,8 +88,8 @@ function Demo({ status = 'ready', prompt = 'Subtitle', onCancel, onUse }: DemoPr
 }
 
 const meta = preview.meta({
-  title: 'Agent Blocks/Widgets & Artifacts/Image Generation Card',
-  tags: ['feature'],
+  title: 'Agent Builder/Image Generation Card',
+  tags: ['agent-builder', 'widgets'],
   component: Demo,
   parameters: {
     layout: 'padded',

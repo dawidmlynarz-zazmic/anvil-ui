@@ -83,8 +83,8 @@ function Demo({
 }
 
 const meta = preview.meta({
-  title: 'Agent Blocks/Sources/Citation Drawer',
-  tags: ['feature'],
+  title: 'Agent Builder/Citation Drawer',
+  tags: ['agent-builder', 'sources'],
   component: Demo,
   parameters: {
     layout: 'centered',

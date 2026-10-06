@@ -8,10 +8,11 @@ import { Slider } from './slider'
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10946-184'
 
 const meta = preview.meta({
-  title: 'UI Components/Slider',
-  tags: ['element'],
+  title: 'Atoms/Slider',
+  tags: ['atom'],
   component: Slider,
   parameters: {
+    shadcn: 'slider',
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

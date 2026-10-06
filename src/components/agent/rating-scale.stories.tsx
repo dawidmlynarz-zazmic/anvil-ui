@@ -6,8 +6,8 @@ import { RatingScale } from './rating-scale'
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10726-1937'
 
 const meta = preview.meta({
-  title: 'Agent Primitives/Feedback & Surveys/Rating Scale',
-  tags: ['composite'],
+  title: 'Molecules/Rating Scale',
+  tags: ['molecule', 'feedback'],
   component: RatingScale,
   parameters: {
     layout: 'padded',

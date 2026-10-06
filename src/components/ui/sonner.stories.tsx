@@ -76,10 +76,11 @@ function Sheet({ toasts, theme }: { toasts: DemoProps[]; theme?: 'light' | 'dark
 }
 
 const meta = preview.meta({
-  title: 'UI Components/Toast',
-  tags: ['composite'],
+  title: 'Molecules/Toast',
+  tags: ['molecule'],
   component: DemoToast,
   parameters: {
+    shadcn: 'sonner',
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

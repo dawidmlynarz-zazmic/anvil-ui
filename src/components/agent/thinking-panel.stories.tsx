@@ -38,8 +38,8 @@ function Panel({
 }
 
 const meta = preview.meta({
-  title: 'Agent Primitives/Agent States/Thinking Panel',
-  tags: ['composite'],
+  title: 'Agent Builder/Thinking Panel',
+  tags: ['agent-builder', 'agent-status'],
   component: Panel,
   parameters: {
     layout: 'padded',

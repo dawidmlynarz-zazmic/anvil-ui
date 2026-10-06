@@ -13,10 +13,11 @@ const OPTIONS = [
 ]
 
 const meta = preview.meta({
-  title: 'UI Components/Radio Group',
-  tags: ['element'],
+  title: 'Atoms/Radio Group',
+  tags: ['atom'],
   component: RadioGroup,
   parameters: {
+    shadcn: 'radio-group',
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

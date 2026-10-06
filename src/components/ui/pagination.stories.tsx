@@ -71,10 +71,11 @@ function DemoPagination({ type = 'full', page: initial = 5, total = 12 }: DemoPr
 }
 
 const meta = preview.meta({
-  title: 'UI Components/Pagination',
-  tags: ['composite'],
+  title: 'Molecules/Pagination',
+  tags: ['molecule'],
   component: DemoPagination,
   parameters: {
+    shadcn: 'pagination',
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

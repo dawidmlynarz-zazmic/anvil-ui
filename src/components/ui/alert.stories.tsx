@@ -80,10 +80,11 @@ function DemoAlert({
 }
 
 const meta = preview.meta({
-  title: 'UI Components/Alert',
-  tags: ['composite'],
+  title: 'Molecules/Alert',
+  tags: ['molecule'],
   component: DemoAlert,
   parameters: {
+    shadcn: 'alert',
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

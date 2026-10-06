@@ -28,10 +28,11 @@ function DemoResizable({ orientation = 'horizontal', withHandle = true }: DemoPr
 }
 
 const meta = preview.meta({
-  title: 'UI Components/Resizable',
-  tags: ['element'],
+  title: 'Molecules/Resizable',
+  tags: ['molecule'],
   component: DemoResizable,
   parameters: {
+    shadcn: 'resizable',
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

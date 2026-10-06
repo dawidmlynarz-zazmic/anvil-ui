@@ -9,10 +9,11 @@ const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=1066
 const TONES = ['neutral', 'brand', 'info', 'success', 'warning', 'destructive', 'agent'] as const
 
 const meta = preview.meta({
-  title: 'UI Components/Spinner',
-  tags: ['element'],
+  title: 'Atoms/Spinner',
+  tags: ['atom'],
   component: Spinner,
   parameters: {
+    shadcn: 'spinner',
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     // No Figma component: Spinner has none (Core Kit pulse dot and typing indicator are built on it).

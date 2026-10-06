@@ -41,10 +41,11 @@ const Label = ({ children }: { children: ReactNode }) => (
 )
 
 const meta = preview.meta({
-  title: 'UI Components/Button',
-  tags: ['element'],
+  title: 'Atoms/Button',
+  tags: ['atom'],
   component: Button,
   parameters: {
+    shadcn: 'button',
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

@@ -8,8 +8,8 @@ import { MemoryManager, MemoryManagerItem, MemoryManagerSearch } from './memory-
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10730-2779'
 
 const meta = preview.meta({
-  title: 'Agent Blocks/System & Context/Memory Manager',
-  tags: ['feature'],
+  title: 'Agent Builder/Memory Manager',
+  tags: ['agent-builder', 'memory'],
   component: MemoryManager,
   parameters: {
     layout: 'padded',

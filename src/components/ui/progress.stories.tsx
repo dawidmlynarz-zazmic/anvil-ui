@@ -8,10 +8,11 @@ const tones = ['brand', 'agent', 'success', 'warning', 'destructive', 'neutral']
 const sizes = ['sm', 'default', 'lg'] as const
 
 const meta = preview.meta({
-  title: 'UI Components/Progress',
-  tags: ['element'],
+  title: 'Atoms/Progress',
+  tags: ['atom'],
   component: Progress,
   parameters: {
+    shadcn: 'progress',
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

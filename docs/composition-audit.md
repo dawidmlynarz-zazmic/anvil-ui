@@ -1,3 +1,7 @@
+> **Superseded (2026-10-06)** by `docs/system-audit.md`: the categories and sections below were
+> replaced by the Atoms · Molecules · Organisms · Agent Builder taxonomy. Kept for history; the
+> merge log (M1–M11) still explains earlier decisions.
+
 # Composition audit (2026-10-05)
 
 How Anvil's components are built from each other, in code and in Figma, and what to merge or

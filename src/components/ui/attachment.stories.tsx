@@ -47,10 +47,11 @@ function Demo({
 }
 
 const meta = preview.meta({
-  title: 'Agent Primitives/Input/Attachment',
-  tags: ['composite'],
+  title: 'Molecules/Attachment',
+  tags: ['molecule', 'input'],
   component: Demo,
   parameters: {
+    shadcn: 'attachment',
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

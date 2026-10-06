@@ -31,10 +31,11 @@ function Search({ size }: { size?: 'sm' | 'default' | 'lg' }) {
 }
 
 const meta = preview.meta({
-  title: 'UI Components/Input Group',
-  tags: ['composite'],
+  title: 'Molecules/Input Group',
+  tags: ['molecule'],
   component: InputGroup,
   parameters: {
+    shadcn: 'input-group',
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

@@ -9,8 +9,8 @@ import { InstructionsBanner } from './instructions-banner'
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10737-3041'
 
 const meta = preview.meta({
-  title: 'Agent Primitives/System & Context/Instructions Banner',
-  tags: ['composite'],
+  title: 'Agent Builder/Instructions Banner',
+  tags: ['agent-builder', 'memory'],
   component: InstructionsBanner,
   parameters: {
     layout: 'padded',

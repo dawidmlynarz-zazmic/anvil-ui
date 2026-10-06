@@ -38,10 +38,11 @@ function DemoAccordion({ type = 'single', collapsible = true, disabledItem = fal
 }
 
 const meta = preview.meta({
-  title: 'UI Components/Accordion',
-  tags: ['composite'],
+  title: 'Molecules/Accordion',
+  tags: ['molecule'],
   component: DemoAccordion,
   parameters: {
+    shadcn: 'accordion',
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     // Figma `accordion` has no properties; the rows are its `accordion item`.

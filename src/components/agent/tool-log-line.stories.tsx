@@ -39,8 +39,8 @@ function Demo({
 }
 
 const meta = preview.meta({
-  title: 'Agent Primitives/Messages/Tool Log Line',
-  tags: ['composite'],
+  title: 'Molecules/Tool Log Line',
+  tags: ['molecule', 'agent-status'],
   component: Demo,
   parameters: {
     layout: 'centered',

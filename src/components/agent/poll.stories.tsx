@@ -13,8 +13,8 @@ const OPTIONS: PollOption[] = [
 ]
 
 const meta = preview.meta({
-  title: 'Agent Blocks/Feedback & Surveys/Poll',
-  tags: ['feature'],
+  title: 'Agent Builder/Poll',
+  tags: ['agent-builder', 'feedback'],
   component: Poll,
   parameters: {
     layout: 'padded',

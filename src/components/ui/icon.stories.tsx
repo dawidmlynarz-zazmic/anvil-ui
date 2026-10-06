@@ -40,7 +40,7 @@ const tones = ['neutral', 'brand', 'info', 'success', 'warning', 'destructive', 
 
 const meta = preview.meta({
   title: 'Foundations/Icon',
-  tags: ['element'],
+  tags: ['atom'],
   component: Icon,
   parameters: {
     layout: 'padded',

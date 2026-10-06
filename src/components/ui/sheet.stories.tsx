@@ -69,10 +69,11 @@ function DemoSheet({
 }
 
 const meta = preview.meta({
-  title: 'UI Components/Sheet',
-  tags: ['feature'],
+  title: 'Organisms/Sheet',
+  tags: ['organism'],
   component: DemoSheet,
   parameters: {
+    shadcn: 'sheet',
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

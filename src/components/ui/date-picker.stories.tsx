@@ -43,10 +43,11 @@ function DemoDatePicker({ open, onOpenChange, withValue = false, id }: DemoProps
 }
 
 const meta = preview.meta({
-  title: 'UI Components/Date Picker',
-  tags: ['composite'],
+  title: 'Molecules/Date Picker',
+  tags: ['molecule'],
   component: DemoDatePicker,
   parameters: {
+    shadcn: 'date-picker',
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

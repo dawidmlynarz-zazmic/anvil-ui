@@ -121,8 +121,8 @@ deprecated feature) are the verdict and its note.
 | Action Status | Primitives · composite | Molecule (Actions) | composite | Approval Card, Connector Card | ✓ | keep (§3) |
 | Citation Source Item | Primitives · composite | Molecule (Sources) | composite | Citation Drawer | ✓ | keep (§3) |
 | Tool Log Line | Primitives · composite | Molecule (Agent Status) | composite | — | ✓ | keep (inline, not expandable — different job from Tool Call Item) |
-| Memory Chip | Primitives · composite | — | composite | — | ✓ | **merge with Memory In Use → Memory Notice** |
-| Memory In Use | Primitives · composite | — | composite | — | ✓ | **merge → Memory Notice** (`status` used · not used · saved · updated · forgotten) |
+| Memory Chip | Primitives · composite | Agent Builder (Memory) | ready-to-use | — | ✓ | **merged with Memory In Use → Memory Notice** |
+| Memory In Use | Primitives · composite | Agent Builder (Memory) | ready-to-use | — | ✓ | **merged → Memory Notice** (`status` used · not used · saved · updated · forgotten) |
 | Drop Overlay | Primitives · composite | Agent Builder (Input) | ready-to-use | — | ✓ | simplify: build on Empty State |
 | Streaming Placeholder | Primitives · composite | Agent Builder (Agent Status) | ready-to-use | — | ✓ | keep; absorbs Typing Indicator |
 | Content Blocks | Primitives · element | Organism (Messages) | composite | — | ✓ | keep (styles rendered markdown) |

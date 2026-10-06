@@ -1,29 +1,32 @@
-// Everything Anvil UI covers, grouped like the Storybook sidebar (Foundations, then UI
-// Components, Agent Primitives, Agent Blocks, Agent Templates) and, inside an agent section, by the
-// Figma section the component comes from. Whether an item is available (and where it links) is
-// read from Storybook's index at runtime, so this list only changes when the scope changes. `title`
-// is the Storybook title the item has (or will have).
+// Everything Anvil UI covers, grouped like the Storybook sidebar: Foundations, then the levels
+// (Atoms, Molecules, Organisms, Agent Builder; docs/system-audit.md). Inside a level, areas group
+// related components. Whether an item is available (and where it links) is read from Storybook's
+// index at runtime, so this list only changes when the scope changes. `title` is the Storybook
+// title the item has (or will have). Figma names that live elsewhere in code are aliases to it.
 
-import type { SectionTitle } from '../../.storybook/taxonomy'
+import type { LevelTitle } from '../../.storybook/taxonomy'
 
 export type CatalogItem = { name: string; title: string }
 export type CatalogArea = {
-  /** The sidebar section the area's components live in. */
-  section: 'Foundations' | SectionTitle
+  /** The sidebar group the area's components live in. */
+  section: 'Foundations' | LevelTitle
   id: string
   name: string
   description: string
   items: CatalogItem[]
 }
 
-const c = (name: string): CatalogItem => ({ name, title: `UI Components/${name}` })
-const f = (name: string): CatalogItem => ({ name, title: `Foundations/${name}` })
-const section =
-  (parent: 'Agent Primitives' | 'Agent Blocks', name: string) =>
-  (names: string[]): CatalogItem[] =>
-    names.map((item) => ({ name: item, title: `${parent}/${name}/${item}` }))
-const prim = (name: string, names: string[]) => section('Agent Primitives', name)(names)
-const block = (name: string, names: string[]) => section('Agent Blocks', name)(names)
+const at =
+  (level: 'Foundations' | LevelTitle) =>
+  (...names: string[]): CatalogItem[] =>
+    names.map((name) => ({ name, title: `${level}/${name}` }))
+const foundation = at('Foundations')
+const atom = at('Atoms')
+const molecule = at('Molecules')
+const organism = at('Organisms')
+const builder = at('Agent Builder')
+/** A Figma name that is part of another component in code. */
+const alias = (name: string, title: string): CatalogItem => ({ name, title })
 
 export const catalog: CatalogArea[] = [
   {
@@ -31,270 +34,254 @@ export const catalog: CatalogArea[] = [
     id: 'foundations',
     name: 'Foundations',
     description: 'Tokens pulled from Figma: color, type, spacing, radius, elevation and icons.',
-    items: [f('Colors'), f('Typography'), f('Spacing'), f('Radius'), f('Elevation'), f('Icon')],
+    items: foundation('Colors', 'Typography', 'Spacing', 'Radius', 'Elevation', 'Icon'),
+  },
+  // Atoms: one element, context-agnostic.
+  {
+    section: 'Atoms',
+    id: 'atoms-controls',
+    name: 'Controls',
+    description: 'What people press, type into or switch.',
+    items: atom(
+      'Button',
+      'Toggle',
+      'Input',
+      'Textarea',
+      'Checkbox',
+      'Radio Group',
+      'Switch',
+      'Slider',
+      'Label',
+      'Link',
+      'Chip',
+    ),
   },
   {
-    section: 'UI Components',
-    id: 'actions',
-    name: 'Actions',
-    description: 'Buttons and the small controls that trigger or toggle something.',
-    items: [
-      c('Button'),
-      c('Button Group'),
-      c('Toggle'),
-      c('Toggle Group'),
-      c('Toolbar'),
-      c('Chip'),
-      c('Link'),
-      c('Badge'),
-      c('Kbd'),
-    ],
+    section: 'Atoms',
+    id: 'atoms-display',
+    name: 'Display',
+    description: 'Labels, status and structure.',
+    items: atom(
+      'Badge',
+      'Kbd',
+      'Avatar',
+      'Icon Tile',
+      'Progress',
+      'Spinner',
+      'Skeleton',
+      'Separator',
+      'Scroll Area',
+      'Sparkline',
+    ),
   },
   {
-    section: 'UI Components',
-    id: 'forms',
-    name: 'Forms',
-    description: 'Inputs with the field anatomy built in: label, hint, error and every state.',
-    items: [
-      c('Label'),
-      c('Field'),
-      c('Input'),
-      c('Textarea'),
-      c('Input Group'),
-      c('Select'),
-      c('Combobox'),
-      c('Input OTP'),
-      c('Checkbox'),
-      c('Radio Group'),
-      c('Switch'),
-      c('Slider'),
-      c('Choice Card'),
-      c('Stepper'),
-      c('Calendar'),
-      c('Date Picker'),
-    ],
-  },
-  {
-    section: 'UI Components',
-    id: 'overlays',
-    name: 'Overlays',
-    description: 'Layers above the page. They share the shell header and footer.',
-    items: [
-      c('Dialog'),
-      c('Alert Dialog'),
-      c('Sheet'),
-      c('Drawer'),
-      c('Popover'),
-      c('Hover Card'),
-      c('Tooltip'),
-      c('Dropdown Menu'),
-      c('Context Menu'),
-      c('Menubar'),
-      c('Command'),
-    ],
-  },
-  {
-    section: 'UI Components',
-    id: 'feedback',
-    name: 'Feedback',
-    description: 'Status, progress and messages about what the system or agent is doing.',
-    items: [c('Alert'), c('Toast'), c('Progress'), c('Spinner'), c('Skeleton'), c('Empty State')],
-  },
-  {
-    section: 'UI Components',
-    id: 'navigation',
-    name: 'Navigation',
-    description: 'Moving between views, sections and pages.',
-    items: [c('Sidebar'), c('Tabs'), c('Breadcrumb'), c('Pagination'), c('Accordion')],
-  },
-  {
-    section: 'UI Components',
-    id: 'layout',
-    name: 'Layout & data',
-    description: 'Surfaces and structures for content, lists and data.',
-    items: [
-      c('Card'),
-      c('Separator'),
-      c('Scroll Area'),
-      c('Resizable'),
-      c('Table'),
-      c('Carousel'),
-      c('Avatar'),
-      c('Icon Tile'),
-      c('Sparkline'),
-      c('Item'),
-      c('Code Block'),
-    ],
-  },
-  // Agent Primitives: elements and composites.
-  {
-    section: 'Agent Primitives',
-    id: 'primitives-shell',
-    name: 'Shell',
-    description: 'Small parts of the chat around the thread.',
-    items: prim('Shell', ['Starter Prompt Card', 'Project Header']),
-  },
-  {
-    section: 'Agent Primitives',
-    id: 'primitives-input',
-    name: 'Input',
-    description:
-      'Parts of the composer and replies: quick replies, suggestions, voice, files and stop / continue.',
-    items: [
-      // Figma prompt attachment = the shadcn Attachment primitive.
-      { name: 'Prompt Attachment', title: 'Agent Primitives/Input/Attachment' },
-      ...prim('Input', ['Quick Reply', 'Voice Waveform', 'Drop Overlay']),
-      // Quick reply group and follow up suggestions live in the Quick Reply stories (audit M1).
-      { name: 'Quick Reply Group', title: 'Agent Primitives/Input/Quick Reply' },
-      { name: 'Follow-up Suggestions', title: 'Agent Primitives/Input/Quick Reply' },
-      // Figma attachment menu = Prompt Input's attach button + Dropdown Menu.
-      { name: 'Attachment Menu', title: 'Agent Blocks/Input/Prompt Input' },
-      // Figma response controls = Prompt Input's `response` (Buttons + status line).
-      { name: 'Response Controls', title: 'Agent Blocks/Input/Prompt Input' },
-    ],
-  },
-  {
-    section: 'Agent Primitives',
-    id: 'primitives-messages',
-    name: 'Messages',
-    description: 'The pieces of a turn: bubbles, markers, content, actions, edits, files and streaming.',
-    items: prim('Messages', [
-      'Message',
+    section: 'Atoms',
+    id: 'atoms-agent',
+    name: 'Agent atoms',
+    description: 'The smallest agent parts: a bubble, a marker, status motion and a citation.',
+    items: atom(
       'Message Bubble',
       'Marker',
-      'Message Scroller',
-      'Content Block',
-      'Message Actions',
-      'Message Edit',
-      'File Output Card',
-      'Tool Log Line',
-      'Streaming Placeholder',
-    ]).concat([
-      // Figma regenerate menu = Message Actions' retry menu (Dropdown Menu items).
-      { name: 'Regenerate Menu', title: 'Agent Primitives/Messages/Message Actions' },
-    ]),
+      'Pulse Dot',
+      'Text Shimmer',
+      'Step Status Icon',
+      'Voice Waveform',
+      'Citation Chip',
+    ),
+  },
+  // Molecules: a few atoms with one job.
+  {
+    section: 'Molecules',
+    id: 'molecules-forms',
+    name: 'Forms',
+    description: 'Fields with the label, hint and error built in, and the controls that group inputs.',
+    items: molecule(
+      'Field',
+      'Input Group',
+      'Select',
+      'Combobox',
+      'Input OTP',
+      'Toggle Group',
+      'Button Group',
+      'Calendar',
+      'Date Picker',
+      'Choice Card',
+      'Stepper',
+    ),
   },
   {
-    section: 'Agent Primitives',
-    id: 'primitives-states',
-    name: 'Agent states',
-    description: 'What the agent is doing right now: indicators, reasoning and tool calls.',
+    section: 'Molecules',
+    id: 'molecules-menus',
+    name: 'Menus & popovers',
+    description: 'Small layers anchored to a trigger.',
+    items: molecule('Popover', 'Hover Card', 'Tooltip', 'Dropdown Menu', 'Context Menu'),
+  },
+  {
+    section: 'Molecules',
+    id: 'molecules-content',
+    name: 'Content & feedback',
+    description: 'Surfaces, rows, navigation and messages about what is happening.',
     items: [
-      ...prim('Agent States', [
-        'Pulse Dot',
-        'Text Shimmer',
-        'Step Status Icon',
-        'Thinking Panel',
-        'Tool Call Item',
-      ]),
-      // Figma typing indicator is Streaming Placeholder variant dots.
-      { name: 'Typing Indicator', title: 'Agent Primitives/Messages/Streaming Placeholder' },
+      ...molecule(
+        'Card',
+        'Item',
+        'Shell',
+        'Alert',
+        'Toast',
+        'Empty State',
+        'Tabs',
+        'Accordion',
+        'Breadcrumb',
+        'Pagination',
+        'Resizable',
+      ),
+      alias('System Banner', 'Molecules/Alert'),
     ],
   },
   {
-    section: 'Agent Primitives',
-    id: 'primitives-sources',
-    name: 'Sources',
-    description: 'Citation chips, previews and source rows.',
-    items: prim('Sources', ['Citation Chip', 'Citation Hovercard', 'Citation Source Item', 'Source Card']),
-  },
-  {
-    section: 'Agent Primitives',
-    id: 'primitives-system',
-    name: 'System & context',
-    description: 'Notices and memory markers.',
+    section: 'Molecules',
+    id: 'molecules-agent',
+    name: 'Agent molecules',
+    description: 'Reusable agent parts: message pieces, replies, scales and status strips.',
     items: [
-      // Figma system banner = Alert, size sm (audit M2).
-      { name: 'System Banner', title: 'UI Components/Alert' },
-      ...prim('System & Context', ['Instructions Banner', 'Memory Notice', 'Action Status']),
-      // Figma memory chip and memory in use are Memory Notice.
-      { name: 'Memory Chip', title: 'Agent Primitives/System & Context/Memory Notice' },
-      { name: 'Memory In Use', title: 'Agent Primitives/System & Context/Memory Notice' },
+      ...molecule(
+        'Message',
+        'Message Actions',
+        'Message Edit',
+        'Quick Reply',
+        'Attachment',
+        'Rating Scale',
+        'Action Status',
+        'Citation Source Item',
+        'Tool Log Line',
+      ),
+      alias('Prompt Attachment', 'Molecules/Attachment'),
+      alias('Quick Reply Group', 'Molecules/Quick Reply'),
+      alias('Follow-up Suggestions', 'Molecules/Quick Reply'),
+      alias('Regenerate Menu', 'Molecules/Message Actions'),
     ],
   },
+  // Organisms: complete, reusable sections.
   {
-    section: 'Agent Primitives',
-    id: 'primitives-widgets',
-    name: 'Widgets & artifacts',
-    description: 'Single pieces of rich output.',
-    items: [
-      ...prim('Widgets & Artifacts', ['Widget Metric Card', 'Widget Media']),
-      // Figma widget audio is Widget Media kind audio.
-      { name: 'Widget Audio', title: 'Agent Primitives/Widgets & Artifacts/Widget Media' },
-      // Widget metric group lives in the Widget Metric Card stories.
-      { name: 'Widget Metric Group', title: 'Agent Primitives/Widgets & Artifacts/Widget Metric Card' },
-    ],
+    section: 'Organisms',
+    id: 'organisms-overlays',
+    name: 'Overlays',
+    description: 'Layers above the page. They share the shell header and footer.',
+    items: organism('Dialog', 'Alert Dialog', 'Sheet', 'Drawer', 'Command', 'Menubar'),
   },
   {
-    section: 'Agent Primitives',
-    id: 'primitives-feedback',
-    name: 'Feedback & surveys',
-    description: 'A single rating control.',
-    items: prim('Feedback & Surveys', ['Rating', 'Rating Scale']),
-  },
-  // Agent Blocks: features.
-  {
-    section: 'Agent Blocks',
-    id: 'blocks-shell',
-    name: 'Shell',
-    description: 'The chat around the thread: welcome, model picker, sharing and projects.',
-    items: block('Shell', ['Welcome State', 'Model and Tools Picker', 'Share Dialog', 'Project Setup']),
+    section: 'Organisms',
+    id: 'organisms-layout',
+    name: 'Layout & data',
+    description: 'Navigation, tables, carousels and toolbars.',
+    items: organism('Sidebar', 'Table', 'Carousel', 'Toolbar', 'Code Block'),
   },
   {
-    section: 'Agent Blocks',
-    id: 'blocks-input',
+    section: 'Organisms',
+    id: 'organisms-conversation',
+    name: 'Conversation',
+    description: 'The thread and the answer’s content.',
+    items: organism('Message Scroller', 'Content Block'),
+  },
+  // Agent Builder: ready-to-use agent experiences, grouped by context.
+  {
+    section: 'Agent Builder',
+    id: 'builder-input',
     name: 'Input',
-    description: 'The composer, live voice and answering the agent’s questions.',
-    items: block('Input', ['Prompt Input', 'Clarifying Question']),
+    description: 'The composer, dropping files and answering the agent’s questions.',
+    items: [
+      ...builder('Prompt Input', 'Clarifying Question', 'Drop Overlay'),
+      alias('Attachment Menu', 'Agent Builder/Prompt Input'),
+      alias('Response Controls', 'Agent Builder/Prompt Input'),
+    ],
   },
   {
-    section: 'Agent Blocks',
-    id: 'blocks-messages',
+    section: 'Agent Builder',
+    id: 'builder-messages',
     name: 'Messages',
     description: 'A full turn in the thread.',
-    items: block('Messages', ['Message Row']),
+    items: builder('Message Row'),
   },
   {
-    section: 'Agent Blocks',
-    id: 'blocks-states',
-    name: 'Agent states',
-    description: 'A run of tool calls, grouped.',
-    items: block('Agent States', ['Tool Call Accordion']),
-  },
-  {
-    section: 'Agent Blocks',
-    id: 'blocks-sources',
-    name: 'Sources',
-    description: 'The full list of sources behind an answer.',
-    items: block('Sources', ['Citation Drawer']),
-  },
-  {
-    section: 'Agent Blocks',
-    id: 'blocks-system',
-    name: 'System & context',
-    description: 'Approvals, connected apps and memory management.',
-    items: block('System & Context', ['Approval Card', 'Connector Card', 'Memory Manager']),
-  },
-  {
-    section: 'Agent Blocks',
-    id: 'blocks-widgets',
-    name: 'Widgets & artifacts',
-    description: 'Rich output inside the thread: tables, media and artifacts.',
-    items: block('Widgets & Artifacts', ['Artifact Panel', 'Widget Table', 'Image Generation Card']),
-  },
-  {
-    section: 'Agent Blocks',
-    id: 'blocks-feedback',
-    name: 'Feedback & surveys',
-    description: 'Asking the user how it went.',
-    items: block('Feedback & Surveys', ['Feedback Reason', 'NPS', 'Survey', 'Poll']),
-  },
-  {
-    section: 'Agent Blocks',
-    id: 'blocks-patterns',
-    name: 'Agent patterns',
-    description: 'Task and commerce flows from the Figma Agent Patterns page, built from Core Kit parts.',
+    section: 'Agent Builder',
+    id: 'builder-status',
+    name: 'Agent status',
+    description: 'What the agent is doing: placeholders, reasoning and tool calls.',
     items: [
+      ...builder('Streaming Placeholder', 'Thinking Panel', 'Tool Call Item', 'Tool Call Accordion'),
+      alias('Typing Indicator', 'Agent Builder/Streaming Placeholder'),
+    ],
+  },
+  {
+    section: 'Agent Builder',
+    id: 'builder-sources',
+    name: 'Sources',
+    description: 'Previews, cards and the full list of sources behind an answer.',
+    items: builder('Citation Hovercard', 'Source Card', 'Citation Drawer'),
+  },
+  {
+    section: 'Agent Builder',
+    id: 'builder-memory',
+    name: 'Memory',
+    description: 'Thread instructions and what the agent remembers.',
+    items: [
+      ...builder('Instructions Banner', 'Memory Notice', 'Memory Manager'),
+      alias('Memory Chip', 'Agent Builder/Memory Notice'),
+      alias('Memory In Use', 'Agent Builder/Memory Notice'),
+    ],
+  },
+  {
+    section: 'Agent Builder',
+    id: 'builder-actions',
+    name: 'Actions',
+    description: 'Approvals and connected apps.',
+    items: builder('Approval Card', 'Connector Card'),
+  },
+  {
+    section: 'Agent Builder',
+    id: 'builder-widgets',
+    name: 'Widgets & artifacts',
+    description: 'Rich output inside the thread: files, data, media and artifacts.',
+    items: [
+      ...builder(
+        'File Output Card',
+        'Widget Metric Card',
+        'Widget Media',
+        'Widget Table',
+        'Image Generation Card',
+        'Artifact Panel',
+      ),
+      alias('Widget Audio', 'Agent Builder/Widget Media'),
+      alias('Widget Metric Group', 'Agent Builder/Widget Metric Card'),
+    ],
+  },
+  {
+    section: 'Agent Builder',
+    id: 'builder-feedback',
+    name: 'Feedback',
+    description: 'Asking the user how it went.',
+    items: builder('Rating', 'Feedback Reason', 'NPS', 'Survey', 'Poll'),
+  },
+  {
+    section: 'Agent Builder',
+    id: 'builder-shell',
+    name: 'Shell',
+    description: 'The chat around the thread: welcome, starters, model picker, sharing and projects.',
+    items: builder(
+      'Welcome State',
+      'Starter Prompt Card',
+      'Model and Tools Picker',
+      'Share Dialog',
+      'Project Header',
+      'Project Setup',
+    ),
+  },
+  {
+    section: 'Agent Builder',
+    id: 'builder-patterns',
+    name: 'Agent patterns',
+    description: 'Task and commerce flows from the Figma Agent Patterns page.',
+    items: builder(
       'Task Lifecycle',
       'Evidence & Decisions',
       'Catalog & Offers',
@@ -302,15 +289,14 @@ export const catalog: CatalogArea[] = [
       'Checkout',
       'After Purchase',
       'Trust & Preferences',
-    ].map((name) => ({ name, title: `Agent Blocks/${name}` })),
+    ),
   },
-  // Agent Templates: surfaces and full layouts.
   {
-    section: 'Agent Templates',
-    id: 'templates',
+    section: 'Agent Builder',
+    id: 'builder-surfaces',
     name: 'Surfaces & templates',
     description: 'Where the agent lives: full screen, side panel, popover, split canvas and more.',
-    items: [
+    items: builder(
       'Full Screen',
       'Side Panel',
       'Popover & Launcher',
@@ -319,6 +305,6 @@ export const catalog: CatalogArea[] = [
       'Command Palette',
       'Proactive',
       'Ambient Overlay',
-    ].map((name) => ({ name, title: `Agent Templates/${name}` })),
+    ),
   },
 ]

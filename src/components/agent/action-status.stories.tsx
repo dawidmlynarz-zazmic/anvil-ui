@@ -17,8 +17,8 @@ const ACTION: Record<ActionStatusValue, string> = {
 }
 
 const meta = preview.meta({
-  title: 'Agent Primitives/System & Context/Action Status',
-  tags: ['composite'],
+  title: 'Molecules/Action Status',
+  tags: ['molecule', 'actions'],
   component: ActionStatus,
   parameters: {
     layout: 'padded',

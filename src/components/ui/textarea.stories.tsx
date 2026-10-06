@@ -6,10 +6,11 @@ import { Textarea } from './textarea'
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10939-229'
 
 const meta = preview.meta({
-  title: 'UI Components/Textarea',
-  tags: ['element'],
+  title: 'Atoms/Textarea',
+  tags: ['atom'],
   component: Textarea,
   parameters: {
+    shadcn: 'textarea',
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

@@ -1,73 +1,82 @@
-// How Anvil sorts its components (docs/composition-audit.md).
+// How Anvil sorts its components (docs/system-audit.md).
 //
-// - The sidebar SECTION says where a component lives: UI Components, Agent Primitives, Agent Blocks,
-//   Agent Templates (the first part of every story title, after Welcome and Foundations).
-// - The CATEGORY says how it is built: element, composite, feature or template (atomic design under
-//   plain names). Every meta carries exactly one category tag (`tags: ['composite']`); the docs page
-//   shows it as a badge and the sidebar's tag filter filters by it.
+// - The LEVEL says what a component is and how reusable it is (Atomic Design): Atoms, Molecules,
+//   Organisms, Agent Builder. It is the first part of every story title (`Molecules/Field`) and a
+//   tag (`tags: ['molecule']`); each meta has exactly one.
+// - The CONTEXT says where in an agent UI a component is used (Messages, Sources, …). It is an
+//   optional tag, set only where it helps; generic components have none.
+// - `parameters.shadcn` names the shadcn/ui counterpart (its docs slug), when there is one.
 //
-// Each section allows certain categories; scripts/check-stories.mjs checks both rules.
+// The code stays flat (src/components/{ui,anvil,agent}); levels live here, never in folders.
+// scripts/check-stories.mjs checks the rules.
 
-export const CATEGORIES = [
+export const LEVELS = [
   {
-    tag: 'element',
-    label: 'Element',
-    description: 'Can’t be split further without losing its meaning; uses no other component but Icon.',
+    tag: 'atom',
+    title: 'Atoms',
+    label: 'Atom',
+    description: 'One element, context-agnostic. Uses no other Anvil component except Icon.',
   },
   {
-    tag: 'composite',
-    label: 'Composite',
-    description: 'A few elements working as one unit with one job; no header, body or footer of its own.',
+    tag: 'molecule',
+    title: 'Molecules',
+    label: 'Molecule',
+    description: 'A few atoms with one job: a field, a scale, a menu, a status strip.',
   },
   {
-    tag: 'feature',
-    label: 'Feature',
+    tag: 'organism',
+    title: 'Organisms',
+    label: 'Organism',
     description:
-      'A distinct section of the interface, with its own structure or flow, built from composites.',
+      'A complete, reusable section with its own structure or interaction: overlays, navigation, data.',
   },
   {
-    tag: 'template',
-    label: 'Template',
-    description: 'A page-level layout that places features.',
+    tag: 'agent-builder',
+    title: 'Agent Builder',
+    label: 'Agent Builder',
+    description:
+      'A ready-to-use agent experience built from the levels above, used as-is in an agent UI: a citation drawer, an approval, a survey.',
   },
 ] as const
 
-export type CategoryTag = (typeof CATEGORIES)[number]['tag']
+export type LevelTag = (typeof LEVELS)[number]['tag']
+export type LevelTitle = (typeof LEVELS)[number]['title']
 
-export const SECTIONS = [
+export const CONTEXTS = [
+  { tag: 'messages', label: 'Messages', description: 'The thread: messages, their parts and actions.' },
   {
-    title: 'UI Components',
-    categories: ['element', 'composite', 'feature'],
-    description: 'shadcn/ui components themed with Anvil tokens, and Anvil-only controls.',
+    tag: 'input',
+    label: 'Input',
+    description: 'What the user sends: the composer, replies, files and voice.',
   },
   {
-    title: 'Agent Primitives',
-    categories: ['element', 'composite'],
-    description: 'The agent UI’s elements and composites: message parts, indicators, chips, rows and menus.',
+    tag: 'agent-status',
+    label: 'Agent Status',
+    description: 'What the agent is doing: thinking, tools, streaming.',
   },
+  { tag: 'sources', label: 'Sources', description: 'Where an answer comes from: citations and sources.' },
+  { tag: 'memory', label: 'Memory', description: 'What the agent remembers and the thread’s instructions.' },
   {
-    title: 'Agent Blocks',
-    categories: ['feature'],
-    description: 'Agent features: composer, message row, approvals, connectors and other distinct sections.',
+    tag: 'actions',
+    label: 'Actions',
+    description: 'Actions with side effects: approvals and connected apps.',
   },
-  {
-    title: 'Agent Templates',
-    categories: ['template'],
-    description: 'Surfaces and full layouts: where the agent lives.',
-  },
-] as const satisfies readonly { title: string; categories: readonly CategoryTag[]; description: string }[]
+  { tag: 'widgets', label: 'Widgets & Artifacts', description: 'Rich output: data, media and artifacts.' },
+  { tag: 'feedback', label: 'Feedback', description: 'Asking the user how it went: ratings and surveys.' },
+] as const
 
-export type SectionTitle = (typeof SECTIONS)[number]['title']
+export type ContextTag = (typeof CONTEXTS)[number]['tag']
 
-export function categoryOf(tags: readonly string[] | undefined) {
-  return CATEGORIES.find((category) => tags?.includes(category.tag))
+export function levelOf(tags: readonly string[] | undefined) {
+  return LEVELS.find((level) => tags?.includes(level.tag))
 }
 
-/**
- * Anvil-only UI components (no shadcn counterpart; outside the shadcn sync), code in
- * components/anvil. Shown as a badge on the docs page and in the Welcome catalog.
- */
-export const CUSTOM_TAG = 'anvil-custom'
+export function contextsOf(tags: readonly string[] | undefined) {
+  return CONTEXTS.filter((context) => tags?.includes(context.tag))
+}
+
+/** The shadcn/ui docs page for a `parameters.shadcn` slug. */
+export const shadcnUrl = (slug: string) => `https://ui.shadcn.com/docs/components/${slug}`
 
 /**
  * One row of a component's Figma → code table (`parameters.figmaProps`): the Figma component

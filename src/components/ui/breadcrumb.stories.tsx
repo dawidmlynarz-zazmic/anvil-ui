@@ -66,10 +66,11 @@ function DemoBreadcrumb({ back = false, avatar = true, levels = 2, current = tru
 }
 
 const meta = preview.meta({
-  title: 'UI Components/Breadcrumb',
-  tags: ['composite'],
+  title: 'Molecules/Breadcrumb',
+  tags: ['molecule'],
   component: DemoBreadcrumb,
   parameters: {
+    shadcn: 'breadcrumb',
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

@@ -129,10 +129,11 @@ function DemoTable({
 }
 
 const meta = preview.meta({
-  title: 'UI Components/Table',
-  tags: ['feature'],
+  title: 'Organisms/Table',
+  tags: ['organism'],
   component: DemoTable,
   parameters: {
+    shadcn: 'table',
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

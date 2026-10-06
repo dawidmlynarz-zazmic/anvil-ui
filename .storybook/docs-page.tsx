@@ -1,10 +1,15 @@
-import type { ReactNode } from 'react'
+import type { MouseEvent, ReactNode } from 'react'
 import { Controls, Description, Primary, Stories, Subtitle, Title, useOf } from '@storybook/addon-docs/blocks'
+import { NAVIGATE_URL } from 'storybook/internal/core-events'
+import { addons } from 'storybook/preview-api'
 
-import { categoryOf, CUSTOM_TAG, type FigmaProp } from './taxonomy'
+import { docsIdOf, relationshipsOf } from './relationships'
+import { contextsOf, levelOf, shadcnUrl, type FigmaProp } from './taxonomy'
 
-// Docs page for every component (autodocs): title, category badge and Figma link, the description,
-// the primary story with its controls, the Figma → code table, then every story.
+// Docs page for every component (autodocs): title; badges for the level, the context and the
+// shadcn/ui counterpart (linked), and the Figma link; the description; Built with / Used in (links
+// to the other components' docs, from the imports); the primary story with its controls; the
+// Figma → code table; then every story.
 
 /** Renders `code` spans from backticks. */
 function inlineCode(text: string): ReactNode[] {
@@ -17,42 +22,107 @@ function usePreparedMeta() {
   return resolved.type === 'meta' ? resolved.preparedMeta : undefined
 }
 
+const badge = 'inline-flex items-center gap-1 rounded-full px-2 py-0.5'
+
 function Meta() {
   const preparedMeta = usePreparedMeta()
   if (!preparedMeta) return null
-  const category = categoryOf(preparedMeta.tags)
-  const custom = preparedMeta.tags.includes(CUSTOM_TAG)
+  const level = levelOf(preparedMeta.tags)
+  const contexts = contextsOf(preparedMeta.tags)
+  const shadcn = preparedMeta.parameters.shadcn as string | undefined
   const figmaUrl = (preparedMeta.parameters.design as { url?: string } | undefined)?.url
-  if (!category && !figmaUrl) return null
+  if (!level && !figmaUrl) return null
   return (
     <div className="sb-unstyled not-prose mb-6 flex flex-wrap items-center gap-2 type-text-xs-medium">
-      {category && (
-        <span
-          title={category.description}
-          className="inline-flex items-center gap-1 rounded-full bg-agent-subtle px-2 py-0.5 text-agent-strong"
-        >
-          {category.label}
+      {level && (
+        <span title={level.description} className={`${badge} bg-agent-subtle text-agent-strong`}>
+          {level.label}
         </span>
       )}
-      {custom && (
-        <span
-          title="No shadcn/ui counterpart: built for Anvil, outside the shadcn sync."
-          className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-foreground"
-        >
-          Anvil-only
+      {contexts.map((context) => (
+        <span key={context.tag} title={context.description} className={`${badge} bg-muted text-foreground`}>
+          {context.label}
         </span>
+      ))}
+      {shadcn && (
+        <a
+          href={shadcnUrl(shadcn)}
+          target="_blank"
+          rel="noreferrer"
+          title="The shadcn/ui component this is built on"
+          className={`${badge} bg-foreground text-background no-underline hover:opacity-90`}
+        >
+          shadcn
+        </a>
       )}
       {figmaUrl && (
         <a
           href={figmaUrl}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex items-center rounded-full border px-2 py-0.5 text-foreground no-underline hover:bg-muted"
+          className={`${badge} border text-foreground no-underline hover:bg-muted`}
         >
           Open in Figma
         </a>
       )}
     </div>
+  )
+}
+
+/** A link to another component's docs: navigates the manager (no reload); new-tab still works. */
+function DocsLink({ title }: { title: string }) {
+  const path = `/docs/${docsIdOf(title)}`
+  const onClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
+    event.preventDefault()
+    addons.getChannel().emit(NAVIGATE_URL, `?path=${path}`)
+  }
+  const [level, ...name] = title.split('/')
+  return (
+    <a href={`/?path=${path}`} target="_top" onClick={onClick}>
+      {name.join(' / ')}
+      <span className="sb-unstyled type-text-xs-normal text-muted-foreground"> · {level}</span>
+    </a>
+  )
+}
+
+function Relationships() {
+  const title = usePreparedMeta()?.title
+  if (!title) return null
+  const { builtWith, usedIn } = relationshipsOf(title)
+  if (!builtWith.length && !usedIn.length) return null
+  return (
+    <>
+      <h2 id="relationships">Relationships</h2>
+      {builtWith.length > 0 && (
+        <>
+          <p>
+            <strong>Built with</strong> — the Anvil components inside it:
+          </p>
+          <ul>
+            {builtWith.map((child) => (
+              <li key={child}>
+                <DocsLink title={child} />
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+      {usedIn.length > 0 && (
+        <>
+          <p>
+            <strong>Used in</strong> — the Anvil components built with it:
+          </p>
+          <ul>
+            {usedIn.map((parent) => (
+              <li key={parent}>
+                <DocsLink title={parent} />
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+    </>
   )
 }
 
@@ -97,6 +167,7 @@ export function AnvilDocsPage() {
       <Meta />
       <Subtitle />
       <Description />
+      <Relationships />
       <Primary />
       <Controls />
       <FigmaTable />

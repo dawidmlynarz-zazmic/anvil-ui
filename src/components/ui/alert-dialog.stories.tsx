@@ -80,10 +80,11 @@ function DemoAlertDialog({
 }
 
 const meta = preview.meta({
-  title: 'UI Components/Alert Dialog',
-  tags: ['feature'],
+  title: 'Organisms/Alert Dialog',
+  tags: ['organism'],
   component: DemoAlertDialog,
   parameters: {
+    shadcn: 'alert-dialog',
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

@@ -67,10 +67,11 @@ function DemoPopover({
 }
 
 const meta = preview.meta({
-  title: 'UI Components/Popover',
-  tags: ['composite'],
+  title: 'Molecules/Popover',
+  tags: ['molecule'],
   component: DemoPopover,
   parameters: {
+    shadcn: 'popover',
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

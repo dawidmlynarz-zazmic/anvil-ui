@@ -6,8 +6,8 @@ import { DropOverlay } from './drop-overlay'
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10735-3012'
 
 const meta = preview.meta({
-  title: 'Agent Primitives/Input/Drop Overlay',
-  tags: ['composite'],
+  title: 'Agent Builder/Drop Overlay',
+  tags: ['agent-builder', 'input'],
   component: DropOverlay,
   parameters: {
     layout: 'padded',

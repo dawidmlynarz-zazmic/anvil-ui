@@ -152,8 +152,8 @@ function Demo({ size, status, listening, withFiles, defaultValue, onSubmit, onSt
 }
 
 const meta = preview.meta({
-  title: 'Agent Blocks/Input/Prompt Input',
-  tags: ['feature'],
+  title: 'Agent Builder/Prompt Input',
+  tags: ['agent-builder', 'input'],
   component: Demo,
   parameters: {
     layout: 'padded',

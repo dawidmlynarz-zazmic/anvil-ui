@@ -98,10 +98,11 @@ function DemoCombobox({
 }
 
 const meta = preview.meta({
-  title: 'UI Components/Combobox',
-  tags: ['composite'],
+  title: 'Molecules/Combobox',
+  tags: ['molecule'],
   component: DemoCombobox,
   parameters: {
+    shadcn: 'combobox',
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

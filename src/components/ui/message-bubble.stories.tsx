@@ -8,10 +8,11 @@ const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=1066
 const VARIANTS = ['default', 'secondary', 'muted', 'tinted', 'outline', 'ghost', 'destructive'] as const
 
 const meta = preview.meta({
-  title: 'Agent Primitives/Messages/Message Bubble',
-  tags: ['element'],
+  title: 'Atoms/Message Bubble',
+  tags: ['atom', 'messages'],
   component: MessageBubble,
   parameters: {
+    shadcn: 'bubble',
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     // No Figma message bubble component: the bubble frame inside Core Kit `message row`.

@@ -63,10 +63,11 @@ function DemoTabs({
 }
 
 const meta = preview.meta({
-  title: 'UI Components/Tabs',
-  tags: ['composite'],
+  title: 'Molecules/Tabs',
+  tags: ['molecule'],
   component: DemoTabs,
   parameters: {
+    shadcn: 'tabs',
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

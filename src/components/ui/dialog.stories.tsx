@@ -76,10 +76,11 @@ function DemoDialog({
 }
 
 const meta = preview.meta({
-  title: 'UI Components/Dialog',
-  tags: ['feature'],
+  title: 'Organisms/Dialog',
+  tags: ['organism'],
   component: DemoDialog,
   parameters: {
+    shadcn: 'dialog',
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

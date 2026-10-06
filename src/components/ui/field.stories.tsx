@@ -134,10 +134,11 @@ function DemoField({
 }
 
 const meta = preview.meta({
-  title: 'UI Components/Field',
-  tags: ['composite'],
+  title: 'Molecules/Field',
+  tags: ['molecule'],
   component: DemoField,
   parameters: {
+    shadcn: 'field',
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

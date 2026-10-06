@@ -73,10 +73,11 @@ function DemoDrawer({
 }
 
 const meta = preview.meta({
-  title: 'UI Components/Drawer',
-  tags: ['feature'],
+  title: 'Organisms/Drawer',
+  tags: ['organism'],
   component: DemoDrawer,
   parameters: {
+    shadcn: 'drawer',
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [
