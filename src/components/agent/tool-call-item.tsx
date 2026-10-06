@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'
+import { chevronMotion, expandMotion } from '@/lib/motion'
 import { StepStatusIcon, type StepStatus } from '@/components/agent/step-status'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { ChevronRightIcon, Icon } from '@/components/ui/icon'
@@ -68,7 +69,10 @@ function ToolCallItemTrigger({
       {duration !== undefined && <ToolCallItemDuration>{duration}</ToolCallItemDuration>}
       <Icon
         icon={ChevronRightIcon}
-        className="size-3.5 text-muted-foreground transition-transform group-data-[state=open]/tool-call:rotate-90"
+        className={cn(
+          'size-3.5 text-muted-foreground group-data-[state=open]/tool-call:rotate-90',
+          chevronMotion,
+        )}
       />
     </CollapsibleTrigger>
   )
@@ -111,7 +115,7 @@ function ToolCallItemContent({ className, ...props }: React.ComponentProps<typeo
   return (
     <CollapsibleContent
       data-slot="tool-call-item-content"
-      className={cn('flex flex-col gap-2 ps-(--space-lg)', className)}
+      className={cn(expandMotion, 'flex flex-col gap-2 ps-(--space-lg)', className)}
       {...props}
     />
   )

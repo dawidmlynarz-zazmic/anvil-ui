@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'
+import { chevronMotion, expandMotion } from '@/lib/motion'
 import { PulseDot } from '@/components/agent/pulse-dot'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { ChevronRightIcon, Icon, WrenchIcon } from '@/components/ui/icon'
@@ -66,7 +67,10 @@ function ToolCallAccordionTrigger({
       {duration !== undefined && <ToolCallAccordionDuration>{duration}</ToolCallAccordionDuration>}
       <Icon
         icon={ChevronRightIcon}
-        className="size-3.5 shrink-0 text-muted-foreground transition-transform group-data-[state=open]/tool-calls:rotate-90"
+        className={cn(
+          'size-3.5 shrink-0 text-muted-foreground group-data-[state=open]/tool-calls:rotate-90',
+          chevronMotion,
+        )}
       />
     </CollapsibleTrigger>
   )
@@ -106,14 +110,16 @@ function ToolCallAccordionDuration({ className, ...props }: React.ComponentProps
   )
 }
 
-/** Holds the ToolCallItems. */
-function ToolCallAccordionContent({ className, ...props }: React.ComponentProps<typeof CollapsibleContent>) {
+/** Holds the ToolCallItems. Animates its height; `className` styles the padded list inside. */
+function ToolCallAccordionContent({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<typeof CollapsibleContent>) {
   return (
-    <CollapsibleContent
-      data-slot="tool-call-accordion-content"
-      className={cn('flex flex-col gap-0.5 p-2', className)}
-      {...props}
-    />
+    <CollapsibleContent data-slot="tool-call-accordion-content" className={expandMotion} {...props}>
+      <div className={cn('flex flex-col gap-0.5 p-2', className)}>{children}</div>
+    </CollapsibleContent>
   )
 }
 

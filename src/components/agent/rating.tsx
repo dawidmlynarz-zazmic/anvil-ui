@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'
+import { expandMotion } from '@/lib/motion'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { RatingScale } from '@/components/agent/rating-scale'
@@ -115,7 +116,7 @@ function Rating({
             </CollapsibleTrigger>
           )}
           {onCommentSubmit && (
-            <CollapsibleContent asChild>
+            <CollapsibleContent asChild className={expandMotion}>
               <form
                 data-slot="rating-comment"
                 className="flex w-full flex-col gap-2"
