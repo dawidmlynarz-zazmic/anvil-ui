@@ -15,6 +15,7 @@ import { CornerDownRightIcon, Icon, PlusIcon, SparklesIcon, XIcon } from '@/comp
 //   (12px sparkles + text/xs/medium muted) and the replies as a list, 8px below. `layout` chips
 //   (wrapping, 8px apart) · list (one --input-bordered radius-lg block of text/sm rows with a corner
 //   arrow and a plus, --border between rows). Screen readers hear the label and the count.
+// Text is left-aligned in every layout and state (a wrapping chip reads like a sentence).
 // Focus → focus/ring; disabled → 50% (after one is sent, disable the set).
 
 type Layout = 'chips' | 'list'
@@ -68,7 +69,7 @@ function QuickReply({
         className={cn(
           chipVariants({ variant: 'outline', size: 'lg', shape: 'pill', interactive: false }),
           reply,
-          "max-w-full whitespace-normal [&_svg:not([class*='size-'])]:size-3.5",
+          "max-w-full justify-start text-left whitespace-normal [&_svg:not([class*='size-'])]:size-3.5",
           className,
         )}
         {...props}
@@ -96,7 +97,7 @@ function QuickReplyFilter({
         size="lg"
         shape="pill"
         className={cn(
-          'group/filter h-8 bg-transparent type-text-xs-medium inset-ring-border hover:bg-muted hover:inset-ring-input',
+          'group/filter h-8 justify-start bg-transparent text-left type-text-xs-medium inset-ring-border hover:bg-muted hover:inset-ring-input',
           "[&_svg:not([class*='size-'])]:size-3.5",
           'data-[state=on]:bg-agent-subtle data-[state=on]:text-agent data-[state=on]:inset-ring-1 data-[state=on]:inset-ring-agent-soft data-[state=on]:hover:bg-agent-soft dark:data-[state=on]:text-agent-medium',
           className,

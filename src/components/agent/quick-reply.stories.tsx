@@ -8,6 +8,12 @@ import { QuickReply, QuickReplyFilter, QuickReplyGroup } from './quick-reply'
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10668-15632'
 const FIGMA_FOLLOW_UPS = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10668-15663'
 
+const FOLLOW_UPS = [
+  'What are the biggest launch risks?',
+  'Who owns the onboarding email?',
+  'How does this compare with the Q2 launch?',
+]
+
 const meta = preview.meta({
   title: 'Molecules/Quick Reply',
   tags: ['molecule', 'messages'],
@@ -73,7 +79,7 @@ const meta = preview.meta({
       },
     },
   },
-  args: { children: 'Label', disabled: false, onClick: fn() },
+  args: { children: 'Make it shorter', disabled: false, onClick: fn() },
   argTypes: {
     children: { control: 'text' },
     disabled: { control: 'boolean' },
@@ -86,7 +92,7 @@ const meta = preview.meta({
 export const Default = meta.story()
 
 Default.test('sends on click', async ({ canvas, args }) => {
-  await userEvent.click(canvas.getByRole('button', { name: 'Label' }))
+  await userEvent.click(canvas.getByRole('button', { name: 'Make it shorter' }))
   await expect(args.onClick).toHaveBeenCalledOnce()
 })
 
@@ -104,10 +110,10 @@ export const Variants = meta.story({
               }
             >
               {type === 'suggestion' ? (
-                <QuickReply disabled={state === 'disabled'}>Label</QuickReply>
+                <QuickReply disabled={state === 'disabled'}>Add a timeline</QuickReply>
               ) : (
                 <QuickReplyFilter pressed={type === 'applied'} disabled={state === 'disabled'}>
-                  Label
+                  Last 30 days
                 </QuickReplyFilter>
               )}
             </span>
@@ -121,16 +127,16 @@ export const Variants = meta.story({
 /** Filters toggle between filter and applied. */
 export const Filters = meta.story({
   render: () => (
-    <QuickReplyGroup label="Title">
-      <QuickReplyFilter defaultPressed>Label 1</QuickReplyFilter>
-      <QuickReplyFilter>Label 2</QuickReplyFilter>
-      <QuickReplyFilter>Label 3</QuickReplyFilter>
+    <QuickReplyGroup label="Narrow the results">
+      <QuickReplyFilter defaultPressed>Last 30 days</QuickReplyFilter>
+      <QuickReplyFilter>Only PDFs</QuickReplyFilter>
+      <QuickReplyFilter>From Drive</QuickReplyFilter>
     </QuickReplyGroup>
   ),
 })
 
 Filters.test('a filter toggles applied', async ({ canvas }) => {
-  const filter = canvas.getByRole('button', { name: 'Label 2' })
+  const filter = canvas.getByRole('button', { name: 'Only PDFs' })
   await userEvent.click(filter)
   await expect(filter).toHaveAttribute('aria-pressed', 'true')
 })
@@ -139,9 +145,16 @@ Filters.test('a filter toggles applied', async ({ canvas }) => {
 export const Group = meta.story({
   render: () => (
     <div className="w-120">
-      <QuickReplyGroup label="Title">
-        {[1, 2, 3, 4, 5, 6].map((i) => (
-          <QuickReply key={i}>Label {i}</QuickReply>
+      <QuickReplyGroup label="Suggested replies">
+        {[
+          'Make it shorter',
+          'Add a timeline',
+          'Compare with last quarter',
+          'Turn it into a checklist',
+          'Draft the email',
+          'Show the sources',
+        ].map((reply) => (
+          <QuickReply key={reply}>{reply}</QuickReply>
         ))}
       </QuickReplyGroup>
     </div>
@@ -154,10 +167,10 @@ export const FollowUps = meta.story({
   render: (args) => (
     <div className="flex w-120 flex-col gap-6">
       {(['chips', 'list'] as const).map((layout) => (
-        <QuickReplyGroup key={layout} label="Title" layout={layout}>
-          {['Label 1', 'Label 2', 'Label 3'].map((label) => (
-            <QuickReply key={label} onClick={args.onClick}>
-              {label}
+        <QuickReplyGroup key={layout} label="Suggested follow-ups" layout={layout}>
+          {FOLLOW_UPS.map((question) => (
+            <QuickReply key={question} onClick={args.onClick}>
+              {question}
             </QuickReply>
           ))}
         </QuickReplyGroup>
@@ -167,15 +180,15 @@ export const FollowUps = meta.story({
 })
 
 FollowUps.test('a labelled list of follow-ups that send on click', async ({ canvas, args }) => {
-  await expect(canvas.getAllByRole('list', { name: 'Title' })).toHaveLength(2)
-  await userEvent.click(canvas.getAllByRole('button', { name: 'Label 2' })[1])
+  await expect(canvas.getAllByRole('list', { name: 'Suggested follow-ups' })).toHaveLength(2)
+  await userEvent.click(canvas.getAllByRole('button', { name: FOLLOW_UPS[1] })[1])
   await expect(args.onClick).toHaveBeenCalledOnce()
 })
 
 /** While the answer is still streaming: skeleton chips hold the space until the follow-ups arrive. */
 export const Loading = meta.story({
   render: () => (
-    <QuickReplyGroup label="Title" aria-busy="true" className="w-120">
+    <QuickReplyGroup label="Suggested follow-ups" aria-busy="true" className="w-120">
       {['w-28', 'w-36', 'w-24'].map((width) => (
         <li key={width}>
           <Skeleton className={`h-8 ${width} rounded-full`} />
@@ -196,10 +209,10 @@ Loading.test('is marked busy and offers nothing to click yet', async ({ canvas, 
 /** After one is sent the set is disabled, so the same reply can't be sent twice. */
 export const AfterChoice = meta.story({
   render: () => (
-    <QuickReplyGroup label="Title" className="w-120">
-      {['Label 1', 'Label 2', 'Label 3'].map((label) => (
-        <QuickReply key={label} disabled>
-          {label}
+    <QuickReplyGroup label="Suggested replies" className="w-120">
+      {['Make it shorter', 'Add a timeline', 'Compare with last quarter'].map((reply) => (
+        <QuickReply key={reply} disabled>
+          {reply}
         </QuickReply>
       ))}
     </QuickReplyGroup>
@@ -210,18 +223,22 @@ AfterChoice.test('every reply is disabled', async ({ canvas }) => {
   for (const button of canvas.getAllByRole('button')) await expect(button).toBeDisabled()
 })
 
-const LONG = 'A long follow-up question that wraps onto a second line in a narrow column'
+const LONG = 'Compare our trial conversion with last quarter and explain what changed'
 
 /** Stress test: long replies in a narrow column wrap instead of overflowing, in both layouts. */
 export const LongContent = meta.story({
   render: () => (
     <div className="flex w-80 flex-col gap-6">
       {(['chips', 'list'] as const).map((layout) => (
-        <QuickReplyGroup key={layout} label="Title" layout={layout}>
+        <QuickReplyGroup key={layout} label="Suggested follow-ups" layout={layout}>
           <QuickReply>{LONG}</QuickReply>
-          <QuickReply>Label</QuickReply>
+          <QuickReply>Make it shorter</QuickReply>
         </QuickReplyGroup>
       ))}
+      <QuickReplyGroup label="Narrow the results">
+        <QuickReplyFilter defaultPressed>Only sources published in the last 30 days</QuickReplyFilter>
+        <QuickReplyFilter>Only PDFs and spreadsheets from Drive</QuickReplyFilter>
+      </QuickReplyGroup>
     </div>
   ),
 })
@@ -233,5 +250,12 @@ LongContent.test('long replies stay inside the column', async ({ canvasElement }
         root.getBoundingClientRect().right + 1,
       )
     }
+  }
+})
+
+LongContent.test('wrapping text is left-aligned in every layout', async ({ canvasElement }) => {
+  for (const button of canvasElement.querySelectorAll<HTMLElement>('button')) {
+    await expect(getComputedStyle(button).textAlign).toMatch(/^(left|start)$/)
+    await expect(getComputedStyle(button).justifyContent).toMatch(/^(flex-start|start|normal)$/)
   }
 })
