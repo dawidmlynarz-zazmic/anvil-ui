@@ -52,7 +52,7 @@ function Demo({ open, onOpenChange, onUploadFiles, onPhotos, onTakePhoto }: Demo
 }
 
 const meta = preview.meta({
-  title: 'Agent Builder/Core Kit/Input/Attachment Menu',
+  title: 'Agent Blocks/Input/Attachment Menu',
   tags: ['agent-block'],
   component: Demo,
   parameters: {

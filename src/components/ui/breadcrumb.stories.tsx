@@ -66,7 +66,7 @@ function DemoBreadcrumb({ back = false, avatar = true, levels = 2, current = tru
 }
 
 const meta = preview.meta({
-  title: 'Components/Breadcrumb',
+  title: 'UI Components/Breadcrumb',
   tags: ['ui-component'],
   component: DemoBreadcrumb,
   parameters: {

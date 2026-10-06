@@ -41,7 +41,7 @@ const Label = ({ children }: { children: ReactNode }) => (
 )
 
 const meta = preview.meta({
-  title: 'Components/Button',
+  title: 'UI Components/Button',
   tags: ['ui-component'],
   component: Button,
   parameters: {

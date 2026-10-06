@@ -45,7 +45,7 @@ function DemoAvatar({ size = 'default', shape = 'circle', type = 'text', label =
 }
 
 const meta = preview.meta({
-  title: 'Components/Avatar',
+  title: 'UI Components/Avatar',
   tags: ['ui-component'],
   component: DemoAvatar,
   parameters: {

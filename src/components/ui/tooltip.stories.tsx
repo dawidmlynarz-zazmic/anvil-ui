@@ -29,7 +29,7 @@ function DemoTooltip({ open, onOpenChange, side = 'top', text = 'Add' }: DemoPro
 }
 
 const meta = preview.meta({
-  title: 'Components/Tooltip',
+  title: 'UI Components/Tooltip',
   tags: ['ui-component'],
   component: DemoTooltip,
   parameters: {

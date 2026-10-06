@@ -31,7 +31,7 @@ import {
 import { Kbd } from '@/components/ui/kbd'
 import { cn } from '@/lib/utils'
 
-import { tierOf } from '../../.storybook/tiers'
+import { CUSTOM_TAG, TIERS } from '../../.storybook/tiers'
 
 import { catalog, type CatalogItem } from './catalog'
 import { ChatDemo } from './ChatDemo'
@@ -51,33 +51,30 @@ type IndexEntry = {
   tags?: string[]
 }
 
-type Tier = NonNullable<ReturnType<typeof tierOf>>
-
 function useStorybookPaths() {
   const [paths, setPaths] = useState<Map<string, string> | null>(null)
-  const [tiers, setTiers] = useState<Map<string, Tier>>(new Map())
+  const [custom, setCustom] = useState<Set<string>>(new Set())
   useEffect(() => {
     let cancelled = false
     fetch('index.json')
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
       .then((index: { entries: Record<string, IndexEntry> }) => {
         const map = new Map<string, string>()
-        const tierMap = new Map<string, Tier>()
+        const customTitles = new Set<string>()
         for (const entry of Object.values(index.entries)) {
-          const tier = tierOf(entry.tags)
-          if (tier) tierMap.set(entry.title, tier)
+          if (entry.tags?.includes(CUSTOM_TAG)) customTitles.add(entry.title)
           if (map.has(entry.title)) continue
           if (entry.type === 'docs') map.set(entry.title, `/docs/${entry.id}`)
           else if (entry.subtype !== 'test') map.set(entry.title, `/story/${entry.id}`)
         }
-        // A group item (e.g. "Agent Builder/Core Kit") links to the first page inside it.
+        // A group item (e.g. "Agent Blocks/Checkout") links to the first page inside it.
         for (const [title, path] of [...map]) {
           const parent = title.slice(0, title.lastIndexOf('/'))
           if (parent && !map.has(parent)) map.set(parent, path)
         }
         if (!cancelled) {
           setPaths(map)
-          setTiers(tierMap)
+          setCustom(customTitles)
         }
       })
       .catch(() => !cancelled && setPaths(new Map()))
@@ -85,7 +82,7 @@ function useStorybookPaths() {
       cancelled = true
     }
   }, [])
-  return { paths, tiers }
+  return { paths, custom }
 }
 
 /** A link to another Storybook page: navigates the manager (no reload); new-tab still works. */
@@ -309,7 +306,7 @@ const layers = [
   { name: 'Tokens', detail: 'CSS variables, light and dark' },
   { name: 'shadcn/ui + Radix', detail: 'Behavior and accessibility' },
   { name: 'Anvil components', detail: 'Restyled to the API contract' },
-  { name: 'Agent Builder', detail: 'Conversation patterns' },
+  { name: 'Agent tiers', detail: 'Primitives, blocks and templates' },
 ]
 
 function Architecture() {
@@ -358,7 +355,7 @@ function Status({ ready }: { ready: boolean }) {
   )
 }
 
-function CatalogRow({ item, path, tier }: { item: CatalogItem; path?: string; tier?: Tier }) {
+function CatalogRow({ item, path, custom }: { item: CatalogItem; path?: string; custom?: boolean }) {
   return (
     <li className="flex min-h-8 items-center justify-between gap-2">
       {path ? (
@@ -368,12 +365,12 @@ function CatalogRow({ item, path, tier }: { item: CatalogItem; path?: string; ti
       ) : (
         <span className="type-text-sm-normal text-muted-foreground">{item.name}</span>
       )}
-      {tier && tier.tier > 1 && (
+      {custom && (
         <span
-          title={`Tier ${tier.tier} · ${tier.label}`}
-          className="ml-auto rounded-sm bg-agent-subtle px-1 py-0.5 type-text-2xs-medium text-agent-strong dark:text-foreground"
+          title="Anvil-only: no shadcn/ui counterpart, outside the shadcn sync"
+          className="ml-auto rounded-sm bg-muted px-1 py-0.5 type-text-2xs-medium text-muted-foreground"
         >
-          {tier.short}
+          Anvil
         </span>
       )}
       <Status ready={Boolean(path)} />
@@ -381,14 +378,20 @@ function CatalogRow({ item, path, tier }: { item: CatalogItem; path?: string; ti
   )
 }
 
+// Explore groups: Foundations, then the four tiers (the sidebar's main sections).
+const exploreGroups = [
+  { key: 'foundations', label: 'Foundations', description: 'Tokens pulled from Figma.' },
+  ...TIERS.map((tier) => ({ key: tier.tag, label: `${tier.label}s`, description: tier.description })),
+]
+
 function Explore({
   paths,
-  tiers,
+  custom,
   ready,
   total,
 }: {
   paths: Map<string, string> | null
-  tiers: Map<string, Tier>
+  custom: Set<string>
   ready: number
   total: number
 }) {
@@ -397,7 +400,7 @@ function Explore({
       id="explore"
       eyebrow="Explore"
       title="Everything we're building"
-      description="Every area of the system. Ready items open their stories. Planned items follow the roadmap: shadcn counterparts first, then custom Anvil components and Agent Builder."
+      description="Every area of the system, grouped like the sidebar: Foundations, then the four tiers. Ready items open their docs. Planned items follow the roadmap."
     >
       <dl className="flex flex-wrap gap-x-(--space-2xl) gap-y-3">
         {[
@@ -412,45 +415,58 @@ function Explore({
           </div>
         ))}
       </dl>
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {catalog.map((area) => {
-          const ready = area.items.filter((item) => paths?.has(item.title)).length
-          return (
-            <div
-              key={area.id}
-              className="flex flex-col gap-3 rounded-xl bg-card p-(--space-lg) text-card-foreground inset-ring inset-ring-border"
-            >
-              <div className="flex items-baseline justify-between gap-2">
-                <h3 className="type-text-base-semibold">{area.name}</h3>
-                <span className="type-text-xs-medium text-muted-foreground">
-                  {ready}/{area.items.length}
-                </span>
-              </div>
-              <p className="type-text-xs-normal text-muted-foreground">{area.description}</p>
-              <div
-                className="h-1 overflow-hidden rounded-full bg-muted"
-                role="img"
-                aria-label={`${ready} of ${area.items.length} ready`}
-              >
-                <div
-                  className="h-full rounded-full bg-primary"
-                  style={{ width: `${(ready / area.items.length) * 100}%` }}
-                />
-              </div>
-              <ul className="flex flex-col" aria-label={area.name}>
-                {area.items.map((item) => (
-                  <CatalogRow
-                    key={item.title}
-                    item={item}
-                    path={paths?.get(item.title)}
-                    tier={tiers.get(item.title)}
-                  />
-                ))}
-              </ul>
+      {exploreGroups.map((group) => {
+        const areas = catalog.filter((area) => area.tier === group.key)
+        return (
+          <section key={group.key} aria-labelledby={`explore-${group.key}`} className="flex flex-col gap-4">
+            <div className="flex flex-col gap-1">
+              <h3 id={`explore-${group.key}`} className="type-heading-xl text-foreground">
+                {group.label}
+              </h3>
+              <p className="type-text-sm-normal text-muted-foreground">{group.description}</p>
             </div>
-          )
-        })}
-      </div>
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+              {areas.map((area) => {
+                const ready = area.items.filter((item) => paths?.has(item.title)).length
+                return (
+                  <div
+                    key={area.id}
+                    className="flex flex-col gap-3 rounded-xl bg-card p-(--space-lg) text-card-foreground inset-ring inset-ring-border"
+                  >
+                    <div className="flex items-baseline justify-between gap-2">
+                      <h4 className="type-text-base-semibold">{area.name}</h4>
+                      <span className="type-text-xs-medium text-muted-foreground">
+                        {ready}/{area.items.length}
+                      </span>
+                    </div>
+                    <p className="type-text-xs-normal text-muted-foreground">{area.description}</p>
+                    <div
+                      className="h-1 overflow-hidden rounded-full bg-muted"
+                      role="img"
+                      aria-label={`${ready} of ${area.items.length} ready`}
+                    >
+                      <div
+                        className="h-full rounded-full bg-primary"
+                        style={{ width: `${(ready / area.items.length) * 100}%` }}
+                      />
+                    </div>
+                    <ul className="flex flex-col" aria-label={`${group.label} · ${area.name}`}>
+                      {area.items.map((item) => (
+                        <CatalogRow
+                          key={item.title}
+                          item={item}
+                          path={paths?.get(item.title)}
+                          custom={custom.has(item.title)}
+                        />
+                      ))}
+                    </ul>
+                  </div>
+                )
+              })}
+            </div>
+          </section>
+        )
+      })}
     </Section>
   )
 }
@@ -461,12 +477,13 @@ const tips: { icon: LucideIcon; title: string; body: ReactNode }[] = [
     title: 'Sidebar',
     body: (
       <>
-        <strong className="text-foreground">Foundations</strong> (tokens),{' '}
-        <strong className="text-foreground">Components</strong> (shadcn/ui, A–Z),{' '}
-        <strong className="text-foreground">Custom Components</strong> (Anvil-only parts, outside the shadcn
-        sync) and <strong className="text-foreground">Agent Builder</strong>, grouped like the Figma pages:
-        Primitives, Core Kit, Agent Patterns, Surfaces and Templates. Filter by tier with the sidebar&apos;s
-        tag filter: UI Component, Agent Primitive, Agent Block, Agent Template.
+        <strong className="text-foreground">Foundations</strong> (tokens), then the four tiers:{' '}
+        <strong className="text-foreground">UI Components</strong> (shadcn/ui and Anvil-only controls, A–Z),{' '}
+        <strong className="text-foreground">Agent Primitives</strong>,{' '}
+        <strong className="text-foreground">Agent Blocks</strong> and{' '}
+        <strong className="text-foreground">Agent Templates</strong>. Agent tiers keep the Figma section a
+        component comes from (Input, Messages, Sources…). Anvil-only components carry an Anvil badge and an{' '}
+        <code>anvil-custom</code> tag in the sidebar&apos;s tag filter.
       </>
     ),
   },
@@ -613,10 +630,12 @@ function Footer() {
 // ---------------------------------------------------------------------------------------------
 
 export function WelcomePage() {
-  const { paths, tiers } = useStorybookPaths()
+  const { paths, custom } = useStorybookPaths()
   const items = catalog.flatMap((area) => area.items)
   const ready = items.filter((item) => paths?.has(item.title)).length
-  const firstComponent = items.find((item) => item.title.startsWith('Components/') && paths?.has(item.title))
+  const firstComponent = items.find(
+    (item) => item.title.startsWith('UI Components/') && paths?.has(item.title),
+  )
 
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -625,7 +644,7 @@ export function WelcomePage() {
         <Audience />
         <Goals />
         <Architecture />
-        <Explore paths={paths} tiers={tiers} ready={ready} total={items.length} />
+        <Explore paths={paths} custom={custom} ready={ready} total={items.length} />
         <UsingStorybook />
         <Contributors />
         <Footer />

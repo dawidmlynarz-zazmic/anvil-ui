@@ -128,24 +128,19 @@ export default definePreview({
     docs: { page: AnvilDocsPage },
     controls: { matchers: { color: /(background|color)$/i, date: /Date$/i }, sort: 'requiredFirst' },
     options: {
-      // Groups in a fixed order (Agent Builder sub-groups and Core Kit sections follow Figma), components A–Z
-      // inside a group, stories in file order. Plain JS, no outside references: Storybook evaluates
-      // this function's source on its own.
+      // Tiers in a fixed order (Welcome, Foundations, then the four tiers); inside an agent tier, the
+      // sections follow the Figma Core Kit; components A–Z inside a section, stories in file order.
+      // Plain JS, no outside references: Storybook evaluates this function's source on its own.
       storySort: (a, b) => {
-        const groups = ['Welcome', 'Foundations', 'Components', 'Custom Components', 'Agent Builder']
-        const agent = ['Primitives', 'Core Kit', 'Agent Patterns', 'Surfaces', 'Templates']
-        const pa = a.title.split('/')
-        const pb = b.title.split('/')
-        const ga = groups.indexOf(pa[0])
-        const gb = groups.indexOf(pb[0])
-        if (ga !== gb) return (ga === -1 ? 99 : ga) - (gb === -1 ? 99 : gb)
-        if (pa[0] === 'Agent Builder' && pa[1] !== pb[1]) {
-          const sa = agent.indexOf(pa[1])
-          const sb = agent.indexOf(pb[1])
-          if (sa !== sb) return (sa === -1 ? 99 : sa) - (sb === -1 ? 99 : sb)
-        }
-        // Core Kit sections follow the Figma page.
-        const kit = [
+        const groups = [
+          'Welcome',
+          'Foundations',
+          'UI Components',
+          'Agent Primitives',
+          'Agent Blocks',
+          'Agent Templates',
+        ]
+        const sections = [
           'Shell',
           'Input',
           'Messages',
@@ -155,10 +150,15 @@ export default definePreview({
           'Widgets & Artifacts',
           'Feedback & Surveys',
         ]
-        if (pa[1] === 'Core Kit' && pb[1] === 'Core Kit' && pa[2] !== pb[2]) {
-          const ka = kit.indexOf(pa[2])
-          const kb = kit.indexOf(pb[2])
-          if (ka !== kb) return (ka === -1 ? 99 : ka) - (kb === -1 ? 99 : kb)
+        const pa = a.title.split('/')
+        const pb = b.title.split('/')
+        const ga = groups.indexOf(pa[0])
+        const gb = groups.indexOf(pb[0])
+        if (ga !== gb) return (ga === -1 ? 99 : ga) - (gb === -1 ? 99 : gb)
+        if (pa.length > 2 && pb.length > 2 && pa[1] !== pb[1]) {
+          const sa = sections.indexOf(pa[1])
+          const sb = sections.indexOf(pb[1])
+          if (sa !== sb) return (sa === -1 ? 99 : sa) - (sb === -1 ? 99 : sb)
         }
         if (pa[0] === 'Welcome' || pa[0] === 'Foundations' || a.title === b.title) return 0
         return a.title.localeCompare(b.title)

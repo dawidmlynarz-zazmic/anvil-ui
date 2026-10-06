@@ -9,7 +9,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from './tooltip'
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=2534-31422'
 
 const meta = preview.meta({
-  title: 'Components/Kbd',
+  title: 'UI Components/Kbd',
   tags: ['ui-component'],
   component: Kbd,
   parameters: {

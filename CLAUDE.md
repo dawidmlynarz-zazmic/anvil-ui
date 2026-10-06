@@ -236,18 +236,19 @@ Lucide    → Icon (@/components/ui/icon) → every component and story
 4. Write `<name>.stories.tsx` in **CSF Next** (`import preview from '#.storybook/preview'`,
    `preview.meta({...})`, `meta.story({...})`): Default with controls, Variants grid, Sizes, States
    reference grid, With icons, Composition. Add `parameters.design` with the Figma URL.
-   - **Titles** place it in the sidebar: `Components/<Name>` (shadcn primitives), `Custom Components/<Name>`
-     (Anvil components with no shadcn counterpart, code in `components/anvil`),
-     or `Agent Builder/<Primitives | Core Kit | Agent Patterns | Surfaces | Templates>/<Name>`
-     (Figma pages; shadcn's chat set is Primitives). Core Kit adds the Figma section:
-     `Agent Builder/Core Kit/<Shell | Input | Messages | Agent States | Sources | System & Context |
-     Widgets & Artifacts | Feedback & Surveys>/<Name>`. Groups and sections keep that order, names
+   - **Titles** place it in the sidebar by tier: `Foundations/<Name>`, `UI Components/<Name>`
+     (shadcn components and Anvil-only controls; Anvil-only ones, code in `components/anvil`, also
+     carry the `anvil-custom` tag), `Agent Primitives/<Section>/<Name>`, `Agent Blocks/<Section>/<Name>`,
+     `Agent Templates/<Name>`. `<Section>` is the Figma section the component comes from (Core Kit:
+     Shell · Input · Messages · Agent States · Sources · System & Context · Widgets & Artifacts ·
+     Feedback & Surveys; Agent Patterns sections later). Tiers and sections keep that order, names
      sort A–Z (`storySort` in `preview.tsx`); every item is listed in `stories/welcome/catalog.ts`.
-   - **Tier tag:** every meta has exactly one `tags` tier (`.storybook/tiers.ts`): `ui-component`
-     (Tier 1: shadcn components and Anvil-only controls), `agent-primitive` (Tier 2: one message
-     part, indicator, chip or row), `agent-block` (Tier 3: a composed interactive agent feature),
-     `agent-template` (Tier 4: surfaces and templates). The sidebar's tag filter filters by it; the
-     docs page and the Welcome catalog show it. The sidebar itself keeps following Figma.
+     Figma keeps its own page structure (by flow); the docs page links each component to it.
+   - **Tier tag:** every meta has exactly one `tags` tier (`.storybook/tiers.ts`) matching its title's
+     section: `ui-component` (Tier 1: shadcn components and Anvil-only controls), `agent-primitive`
+     (Tier 2: one message part, indicator, chip or row), `agent-block` (Tier 3: a composed
+     interactive agent feature), `agent-template` (Tier 4: surfaces and templates). The docs page
+     shows it; `scripts/check-stories.mjs` fails when tag and section disagree.
    - **Docs page** (autodocs, `.storybook/docs-page.tsx`): title, tier, Figma link, description,
      controls, then `parameters.figmaProps`: one row per Figma component property
      (`{ property, values, code }`; names exactly as in Figma) saying what it is in code: a prop, a

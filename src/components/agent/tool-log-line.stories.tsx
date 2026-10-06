@@ -39,7 +39,7 @@ function Demo({
 }
 
 const meta = preview.meta({
-  title: 'Agent Builder/Core Kit/Messages/Tool Log Line',
+  title: 'Agent Primitives/Messages/Tool Log Line',
   tags: ['agent-primitive'],
   component: Demo,
   parameters: {

@@ -7,7 +7,7 @@ import { VoiceWaveform } from './voice-waveform'
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10664-12496'
 
 const meta = preview.meta({
-  title: 'Agent Builder/Core Kit/Input/Voice Waveform',
+  title: 'Agent Primitives/Input/Voice Waveform',
   tags: ['agent-primitive'],
   component: VoiceWaveform,
   parameters: {

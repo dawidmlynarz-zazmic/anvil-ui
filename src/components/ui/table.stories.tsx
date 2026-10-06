@@ -129,7 +129,7 @@ function DemoTable({
 }
 
 const meta = preview.meta({
-  title: 'Components/Table',
+  title: 'UI Components/Table',
   tags: ['ui-component'],
   component: DemoTable,
   parameters: {

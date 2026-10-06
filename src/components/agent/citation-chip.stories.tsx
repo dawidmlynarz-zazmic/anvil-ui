@@ -11,7 +11,7 @@ const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=1066
 const CONFIDENCES = ['high', 'medium', 'low', undefined] as const
 
 const meta = preview.meta({
-  title: 'Agent Builder/Core Kit/Sources/Citation Chip',
+  title: 'Agent Primitives/Sources/Citation Chip',
   tags: ['agent-primitive'],
   component: CitationChip,
   parameters: {

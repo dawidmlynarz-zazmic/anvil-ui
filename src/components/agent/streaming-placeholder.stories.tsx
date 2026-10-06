@@ -6,7 +6,7 @@ import { StreamingPlaceholder } from './streaming-placeholder'
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10735-2952'
 
 const meta = preview.meta({
-  title: 'Agent Builder/Core Kit/Messages/Streaming Placeholder',
+  title: 'Agent Primitives/Messages/Streaming Placeholder',
   tags: ['agent-primitive'],
   component: StreamingPlaceholder,
   parameters: {

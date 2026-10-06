@@ -7,7 +7,7 @@ const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=57-1
 const sizes = ['sm', 'default', 'lg'] as const
 
 const meta = preview.meta({
-  title: 'Components/Input',
+  title: 'UI Components/Input',
   tags: ['ui-component'],
   component: Input,
   parameters: {

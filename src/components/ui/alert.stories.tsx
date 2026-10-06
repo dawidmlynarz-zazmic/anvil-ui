@@ -56,7 +56,7 @@ function DemoAlert({
 }
 
 const meta = preview.meta({
-  title: 'Components/Alert',
+  title: 'UI Components/Alert',
   tags: ['ui-component'],
   component: DemoAlert,
   parameters: {

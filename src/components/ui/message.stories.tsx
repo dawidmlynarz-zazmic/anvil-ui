@@ -40,7 +40,7 @@ function Actions() {
 }
 
 const meta = preview.meta({
-  title: 'Agent Builder/Primitives/Message',
+  title: 'Agent Primitives/Messages/Message',
   tags: ['agent-primitive'],
   component: Message,
   parameters: {

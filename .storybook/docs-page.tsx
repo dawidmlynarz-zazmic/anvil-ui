@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { Controls, Description, Primary, Stories, Subtitle, Title, useOf } from '@storybook/addon-docs/blocks'
 
-import { tierOf, type FigmaProp } from './tiers'
+import { CUSTOM_TAG, tierOf, type FigmaProp } from './tiers'
 
 // Docs page for every component (autodocs): title, tier badge and Figma link, the description,
 // the primary story with its controls, the Figma → code table, then every story.
@@ -21,6 +21,7 @@ function Meta() {
   const preparedMeta = usePreparedMeta()
   if (!preparedMeta) return null
   const tier = tierOf(preparedMeta.tags)
+  const custom = preparedMeta.tags.includes(CUSTOM_TAG)
   const figmaUrl = (preparedMeta.parameters.design as { url?: string } | undefined)?.url
   if (!tier && !figmaUrl) return null
   return (
@@ -31,6 +32,14 @@ function Meta() {
           className="inline-flex items-center gap-1 rounded-full bg-agent-subtle px-2 py-0.5 text-agent-strong"
         >
           Tier {tier.tier} · {tier.label}
+        </span>
+      )}
+      {custom && (
+        <span
+          title="No shadcn/ui counterpart: built for Anvil, outside the shadcn sync."
+          className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-foreground"
+        >
+          Anvil-only
         </span>
       )}
       {figmaUrl && (

@@ -27,9 +27,23 @@ Welcome.test('follows the theme toolbar', async ({ globals }) => {
   await expect(document.documentElement.classList.contains('dark')).toBe(globals.theme === 'dark')
 })
 
-Welcome.test('introduces the system and lists every area', async ({ canvas }) => {
+Welcome.test('introduces the system and lists every tier', async ({ canvas }) => {
   await expect(canvas.getByRole('heading', { level: 1, name: 'Anvil UI' })).toBeVisible()
-  for (const area of ['Foundations', 'Forms', 'Overlays', 'Agent Builder']) {
+  for (const tier of [
+    'Foundations',
+    'UI Components',
+    'Agent Primitives',
+    'Agent Blocks',
+    'Agent Templates',
+  ]) {
+    await expect(canvas.getByRole('region', { name: tier })).toBeInTheDocument()
+  }
+  for (const area of [
+    'Foundations · Foundations',
+    'UI Components · Forms',
+    'Agent Primitives · Input',
+    'Agent Blocks · Input',
+  ]) {
     await waitFor(() => expect(canvas.getByRole('list', { name: area })).toBeInTheDocument())
   }
 })

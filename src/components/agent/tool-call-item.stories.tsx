@@ -53,7 +53,7 @@ function Call(props: React.ComponentProps<typeof ToolCallItem>) {
 }
 
 const meta = preview.meta({
-  title: 'Agent Builder/Core Kit/Agent States/Tool Call Item',
+  title: 'Agent Primitives/Agent States/Tool Call Item',
   tags: ['agent-primitive'],
   component: Call,
   parameters: {

@@ -37,7 +37,7 @@ function DemoSeparator({
 }
 
 const meta = preview.meta({
-  title: 'Components/Separator',
+  title: 'UI Components/Separator',
   tags: ['ui-component'],
   component: DemoSeparator,
   parameters: {

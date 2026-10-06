@@ -41,7 +41,7 @@ function DemoToggleGroup({
 }
 
 const meta = preview.meta({
-  title: 'Components/Toggle Group',
+  title: 'UI Components/Toggle Group',
   tags: ['ui-component'],
   component: DemoToggleGroup,
   parameters: {

@@ -10,7 +10,7 @@ const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=8230
 const checkedValues = [false, true, 'indeterminate'] as const
 
 const meta = preview.meta({
-  title: 'Components/Checkbox',
+  title: 'UI Components/Checkbox',
   tags: ['ui-component'],
   component: Checkbox,
   parameters: {
