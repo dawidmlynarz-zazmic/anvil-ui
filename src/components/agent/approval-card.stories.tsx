@@ -5,13 +5,8 @@ import { expect, fn, userEvent } from 'storybook/test'
 import { Button } from '@/components/ui/button'
 import { CheckIcon, ExternalLinkIcon, Icon, PencilIcon, RotateCcwIcon } from '@/components/ui/icon'
 
-import {
-  ApprovalCard,
-  ApprovalCardField,
-  ApprovalCardFooter,
-  ApprovalCardStatus,
-  type ApprovalStatus,
-} from './approval-card'
+import { ApprovalCard, ApprovalCardField, ApprovalCardFooter, type ApprovalStatus } from './approval-card'
+import { ActionStatus } from './action-status'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10728-2418'
 
@@ -64,7 +59,8 @@ function Footer({
       )
     case 'executing':
       return (
-        <ApprovalCardStatus
+        <ActionStatus
+          status="executing"
           progress={40}
           action={
             <Button variant="ghost" intent="neutral" size="xs">
@@ -73,11 +69,12 @@ function Footer({
           }
         >
           Subtitle
-        </ApprovalCardStatus>
+        </ActionStatus>
       )
     case 'failed':
       return (
-        <ApprovalCardStatus
+        <ActionStatus
+          status="failed"
           action={
             <Button variant="outline" intent="neutral" size="xs">
               <Icon icon={RotateCcwIcon} />
@@ -86,11 +83,12 @@ function Footer({
           }
         >
           Subtitle
-        </ApprovalCardStatus>
+        </ActionStatus>
       )
     case 'expired':
       return (
-        <ApprovalCardStatus
+        <ActionStatus
+          status="expired"
           action={
             <Button variant="ghost" intent="neutral" size="xs">
               Request again
@@ -98,7 +96,7 @@ function Footer({
           }
         >
           Subtitle
-        </ApprovalCardStatus>
+        </ActionStatus>
       )
   }
 }
@@ -139,7 +137,7 @@ const meta = preview.meta({
     docs: {
       description: {
         component:
-          'Confirmation before an action with side effects (`@/components/agent/approval-card`). `status` pending · approved · denied · executing · failed · expired sets the tile, badge and detail tone; `title`, `subtitle` (the action), `badge` (overrides the status label), `note` (pending warning). Details are `ApprovalCardField` rows; `footer` is `ApprovalCardFooter` (actions) or `ApprovalCardStatus` (the lifecycle strip with `progress` and `action`).',
+          'Confirmation before an action with side effects (`@/components/agent/approval-card`). `status` pending · approved · denied · executing · failed · expired sets the tile, badge and detail tone; `title`, `subtitle` (the action), `badge` (overrides the status label), `note` (pending warning). Details are `ApprovalCardField` rows; `footer` is `ApprovalCardFooter` (actions) or `ActionStatus` (the shared lifecycle strip with `progress` and `action`).',
       },
     },
   },
@@ -196,9 +194,7 @@ export const Statuses = meta.story({
 })
 
 Statuses.test('the lifecycle strip is a live status', async ({ canvasElement }) => {
-  await expect(canvasElement.querySelectorAll('[data-slot=approval-card-status][role=status]')).toHaveLength(
-    3,
-  )
+  await expect(canvasElement.querySelectorAll('[data-slot=action-status][role=status]')).toHaveLength(3)
 })
 
 const LONG =

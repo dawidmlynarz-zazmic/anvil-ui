@@ -10,9 +10,9 @@ import {
   ConnectorCardFooter,
   ConnectorCardItem,
   ConnectorCardPermission,
-  ConnectorCardStatus,
   type ConnectorStatus,
 } from './connector-card'
+import { ActionStatus } from './action-status'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10730-2985'
 
@@ -31,7 +31,8 @@ function Example({ onConnect, ...props }: ExampleProps) {
       {...props}
       footer={
         status === 'connecting' ? (
-          <ConnectorCardStatus
+          <ActionStatus
+            status="executing"
             progress={40}
             action={
               <Button variant="ghost" intent="neutral" size="xs">
@@ -40,7 +41,7 @@ function Example({ onConnect, ...props }: ExampleProps) {
             }
           >
             Subtitle
-          </ConnectorCardStatus>
+          </ActionStatus>
         ) : (
           <ConnectorCardFooter>
             {status === 'suggest' && (
@@ -107,7 +108,7 @@ const meta = preview.meta({
     docs: {
       description: {
         component:
-          'Asks to connect an app, then shows the result (`@/components/agent/connector-card`). `status` suggest · connected · reconnect · connecting sets the badge; `icon` (a neutral app icon; the partner logo in product), `title`, `description`, `badge`. Body: `ConnectorCardPermission` rows or `ConnectorCardItem` results. `footer`: `ConnectorCardFooter` or `ConnectorCardStatus` (connecting strip).',
+          'Asks to connect an app, then shows the result (`@/components/agent/connector-card`). `status` suggest · connected · reconnect · connecting sets the badge; `icon` (a neutral app icon; the partner logo in product), `title`, `description`, `badge`. Body: `ConnectorCardPermission` rows or `ConnectorCardItem` results. `footer`: `ConnectorCardFooter` or `ActionStatus` (executing while connecting).',
       },
     },
   },
