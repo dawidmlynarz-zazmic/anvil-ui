@@ -14,6 +14,7 @@ import {
 } from '@/components/anvil/shell'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { modalMotion } from '@/lib/motion'
 
 // Figma: Dialog · Sheet · Drawer page → `dialog` (8255:1298). Centered modal: ShellHeader (bar) +
 // body (Figma `modal-content` slot, 16px padding and gap) + ShellFooter (bar). `size` sm · default ·
@@ -42,7 +43,8 @@ function DialogOverlay({ className, ...props }: React.ComponentProps<typeof Dial
       data-slot="dialog-overlay"
       className={cn(
         'fixed inset-0 z-(--z-overlay) bg-overlay',
-        'duration-(--duration-base) data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0',
+        modalMotion,
+        'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0',
         className,
       )}
       {...props}
@@ -57,7 +59,8 @@ const dialogContentVariants = cva(
     // A real border (Figma inside stroke): an inset ring is painted under the header and footer
     // bars' backgrounds, which left the outline around the body only.
     'border border-overlay-16 shadow-elevation-modal',
-    'duration-(--duration-base) data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
+    modalMotion,
+    'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
   ],
   {
     variants: {

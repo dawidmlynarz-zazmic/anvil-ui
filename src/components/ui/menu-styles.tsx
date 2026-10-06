@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils'
+import { overlayMotion, overlayNudge } from '@/lib/motion'
 
 // Shared by Dropdown Menu and Context Menu: Figma draws one set of menu parts (Dropdown Menu page →
 // `dropdown menu` 8257:3156, `dropdown item` 1650:28172, `dropdown title` 8308:2662) and a context
@@ -9,7 +10,9 @@ import { cn } from '@/lib/utils'
 export const menuContentClassName = cn(
   'z-(--z-popover) min-w-54 overflow-x-hidden overflow-y-auto rounded-lg bg-popover p-2 text-popover-foreground',
   'inset-ring inset-ring-overlay-4 shadow-elevation-raised',
-  'data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
+  'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
+  overlayNudge,
+  overlayMotion,
 )
 
 /** Figma `dropdown item`: 36px, radius md; highlighted → --muted, disabled → 50% (as drawn).

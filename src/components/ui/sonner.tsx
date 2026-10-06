@@ -25,6 +25,9 @@ import { cn } from '@/lib/utils'
 
 const toastClassNames: NonNullable<ToasterProps['toastOptions']>['classNames'] = {
   toast: cn(
+    // Sonner's own transitions (400ms) on the toast timing: base + ease-out; reduced motion keeps
+    // only the fade (Sonner has no reduced-motion handling of its own).
+    '[transition-duration:var(--duration-base)]! [transition-timing-function:var(--ease-out)]! motion-reduce:[transition-property:opacity]!',
     'group/toast pointer-events-auto rounded-lg font-sans shadow-xl outline-none focus-visible:focus-ring',
     // compact
     'toast-compact:flex toast-compact:w-80.5 toast-compact:items-center toast-compact:gap-2 toast-compact:px-3 toast-compact:py-2',

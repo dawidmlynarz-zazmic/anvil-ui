@@ -11,6 +11,7 @@ import {
   type ShellHeaderProps,
 } from '@/components/anvil/shell'
 import { cn } from '@/lib/utils'
+import { overlayMotion, overlayNudge } from '@/lib/motion'
 
 // Figma: Popover page → `popover` (10939:49). Floating panel anchored to a trigger for interactive
 // content: ShellHeader (inline) + content + optional ShellFooter (inline). Width 288, padding 16,
@@ -75,7 +76,9 @@ function PopoverContent({
         className={cn(
           'z-(--z-popover) flex w-72 origin-(--radix-popover-content-transform-origin) flex-col gap-3 rounded-lg bg-popover p-4 text-popover-foreground outline-hidden',
           'inset-ring inset-ring-overlay-4 shadow-elevation-raised',
-          'data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
+          'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
+          overlayNudge,
+          overlayMotion,
           className,
         )}
         {...props}

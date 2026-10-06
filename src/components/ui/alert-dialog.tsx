@@ -4,6 +4,7 @@ import { AlertDialog as AlertDialogPrimitive } from 'radix-ui'
 import { shellDescriptionClassName } from '@/components/anvil/shell'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { modalMotion } from '@/lib/motion'
 
 // Figma: Alert Dialog page → `alert dialog` (10892:134). Blocking confirmation for destructive or
 // irreversible actions: the inline .shell header (title + description) and the inline .shell footer
@@ -34,7 +35,8 @@ function AlertDialogOverlay({
       data-slot="alert-dialog-overlay"
       className={cn(
         'fixed inset-0 z-(--z-overlay) bg-overlay',
-        'duration-(--duration-base) data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0',
+        modalMotion,
+        'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0',
         className,
       )}
       {...props}
@@ -61,7 +63,8 @@ function AlertDialogContent({
           // --popover, --border): one modal family, one look.
           'border border-overlay-16 shadow-elevation-modal',
           'data-[size=default]:sm:max-w-110 data-[size=sm]:max-w-80',
-          'duration-(--duration-base) data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
+          modalMotion,
+          'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
           className,
         )}
         {...props}

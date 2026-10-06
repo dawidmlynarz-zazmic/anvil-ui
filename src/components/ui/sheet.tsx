@@ -13,6 +13,7 @@ import {
   type ShellHeaderProps,
 } from '@/components/anvil/shell'
 import { cn } from '@/lib/utils'
+import { modalMotion, panelMotion } from '@/lib/motion'
 
 // Figma: Dialog · Sheet · Drawer page → `sheet` (10935:40686). Panel that slides in from a screen
 // edge for secondary tasks, filters and settings; use instead of Dialog when the user should keep
@@ -41,7 +42,8 @@ function SheetOverlay({ className, ...props }: React.ComponentProps<typeof Sheet
       data-slot="sheet-overlay"
       className={cn(
         'fixed inset-0 z-(--z-overlay) bg-overlay',
-        'duration-(--duration-base) data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0',
+        modalMotion,
+        'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0',
         className,
       )}
       {...props}
@@ -55,7 +57,8 @@ const sheetContentVariants = cva(
     // A real border (Figma inside stroke): an inset ring is painted under the header and footer
     // bars' backgrounds, which left the outline around the body only.
     'border border-overlay-16 shadow-elevation-modal',
-    'transition ease-out data-[state=closed]:animate-out data-[state=closed]:duration-(--duration-base) data-[state=open]:animate-in data-[state=open]:duration-(--duration-slow)',
+    panelMotion,
+    'data-[state=closed]:animate-out data-[state=open]:animate-in',
   ],
   {
     variants: {
