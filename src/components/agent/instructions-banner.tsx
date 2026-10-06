@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'
+import { Item, ItemActions, ItemContent, ItemDescription, ItemMedia, ItemTitle } from '@/components/ui/item'
 import { Button } from '@/components/ui/button'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import {
@@ -65,30 +66,40 @@ function InstructionsBanner({
       )}
       {...props}
     >
-      <div className="flex items-center gap-3 px-3 py-2.5">
-        <IconTile icon={icon} tone={tone} size="sm" />
-        <div className="flex min-w-0 flex-1 flex-col">
-          <span className="truncate type-text-sm-medium text-foreground">{title}</span>
-          {detail && <span className="truncate type-text-xs-normal text-muted-foreground">{detail}</span>}
-        </div>
-        {action}
-        {children ? (
-          <CollapsibleTrigger asChild>
-            <Button variant="ghost" intent="neutral" size="icon-xs" aria-label="Show instructions">
-              <Icon
-                icon={ChevronDownIcon}
-                className="transition-transform group-data-[state=open]/instructions:rotate-180"
-              />
-            </Button>
-          </CollapsibleTrigger>
-        ) : (
-          onDismiss && (
-            <Button variant="ghost" intent="neutral" size="icon-xs" aria-label="Dismiss" onClick={onDismiss}>
-              <Icon icon={XIcon} />
-            </Button>
-          )
-        )}
-      </div>
+      <Item size="sm" className="flex-nowrap rounded-none border-0">
+        <ItemMedia>
+          <IconTile icon={icon} tone={tone} size="sm" />
+        </ItemMedia>
+        <ItemContent>
+          <ItemTitle className="block truncate">{title}</ItemTitle>
+          {detail && <ItemDescription className="line-clamp-1 block truncate">{detail}</ItemDescription>}
+        </ItemContent>
+        <ItemActions className="gap-1">
+          {action}
+          {children ? (
+            <CollapsibleTrigger asChild>
+              <Button variant="ghost" intent="neutral" size="icon-xs" aria-label="Show instructions">
+                <Icon
+                  icon={ChevronDownIcon}
+                  className="transition-transform group-data-[state=open]/instructions:rotate-180"
+                />
+              </Button>
+            </CollapsibleTrigger>
+          ) : (
+            onDismiss && (
+              <Button
+                variant="ghost"
+                intent="neutral"
+                size="icon-xs"
+                aria-label="Dismiss"
+                onClick={onDismiss}
+              >
+                <Icon icon={XIcon} />
+              </Button>
+            )
+          )}
+        </ItemActions>
+      </Item>
       {children && (
         <CollapsibleContent className="border-t px-3 py-2.5 type-text-sm-normal text-muted-foreground">
           {children}
