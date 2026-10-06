@@ -4,8 +4,8 @@ import { expect, fn, userEvent, waitFor, within } from 'storybook/test'
 
 import { MessageAction } from '@/components/agent/message-actions'
 import { WidgetMetricCard, WidgetMetricGroup } from '@/components/agent/widget-metric-card'
+import { WidgetTable } from '@/components/agent/widget-table'
 import { IconTile } from '@/components/anvil/icon-tile'
-import { Sparkline } from '@/components/anvil/sparkline'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -20,6 +20,7 @@ import {
   TriangleAlertIcon,
 } from '@/components/ui/icon'
 import { Spinner } from '@/components/ui/spinner'
+import { TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 
 import { ArtifactPanel, type ArtifactView } from './artifact-panel'
 
@@ -30,8 +31,13 @@ const VERSIONS = [
   { value: 'v2', label: 'v2' },
   { value: 'v3', label: 'v3' },
 ]
-// Weekly active users, last 12 weeks (thousands).
-const SERIES = [8.4, 8.9, 9.2, 9.8, 10.2, 10.0, 10.6, 11.0, 10.9, 11.5, 11.9, 12.5]
+// Weekly active users, last 4 weeks.
+const WEEKS = [
+  { week: 'Sep 8', users: '11,050', change: '+1.8%' },
+  { week: 'Sep 15', users: '11,530', change: '+4.3%' },
+  { week: 'Sep 22', users: '11,920', change: '+3.4%' },
+  { week: 'Sep 29', users: '12,480', change: '+4.7%' },
+]
 
 const METRICS = [
   { label: 'Weekly active users', value: '12,480', delta: '+8.2%', trend: 'up' },
@@ -77,7 +83,7 @@ const code = (
   </pre>
 )
 
-/** Preview content: Widget Metric Cards and a chart (Sparkline) — the consumer's artifact. */
+/** Preview content: Widget Metric Cards and a Widget Table — the consumer's artifact. */
 function Dashboard({ editing = false }: { editing?: boolean }) {
   return (
     <>
@@ -87,25 +93,33 @@ function Dashboard({ editing = false }: { editing?: boolean }) {
         ))}
       </WidgetMetricGroup>
       <div className="relative">
-        <Card
-          className={
-            editing
-              ? 'h-60 justify-end rounded-lg border-border-action p-5 ring-1 ring-border-action'
-              : 'h-60 justify-end rounded-lg p-5'
+        <WidgetTable
+          title="Weekly active users"
+          rowCount="Last 4 weeks"
+          className={editing ? 'border-border-action ring-1 ring-border-action' : undefined}
+          header={
+            <TableHeader>
+              <TableRow>
+                <TableHead>Week of</TableHead>
+                <TableHead className="text-right">Users</TableHead>
+                <TableHead className="text-right">Change</TableHead>
+              </TableRow>
+            </TableHeader>
           }
         >
-          <Sparkline
-            values={SERIES}
-            trend="neutral"
-            label="Weekly active users, last 12 weeks"
-            className="h-40 w-full"
-          />
-        </Card>
+          {WEEKS.map((w) => (
+            <TableRow key={w.week}>
+              <TableCell>{w.week}</TableCell>
+              <TableCell className="text-right">{w.users}</TableCell>
+              <TableCell className="text-right">{w.change}</TableCell>
+            </TableRow>
+          ))}
+        </WidgetTable>
         {editing && (
           // Surfaces › inline assist: the prompt on the selection.
           <Card className="absolute top-3 left-24 w-fit flex-row items-center gap-3 rounded-lg p-2 shadow-elevation-raised">
             <IconTile icon={SparklesIcon} tone="agent" size="sm" />
-            <span className="type-text-sm-normal">Show only the last 8 weeks</span>
+            <span className="type-text-sm-normal">Add the last 8 weeks</span>
             <Button intent="brand" size="xs">
               Apply
             </Button>

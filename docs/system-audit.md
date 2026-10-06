@@ -81,7 +81,6 @@ deprecated feature) are the verdict and its note.
 | Sidebar | UI · feature | Organism | composite | — | ✓ | | keep |
 | Skeleton | UI · element | Atom | base | 5 components | ✓ | | keep |
 | Slider | UI · element | Atom | base | — | ✓ | | keep |
-| Sparkline | UI · element (Anvil) | Atom | base | Widget Metric Card | | | keep |
 | Spinner | UI · element | Atom | base | — | ✓ | | keep |
 | Switch | UI · element | Atom | base | Memory Manager | ✓ | | keep |
 | Table | UI · feature | Organism | composite | Widget Table | ✓ | | keep |
