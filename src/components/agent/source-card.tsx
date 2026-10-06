@@ -2,6 +2,7 @@ import * as React from 'react'
 
 import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
+import { IconTile } from '@/components/anvil/icon-tile'
 import { Button } from '@/components/ui/button'
 import {
   BanIcon,
@@ -75,9 +76,7 @@ function SourceCard({
       {...props}
     >
       <header className="flex items-center gap-2">
-        <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-muted group-data-[excluded]/source:opacity-55">
-          <Icon icon={icon} className="size-3.5" />
-        </span>
+        <IconTile icon={icon} size="xs" className="group-data-[excluded]/source:opacity-55" />
         <div className="flex min-w-0 flex-1 flex-col">
           <span className="truncate type-text-xs-medium text-foreground group-data-[excluded]/source:text-muted-foreground">
             {publisher}
@@ -111,9 +110,9 @@ function SourceCard({
           </span>
         )}
         {excluded ? (
-          <span className="rounded-sm bg-danger-subtle px-1 py-0.5 type-text-2xs-medium text-danger-medium">
+          <Badge variant="semantic" tone="destructive" size="xs">
             Excluded
-          </span>
+          </Badge>
         ) : (
           usage && (
             <Badge variant="subtle" intent="neutral" size="xs">

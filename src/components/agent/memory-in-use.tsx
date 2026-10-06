@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'
+import { Badge } from '@/components/ui/badge'
 import {
   Popover,
   PopoverContent,
@@ -14,7 +15,7 @@ import { BrainIcon, Icon } from '@/components/ui/icon'
 // inline: --agent-subtle pill, 8/10px × 4px, 6px gap, 14px icon, text/xs/medium --agent-strong.
 // details: the chip opens a Popover (12px padding, 10px gap; Figma shadow/lg → elevation/raised)
 // with the title, description and `actions` (outline xs · ghost xs · ghost destructive xs).
-// not used: an --accent chip (12px icon, text/xs/medium --muted-foreground) with `undo` beside it.
+// not used: a neutral pill Badge (semantic, sm, 12px icon; Figma status badge) with `undo` beside it.
 // Figma `state` inline / details / not used → `used` + the popover's `open`.
 
 function MemoryInUse({
@@ -54,10 +55,10 @@ function MemoryInUse({
         className={cn('flex flex-col items-start gap-2', className)}
         {...props}
       >
-        <span className="inline-flex h-5 items-center gap-1 rounded-2xl bg-accent px-2 type-text-xs-medium text-muted-foreground dark:text-foreground">
-          <Icon icon={BrainIcon} size="xs" />
+        <Badge variant="semantic" tone="neutral" shape="pill" size="sm">
+          <Icon icon={BrainIcon} />
           {children}
-        </span>
+        </Badge>
         {undo}
       </div>
     )

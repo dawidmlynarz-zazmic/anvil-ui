@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'
+import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { CircleCheckIcon, FileTextIcon, HardDriveIcon, Icon, type LucideIcon } from '@/components/ui/icon'
 import { IconTile } from '@/components/anvil/icon-tile'
@@ -9,27 +10,22 @@ import { PulseDot } from '@/components/agent/pulse-dot'
 // Figma Agent Builder › Core Kit › connector card (10730:2985): asks to connect an app, then shows
 // the result. --card, border, radius xl, shadow-sm, max 640px. Header (16px, 12px gap, no
 // divider): 40px --muted radius-lg tile with an 18px app icon (neutral; swap in the partner logo
-// in product), title text/sm/semibold, description text/xs muted, status badge (text/2xs/medium;
-// replace with the Anvil Status Badge once built). Body (16px sides and bottom):
+// in product), title text/sm/semibold, description text/xs muted, status Badge (semantic, xs,
+// indicator). Body (16px sides and bottom):
 // ConnectorCardPermission rows (Figma part / check row) or ConnectorCardItem results. Then
 // ConnectorCardFooter (--muted bar) or ConnectorCardStatus (connecting strip: pulse + progress).
 // Figma `state` → `status` suggest · connected · reconnect · connecting.
 
 type ConnectorStatus = 'suggest' | 'connected' | 'reconnect' | 'connecting'
 
-const BADGE: Record<ConnectorStatus, { label: string; className: string; dot: string }> = {
-  suggest: {
-    label: 'Not connected',
-    className: 'bg-accent text-muted-foreground dark:text-foreground',
-    dot: 'bg-agent',
-  },
-  connecting: {
-    label: 'Not connected',
-    className: 'bg-accent text-muted-foreground dark:text-foreground',
-    dot: 'bg-agent',
-  },
-  connected: { label: 'Connected', className: 'bg-success-subtle text-success-medium', dot: 'bg-success' },
-  reconnect: { label: 'Expired', className: 'bg-warning-subtle text-warning-medium', dot: 'bg-warning' },
+const BADGE: Record<
+  ConnectorStatus,
+  { label: string; tone: 'neutral' | 'success' | 'warning' | 'destructive' }
+> = {
+  suggest: { label: 'Not connected', tone: 'neutral' },
+  connecting: { label: 'Not connected', tone: 'neutral' },
+  connected: { label: 'Connected', tone: 'success' },
+  reconnect: { label: 'Expired', tone: 'warning' },
 }
 
 function ConnectorCard({
@@ -74,16 +70,16 @@ function ConnectorCard({
           </h3>
           {description && <p className="type-text-xs-normal text-muted-foreground">{description}</p>}
         </div>
-        <span
+        <Badge
           data-slot="connector-card-badge"
-          className={cn(
-            'inline-flex min-w-4 shrink-0 items-center justify-center gap-1 rounded-sm px-1 py-0.5 type-text-2xs-medium',
-            tag.className,
-          )}
+          variant="semantic"
+          tone={tag.tone}
+          size="xs"
+          indicator
+          className="shrink-0"
         >
-          <span aria-hidden className={cn('size-1.5 rounded-full', tag.dot)} />
           {badge ?? tag.label}
-        </span>
+        </Badge>
       </header>
       {children && <div className="flex flex-col gap-1.5 px-4 pb-4">{children}</div>}
       {footer}

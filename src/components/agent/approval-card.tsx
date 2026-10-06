@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'
+import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import {
   CircleXIcon,
@@ -17,8 +18,8 @@ import { PulseDot } from '@/components/agent/pulse-dot'
 
 // Figma Agent Builder › Core Kit › approval card (10728:2418): confirmation before an action with
 // side effects. --card, border, radius xl, shadow-sm, max 640px. Header (16px, divider): 32px
-// radius-lg tile + title text/sm/semibold + subtitle text/xs muted + a status badge (text/2xs/
-// medium on --{tone}-subtle; replace with the Anvil Status Badge once built). Details (16px, 10px
+// radius-lg tile + title text/sm/semibold + subtitle text/xs muted + a Badge (semantic, xs,
+// indicator). Details (16px, 10px
 // gap): ApprovalCardField rows (96px label column) and an optional warning `note`. Then either
 // ApprovalCardFooter (--muted bar, 16/12px, 8px gap) or ApprovalCardStatus (Figma action status:
 // executing --agent-subtle with pulse + progress · failed --danger-subtle · expired --muted).
@@ -38,25 +39,16 @@ const TILE: Record<ApprovalStatus, { icon: LucideIcon; tone: 'warning' | 'succes
   expired: { icon: ShieldAlertIcon, tone: 'warning' },
 }
 
-const BADGE: Record<ApprovalStatus, { label: string; className: string; dot: string }> = {
-  pending: {
-    label: 'Needs your approval',
-    className: 'bg-warning-subtle text-warning-medium',
-    dot: 'bg-warning',
-  },
-  approved: { label: 'Approved', className: 'bg-success-subtle text-success-medium', dot: 'bg-success' },
-  denied: { label: 'Denied', className: 'bg-danger-subtle text-danger-medium', dot: 'bg-danger' },
-  executing: {
-    label: 'Needs your approval',
-    className: 'bg-warning-subtle text-warning-medium',
-    dot: 'bg-warning',
-  },
-  failed: { label: 'Failed', className: 'bg-danger-subtle text-danger-medium', dot: 'bg-danger' },
-  expired: {
-    label: 'Expired',
-    className: 'bg-accent text-muted-foreground dark:text-foreground',
-    dot: 'bg-muted-foreground',
-  },
+const BADGE: Record<
+  ApprovalStatus,
+  { label: string; tone: 'neutral' | 'success' | 'warning' | 'destructive' }
+> = {
+  pending: { label: 'Needs your approval', tone: 'warning' },
+  approved: { label: 'Approved', tone: 'success' },
+  denied: { label: 'Denied', tone: 'destructive' },
+  executing: { label: 'Needs your approval', tone: 'warning' },
+  failed: { label: 'Failed', tone: 'destructive' },
+  expired: { label: 'Expired', tone: 'neutral' },
 }
 
 function ApprovalCard({
@@ -104,16 +96,16 @@ function ApprovalCard({
             </h3>
             {subtitle && <p className="type-text-xs-normal text-muted-foreground">{subtitle}</p>}
           </div>
-          <span
+          <Badge
             data-slot="approval-card-badge"
-            className={cn(
-              'inline-flex min-w-4 shrink-0 items-center justify-center gap-1 rounded-sm px-1 py-0.5 type-text-2xs-medium',
-              tag.className,
-            )}
+            variant="semantic"
+            tone={tag.tone}
+            size="xs"
+            indicator
+            className="shrink-0"
           >
-            <span aria-hidden className={cn('size-1.5 rounded-full', tag.dot)} />
             {badge ?? tag.label}
-          </span>
+          </Badge>
         </header>
         {(children || (note && status === 'pending')) && (
           <div className="flex flex-col gap-2.5 p-4">

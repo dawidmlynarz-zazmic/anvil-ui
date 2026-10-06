@@ -2,6 +2,7 @@ import * as React from 'react'
 import { Toolbar as ToolbarPrimitive } from 'radix-ui'
 
 import { cn } from '@/lib/utils'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { toggleVariants } from '@/components/ui/toggle'
 
@@ -93,14 +94,16 @@ function ToolbarToggleItem({
 }
 
 /** Figma selection count: an --info-subtle pill. */
+/** A count in the toolbar, e.g. selected items: a Badge (semantic info, pill, sm). */
 function ToolbarCount({ className, ...props }: React.ComponentProps<'span'>) {
   return (
-    <span
+    <Badge
       data-slot="toolbar-count"
-      className={cn(
-        'inline-flex h-5.5 min-w-5 items-center justify-center rounded-2xl bg-info-subtle px-2 type-text-xs-medium text-info-medium',
-        className,
-      )}
+      variant="semantic"
+      tone="info"
+      shape="pill"
+      size="sm"
+      className={cn('min-w-5', className)}
       {...props}
     />
   )
