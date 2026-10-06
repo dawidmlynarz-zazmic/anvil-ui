@@ -32,7 +32,7 @@ function DemoSheet({
   open,
   onOpenChange,
   focusOnOpen = true,
-  description = 'Subtitle',
+  description = 'Instructions and files apply to every chat in this project.',
 }: DemoProps) {
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -48,12 +48,12 @@ function DemoSheet({
         {...(description ? {} : { 'aria-describedby': undefined })}
       >
         <SheetHeader>
-          <SheetTitle>Title</SheetTitle>
+          <SheetTitle>Project settings</SheetTitle>
           {description && <SheetDescription>{description}</SheetDescription>}
         </SheetHeader>
         <SheetBody>
-          <Input label="Label" defaultValue="Value" />
-          <Input label="Label" placeholder="Placeholder" />
+          <Input label="Project name" defaultValue="Q3 launch plan" />
+          <Input label="Answer style" placeholder="e.g. Concise, with bullet points" />
         </SheetBody>
         <SheetFooter>
           <SheetClose asChild>
@@ -105,11 +105,15 @@ const meta = preview.meta({
       story: { inline: false, height: '560px' },
       description: {
         component:
-          'Panel that slides in from a screen edge for secondary tasks, filters and settings (shadcn/ui Sheet on Radix Dialog). Same anatomy as Dialog: `SheetHeader` (ShellHeader bar) → `SheetBody` → `SheetFooter` (ShellFooter bar). `side` right · left (400px) · top · bottom (full width).',
+          'One modal family, one shell: Dialog (a focused task, centred) · Alert Dialog (a decision the user must answer; no close button, no outside-click dismiss) · Sheet (a side panel that keeps the page in view) · Drawer (the mobile bottom panel). All four share the Shell header / footer, the --overlay scrim, elevation/modal and the same surface (--background, 1px --overlay-16 border). Panel that slides in from a screen edge for secondary tasks, filters and settings (shadcn/ui Sheet on Radix Dialog). Same anatomy as Dialog: `SheetHeader` (ShellHeader bar) → `SheetBody` → `SheetFooter` (ShellFooter bar). `side` right · left (400px) · top · bottom (full width).',
       },
     },
   },
-  args: { open: false, side: 'right', description: 'Subtitle' },
+  args: {
+    open: false,
+    side: 'right',
+    description: 'Instructions and files apply to every chat in this project.',
+  },
   argTypes: {
     side: { control: 'inline-radio', options: ['right', 'left', 'top', 'bottom'] },
     open: { control: 'boolean' },
@@ -129,8 +133,8 @@ Default.test(
   async ({ canvas, canvasElement }) => {
     const trigger = canvas.getByRole('button', { name: 'Open sheet' })
     await userEvent.click(trigger)
-    const sheet = await body(canvasElement).findByRole('dialog', { name: 'Title' })
-    await waitFor(() => expect(within(sheet).getAllByLabelText('Label')[0]).toHaveFocus())
+    const sheet = await body(canvasElement).findByRole('dialog', { name: 'Project settings' })
+    await waitFor(() => expect(within(sheet).getAllByLabelText('Project name')[0]).toHaveFocus())
     await userEvent.click(within(sheet).getByRole('button', { name: 'Close' }))
     await waitFor(() => expect(body(canvasElement).queryByRole('dialog')).toBeNull())
     await expect(trigger).toHaveFocus()
@@ -141,9 +145,11 @@ Default.test(
 export const Right = meta.story({ args: { open: true, focusOnOpen: false } })
 
 Right.test('slides in from the right with its description', async ({ canvasElement }) => {
-  const sheet = await body(canvasElement).findByRole('dialog', { name: 'Title' })
+  const sheet = await body(canvasElement).findByRole('dialog', { name: 'Project settings' })
   await expect(sheet).toHaveAttribute('data-side', 'right')
-  await expect(sheet).toHaveAccessibleDescription('Subtitle')
+  await expect(sheet).toHaveAccessibleDescription(
+    'Instructions and files apply to every chat in this project.',
+  )
 })
 
 export const Left = meta.story({ args: { open: true, focusOnOpen: false, side: 'left' } })

@@ -39,7 +39,7 @@ function DemoDialog({
   open,
   onOpenChange,
   focusOnOpen = true,
-  title = 'Title',
+  title = 'Rename conversation',
   description,
   align = 'end',
   children,
@@ -61,7 +61,7 @@ function DemoDialog({
           <DialogTitle>{title}</DialogTitle>
           {description && <DialogDescription>{description}</DialogDescription>}
         </DialogHeader>
-        <DialogBody>{children ?? <Input label="Label" defaultValue="Value" />}</DialogBody>
+        <DialogBody>{children ?? <Input label="Name" defaultValue="Q3 launch plan" />}</DialogBody>
         <DialogFooter align={align}>
           <DialogClose asChild>
             <Button size="sm" variant="outline" intent="neutral">
@@ -112,11 +112,16 @@ const meta = preview.meta({
       story: { inline: false, height: '420px' },
       description: {
         component:
-          'Centered modal for focused tasks (shadcn/ui Dialog on Radix). Anatomy: `DialogHeader` (ShellHeader bar: title, optional description, close) → `DialogBody` (16px padding and gap, scrolls) → `DialogFooter` (ShellFooter bar). `size` sm · default · lg = 400 / 480 / 640. Use Alert Dialog for destructive confirmations, Sheet for side tasks.',
+          'One modal family, one shell: Dialog (a focused task, centred) · Alert Dialog (a decision the user must answer; no close button, no outside-click dismiss) · Sheet (a side panel that keeps the page in view) · Drawer (the mobile bottom panel). All four share the Shell header / footer, the --overlay scrim, elevation/modal and the same surface (--background, 1px --overlay-16 border). Centered modal for focused tasks (shadcn/ui Dialog on Radix). Anatomy: `DialogHeader` (ShellHeader bar: title, optional description, close) → `DialogBody` (16px padding and gap, scrolls) → `DialogFooter` (ShellFooter bar). `size` sm · default · lg = 400 / 480 / 640. Use Alert Dialog for destructive confirmations, Sheet for side tasks.',
       },
     },
   },
-  args: { open: false, size: 'default', description: 'Subtitle', align: 'end' },
+  args: {
+    open: false,
+    size: 'default',
+    description: 'Give this conversation a name you’ll recognize later.',
+    align: 'end',
+  },
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'default', 'lg'] },
     align: { control: 'inline-radio', options: ['end', 'between', 'stretch'] },
@@ -137,9 +142,9 @@ export const Default = meta.story()
 Default.test('trigger opens, Escape closes and focus returns', async ({ canvas, canvasElement }) => {
   const trigger = canvas.getByRole('button', { name: 'Open dialog' })
   await userEvent.click(trigger)
-  const dialog = await body(canvasElement).findByRole('dialog', { name: 'Title' })
-  await expect(dialog).toHaveAccessibleDescription('Subtitle')
-  await expect(within(dialog).getByLabelText('Label')).toHaveFocus()
+  const dialog = await body(canvasElement).findByRole('dialog', { name: 'Rename conversation' })
+  await expect(dialog).toHaveAccessibleDescription('Give this conversation a name you’ll recognize later.')
+  await expect(within(dialog).getByLabelText('Name')).toHaveFocus()
   await expect(within(dialog).getByRole('button', { name: 'Close' })).toBeInTheDocument()
   await userEvent.keyboard('{Escape}')
   await waitFor(() => expect(body(canvasElement).queryByRole('dialog')).toBeNull())
@@ -154,19 +159,25 @@ export const Small = meta.story({
 })
 
 export const Large = meta.story({
-  args: { open: true, focusOnOpen: false, size: 'lg' },
+  args: {
+    open: true,
+    focusOnOpen: false,
+    size: 'lg',
+    title: 'Share conversation',
+    description: 'People you share with can read the conversation and its sources.',
+  },
   render: (args) => (
     <DemoDialog {...args}>
-      <Select defaultValue="1">
-        <SelectTrigger label="Label">
+      <Select defaultValue="team">
+        <SelectTrigger label="Who can view">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="1">Label 1</SelectItem>
-          <SelectItem value="2">Label 2</SelectItem>
+          <SelectItem value="team">Northwind Labs</SelectItem>
+          <SelectItem value="link">Anyone with the link</SelectItem>
         </SelectContent>
       </Select>
-      <Textarea label="Label" defaultValue="Value" />
+      <Textarea label="Message" defaultValue="Here’s the launch summary we discussed on Monday." />
     </DemoDialog>
   ),
 })

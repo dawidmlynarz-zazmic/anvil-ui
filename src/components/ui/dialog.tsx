@@ -54,7 +54,9 @@ const dialogContentVariants = cva(
   [
     'fixed top-1/2 left-1/2 z-(--z-modal) flex w-[calc(100%-(--spacing(8)))] -translate-x-1/2 -translate-y-1/2 flex-col',
     'max-h-[calc(100dvh-(--spacing(8)))] overflow-hidden rounded-xl bg-background text-foreground outline-none',
-    'inset-ring inset-ring-overlay-16 shadow-elevation-modal',
+    // A real border (Figma inside stroke): an inset ring is painted under the header and footer
+    // bars' backgrounds, which left the outline around the body only.
+    'border border-overlay-16 shadow-elevation-modal',
     'duration-(--duration-base) data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
   ],
   {

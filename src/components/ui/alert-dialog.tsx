@@ -7,8 +7,10 @@ import { cn } from '@/lib/utils'
 
 // Figma: Alert Dialog page → `alert dialog` (10892:134). Blocking confirmation for destructive or
 // irreversible actions: the inline .shell header (title + description) and the inline .shell footer
-// (Cancel + action, size sm, aligned end); padding 24, gap 20, radius lg, --popover with a --border
-// stroke, elevation/modal over the Overlay. Figma `variant` destructive → AlertDialogAction
+// (Cancel + action, size sm, aligned end); padding 24, gap 20, elevation/modal over the Overlay.
+// Surface = Dialog's (radius xl, --background, 1px --overlay-16 border), aligned in the next phase:
+// Figma drew radius lg, --popover and --border, the only modal that differed. Alert Dialog stays its
+// own component (role="alertdialog", no outside-click dismissal, must be answered); see Dialog. Figma `variant` destructive → AlertDialogAction
 // intent="destructive"; `loading` → AlertDialogAction loading (Button spinner; Cancel disabled).
 
 function AlertDialog({ ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Root>) {
@@ -54,8 +56,10 @@ function AlertDialogContent({
         data-slot="alert-dialog-content"
         data-size={size}
         className={cn(
-          'group/alert-dialog-content fixed top-1/2 left-1/2 z-(--z-modal) grid w-full max-w-[calc(100%-(--spacing(8)))] -translate-x-1/2 -translate-y-1/2 gap-5 rounded-lg bg-popover p-(--space-lg) text-popover-foreground outline-none',
-          'inset-ring inset-ring-border shadow-elevation-modal',
+          'group/alert-dialog-content fixed top-1/2 left-1/2 z-(--z-modal) grid w-full max-w-[calc(100%-(--spacing(8)))] -translate-x-1/2 -translate-y-1/2 gap-5 rounded-xl bg-background p-(--space-lg) text-foreground outline-none',
+          // Same surface as Dialog (radius xl, --background, --overlay-16 border; Figma drew r8,
+          // --popover, --border): one modal family, one look.
+          'border border-overlay-16 shadow-elevation-modal',
           'data-[size=default]:sm:max-w-110 data-[size=sm]:max-w-80',
           'duration-(--duration-base) data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
           className,

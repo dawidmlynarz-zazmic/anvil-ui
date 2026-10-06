@@ -33,7 +33,7 @@ function DemoDrawer({
   open,
   onOpenChange,
   direction = 'bottom',
-  title = 'Title',
+  title = 'Rename conversation',
   description,
   align = 'end',
   showCloseButton = true,
@@ -57,7 +57,7 @@ function DemoDrawer({
           {description && <DrawerDescription>{description}</DrawerDescription>}
         </DrawerHeader>
         <DrawerBody>
-          <Input label="Label" defaultValue="Value" />
+          <Input label="Name" defaultValue="Q3 launch plan" />
         </DrawerBody>
         <DrawerFooter align={align}>
           <DrawerClose asChild>
@@ -108,15 +108,15 @@ const meta = preview.meta({
       story: { inline: false, height: '480px' },
       description: {
         component:
-          'Bottom panel for the mobile shell (shadcn/ui Drawer on vaul): drag or swipe the handle down, press Escape, click outside or use the close button to dismiss. Use it instead of Dialog or Sheet below 768px. Anatomy: handle → `DrawerHeader` (ShellHeader bar) → `DrawerBody` → `DrawerFooter` (ShellFooter bar; `align="stretch"` for full-width mobile actions). `direction` comes from vaul (bottom by default).',
+          'One modal family, one shell: Dialog (a focused task, centred) · Alert Dialog (a decision the user must answer; no close button, no outside-click dismiss) · Sheet (a side panel that keeps the page in view) · Drawer (the mobile bottom panel). All four share the Shell header / footer, the --overlay scrim, elevation/modal and the same surface (--background, 1px --overlay-16 border). Bottom panel for the mobile shell (shadcn/ui Drawer on vaul): drag or swipe the handle down, press Escape, click outside or use the close button to dismiss. Use it instead of Dialog or Sheet below 768px. Anatomy: handle → `DrawerHeader` (ShellHeader bar) → `DrawerBody` → `DrawerFooter` (ShellFooter bar; `align="stretch"` for full-width mobile actions). `direction` comes from vaul (bottom by default).',
       },
     },
   },
   args: {
     open: false,
     direction: 'bottom',
-    title: 'Title',
-    description: 'Subtitle',
+    title: 'Rename conversation',
+    description: 'Give this conversation a name you’ll recognize later.',
     align: 'end',
     showCloseButton: true,
   },
@@ -144,9 +144,9 @@ Default.test(
   async ({ canvas, canvasElement }) => {
     const trigger = canvas.getByRole('button', { name: 'Open drawer' })
     await userEvent.click(trigger)
-    const drawer = await body(canvasElement).findByRole('dialog', { name: 'Title' })
-    await expect(drawer).toHaveAccessibleDescription('Subtitle')
-    await expect(within(drawer).getByLabelText('Label')).not.toHaveFocus()
+    const drawer = await body(canvasElement).findByRole('dialog', { name: 'Rename conversation' })
+    await expect(drawer).toHaveAccessibleDescription('Give this conversation a name you’ll recognize later.')
+    await expect(within(drawer).getByLabelText('Name')).not.toHaveFocus()
     await userEvent.keyboard('{Escape}')
     await waitFor(() => expect(body(canvasElement).queryByRole('dialog')).toBeNull())
     await waitFor(() => expect(trigger).toHaveFocus())
@@ -155,7 +155,7 @@ Default.test(
 
 Default.test('the header close button closes it', async ({ canvas, canvasElement }) => {
   await userEvent.click(canvas.getByRole('button', { name: 'Open drawer' }))
-  const drawer = await body(canvasElement).findByRole('dialog', { name: 'Title' })
+  const drawer = await body(canvasElement).findByRole('dialog', { name: 'Rename conversation' })
   await userEvent.click(within(drawer).getByRole('button', { name: 'Close' }))
   await waitFor(() => expect(body(canvasElement).queryByRole('dialog')).toBeNull())
 })
