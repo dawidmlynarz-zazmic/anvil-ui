@@ -9,7 +9,6 @@ const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=1066
 const FIGMA_GROUP = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10663-3065'
 
 // Weekly active users over the last 8 weeks.
-const SERIES = [9800, 10150, 10020, 10640, 11020, 10910, 11530, 12480]
 
 // One real metric per trend (the Variants grid).
 const BY_TREND = {
@@ -38,12 +37,7 @@ const meta = preview.meta({
       { property: 'delta · show delta', values: 'text · boolean', code: '`delta` prop (a subtle Badge)' },
       { property: 'period', values: 'text', code: '`period` prop' },
       { property: 'show icon · icon', values: 'boolean · instance', code: '`icon` prop' },
-      {
-        property: 'show sparkline · sparkline',
-        values: 'boolean · instance',
-        code: '`sparkline` prop (the series; a Sparkline)',
-      },
-      { property: 'trend', values: 'up · down · neutral', code: '`trend` prop (delta tone + sparkline)' },
+      { property: 'trend', values: 'up · down · neutral', code: '`trend` prop (delta tone)' },
       { property: 'size', values: 'default · compact', code: '`size` prop' },
       { property: 'state', values: 'loaded · loading', code: '`loading` prop (Skeletons)' },
       { property: 'widget metric group', values: '—', code: '`WidgetMetricGroup` (no properties)' },
@@ -52,11 +46,10 @@ const meta = preview.meta({
       use: [
         'When the answer is a number: one key metric with its change and what it compares to.',
         'Several related metrics side by side: put the cards in a `WidgetMetricGroup` with an `aria-label`.',
-        'Add a `sparkline` when the trend matters more than the single value.',
       ],
       avoid: [
         'Many rows of numbers to compare: use Widget Table.',
-        'A full chart with axes and a legend: use a chart widget, not a stretched sparkline.',
+        'A trend over time: describe it in the message or attach a chart artifact.',
         'Numbers inside a running sentence: keep them in the message text.',
       ],
       content: [
@@ -66,14 +59,14 @@ const meta = preview.meta({
       ],
       a11y: [
         'The delta Badge carries its sign in text, so the trend isn’t told by colour alone.',
-        'While `loading`, the card is `aria-busy`; the sparkline is decorative.',
+        'While `loading`, the card is `aria-busy`.',
         '`WidgetMetricGroup` is a `group`: name it with `aria-label` (“Northwind Sync this week”).',
       ],
     },
     docs: {
       description: {
         component:
-          'One number in an answer (`@/components/agent/widget-metric-card`), built from Card, a subtle Badge (the delta), Skeleton (loading) and Sparkline. `label`, `value`, `delta`, `period`, `trend` up · down · neutral, `icon`, `sparkline` (a series), `size` default · compact, `loading`. `WidgetMetricGroup` lays several out in a wrapping row.',
+          'One number in an answer (`@/components/agent/widget-metric-card`), built from Card, a subtle Badge (the delta), and Skeleton (loading). `label`, `value`, `delta`, `period`, `trend` up · down · neutral, `icon`, `size` default · compact, `loading`. `WidgetMetricGroup` lays several out in a wrapping row.',
       },
     },
   },
@@ -94,7 +87,6 @@ const meta = preview.meta({
     period: { control: 'text' },
     trend: { control: 'inline-radio', options: ['up', 'down', 'neutral'] },
     icon: { control: false },
-    sparkline: { control: 'object' },
     size: { control: 'inline-radio', options: ['default', 'compact'] },
     loading: { control: 'boolean' },
   },
@@ -109,7 +101,7 @@ Default.test('shows the value and the delta badge', async ({ canvas }) => {
   await expect(canvas.getByText('+8.2%')).toHaveAttribute('data-tone', 'success')
 })
 
-/** Figma trend × size, loaded and loading, with and without a sparkline. */
+/** Figma trend × size, loaded and loading. */
 export const Variants = meta.story({
   decorators: [(Story) => <div className="w-200">{Story()}</div>],
   render: (args) => (
@@ -123,7 +115,6 @@ export const Variants = meta.story({
               {...BY_TREND[trend]}
               size={size}
               trend={trend}
-              sparkline={trend === 'up' ? SERIES : undefined}
               className="w-56"
             />
           ))}

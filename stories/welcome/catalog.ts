@@ -72,7 +72,6 @@ export const catalog: CatalogArea[] = [
       'Skeleton',
       'Separator',
       'Scroll Area',
-      'Sparkline',
     ),
   },
   {

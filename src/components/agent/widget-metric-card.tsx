@@ -1,7 +1,6 @@
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'
-import { Sparkline, type Trend } from '@/components/anvil/sparkline'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
 import { Icon, type LucideIcon } from '@/components/ui/icon'
@@ -10,11 +9,12 @@ import { Skeleton } from '@/components/ui/skeleton'
 // Figma Agent Builder › Core Kit › widget metric card (10663:2929) and widget metric group
 // (10663:3065). Built from existing parts (no re-drawn elements): Card (radius xl, --border, 160px
 // min, 8px gap; 16px padding, 12px when compact), the delta is a Badge (subtle, sm: up = success,
-// down = destructive, neutral), loading is Skeleton (28px value, 16px delta), the trend is a
-// Sparkline. Label text/xs muted (one line) with an optional 16px icon at the end; value
+// down = destructive, neutral), loading is Skeleton (28px value, 16px delta). Label text/xs muted (one line) with an optional 16px icon at the end; value
 // heading/3xl (compact heading/2xl); period text/xs muted after the delta. `trend` drives the delta
-// tone and the sparkline. Figma state loaded · loading → `loading`. WidgetMetricGroup: a wrapping
+// tone. Figma state loaded · loading → `loading`. WidgetMetricGroup: a wrapping
 // row, 12px apart, each card filling its share.
+
+type Trend = 'up' | 'down' | 'neutral'
 
 const DELTA_TONE: Record<Trend, 'success' | 'destructive' | 'neutral'> = {
   up: 'success',
@@ -29,7 +29,6 @@ function WidgetMetricCard({
   period,
   trend = 'neutral',
   icon,
-  sparkline,
   size = 'default',
   loading = false,
   className,
@@ -43,8 +42,6 @@ function WidgetMetricCard({
   period?: React.ReactNode
   trend?: Trend
   icon?: LucideIcon
-  /** The series for the sparkline (Figma show sparkline). */
-  sparkline?: number[]
   size?: 'default' | 'compact'
   /** Figma state loading: skeletons in place of the value and delta. */
   loading?: boolean
@@ -86,7 +83,6 @@ function WidgetMetricCard({
               {period && <span className="truncate type-text-xs-normal text-muted-foreground">{period}</span>}
             </div>
           )}
-          {sparkline && <Sparkline values={sparkline} trend={trend} />}
         </>
       )}
     </Card>
