@@ -128,6 +128,7 @@ export const catalog: CatalogArea[] = [
       c('Table'),
       c('Carousel'),
       c('Avatar'),
+      c('Icon Tile'),
       c('Code Block'),
     ],
   },

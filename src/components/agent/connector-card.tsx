@@ -3,6 +3,7 @@ import * as React from 'react'
 import { cn } from '@/lib/utils'
 import { Progress } from '@/components/ui/progress'
 import { CircleCheckIcon, FileTextIcon, HardDriveIcon, Icon, type LucideIcon } from '@/components/ui/icon'
+import { IconTile } from '@/components/anvil/icon-tile'
 import { PulseDot } from '@/components/agent/pulse-dot'
 
 // Figma Agent Builder › Core Kit › connector card (10730:2985): asks to connect an app, then shows
@@ -66,9 +67,7 @@ function ConnectorCard({
       {...props}
     >
       <header className="flex flex-wrap items-start gap-3 p-4">
-        <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted text-foreground">
-          <Icon icon={icon} className="size-4.5" />
-        </span>
+        <IconTile icon={icon} />
         <div className="flex min-w-0 grow basis-48 flex-col gap-1">
           <h3 id={titleId} className="type-text-sm-semibold text-foreground">
             {title}

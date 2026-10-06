@@ -3,6 +3,7 @@ import * as React from 'react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { ArrowRightIcon, CheckIcon, CircleHelpIcon, Icon } from '@/components/ui/icon'
+import { IconTile } from '@/components/anvil/icon-tile'
 
 // Figma Agent Builder › Core Kit › clarifying question (10732:2911): one tappable question from the
 // agent. --card, --border, radius xl. Header (16px): 32px --agent-subtle tile with a help icon, title
@@ -67,9 +68,7 @@ function ClarifyingQuestion({
       {...props}
     >
       <header className="flex items-center gap-3 p-4">
-        <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-agent-subtle text-agent dark:text-agent-medium">
-          <Icon icon={CircleHelpIcon} />
-        </span>
+        <IconTile icon={CircleHelpIcon} tone="agent" size="sm" />
         <div className="flex min-w-0 flex-col">
           <h3 id={titleId} className="type-text-sm-semibold text-foreground">
             {title}

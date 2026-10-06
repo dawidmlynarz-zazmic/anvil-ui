@@ -12,6 +12,7 @@ import {
   XIcon,
   type LucideIcon,
 } from '@/components/ui/icon'
+import { IconTile } from '@/components/anvil/icon-tile'
 
 // Figma Agent Builder › Core Kit › instructions banner (10737:3041): thread-level context at the top
 // of a chat. --card, --border, radius lg, 12/10px, 12px gap: 32px radius-lg icon tile by `tone`
@@ -19,11 +20,7 @@ import {
 // text/xs --muted-foreground, `action` (ghost xs), then expand (when it has `children`, on
 // Collapsible) or dismiss (`onDismiss`).
 
-const TILE = {
-  info: 'bg-info-subtle text-info dark:text-info-medium',
-  agent: 'bg-agent-subtle text-agent dark:text-agent-medium',
-  neutral: 'bg-muted text-foreground',
-} as const
+type Tone = 'info' | 'agent' | 'neutral'
 
 const ICON = { info: FolderIcon, agent: BotIcon, neutral: InfoIcon } as const
 
@@ -41,7 +38,7 @@ function InstructionsBanner({
   children,
   ...props
 }: Omit<React.ComponentProps<'div'>, 'title'> & {
-  tone?: keyof typeof TILE
+  tone?: Tone
   /** Defaults to the Figma type icon: folder (project), bot (persona), info (notice). */
   icon?: LucideIcon
   title: React.ReactNode
@@ -69,9 +66,7 @@ function InstructionsBanner({
       {...props}
     >
       <div className="flex items-center gap-3 px-3 py-2.5">
-        <span className={cn('flex size-8 shrink-0 items-center justify-center rounded-lg', TILE[tone])}>
-          <Icon icon={icon} />
-        </span>
+        <IconTile icon={icon} tone={tone} size="sm" />
         <div className="flex min-w-0 flex-1 flex-col">
           <span className="truncate type-text-sm-medium text-foreground">{title}</span>
           {detail && <span className="truncate type-text-xs-normal text-muted-foreground">{detail}</span>}

@@ -15,7 +15,7 @@ Every component property uses one of these names. A property that is not on this
 | --- | --- | --- | --- | --- |
 | variant | Variant | default · outline · ghost · link (per component) | cva variant | Button style · Alert dialog type · Tabs type + contained · Tooltip type |
 | intent | Variant | neutral · brand · inverse · destructive | cva intent (Anvil extension) | Button / Icon button variant |
-| tone | Variant | neutral · brand · info · success · warning · destructive · agent | cva tone | Status badge status · Toast type · Alert tone |
+| tone | Variant | neutral · brand · info · success · warning · destructive · agent (Icon Tile adds surface · inverse, from Figma) | cva tone | Status badge status · Toast type · Alert tone · Icon tile tone |
 | size | Variant | xs · sm · default · lg · icon · icon-xs · icon-sm · icon-lg | cva size | md → default on every component |
 | shape | Variant | default · pill · circle | cva shape | Button shape · Icon button shape |
 | side | Variant | top · right · bottom · left | Radix side | Tooltip position · new Sheet |
