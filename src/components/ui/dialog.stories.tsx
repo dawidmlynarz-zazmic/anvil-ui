@@ -89,6 +89,25 @@ const meta = preview.meta({
       { property: 'show action bar', values: 'boolean', code: 'render `DialogFooter` or not' },
       { property: 'modal-content', values: 'slot', code: '`DialogBody` children' },
     ],
+    guide: {
+      use: [
+        'A focused task that needs the user’s full attention and returns to the page: rename a conversation, connect an app, edit a memory.',
+        'Short forms (a few fields) with a clear primary action in the footer.',
+      ],
+      avoid: [
+        'Destructive confirmations: use Alert Dialog. Side tasks where the page should stay in view (filters, settings, source details): use Sheet.',
+        'Below 768px: use Drawer. Light, non-blocking content next to a trigger: use Popover.',
+      ],
+      content: [
+        'Title says the task in sentence case (“Rename conversation”); the description adds context only when needed.',
+        'Footer: “Cancel” + a specific verb (“Save”, “Connect”), one brand button.',
+      ],
+      a11y: [
+        'Radix traps focus, focuses the first control, closes on Escape or outside click and returns focus to the trigger.',
+        'The close button is rendered last in the DOM (positioned in the header), so initial focus lands on content.',
+        'Always render `DialogTitle`; hide it visually instead of removing it when the design has none.',
+      ],
+    },
     docs: {
       story: { inline: false, height: '420px' },
       description: {

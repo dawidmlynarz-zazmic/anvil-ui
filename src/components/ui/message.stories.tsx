@@ -9,6 +9,10 @@ import { Message, MessageAvatar, MessageContent, MessageFooter, MessageGroup, Me
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10663-3597'
 
+const USER_PROMPT = 'Summarize the Q3 launch plan'
+const ANSWER =
+  'The Q3 launch plan ships Northwind Sync on September 14. A private beta for 200 teams runs through August, then pricing goes live with the launch.'
+
 function AgentAvatar() {
   return (
     <MessageAvatar>
@@ -54,6 +58,28 @@ const meta = preview.meta({
         code: '`align` end (user) · start (assistant); system → `Marker`; the full row is Message Row',
       },
     ],
+    guide: {
+      use: [
+        'Every turn in a conversation: the user’s prompt (`align="end"`, muted bubble) and the assistant’s answer (`align="start"`, avatar, ghost bubble).',
+        'Stack turns in `MessageGroup`; consecutive bubbles from the same author share one `MessageHeader`.',
+        '`MessageFooter` for what follows a turn: Message Actions on the assistant’s answer, a failed-to-send line on the user’s.',
+      ],
+      avoid: [
+        'System notices in the thread (“Maya joined”, “Context cleared”): use Marker.',
+        'Tool activity and reasoning: use Tool Log Line, Tool Call Item or Thinking Panel, not a message bubble.',
+        'Scrolling and auto-follow of a long thread: wrap the group in Message Scroller.',
+      ],
+      content: [
+        'Header: the author (“Assistant”, “Maya Chen”) in `<strong>`, then the time (“14:02”).',
+        'Assistant copy is first person and brief; long answers use Content Blocks inside the bubble.',
+        'A failed turn says what happened and offers Retry.',
+      ],
+      a11y: [
+        'Author and time are text, so screen readers read who said what; the avatar is decorative.',
+        'Icon-only actions in the footer need `aria-label` (“Copy”, “Retry”).',
+        'A failed bubble sets `aria-invalid`; the footer repeats the failure in text, not only in color.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -69,11 +95,11 @@ const meta = preview.meta({
         {args.align === 'start' && <AgentAvatar />}
         <MessageContent>
           <MessageHeader>
-            <strong>Title</strong>
+            <strong>{args.align === 'end' ? 'Maya Chen' : 'Assistant'}</strong>
             <span>14:02</span>
           </MessageHeader>
           <MessageBubble variant={args.align === 'end' ? 'muted' : 'ghost'}>
-            <MessageBubbleContent>Subtitle</MessageBubbleContent>
+            <MessageBubbleContent>{args.align === 'end' ? USER_PROMPT : ANSWER}</MessageBubbleContent>
           </MessageBubble>
         </MessageContent>
       </Message>
@@ -86,9 +112,9 @@ export const Default = meta.story()
 
 Default.test('renders the author, time and content', async ({ canvas, canvasElement }) => {
   await expect(canvasElement.querySelector('[data-slot=message]')).toHaveAttribute('data-align', 'start')
-  await expect(canvas.getByText('Title')).toBeVisible()
+  await expect(canvas.getByText('Assistant')).toBeVisible()
   await expect(canvas.getByText('14:02')).toBeVisible()
-  await expect(canvas.getByText('Subtitle')).toBeVisible()
+  await expect(canvas.getByText(ANSWER)).toBeVisible()
 })
 
 /** The user's turn: right-aligned, muted bubble, no avatar. */
@@ -102,11 +128,11 @@ export const WithActions = meta.story({
         <AgentAvatar />
         <MessageContent>
           <MessageHeader>
-            <strong>Title</strong>
+            <strong>Assistant</strong>
             <span>14:02</span>
           </MessageHeader>
           <MessageBubble variant="ghost">
-            <MessageBubbleContent>Subtitle</MessageBubbleContent>
+            <MessageBubbleContent>{ANSWER}</MessageBubbleContent>
           </MessageBubble>
           <Actions />
         </MessageContent>
@@ -128,11 +154,11 @@ export const Failed = meta.story({
       <Message align="end">
         <MessageContent>
           <MessageHeader>
-            <strong>Title</strong>
+            <strong>Maya Chen</strong>
             <span>14:02</span>
           </MessageHeader>
           <MessageBubble variant="muted">
-            <MessageBubbleContent aria-invalid>Subtitle</MessageBubbleContent>
+            <MessageBubbleContent aria-invalid>Draft the onboarding email</MessageBubbleContent>
           </MessageBubble>
           <MessageFooter className="text-danger-medium">
             <Icon icon={CircleAlertIcon} size="xs" />
@@ -161,11 +187,11 @@ export const Thread = meta.story({
       <Message align="end">
         <MessageContent>
           <MessageHeader>
-            <strong>Title</strong>
+            <strong>Maya Chen</strong>
             <span>14:02</span>
           </MessageHeader>
           <MessageBubble variant="muted">
-            <MessageBubbleContent>Subtitle</MessageBubbleContent>
+            <MessageBubbleContent>{USER_PROMPT}</MessageBubbleContent>
           </MessageBubble>
         </MessageContent>
       </Message>
@@ -173,11 +199,11 @@ export const Thread = meta.story({
         <AgentAvatar />
         <MessageContent>
           <MessageHeader>
-            <strong>Title</strong>
+            <strong>Assistant</strong>
             <span>14:02</span>
           </MessageHeader>
           <MessageBubble variant="ghost">
-            <MessageBubbleContent>Subtitle</MessageBubbleContent>
+            <MessageBubbleContent>{ANSWER}</MessageBubbleContent>
           </MessageBubble>
           <Actions />
         </MessageContent>
@@ -185,14 +211,14 @@ export const Thread = meta.story({
       <Message align="end">
         <MessageContent>
           <MessageHeader>
-            <strong>Title</strong>
+            <strong>Maya Chen</strong>
             <span>14:03</span>
           </MessageHeader>
           <MessageBubble variant="muted">
-            <MessageBubbleContent>Subtitle</MessageBubbleContent>
+            <MessageBubbleContent>Make it shorter</MessageBubbleContent>
           </MessageBubble>
           <MessageBubble variant="muted">
-            <MessageBubbleContent>Subtitle</MessageBubbleContent>
+            <MessageBubbleContent>And add the beta dates as a timeline</MessageBubbleContent>
           </MessageBubble>
         </MessageContent>
       </Message>

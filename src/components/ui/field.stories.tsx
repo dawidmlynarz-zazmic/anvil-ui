@@ -23,7 +23,9 @@ import { Slider } from './slider'
 import { Switch } from './switch'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10940-109'
-const OPTIONS = ['Label 1', 'Label 2', 'Label 3']
+const PROJECTS = ['Q3 launch plan', 'Competitor pricing research', 'Onboarding email draft']
+const STYLES = ['Concise', 'Balanced', 'Detailed']
+const APPS = ['Calendar', 'Drive', 'Mail']
 
 function FieldCombobox({
   id,
@@ -42,7 +44,7 @@ function FieldCombobox({
     <Combobox open={open} onOpenChange={setOpen}>
       <ComboboxTrigger
         id={id}
-        placeholder="Placeholder"
+        placeholder="Select a project"
         disabled={disabled}
         aria-invalid={invalid || undefined}
         aria-describedby={describedBy}
@@ -51,10 +53,10 @@ function FieldCombobox({
       </ComboboxTrigger>
       <ComboboxContent>
         <Command>
-          <CommandInput placeholder="Placeholder" />
+          <CommandInput placeholder="Search projects…" />
           <CommandList>
             <CommandGroup>
-              {OPTIONS.map((option) => (
+              {PROJECTS.map((option) => (
                 <ComboboxItem
                   key={option}
                   value={option}
@@ -69,7 +71,7 @@ function FieldCombobox({
               ))}
             </CommandGroup>
           </CommandList>
-          <CommandEmpty>Subtitle</CommandEmpty>
+          <CommandEmpty>No projects found.</CommandEmpty>
         </Command>
       </ComboboxContent>
     </Combobox>
@@ -91,10 +93,10 @@ type DemoProps = {
 /** A Field with the Figma anatomy: vertical → label, Combobox, description / error; horizontal → Switch, label, description. */
 function DemoField({
   orientation = 'vertical',
-  label = 'Label',
-  description = 'Subtitle',
+  label = 'Default project',
+  description = 'New chats start in this project.',
   invalid = false,
-  error = 'Subtitle',
+  error = 'Choose a project for new chats.',
   disabled = false,
 }: DemoProps) {
   const id = useId()
@@ -160,6 +162,27 @@ const meta = preview.meta({
       },
       { property: 'control', values: 'instance', code: 'the control child (Combobox, Switch, Slider, …)' },
     ],
+    guide: {
+      use: [
+        'Labelling controls that have no label of their own: Switch and Checkbox rows with a description, Combobox, Slider, Input OTP.',
+        'Groups of options: `FieldSet` + `FieldLegend` around radio or checkbox Fields; `FieldGroup` + `FieldSeparator` for settings sections.',
+        'Carrying validation: `data-invalid` on Field, `aria-invalid` on the control and a `FieldError`.',
+      ],
+      avoid: [
+        'Wrapping Input, Textarea or Select: pass them `label` / `hint` and they render their own Field.',
+        'Page-level errors (“Couldn’t save settings”): use Alert. Read-only key–value details: use Item or a table.',
+      ],
+      content: [
+        'Labels are short nouns in sentence case (“Default project”, “Memory”), no colon.',
+        'Descriptions say what the setting does or the format expected, in one sentence.',
+        'Errors say what is wrong and how to fix it (“Choose a project for new chats.”), and replace the description in vertical fields.',
+      ],
+      a11y: [
+        '`FieldLabel` uses `htmlFor` (or `aria-labelledby` for Slider) so clicking it focuses or toggles the control.',
+        'Link the description or error with `aria-describedby`; `FieldError` is `role="alert"`.',
+        'Disable the control itself, not only the Field, so it leaves the tab order.',
+      ],
+    },
     docs: {
       description: {
         component: [
@@ -172,10 +195,10 @@ const meta = preview.meta({
   },
   args: {
     orientation: 'vertical',
-    label: 'Label',
-    description: 'Subtitle',
+    label: 'Default project',
+    description: 'New chats start in this project.',
     invalid: false,
-    error: 'Subtitle',
+    error: 'Choose a project for new chats.',
     disabled: false,
   },
   argTypes: {
@@ -202,18 +225,23 @@ const meta = preview.meta({
 export const Default = meta.story()
 
 Default.test('the label names the control and the description describes it', async ({ canvas }) => {
-  await expect(canvas.getByRole('combobox', { name: 'Label' })).toHaveAccessibleDescription('Subtitle')
+  await expect(canvas.getByRole('combobox', { name: 'Default project' })).toHaveAccessibleDescription(
+    'New chats start in this project.',
+  )
 })
 
 Default.test('invalid shows the error', { args: { invalid: true } }, async ({ canvas }) => {
   await expect(canvas.getByRole('group')).toHaveAttribute('data-invalid', 'true')
-  await expect(canvas.getByRole('alert')).toHaveTextContent('Subtitle')
-  await expect(canvas.getByRole('combobox', { name: 'Label' })).toHaveAttribute('aria-invalid', 'true')
+  await expect(canvas.getByRole('alert')).toHaveTextContent('Choose a project for new chats.')
+  await expect(canvas.getByRole('combobox', { name: 'Default project' })).toHaveAttribute(
+    'aria-invalid',
+    'true',
+  )
 })
 
 Default.test('disabled', { args: { disabled: true } }, async ({ canvas }) => {
   await expect(canvas.getByRole('group')).toHaveAttribute('data-disabled', 'true')
-  await expect(canvas.getByRole('combobox', { name: 'Label' })).toBeDisabled()
+  await expect(canvas.getByRole('combobox', { name: 'Default project' })).toBeDisabled()
 })
 
 /** Figma orientation=vertical, state=invalid: the label and error turn destructive. */
@@ -221,9 +249,9 @@ export const VerticalInvalid = meta.story({
   name: 'Vertical invalid',
   render: () => (
     <Field data-invalid="true">
-      <FieldLabel htmlFor="field-combobox-invalid">Label</FieldLabel>
+      <FieldLabel htmlFor="field-combobox-invalid">Default project</FieldLabel>
       <FieldCombobox id="field-combobox-invalid" invalid describedBy="field-combobox-error" />
-      <FieldError id="field-combobox-error">Subtitle</FieldError>
+      <FieldError id="field-combobox-error">Choose a project for new chats.</FieldError>
     </Field>
   ),
 })
@@ -234,16 +262,16 @@ export const Horizontal = meta.story({
     <Field orientation="horizontal">
       <Switch id="field-switch" defaultChecked />
       <FieldContent>
-        <FieldLabel htmlFor="field-switch">Label</FieldLabel>
-        <FieldDescription>Subtitle</FieldDescription>
+        <FieldLabel htmlFor="field-switch">Memory</FieldLabel>
+        <FieldDescription>The assistant remembers preferences you share.</FieldDescription>
       </FieldContent>
     </Field>
   ),
 })
 
 Horizontal.test('clicking the label toggles the switch', async ({ canvas }) => {
-  const toggle = canvas.getByRole('switch', { name: 'Label' })
-  await userEvent.click(canvas.getByText('Label'))
+  const toggle = canvas.getByRole('switch', { name: 'Memory' })
+  await userEvent.click(canvas.getByText('Memory'))
   await expect(toggle).not.toBeChecked()
 })
 
@@ -253,17 +281,19 @@ export const Invalid = meta.story({
     <Field orientation="horizontal" data-invalid="true">
       <Checkbox id="field-checkbox" aria-invalid aria-describedby="field-checkbox-error" />
       <FieldContent>
-        <FieldLabel htmlFor="field-checkbox">Label</FieldLabel>
-        <FieldDescription>Subtitle</FieldDescription>
-        <FieldError id="field-checkbox-error">Subtitle</FieldError>
+        <FieldLabel htmlFor="field-checkbox">Allow the assistant to send email</FieldLabel>
+        <FieldDescription>It always asks before sending.</FieldDescription>
+        <FieldError id="field-checkbox-error">Turn this on to schedule the beta invite email.</FieldError>
       </FieldContent>
     </Field>
   ),
 })
 
 Invalid.test('the error is announced and describes the control', async ({ canvas }) => {
-  await expect(canvas.getByRole('alert')).toHaveTextContent('Subtitle')
-  await expect(canvas.getByRole('checkbox', { name: 'Label' })).toHaveAccessibleDescription('Subtitle')
+  await expect(canvas.getByRole('alert')).toHaveTextContent('Turn this on to schedule the beta invite email.')
+  await expect(
+    canvas.getByRole('checkbox', { name: 'Allow the assistant to send email' }),
+  ).toHaveAccessibleDescription('Turn this on to schedule the beta invite email.')
 })
 
 /** `data-disabled` on Field dims the label; disable the control itself too. */
@@ -272,8 +302,8 @@ export const Disabled = meta.story({
     <Field orientation="horizontal" data-disabled="true">
       <Switch id="field-disabled" disabled />
       <FieldContent>
-        <FieldLabel htmlFor="field-disabled">Label</FieldLabel>
-        <FieldDescription>Subtitle</FieldDescription>
+        <FieldLabel htmlFor="field-disabled">Web search</FieldLabel>
+        <FieldDescription>Your admin turned off web search for this workspace.</FieldDescription>
       </FieldContent>
     </Field>
   ),
@@ -284,10 +314,10 @@ export const RadioGroupInFieldSet = meta.story({
   name: 'Radio group',
   render: () => (
     <FieldSet>
-      <FieldLegend variant="label">Title</FieldLegend>
-      <FieldDescription>Subtitle</FieldDescription>
+      <FieldLegend variant="label">Response style</FieldLegend>
+      <FieldDescription>How long the assistant’s answers are.</FieldDescription>
       <RadioGroup defaultValue="1">
-        {OPTIONS.map((label, i) => (
+        {STYLES.map((label, i) => (
           <Field key={label} orientation="horizontal">
             <RadioGroupItem id={`field-radio-${i}`} value={String(i + 1)} />
             <FieldLabel htmlFor={`field-radio-${i}`}>{label}</FieldLabel>
@@ -302,10 +332,10 @@ export const RadioGroupInFieldSet = meta.story({
 export const CheckboxGroup = meta.story({
   render: () => (
     <FieldSet>
-      <FieldLegend variant="label">Title</FieldLegend>
-      <FieldDescription>Subtitle</FieldDescription>
+      <FieldLegend variant="label">Connected apps</FieldLegend>
+      <FieldDescription>The assistant can read from these apps when it answers.</FieldDescription>
       <FieldGroup data-slot="checkbox-group">
-        {OPTIONS.map((label, i) => (
+        {APPS.map((label, i) => (
           <Field key={label} orientation="horizontal">
             <Checkbox id={`field-check-${i}`} defaultChecked={i === 0} />
             <FieldLabel htmlFor={`field-check-${i}`}>{label}</FieldLabel>
@@ -320,22 +350,22 @@ export const CheckboxGroup = meta.story({
 export const WithSlider = meta.story({
   render: () => (
     <Field>
-      <FieldLabel id="field-slider-label">Label</FieldLabel>
+      <FieldLabel id="field-slider-label">Creativity</FieldLabel>
       <Slider aria-labelledby="field-slider-label" defaultValue={[50]} max={100} step={1} />
-      <FieldDescription>Subtitle</FieldDescription>
+      <FieldDescription>Higher values give more varied answers.</FieldDescription>
     </Field>
   ),
 })
 
 WithSlider.test('the label names the slider', async ({ canvas }) => {
-  await expect(canvas.getByRole('slider', { name: 'Label' })).toHaveAttribute('aria-valuenow', '50')
+  await expect(canvas.getByRole('slider', { name: 'Creativity' })).toHaveAttribute('aria-valuenow', '50')
 })
 
 /** Input OTP: FieldLabel points at the hidden input that drives the slots. */
 export const WithInputOTP = meta.story({
   render: () => (
     <Field>
-      <FieldLabel htmlFor="field-otp">Label</FieldLabel>
+      <FieldLabel htmlFor="field-otp">Verification code</FieldLabel>
       <InputOTP id="field-otp" maxLength={6} aria-describedby="field-otp-hint">
         <InputOTPGroup>
           {Array.from({ length: 6 }, (_, i) => (
@@ -343,13 +373,15 @@ export const WithInputOTP = meta.story({
           ))}
         </InputOTPGroup>
       </InputOTP>
-      <FieldDescription id="field-otp-hint">Subtitle</FieldDescription>
+      <FieldDescription id="field-otp-hint">Enter the 6-digit code we sent to your email.</FieldDescription>
     </Field>
   ),
 })
 
 WithInputOTP.test('the label names the input', async ({ canvas }) => {
-  await expect(canvas.getByRole('textbox', { name: 'Label' })).toHaveAccessibleDescription('Subtitle')
+  await expect(canvas.getByRole('textbox', { name: 'Verification code' })).toHaveAccessibleDescription(
+    'Enter the 6-digit code we sent to your email.',
+  )
 })
 
 /** Sections of a settings form: FieldGroup stacks Fields, FieldSeparator divides them. */
@@ -359,16 +391,16 @@ export const Group = meta.story({
       <Field orientation="horizontal">
         <Switch id="field-group-1" />
         <FieldContent>
-          <FieldLabel htmlFor="field-group-1">Label 1</FieldLabel>
-          <FieldDescription>Subtitle</FieldDescription>
+          <FieldLabel htmlFor="field-group-1">Email when a task finishes</FieldLabel>
+          <FieldDescription>Get an email when a long research task is done.</FieldDescription>
         </FieldContent>
       </Field>
       <FieldSeparator />
       <Field orientation="horizontal">
         <Switch id="field-group-2" defaultChecked />
         <FieldContent>
-          <FieldLabel htmlFor="field-group-2">Label 2</FieldLabel>
-          <FieldDescription>Subtitle</FieldDescription>
+          <FieldLabel htmlFor="field-group-2">Show sources</FieldLabel>
+          <FieldDescription>List the sites the assistant used under each answer.</FieldDescription>
         </FieldContent>
       </Field>
     </FieldGroup>
@@ -383,8 +415,17 @@ export const BuiltIntoInput = meta.story({
   name: 'Built into Input',
   render: () => (
     <div className="flex flex-col gap-6">
-      <Input label="Label" hint="Subtitle" placeholder="Placeholder" />
-      <Input label="Label" hint="Subtitle" defaultValue="Value" aria-invalid />
+      <Input
+        label="Project name"
+        hint="Shown in the sidebar and in shared links."
+        placeholder="Q3 launch plan"
+      />
+      <Input
+        label="Project name"
+        hint="A project with this name already exists."
+        defaultValue="Q3 launch plan"
+        aria-invalid
+      />
     </div>
   ),
 })

@@ -2,7 +2,7 @@
 // level (Atoms/…, Molecules/…, Organisms/…, Agent Builder/…; Foundations/… for the Icon), exactly one
 // level tag that matches it, only known context tags (.storybook/taxonomy.ts), a shadcn slug only
 // as `parameters.shadcn: '<slug>'`, parameters.layout, a Figma link
-// (parameters.design), the Figma → code table (parameters.figmaProps; `[]` with a comment when
+// (parameters.design), the usage guide (parameters.guide, starting with `use`), the Figma → code table (parameters.figmaProps; `[]` with a comment when
 // Figma has no properties) and explicit argTypes, and no story may use `play` (interactions are
 // Story.test). Welcome is exempt.
 import { globSync, readFileSync } from 'node:fs'
@@ -49,6 +49,8 @@ for (const file of files) {
   if (!/^ {4}figmaProps: \[/m.test(source))
     problems.push(`${file}: no parameters.figmaProps (Figma → code table)`)
   if (!/^ {2}argTypes: \{/m.test(source)) problems.push(`${file}: no argTypes`)
+  if (section !== 'Foundations' && !/^ {4}guide: \{\n {6}use: \[/m.test(source))
+    problems.push(`${file}: no parameters.guide (Usage: use, avoid, content, a11y)`)
   if (/^\s+play:/m.test(source)) problems.push(`${file}: uses play (use Story.test instead)`)
 }
 

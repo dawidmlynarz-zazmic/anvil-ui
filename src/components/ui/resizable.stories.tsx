@@ -16,11 +16,13 @@ function DemoResizable({ orientation = 'horizontal', withHandle = true }: DemoPr
     <div className="h-60 w-120 overflow-hidden rounded-lg border border-border bg-background">
       <ResizablePanelGroup orientation={orientation}>
         <ResizablePanel defaultSize="50" minSize="20">
-          <div className="flex h-full items-center justify-center type-text-sm-medium">Label 1</div>
+          <div className="flex h-full items-center justify-center type-text-sm-medium">Conversation</div>
         </ResizablePanel>
-        <ResizableHandle withHandle={withHandle} aria-label="Resize" />
+        <ResizableHandle withHandle={withHandle} aria-label="Resize preview" />
         <ResizablePanel defaultSize="50" minSize="20">
-          <div className="flex h-full items-center justify-center type-text-sm-medium">Label 2</div>
+          <div className="flex h-full items-center justify-center type-text-sm-medium">
+            Preview · q3-launch-plan.pdf
+          </div>
         </ResizablePanel>
       </ResizablePanelGroup>
     </div>
@@ -43,6 +45,24 @@ const meta = preview.meta({
       },
       { property: 'with handle', values: 'false · true', code: '`withHandle` prop on `ResizableHandle`' },
     ],
+    guide: {
+      use: [
+        'Side-by-side work areas people size to the task: the conversation next to a file preview, an artifact or a code view.',
+        'Set `minSize` so neither panel collapses into something unusable.',
+      ],
+      avoid: [
+        'Temporary side content that comes and goes: use Sheet. Fixed app navigation: use Sidebar (it has its own collapse).',
+        'Small screens: stack the panels or switch between them with Tabs.',
+      ],
+      content: [
+        'Each panel has a visible heading so people know what they are resizing.',
+        'Remember the user’s sizes between sessions when the layout is persistent.',
+      ],
+      a11y: [
+        'The handle is a focusable `separator` with `aria-valuenow`; arrow keys resize.',
+        'Give each handle an `aria-label` that names what it resizes (“Resize preview”).',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -60,7 +80,7 @@ const meta = preview.meta({
 export const Default = meta.story()
 
 Default.test('the handle is a focusable separator that arrow keys move', async ({ canvas }) => {
-  const handle = canvas.getByRole('separator', { name: 'Resize' })
+  const handle = canvas.getByRole('separator', { name: 'Resize preview' })
   const before = Number(handle.getAttribute('aria-valuenow'))
   handle.focus()
   await userEvent.keyboard('{ArrowRight}')

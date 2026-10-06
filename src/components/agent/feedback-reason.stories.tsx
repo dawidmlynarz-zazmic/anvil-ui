@@ -6,7 +6,14 @@ import { FeedbackReason } from './feedback-reason'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10726-1783'
 
-const REASONS = ['Label 1', 'Label 2', 'Label 3', 'Label 4', 'Label 5', 'Label 6', 'Label 7']
+const REASONS = [
+  'Inaccurate',
+  'Not helpful',
+  'Out of date',
+  'Too long',
+  'Didn’t follow instructions',
+  'Other',
+]
 
 const meta = preview.meta({
   title: 'Agent Builder/Feedback Reason',
@@ -41,6 +48,28 @@ const meta = preview.meta({
         code: '`submittedDescription`, `onUndo`',
       },
     ],
+    guide: {
+      use: [
+        'Right after a thumbs-down on an answer: ask what went wrong, in the thread.',
+        'Let the user pick several `reasons` and add an optional comment, then confirm with Undo.',
+      ],
+      avoid: [
+        'A general satisfaction check after a task: use Rating. Loyalty on 0–10: use NPS.',
+        'Several questions or a structured study: use Survey. A group decision: use Poll.',
+        'Reporting harmful content: that needs its own report flow, not a feedback card.',
+      ],
+      content: [
+        'Title: a direct question (“What went wrong?”).',
+        'Reasons: two or three words each, sentence case (“Out of date”, “Didn’t follow instructions”); end with “Other”.',
+        '`note` says where feedback goes (“Your feedback and this conversation are shared with the Northwind Labs team.”).',
+        'Submitted: thank the user and say what happens next (“Thanks for the feedback” · “I’ll use it to improve future answers.”).',
+      ],
+      a11y: [
+        'The card is a `group` named by its title; reasons are a list of toggle buttons with `aria-pressed`.',
+        'The comment Textarea is labelled “Comment”; Close, Cancel and Send feedback are labelled buttons.',
+        'The submitted row is `role="status"`, so the confirmation is announced.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -50,12 +79,12 @@ const meta = preview.meta({
   },
   args: {
     status: 'open' as const,
-    title: 'Title',
+    title: 'What went wrong?',
     reasons: REASONS,
-    defaultSelected: ['Label 1'],
-    note: 'Subtitle',
-    submittedTitle: 'Title',
-    submittedDescription: 'Subtitle',
+    defaultSelected: ['Inaccurate'],
+    note: 'Your feedback and this conversation are shared with the Northwind Labs team.',
+    submittedTitle: 'Thanks for the feedback',
+    submittedDescription: 'I’ll use it to improve future answers.',
     onSubmit: fn(),
     onCancel: fn(),
     onClose: fn(),
@@ -90,11 +119,14 @@ export const Default = meta.story({
 })
 
 Default.test('sends the picked reasons and the comment', async ({ canvas, args }) => {
-  await userEvent.click(canvas.getByRole('button', { name: 'Label 3' }))
-  await expect(canvas.getByRole('button', { name: 'Label 3' })).toHaveAttribute('aria-pressed', 'true')
-  await userEvent.type(canvas.getByRole('textbox', { name: 'Comment' }), 'Value')
+  await userEvent.click(canvas.getByRole('button', { name: 'Out of date' }))
+  await expect(canvas.getByRole('button', { name: 'Out of date' })).toHaveAttribute('aria-pressed', 'true')
+  await userEvent.type(canvas.getByRole('textbox', { name: 'Comment' }), 'The pricing is from last quarter.')
   await userEvent.click(canvas.getByRole('button', { name: 'Send feedback' }))
-  await expect(args.onSubmit).toHaveBeenCalledWith({ reasons: ['Label 1', 'Label 3'], comment: 'Value' })
+  await expect(args.onSubmit).toHaveBeenCalledWith({
+    reasons: ['Inaccurate', 'Out of date'],
+    comment: 'The pricing is from last quarter.',
+  })
 })
 
 /** Figma state: open and submitted. */
@@ -108,7 +140,7 @@ export const Statuses = meta.story({
 })
 
 Statuses.test('submitted announces and offers Undo', async ({ canvas, args }) => {
-  await expect(canvas.getByRole('status')).toHaveTextContent('Title')
+  await expect(canvas.getByRole('status')).toHaveTextContent('Thanks for the feedback')
   await userEvent.click(canvas.getByRole('button', { name: 'Undo' }))
   await expect(args.onUndo).toHaveBeenCalledOnce()
 })
@@ -118,11 +150,11 @@ function Flow() {
   return (
     <FeedbackReason
       status={sent ? 'submitted' : 'open'}
-      title="Title"
+      title="What went wrong?"
       reasons={REASONS}
-      note="Subtitle"
-      submittedTitle="Title"
-      submittedDescription="Subtitle"
+      note="Your feedback and this conversation are shared with the Northwind Labs team."
+      submittedTitle="Thanks for the feedback"
+      submittedDescription="I’ll use it to improve future answers."
       onSubmit={() => setSent(true)}
       onCancel={() => {}}
       onUndo={() => setSent(false)}

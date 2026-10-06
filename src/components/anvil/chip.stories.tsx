@@ -49,6 +49,22 @@ const meta = preview.meta({
         code: 'pass `onRemove` (+ `removeLabel`) for the remove button',
       },
     ],
+    guide: {
+      use: [
+        'Filters people switch on and off (`pressed`), in a row above results.',
+        'Selected values or tags people can remove (`onRemove` + `removeLabel`).',
+        'An icon or 16px logo before the label to identify a source or app.',
+      ],
+      avoid: [
+        'A static label or status: use Badge. A suggested reply: use Quick Reply.',
+        'An action: use Button. Exactly one option on at a time: use Toggle Group.',
+      ],
+      content: ['One to three words in sentence case; the remove label names the item: “Remove Label”.'],
+      a11y: [
+        'A selectable chip is a toggle button (`aria-pressed`); group a filter row with `role="group"` and `aria-label`.',
+        'A removable chip has its own remove button named by `removeLabel`; move focus sensibly after removal.',
+      ],
+    },
     docs: {
       description: {
         component:

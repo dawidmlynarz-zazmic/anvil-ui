@@ -58,6 +58,25 @@ const meta = preview.meta({
     figmaProps: [
       { property: 'mode', values: 'single · range', code: '`mode` prop (react-day-picker; also `multiple`)' },
     ],
+    guide: {
+      use: [
+        'Choosing a date or range when seeing the month helps: scheduling a launch review, picking a report period.',
+        'Inline in a panel or Card when the calendar is the main task; inside a Popover it becomes the Date Picker.',
+        '`disabled` days for dates that can’t be chosen (past dates, weekends) instead of failing on submit.',
+      ],
+      avoid: [
+        'A compact form field: use Date Picker. Well-known dates far away (a birth date): a Text field with a format hint is faster.',
+        'Picking a time: pair it with a time Select or Text field; Calendar has no time.',
+      ],
+      content: [
+        'Show the chosen value outside the grid in a readable format (“Tue, Oct 14”), formatted with date-fns.',
+        'Explain why days are disabled in a nearby description.',
+      ],
+      a11y: [
+        'Arrow keys move between days, PageUp / PageDown between months, Home / End to the week edges.',
+        'Days are buttons with full-date labels; today and the selection are announced, not only colored.',
+      ],
+    },
     docs: {
       description: {
         component:

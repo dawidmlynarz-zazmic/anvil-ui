@@ -289,13 +289,13 @@ Lucide    → Icon (@/components/ui/icon) → every component and story
      pass `open` / `onOpenChange` to the Root. Default is closed; stories that open on load
      prevent Radix's initial focus (`onOpenAutoFocus={(e) => e.preventDefault()}`). Query
      `within(canvasElement.ownerDocument.body)` in tests; `parameters.docs.story.inline = false`.
-   Copy: **content** is plain and context-agnostic: "Title", "Subtitle" (descriptions, hints,
-   errors), "Label" (field labels, options, tabs, nav items, isolated variant grids; "Label 1",
-   "Label 2" when several), "Placeholder" / "Value" in inputs. **Actions** used in an example
-   say what they do: triggers "Open dialog", footers "Cancel" + "Save" / "Continue" / "Delete",
-   forms "Submit", menu and command items generic commands ("Edit", "Duplicate", "Delete"),
-   icon buttons name the icon's action. Domain-specific examples belong in the examples
-   playground (roadmap Step 5).
+   - **Usage guide:** every meta has `parameters.guide` (`use`, `avoid` with the alternative,
+     `content`, `a11y`; short bullets), shown as the docs page's Usage section; lint requires it.
+   Copy (`docs/content-guide.md`): **atoms** stay context-agnostic ("Title", "Label", "Value",
+   "Placeholder"). **Molecules, organisms and Agent Builder** show realistic agent UI content
+   from the shared scenario (Assistant, Maya Chen, Northwind Labs, "Q3 launch plan"): e.g. a
+   confirmation reads "Delete “Q3 launch plan”?", not "Title". **Actions** always say what they
+   do ("Save changes", "Send feedback", "Delete"). No real companies, people or products.
 5. Compare against the Figma screenshot in light and dark; fix differences or note them.
 6. Run `pnpm typecheck && pnpm lint && pnpm test-storybook`.
 7. Update `docs/component-status.md` (component · Figma node · status · notes), and recheck step 0:

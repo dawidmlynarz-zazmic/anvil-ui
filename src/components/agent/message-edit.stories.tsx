@@ -9,6 +9,13 @@ import { MessageBranch, MessageEditor } from './message-edit'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10728-2229'
 
+/** Three versions of one prompt, as the user refined it. */
+const VERSIONS = [
+  'Summarize the Q3 launch plan',
+  'Summarize the Q3 launch plan in 5 bullets',
+  'Summarize the Q3 launch plan in 5 bullets, with owners and dates',
+]
+
 const meta = preview.meta({
   title: 'Molecules/Message Edit',
   tags: ['molecule', 'messages'],
@@ -21,6 +28,25 @@ const meta = preview.meta({
       { property: 'position', values: 'text', code: '`index` / `count` props on `MessageBranch`' },
       { property: 'state', values: 'editing · branched', code: '`MessageEditor` · `MessageBranch`' },
     ],
+    guide: {
+      use: [
+        'Letting the user edit a prompt they already sent; sending the edit creates a new version and a new answer.',
+        '`MessageBranch` under the edited message to move between versions (“Version 2 of 3”), with Edit and Copy.',
+      ],
+      avoid: [
+        'Writing a new prompt: use Prompt Input. Editing a draft the agent wrote (an email, a doc): use the artifact’s own editor or Textarea.',
+        'Retrying the same prompt: use Retry in Message Actions.',
+      ],
+      content: [
+        'Keep the original text in the field; the default `hint` explains the effect (“Editing creates a new branch; the original is kept.”).',
+        'Actions: “Cancel” and “Send”. Mark edited messages with “Edited”.',
+      ],
+      a11y: [
+        'The field is a named Textarea (“Edit message”); move focus into it when editing starts. Escape cancels, ⌘/Ctrl+Enter sends.',
+        'Previous / Next version are named buttons, disabled at the ends; the position is text (“Version 3 of 3”).',
+        'After cancel or send, return focus to the message’s Edit button.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -28,7 +54,7 @@ const meta = preview.meta({
       },
     },
   },
-  args: { defaultValue: 'Subtitle', onCancel: fn(), onSend: fn() },
+  args: { defaultValue: 'Summarize the Q3 launch plan', onCancel: fn(), onSend: fn() },
   argTypes: {
     defaultValue: { control: 'text' },
     hint: { control: 'text' },
@@ -48,9 +74,9 @@ export const Editing = meta.story()
 Editing.test('sends the edited text; Escape cancels', async ({ canvas, args }) => {
   const field = canvas.getByRole('textbox', { name: 'Edit message' })
   await userEvent.clear(field)
-  await userEvent.type(field, 'Value')
+  await userEvent.type(field, 'Summarize the Q3 launch plan in 5 bullets')
   await userEvent.click(canvas.getByRole('button', { name: 'Send' }))
-  await expect(args.onSend).toHaveBeenCalledWith('Value')
+  await expect(args.onSend).toHaveBeenCalledWith('Summarize the Q3 launch plan in 5 bullets')
   await userEvent.type(field, '{Escape}')
   await expect(args.onCancel).toHaveBeenCalledOnce()
 })
@@ -64,7 +90,7 @@ export const Branched = meta.story({
         <Message align="end">
           <MessageContent>
             <MessageBubble variant="muted">
-              <MessageBubbleContent>Subtitle {index}</MessageBubbleContent>
+              <MessageBubbleContent>{VERSIONS[index - 1]}</MessageBubbleContent>
             </MessageBubble>
             <MessageBranch
               className="self-end"
@@ -91,7 +117,7 @@ Branched.test('steps between versions and stops at the ends', async ({ canvas })
 /** Edit → send → a new version appears. */
 export const Flow = meta.story({
   render: function Render() {
-    const [versions, setVersions] = useState(['Subtitle'])
+    const [versions, setVersions] = useState(['Summarize the Q3 launch plan'])
     const [index, setIndex] = useState(1)
     const [editing, setEditing] = useState(false)
     return (

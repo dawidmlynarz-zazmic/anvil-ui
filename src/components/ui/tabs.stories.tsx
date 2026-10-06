@@ -2,12 +2,41 @@ import preview from '#.storybook/preview'
 import { expect, fn, userEvent, waitFor } from 'storybook/test'
 
 import { Badge } from './badge'
-import { Icon, SettingsIcon } from './icon'
+import {
+  BrainIcon,
+  FileTextIcon,
+  GlobeIcon,
+  Icon,
+  MessageSquareIcon,
+  SettingsIcon,
+  type LucideIcon,
+} from './icon'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './tabs'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=8218-18525'
 const FIGMA_ITEM = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=1623-6844'
-const TABS = ['Label 1', 'Label 2', 'Label 3', 'Label 4', 'Label 5']
+const TABS: { label: string; icon: LucideIcon; count: number; body: string }[] = [
+  { label: 'Chat', icon: MessageSquareIcon, count: 14, body: '14 messages in “Q3 launch plan”.' },
+  {
+    label: 'Files',
+    icon: FileTextIcon,
+    count: 5,
+    body: 'q3-launch-plan.pdf, pricing-research.xlsx and 3 more.',
+  },
+  {
+    label: 'Sources',
+    icon: GlobeIcon,
+    count: 6,
+    body: '6 sites the assistant cited, from marketpulse.example to devsurvey.example.',
+  },
+  { label: 'Memory', icon: BrainIcon, count: 3, body: 'Prefers concise answers with bullet points.' },
+  {
+    label: 'Settings',
+    icon: SettingsIcon,
+    count: 2,
+    body: 'Model, response style and connected apps for this project.',
+  },
+]
 
 type DemoProps = {
   variant?: 'contained' | 'line'
@@ -37,25 +66,25 @@ function DemoTabs({
       className="w-full max-w-190"
     >
       <TabsList variant={variant} fullWidth={fullWidth}>
-        {TABS.map((label, i) => (
+        {TABS.map(({ label, icon, count }, i) => (
           <TabsTrigger key={label} value={String(i + 1)} disabled={disabledTab && i === TABS.length - 1}>
-            {showIcon && <Icon icon={SettingsIcon} />}
+            {showIcon && <Icon icon={icon} />}
             {label}
             {showBadge && (
               <Badge variant="subtle" intent="neutral" size="xs">
-                3
+                {count}
               </Badge>
             )}
           </TabsTrigger>
         ))}
       </TabsList>
-      {TABS.map((label, i) => (
+      {TABS.map(({ label, body }, i) => (
         <TabsContent
           key={label}
           value={String(i + 1)}
           className="px-4 type-text-sm-normal text-muted-foreground"
         >
-          Subtitle {i + 1}
+          {body}
         </TabsContent>
       ))}
     </Tabs>
@@ -74,6 +103,26 @@ const meta = preview.meta({
       { property: 'full width', values: 'false · true', code: '`fullWidth` prop on `TabsList`' },
       { property: 'variant', values: 'contained · line', code: '`variant` prop on `TabsList`' },
     ],
+    guide: {
+      use: [
+        'Switching between peer views of the same object without leaving it: Chat · Files · Sources for a project.',
+        'A handful of short, parallel sections (2–6); add a count Badge when the number helps people choose.',
+      ],
+      avoid: [
+        'Moving between pages or the app’s main areas: use Sidebar or links. Sequential steps: use Stepper.',
+        'Toggling a filter or display mode of one list: use Toggle Group.',
+        'More tabs than fit on one line: rethink the grouping or use a Select on narrow screens.',
+      ],
+      content: [
+        'One or two words per tab, nouns in sentence case (“Sources”, not “View sources”).',
+        'Order by frequency of use; the first tab is the default view.',
+      ],
+      a11y: [
+        '`tablist` / `tab` / `tabpanel` roles; the selected tab is `aria-selected` and controls its panel.',
+        'Arrow keys move between tabs (disabled tabs are skipped), Home / End jump to the ends; Tab moves into the panel.',
+        'Icons are decorative; badges add their number to the tab’s name, so keep them meaningful.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -104,19 +153,19 @@ const meta = preview.meta({
 export const Default = meta.story()
 
 Default.test('click and arrow keys switch tabs', async ({ canvas, args }) => {
-  await userEvent.click(canvas.getByRole('tab', { name: 'Label 2' }))
-  await expect(canvas.getByRole('tab', { name: 'Label 2' })).toHaveAttribute('aria-selected', 'true')
+  await userEvent.click(canvas.getByRole('tab', { name: 'Files' }))
+  await expect(canvas.getByRole('tab', { name: 'Files' })).toHaveAttribute('aria-selected', 'true')
   await expect(args.onValueChange).toHaveBeenLastCalledWith('2')
   await userEvent.keyboard('{ArrowRight}')
-  await waitFor(() => expect(canvas.getByRole('tab', { name: 'Label 3' })).toHaveFocus())
-  await expect(canvas.getByRole('tabpanel')).toHaveTextContent('Subtitle 3')
+  await waitFor(() => expect(canvas.getByRole('tab', { name: 'Sources' })).toHaveFocus())
+  await expect(canvas.getByRole('tabpanel')).toHaveTextContent(TABS[2].body)
 })
 
 Default.test('a disabled tab is skipped', { args: { disabledTab: true } }, async ({ canvas }) => {
-  await expect(canvas.getByRole('tab', { name: 'Label 5' })).toBeDisabled()
-  canvas.getByRole('tab', { name: 'Label 4' }).focus()
+  await expect(canvas.getByRole('tab', { name: 'Settings' })).toBeDisabled()
+  canvas.getByRole('tab', { name: 'Memory' }).focus()
   await userEvent.keyboard('{ArrowRight}')
-  await waitFor(() => expect(canvas.getByRole('tab', { name: 'Label 1' })).toHaveFocus())
+  await waitFor(() => expect(canvas.getByRole('tab', { name: 'Chat' })).toHaveFocus())
 })
 
 /** Figma variant=contained · line × full width=false · true. */
@@ -141,25 +190,25 @@ export const ItemStates = meta.story({
           <span className="w-24 type-text-xs-medium text-muted-foreground">{state}</span>
           <Tabs defaultValue="1">
             <TabsList variant="line" className="px-0">
-              {['1', '2'].map((value) => (
+              {TABS.slice(1, 3).map(({ label, icon, count }, i) => (
                 <TabsTrigger
-                  key={value}
-                  value={value}
+                  key={label}
+                  value={String(i + 1)}
                   disabled={state === 'disabled'}
                   // The state on the trigger only (not its badge), via storybook-addon-pseudo-states.
                   className={state === 'hover' || state === 'focus-visible' ? `pseudo-${state}` : undefined}
                 >
-                  <Icon icon={SettingsIcon} />
-                  Label
+                  <Icon icon={icon} />
+                  {label}
                   <Badge variant="subtle" intent="neutral" size="xs">
-                    3
+                    {count}
                   </Badge>
                 </TabsTrigger>
               ))}
             </TabsList>
             {['1', '2'].map((value) => (
               <TabsContent key={value} value={value} className="sr-only">
-                Subtitle
+                {TABS[Number(value)].body}
               </TabsContent>
             ))}
           </Tabs>

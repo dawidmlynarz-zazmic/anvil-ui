@@ -17,6 +17,23 @@ const meta = preview.meta({
     // No Figma component of its own: the status indicator inside thinking panel, tool call item and
     // tool log line (their `status`).
     figmaProps: [],
+    guide: {
+      use: [
+        'The status of an agent step: Thinking Panel, Tool Call Item, Tool Call Accordion, Tool Log Line.',
+        '`appearance="subtle"` inside the Thinking Panel; `default` in tool rows.',
+      ],
+      avoid: [
+        'A status label with text: use Badge. The result of an action: use Action Status.',
+        'General loading: use Spinner.',
+      ],
+      content: [
+        'The step text carries the status: “Searched 6 sites” when done, an error with a next step when failed.',
+      ],
+      a11y: [
+        'Decorative (`aria-hidden`): the step text must say running, done or failed.',
+        'Success and danger colors only repeat what the text says.',
+      ],
+    },
     docs: {
       description: {
         component:

@@ -37,6 +37,21 @@ const meta = preview.meta({
       { property: 'size', values: '24 · 32 · 40 · 48', code: '`size` xs · sm · default · lg' },
       { property: 'shape', values: 'rounded · circle', code: '`shape` default · circle' },
     ],
+    guide: {
+      use: [
+        'The leading visual of a card header, row or banner: approvals, connectors, files, memory.',
+        '`tone` from the meaning (agent for things the assistant made, warning for risk); `inverse` on dark surfaces.',
+      ],
+      avoid: [
+        'A person or the assistant as a party: use Avatar. Something clickable: use an icon Button.',
+        'An inline icon in text: use Icon.',
+      ],
+      content: ['One Lucide glyph that names the category; keep one size per list.'],
+      a11y: [
+        'Decorative (`aria-hidden`): the text beside it must name the thing.',
+        'Keep `inverse` for dark surfaces so the icon keeps its contrast.',
+      ],
+    },
     docs: {
       description: {
         component:

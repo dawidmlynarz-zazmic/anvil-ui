@@ -16,15 +16,25 @@ import {
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10738-11'
 
+/** A Q3 launch plan exchange; longer threads repeat it. */
+const TURNS = [
+  'Summarize the Q3 launch plan',
+  'Northwind Sync launches on September 14. A private beta for 200 teams runs through August, and pricing goes live on launch day.',
+  'Who owns each workstream?',
+  'Leo Park owns design, Priya Shah owns engineering and Sam Ortiz owns marketing. You own the launch review on September 7.',
+  'Add a timeline',
+  'Beta invites go out August 4, feedback closes August 25, the launch review is September 7 and the public launch is September 14.',
+  'Compare with last quarter',
+  'Weekly active users are up 8.2% to 12,480, but trial conversion dropped 0.3 pt to 4.6%. Churn held at 2.1%.',
+]
+
 function Turn({ index }: { index: number }) {
   const user = index % 2 === 0
   return (
     <Message align={user ? 'end' : 'start'}>
       <MessageContent>
         <MessageBubble variant={user ? 'muted' : 'ghost'}>
-          <MessageBubbleContent>
-            {user ? 'Subtitle' : 'Subtitle. Subtitle. Subtitle. Subtitle. Subtitle. Subtitle.'}
-          </MessageBubbleContent>
+          <MessageBubbleContent>{TURNS[index % TURNS.length]}</MessageBubbleContent>
         </MessageBubble>
       </MessageContent>
     </Message>
@@ -39,7 +49,7 @@ function Demo({ count = 12, ...props }: DemoProps) {
   return (
     <MessageScrollerProvider {...props}>
       <MessageScroller className="h-100 w-full max-w-(--shell-thread-max) rounded-lg border">
-        <MessageScrollerViewport aria-label="Label" className="px-4">
+        <MessageScrollerViewport aria-label="Q3 launch plan conversation" className="px-4">
           <MessageScrollerContent className="gap-6 py-4">
             {Array.from({ length: count }, (_, i) => (
               <MessageScrollerItem key={i} messageId={String(i)} scrollAnchor={i % 2 === 0}>
@@ -64,6 +74,26 @@ const meta = preview.meta({
     design: { type: 'figma', url: FIGMA },
     // Figma: no scroller component; the thread is drawn on Agent Builder › Surfaces.
     figmaProps: [],
+    guide: {
+      use: [
+        'The scrolling conversation in every agent surface: it opens at the latest message and follows new ones while the reader is at the end.',
+        'Mark the user’s turns with `scrollAnchor` so a new answer starts at its question; add `MessageScrollerButton` to jump back to the end.',
+        '`defaultScrollPosition="start"` for a transcript read from the top (a shared conversation or an export).',
+      ],
+      avoid: [
+        'Other long panels (settings, source lists, menus): use Scroll Area; it has no follow-the-end behavior.',
+        'A single turn or a static example: render Message and `MessageGroup` without the scroller.',
+      ],
+      content: [
+        'Name the viewport after the conversation (“Q3 launch plan conversation”), not “Messages”.',
+        'Keep turns in order; system notices go in as Marker items, not as bubbles.',
+      ],
+      a11y: [
+        '`MessageScrollerViewport` is a named, keyboard-scrollable region: always pass `aria-label`.',
+        'It never moves the reader while they scroll up; the jump button (“Scroll to end”) is a named button.',
+        'Announce streaming answers with a live region in the message, not by moving focus.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -86,7 +116,7 @@ const meta = preview.meta({
 export const Default = meta.story()
 
 Default.test('opens at the end; the button jumps back after scrolling up', async ({ canvas }) => {
-  const viewport = canvas.getByRole('region', { name: 'Label' })
+  const viewport = canvas.getByRole('region', { name: 'Q3 launch plan conversation' })
   const atEnd = () => viewport.scrollHeight - viewport.scrollTop - viewport.clientHeight < 8
   await waitFor(() => expect(atEnd()).toBe(true))
   // A user scroll: the wheel marks it as the reader's intent, then the position changes.
@@ -105,7 +135,7 @@ export const FromStart = meta.story({
   render: (args) => (
     <MessageScrollerProvider {...args}>
       <MessageScroller className="h-100 w-full max-w-(--shell-thread-max) rounded-lg border">
-        <MessageScrollerViewport aria-label="Label" className="px-4">
+        <MessageScrollerViewport aria-label="Q3 launch plan conversation" className="px-4">
           <MessageScrollerContent className="gap-6 py-4">
             {Array.from({ length: args.count ?? 12 }, (_, i) => (
               <MessageScrollerItem key={i} messageId={String(i)}>
@@ -137,7 +167,7 @@ export const Live = meta.story({
 })
 
 Live.test('stays at the end when a message arrives', async ({ canvas }) => {
-  const viewport = canvas.getByRole('region', { name: 'Label' })
+  const viewport = canvas.getByRole('region', { name: 'Q3 launch plan conversation' })
   const atEnd = () => viewport.scrollHeight - viewport.scrollTop - viewport.clientHeight < 8
   await waitFor(() => expect(atEnd()).toBe(true))
   await userEvent.click(canvas.getByRole('button', { name: 'Send' }))

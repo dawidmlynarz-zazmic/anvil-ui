@@ -85,6 +85,25 @@ const meta = preview.meta({
       { property: 'show action bar', values: 'boolean', code: 'render `DrawerFooter` or not' },
       { property: 'content', values: 'slot', code: '`DrawerBody` children' },
     ],
+    guide: {
+      use: [
+        'The mobile shell (below 768px): actions, short forms and details that would be a Dialog or Sheet on desktop.',
+        'Content the user dismisses with a swipe: model picker, attachment options, message actions on touch.',
+      ],
+      avoid: [
+        'Desktop layouts: use Dialog for focused tasks or Sheet for side panels.',
+        'Destructive confirmations: use Alert Dialog on every screen size.',
+      ],
+      content: [
+        'Title says the task (“Choose a model”); keep content short enough to scan without much scrolling.',
+        'Mobile footers use `align="stretch"`: full-width “Cancel” + a specific verb.',
+      ],
+      a11y: [
+        'Built on vaul (Radix Dialog): focus is trapped, Escape and outside click close it, focus returns to the trigger.',
+        'Dragging is not the only way to close: keep the close button or a Cancel action.',
+        'Always render `DrawerTitle`; the handle is decorative.',
+      ],
+    },
     docs: {
       story: { inline: false, height: '480px' },
       description: {

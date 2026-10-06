@@ -21,14 +21,25 @@ type DemoProps = {
   theme?: 'light' | 'dark'
 }
 
+/** Example copy per tone (the scenario in docs/content-guide.md): message, description, action. */
+const COPY: Record<Tone, [string, string, string]> = {
+  neutral: ['Conversation archived', '“Q3 launch plan” moved to Archive. Restore it within 30 days.', 'Undo'],
+  success: ['Saved to memory', 'I’ll keep answers concise, with bullet points.', 'View'],
+  destructive: [
+    'Couldn’t send the email',
+    'Mail didn’t respond. Check your connection and try again.',
+    'Retry',
+  ],
+}
+
 // Each story has its own Toaster (unmounted with the story), so no toast outlives it.
 const TOASTER = 'story'
 
 function show({
   tone = 'neutral',
   variant = 'compact',
-  message = 'Title',
-  description = 'Subtitle',
+  message = COPY[tone][0],
+  description = COPY[tone][1],
   action = true,
   cancel = variant === 'extended',
   onAction,
@@ -38,7 +49,7 @@ function show({
     toasterId: TOASTER,
     duration,
     description: variant === 'extended' ? description : undefined,
-    action: action ? { label: 'Undo', onClick: () => onAction?.() } : undefined,
+    action: action ? { label: COPY[tone][2], onClick: () => onAction?.() } : undefined,
     cancel: cancel ? { label: 'Dismiss', onClick: () => {} } : undefined,
   }
   if (tone === 'success') return toast.success(message, options)
@@ -110,6 +121,27 @@ const meta = preview.meta({
         ],
       },
     },
+    guide: {
+      use: [
+        'Brief confirmation of something that just happened, away from where the user is looking: “Conversation archived”, “Saved to memory”.',
+        'Offering a quick reversal (Undo) instead of asking for confirmation first.',
+        'Background results that finish later: a report generated, an email that failed to send (with Retry).',
+      ],
+      avoid: [
+        'Problems that persist or block the current view: use Alert. Decisions that need an answer: use Alert Dialog.',
+        'Feedback next to the thing that changed (a saved field, a copied link): show it inline or with a Tooltip.',
+        'Several toasts in a row for one task: combine them into one.',
+      ],
+      content: [
+        'Message says what happened, past tense, in a few words; the description adds the object or next step.',
+        'One action, a verb that says what it does (“Undo”, “Retry”, “View”); never the only way to do it.',
+      ],
+      a11y: [
+        'Toasts are announced in a live region; keep the message meaningful on its own.',
+        'They auto-dismiss: don’t put essential information or the only path to an action in them.',
+        'Hovering or focusing the stack pauses the timer; the close button is labelled “Close toast”.',
+      ],
+    },
     docs: {
       story: { inline: false, height: '420px' },
       description: {
@@ -127,8 +159,8 @@ const meta = preview.meta({
   args: {
     tone: 'neutral',
     variant: 'compact',
-    message: 'Title',
-    description: 'Subtitle',
+    message: COPY.neutral[0],
+    description: COPY.neutral[1],
     action: true,
     cancel: false,
     onAction: fn(),
@@ -154,21 +186,21 @@ Default.test(
   'the trigger shows a toast; its action runs and dismisses it',
   async ({ canvas, canvasElement, args }) => {
     await userEvent.click(canvas.getByRole('button', { name: 'Show toast' }))
-    const message = await body(canvasElement).findByText('Title')
+    const message = await body(canvasElement).findByText('Conversation archived')
     const toastElement = message.closest('[data-sonner-toast]') as HTMLElement
     await userEvent.click(within(toastElement).getByRole('button', { name: 'Undo' }))
     await expect(args.onAction).toHaveBeenCalledTimes(1)
-    await waitFor(() => expect(body(canvasElement).queryByText('Title')).toBeNull())
+    await waitFor(() => expect(body(canvasElement).queryByText('Conversation archived')).toBeNull())
   },
 )
 
 Default.test('the close button dismisses it', async ({ canvas, canvasElement }) => {
   await userEvent.click(canvas.getByRole('button', { name: 'Show toast' }))
-  const toastElement = (await body(canvasElement).findByText('Title')).closest(
+  const toastElement = (await body(canvasElement).findByText('Conversation archived')).closest(
     '[data-sonner-toast]',
   ) as HTMLElement
   await userEvent.click(within(toastElement).getByRole('button', { name: 'Close toast' }))
-  await waitFor(() => expect(body(canvasElement).queryByText('Title')).toBeNull())
+  await waitFor(() => expect(body(canvasElement).queryByText('Conversation archived')).toBeNull())
 })
 
 /** Figma variant=compact × tone: neutral, success, destructive. */
@@ -193,8 +225,10 @@ export const Extended = meta.story({
 })
 
 Extended.test('shows title, description, cancel and action', async ({ canvasElement }) => {
-  await waitFor(() => expect(body(canvasElement).getAllByText('Subtitle')).toHaveLength(3))
-  const first = body(canvasElement).getAllByText('Subtitle')[0].closest('[data-sonner-toast]') as HTMLElement
+  await waitFor(() =>
+    expect(body(canvasElement).getAllByText(/./, { selector: '[data-description]' })).toHaveLength(3),
+  )
+  const first = body(canvasElement).getByText(COPY.neutral[1]).closest('[data-sonner-toast]') as HTMLElement
   await expect(within(first).getByRole('button', { name: 'Dismiss' })).toBeInTheDocument()
   await expect(within(first).getByRole('button', { name: 'Undo' })).toBeInTheDocument()
 })

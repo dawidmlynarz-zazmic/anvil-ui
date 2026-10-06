@@ -63,6 +63,24 @@ const meta = preview.meta({
       { property: 'description', values: 'text', code: '`EmptyStateDescription` children' },
       { property: 'show actions', values: 'boolean', code: 'render `EmptyStateContent` (actions) or not' },
     ],
+    guide: {
+      use: [
+        'A list or view with nothing in it yet: no conversations, no sources, no files, no search results.',
+        'First-run moments, where one action gets people started (“New chat”, “Connect Drive”).',
+      ],
+      avoid: [
+        'Loading: use Skeleton. Errors that need fixing: use Alert with a retry action.',
+        'Small inline gaps in a list (one empty group): a short muted line of text is enough.',
+      ],
+      content: [
+        'Title says what is empty (“No conversations yet”); the description says what will appear or what to do next.',
+        'One primary action at most; a secondary link for help.',
+      ],
+      a11y: [
+        'The icon is decorative; the title carries the meaning.',
+        'When the view empties after an action (filters, deletion), move focus or announce the change.',
+      ],
+    },
     docs: {
       description: {
         component:

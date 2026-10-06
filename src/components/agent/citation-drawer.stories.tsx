@@ -16,13 +16,60 @@ import { CitationSourceItem } from './citation-source-item'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10663-2792'
 
-const SOURCES: { confidence?: Confidence; score?: string }[] = [
-  { confidence: 'high', score: '92%' },
-  { confidence: 'high', score: '92%' },
-  { confidence: 'medium', score: '64%' },
-  { confidence: 'medium', score: '64%' },
-  { confidence: 'low', score: '31%' },
-  {},
+const SOURCES: {
+  title: string
+  domain: string
+  path: string
+  snippet: string
+  confidence?: Confidence
+  score?: string
+}[] = [
+  {
+    title: 'Team plans for sync tools, compared',
+    domain: 'marketpulse.example',
+    path: '/reports/sync-tools-pricing-2026',
+    snippet: 'Most sync tools price team plans per seat, between $8 and $14 a month.',
+    confidence: 'high',
+    score: '92%',
+  },
+  {
+    title: 'Northwind Sync beta: what we learned',
+    domain: 'northwind.example',
+    path: '/blog/sync-beta-learnings',
+    snippet: 'Beta teams that finished onboarding in the first week were twice as likely to convert.',
+    confidence: 'high',
+    score: '89%',
+  },
+  {
+    title: '2026 developer tools survey',
+    domain: 'devsurvey.example',
+    path: '/2026/results',
+    snippet: '61% of respondents say file sync is part of their daily workflow.',
+    confidence: 'medium',
+    score: '68%',
+  },
+  {
+    title: 'Why trial conversion stalls after day three',
+    domain: 'analyticsweekly.example',
+    path: '/articles/trial-conversion',
+    snippet: 'Onboarding emails sent on day two lift trial conversion by up to 0.8 points.',
+    confidence: 'medium',
+    score: '64%',
+  },
+  {
+    title: 'Pricing pages that convert',
+    domain: 'marketpulse.example',
+    path: '/blog/pricing-pages',
+    snippet: 'Annual discounts above 20% rarely change the plan teams choose.',
+    confidence: 'low',
+    score: '31%',
+  },
+  {
+    title: 'Northwind Sync release notes',
+    domain: 'northwind.example',
+    path: '/blog/release-notes',
+    snippet: 'Selective sync and shared folders are available on every plan.',
+  },
 ]
 
 type DemoProps = {
@@ -53,8 +100,8 @@ function Demo({
       <CitationDrawerContent
         layout={layout}
         status={body === 'loaded' ? 'ready' : body}
-        emptyMessage="Subtitle"
-        title={`Title (${SOURCES.length})`}
+        emptyMessage="No sources for this answer. Sources appear here when Assistant searches the web or reads a file."
+        title={`Sources (${SOURCES.length})`}
         onOpenAutoFocus={focusOnOpen ? undefined : (e) => e.preventDefault()}
       >
         {search && <CitationDrawerSearch />}
@@ -64,10 +111,10 @@ function Demo({
               <li key={i}>
                 <CitationSourceItem
                   index={i + 1}
-                  title="Title"
-                  domain="Label"
-                  path="/label/value"
-                  snippet="Subtitle"
+                  title={source.title}
+                  domain={source.domain}
+                  path={source.path}
+                  snippet={source.snippet}
                   confidence={source.confidence}
                   score={source.score}
                   active={selected === i + 1}
@@ -104,6 +151,28 @@ const meta = preview.meta({
         code: '`status` loading · ready (your `CitationDrawerList`) · empty (`emptyMessage`)',
       },
     ],
+    guide: {
+      use: [
+        'Every source behind one answer, opened from a “Sources” button or the citations row under the message.',
+        '`layout="side"` on desktop next to the thread; bottom on mobile.',
+        'Add `CitationDrawerSearch` when an answer can cite more than about eight sources.',
+      ],
+      avoid: [
+        'A quick check of one citation: use Citation Hovercard on the chip.',
+        'Reviewing and excluding sources in a research flow: use Source Card.',
+        'Showing sources the agent didn’t cite: list only what supports this answer.',
+      ],
+      content: [
+        'Title: “Sources” plus the count (“Sources (6)”).',
+        'Each item: the page title, domain and path, and the snippet that was cited; order by relevance, as cited.',
+        'Empty: say what is empty and when sources appear (“Sources appear here when Assistant searches the web…”).',
+      ],
+      a11y: [
+        'It is a Sheet dialog: focus moves in on open, Escape closes, and focus returns to the trigger.',
+        'Source items are toggle buttons with `aria-pressed` for the selected one.',
+        'Loading is a status named “Loading sources”.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -129,7 +198,7 @@ export const Default = meta.story()
 Default.test('opens from the trigger; selecting a source marks it', async ({ canvas, canvasElement }) => {
   await userEvent.click(canvas.getByRole('button', { name: 'Open sources' }))
   const body = within(canvasElement.ownerDocument.body)
-  const drawer = await body.findByRole('dialog', { name: 'Title (6)' })
+  const drawer = await body.findByRole('dialog', { name: 'Sources (6)' })
   const items = within(drawer).getAllByRole('button', { name: /^Source/ })
   await expect(items).toHaveLength(6)
   await userEvent.click(items[2])

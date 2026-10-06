@@ -81,6 +81,26 @@ const meta = preview.meta({
         code: 'the selected slide (Embla state; controls `disabled:` at the ends), not a prop',
       },
     ],
+    guide: {
+      use: [
+        'A short row of peer items the user browses one at a time: generated image options, product cards, template previews.',
+        'When space is tight and the items don’t need to be compared side by side.',
+      ],
+      avoid: [
+        'Content the user must read or compare in full (sources, plan options): use a grid of Cards or a Table.',
+        'A scrolling row of chips or attachments: use `AttachmentGroup` or a Scroll Area.',
+        'Auto-advancing slides for important content: users miss what moves on its own.',
+      ],
+      content: [
+        'Keep slides the same kind and size; each one makes sense on its own.',
+        'Show how many there are (dots) and keep Previous / Next visible.',
+      ],
+      a11y: [
+        'The root is a region with `aria-roledescription="carousel"`, each item a group with `aria-roledescription="slide"`; name the region with `aria-label`.',
+        'Arrow keys move it when focused; Previous / Next and the dots (“Go to slide 2”) are named buttons.',
+        'If you add autoplay, provide a pause control and stop on hover and focus.',
+      ],
+    },
     docs: {
       description: {
         component:

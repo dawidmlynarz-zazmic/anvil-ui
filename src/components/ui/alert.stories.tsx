@@ -24,6 +24,16 @@ const FIGMA_INLINE_NOTE = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?
 const TONES = ['neutral', 'info', 'success', 'warning', 'destructive', 'agent'] as const
 type Tone = (typeof TONES)[number]
 
+/** Example copy per tone (the scenario in docs/content-guide.md). */
+const toneCopy: Record<Tone, [string, string]> = {
+  neutral: ['Drive disconnected', 'Reconnect Drive so the assistant can read your project files.'],
+  info: ['Memory is on', 'The assistant remembers preferences you share, like “Prefers concise answers”.'],
+  success: ['Calendar connected', 'The assistant can now check availability and draft invites.'],
+  warning: ['Approaching your usage limit', 'You have used 90% of this month’s messages.'],
+  destructive: ['Couldn’t reach Google Drive', 'Check your connection and try again.'],
+  agent: ['I used your saved preference', 'Answers are concise, with bullet points.'],
+}
+
 /** A fitting icon per tone (Figma: the icon is an instance-swap property, set per use). */
 const toneIcon: Record<Tone, LucideIcon> = {
   neutral: CircleCheckIcon,
@@ -53,8 +63,8 @@ function DemoAlert({
   size = 'default',
   withActions = false,
   onDismiss,
-  title = 'Title',
-  description = 'Subtitle',
+  title,
+  description,
   showIcon = true,
   showTitle = true,
   showDescription = true,
@@ -66,15 +76,15 @@ function DemoAlert({
       action={
         withActions ? (
           <Button variant="outline" intent="neutral" size="xs">
-            Retry
+            Reconnect
           </Button>
         ) : undefined
       }
       onDismiss={withActions ? (onDismiss ?? (() => {})) : undefined}
     >
       {showIcon && <Icon icon={toneIcon[tone]} />}
-      {showTitle && <AlertTitle>{title}</AlertTitle>}
-      {showDescription && <AlertDescription>{description}</AlertDescription>}
+      {showTitle && <AlertTitle>{title ?? toneCopy[tone][0]}</AlertTitle>}
+      {showDescription && <AlertDescription>{description ?? toneCopy[tone][1]}</AlertDescription>}
     </Alert>
   )
 }
@@ -112,6 +122,27 @@ const meta = preview.meta({
         code: '`size="xs"` + `tone` (inset; full-bleed and rule by className)',
       },
     ],
+    guide: {
+      use: [
+        'A persistent message about the current view that needs attention: a disconnected app, a failed step, a limit about to be reached.',
+        '`size="sm"` system notices in the thread (offline, rate limit, long chat); `size="xs"` notes inside a card.',
+        'Add one `action` that fixes the problem (Reconnect, Retry) and `onDismiss` when it can be ignored.',
+      ],
+      avoid: [
+        'Transient confirmation of something that just happened (“Conversation archived”): use Toast.',
+        'A view with nothing in it yet: use Empty State. A decision that blocks progress: use Alert Dialog.',
+        'Field-level validation: use `FieldError` on the field.',
+      ],
+      content: [
+        'Title says what happened in a few words (“Drive disconnected”); the description says what to do next.',
+        'Match the tone to the meaning, not the look: destructive only for errors, agent for the assistant’s own notes.',
+      ],
+      a11y: [
+        'Alert is `role="alert"` and interrupts screen readers; pass `role="status"` for non-urgent notices.',
+        'Tone is not conveyed by color alone: keep the icon and a clear title.',
+        'The dismiss button is labelled “Dismiss”; actions are real buttons in the tab order.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -128,8 +159,9 @@ const meta = preview.meta({
   ],
   args: {
     tone: 'neutral',
-    title: 'Title',
-    description: 'Subtitle',
+    title: 'Drive disconnected',
+    description: 'Reconnect Drive so the assistant can read your project files.',
+    withActions: true,
     showIcon: true,
     showTitle: true,
     showDescription: true,
@@ -151,8 +183,9 @@ export const Default = meta.story()
 
 Default.test('is announced with its title and description', async ({ canvas }) => {
   const alert = canvas.getByRole('alert')
-  await expect(alert).toHaveTextContent('Title')
-  await expect(alert).toHaveTextContent('Subtitle')
+  await expect(alert).toHaveTextContent('Drive disconnected')
+  await expect(alert).toHaveTextContent('Reconnect Drive so the assistant can read your project files.')
+  await expect(canvas.getByRole('button', { name: 'Reconnect' })).toBeVisible()
 })
 
 /** Figma tone=neutral · info · success · warning · destructive · agent. */
@@ -171,8 +204,8 @@ export const ShadcnVariant = meta.story({
   render: () => (
     <Alert variant="destructive">
       <Icon icon={CircleAlertIcon} />
-      <AlertTitle>Title</AlertTitle>
-      <AlertDescription>Subtitle</AlertDescription>
+      <AlertTitle>Couldn’t send the email</AlertTitle>
+      <AlertDescription>Mail rejected the request. Check the recipient and try again.</AlertDescription>
     </Alert>
   ),
 })
@@ -187,10 +220,10 @@ export const Parts = meta.story({
     <div className="flex flex-col gap-4">
       <Alert>
         <Icon icon={Trash2Icon} />
-        <AlertTitle>Title</AlertTitle>
+        <AlertTitle>3 files will be removed from this project</AlertTitle>
       </Alert>
       <Alert>
-        <AlertDescription>Subtitle</AlertDescription>
+        <AlertDescription>Files you upload stay in this project and are not shared.</AlertDescription>
       </Alert>
     </div>
   ),
@@ -201,13 +234,13 @@ export const WithList = meta.story({
   render: () => (
     <Alert tone="destructive">
       <Icon icon={CircleAlertIcon} />
-      <AlertTitle>Title</AlertTitle>
+      <AlertTitle>Couldn’t import 3 files</AlertTitle>
       <AlertDescription>
-        <p>Subtitle</p>
+        <p>These files are larger than 20 MB or in an unsupported format:</p>
         <ul className="list-inside list-disc">
-          <li>Label 1</li>
-          <li>Label 2</li>
-          <li>Label 3</li>
+          <li>launch-deck-final.key</li>
+          <li>product-demo.mov</li>
+          <li>archive-2024.zip</li>
         </ul>
       </AlertDescription>
     </Alert>
@@ -225,13 +258,13 @@ export const SystemNotices = meta.story({
     <div className="flex flex-col gap-3">
       {(
         [
-          ['warning', GaugeIcon, 'Upgrade'],
-          ['warning', ClockIcon, 'Retry'],
-          ['neutral', WifiOffIcon, null],
-          ['info', InfoIcon, 'New chat'],
-          ['destructive', TriangleAlertIcon, 'Continue'],
+          ['warning', GaugeIcon, 'You’ve used 90% of this month’s messages.', 'Upgrade'],
+          ['warning', ClockIcon, 'Too many requests. Try again in 30 seconds.', 'Retry'],
+          ['neutral', WifiOffIcon, 'You’re offline. Messages send when you reconnect.', null],
+          ['info', InfoIcon, 'This chat is getting long. Start a new one for better answers.', 'New chat'],
+          ['destructive', TriangleAlertIcon, 'The response stopped before it finished.', 'Continue'],
         ] as const
-      ).map(([tone, icon, action], i) => (
+      ).map(([tone, icon, text, action], i) => (
         <Alert
           key={i}
           role="status"
@@ -247,7 +280,7 @@ export const SystemNotices = meta.story({
           onDismiss={() => {}}
         >
           <Icon icon={icon} />
-          <AlertDescription>Subtitle</AlertDescription>
+          <AlertDescription>{text}</AlertDescription>
         </Alert>
       ))}
     </div>
@@ -267,7 +300,7 @@ export const InlineNote = meta.story({
       {TONES.map((tone) => (
         <Alert key={tone} tone={tone} size="xs">
           <Icon icon={toneIcon[tone]} />
-          <AlertDescription>Subtitle</AlertDescription>
+          <AlertDescription>{toneCopy[tone][1]}</AlertDescription>
         </Alert>
       ))}
     </div>

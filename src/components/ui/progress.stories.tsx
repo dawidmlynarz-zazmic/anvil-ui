@@ -23,6 +23,25 @@ const meta = preview.meta({
       },
       { property: 'thickness', values: '4 · 6 · 8', code: '`size` prop (sm · default · lg)' },
     ],
+    guide: {
+      use: [
+        'Progress of a task with a known size: uploads, imports, steps completed.',
+        'A share or quota (storage used, budget spent); `tone` for its meaning, e.g. warning near the limit.',
+      ],
+      avoid: [
+        'Unknown duration: use Spinner (or leave `value` undefined). The agent at work: use Pulse Dot or Text Shimmer.',
+        'Named steps people move through: use Stepper.',
+      ],
+      content: [
+        'Show a label and the value in text beside it: “60%”, “3 of 5 files”.',
+        'Keep `tone` for meaning (success when done, warning near a limit), not decoration.',
+      ],
+      a11y: [
+        'It is a `progressbar`: name it with `aria-label` or `aria-labelledby` on a visible label.',
+        'The value is exposed as `aria-valuenow`; announce completion separately (e.g. a Toast).',
+        'Do not rely on the fill color alone: the text beside it says the value.',
+      ],
+    },
     docs: {
       description: {
         component:

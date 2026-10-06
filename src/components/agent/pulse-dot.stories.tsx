@@ -19,6 +19,21 @@ const meta = preview.meta({
         code: 'animation frames of `animate-pulse-dot` (not a prop)',
       },
     ],
+    guide: {
+      use: [
+        'Show that the assistant is working, next to a line that says what it is doing.',
+        'The running state of a step (Step Status Icon uses it).',
+      ],
+      avoid: [
+        'Generic loading: use Spinner. The assistant composing a reply: use Typing Indicator.',
+        'Animating the status text itself: use Text Shimmer.',
+      ],
+      content: ['The text beside it is a present participle: “Searching the web…”.'],
+      a11y: [
+        'With `label` it is a `role="status"`; without one it is decorative, so the text beside it must say it.',
+        'Use one status per activity; the motion stops under reduced motion.',
+      ],
+    },
     docs: {
       description: {
         component:

@@ -8,6 +8,9 @@ import { InstructionsBanner } from './instructions-banner'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10737-3041'
 
+const PROJECT_INSTRUCTIONS =
+  'Refer to the product as Northwind Sync. Use Pacific Time for dates. Keep answers under 200 words, use bullet points, and end with next steps and owners.'
+
 const meta = preview.meta({
   title: 'Agent Builder/Instructions Banner',
   tags: ['agent-builder', 'memory'],
@@ -22,6 +25,27 @@ const meta = preview.meta({
         code: '`tone` prop (info · agent · neutral)',
       },
     ],
+    guide: {
+      use: [
+        'At the top of a thread, to show the context that shapes every answer: project instructions, the active persona, or a mode notice.',
+        '`tone` info for project instructions, agent for a persona, neutral for a notice (for example, web search off).',
+        'Pass the full instructions as `children` so the user can expand and check them; add Edit as the `action`.',
+      ],
+      avoid: [
+        'A single remembered fact used in one answer: use Memory Notice under that answer.',
+        'Reviewing or deleting everything the assistant remembers: use Memory Manager.',
+        'Errors or warnings about the conversation: use Alert.',
+      ],
+      content: [
+        'Title: what applies, with its name (“Project instructions · Q3 launch plan”, “Persona: Launch strategist”).',
+        '`detail`: the scope or effect in one line (“Applied to every chat in this project”).',
+        'Instructions: the user’s own words, as written; don’t paraphrase them.',
+      ],
+      a11y: [
+        'The expand control is a button named “Show instructions” with `aria-expanded`.',
+        'Dismiss is an icon button with an accessible name; the banner itself is not a live region, so it isn’t announced on every load.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -29,7 +53,12 @@ const meta = preview.meta({
       },
     },
   },
-  args: { tone: 'info' as const, title: 'Title', detail: 'Subtitle', onDismiss: fn() },
+  args: {
+    tone: 'info' as const,
+    title: 'Project instructions · Q3 launch plan',
+    detail: 'Applied to every chat in this project',
+    onDismiss: fn(),
+  },
   argTypes: {
     tone: { control: 'inline-radio', options: ['info', 'agent', 'neutral'] },
     title: { control: 'text' },
@@ -52,7 +81,7 @@ const meta = preview.meta({
         </Button>
       }
     >
-      Subtitle
+      {PROJECT_INSTRUCTIONS}
     </InstructionsBanner>
   ),
 })
@@ -73,7 +102,8 @@ export const Types = meta.story({
       <InstructionsBanner
         {...args}
         tone="info"
-
+        title="Project instructions · Q3 launch plan"
+        detail="Applied to every chat in this project"
         action={
           <Button variant="ghost" intent="neutral" size="xs">
             <Icon icon={PencilIcon} />
@@ -81,12 +111,13 @@ export const Types = meta.story({
           </Button>
         }
       >
-        Subtitle
+        {PROJECT_INSTRUCTIONS}
       </InstructionsBanner>
       <InstructionsBanner
         {...args}
         tone="agent"
-
+        title="Persona: Launch strategist"
+        detail="Direct and data-first; asks before making assumptions"
         action={
           <Button variant="ghost" intent="neutral" size="xs">
             <Icon icon={PencilIcon} />
@@ -94,12 +125,14 @@ export const Types = meta.story({
           </Button>
         }
       >
-        Subtitle
+        You are a launch strategist for Northwind Labs. Lead with the numbers, flag risks early, and ask one
+        clarifying question when the request is ambiguous.
       </InstructionsBanner>
       <InstructionsBanner
         {...args}
         tone="neutral"
-
+        title="Web search is off"
+        detail="Answers use only your files and connected apps"
         action={
           <Button variant="ghost" intent="neutral" size="xs">
             <Icon icon={GlobeIcon} />

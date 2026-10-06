@@ -15,10 +15,17 @@ const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=1066
 const ROLES = ['user', 'assistant', 'system', 'tool'] as const
 const STATUSES = ['queued', 'streaming', 'complete', 'failed'] as const
 
+const PROMPT = 'Summarize the Q3 launch plan'
+const ANSWER =
+  'Northwind Sync launches on September 16 after a two-week beta with 24 design partners. The plan focuses on trial conversion, which slipped to 4.6% last month, with a new onboarding email and an in-app checklist.'
+
 function Thinking({ status }: { status: 'running' | 'done' | 'failed' }) {
   return (
     <ThinkingPanel status={status}>
-      <ThinkingPanelTrigger title="Title" duration="Subtitle" />
+      <ThinkingPanelTrigger
+        title={status === 'running' ? 'Planning the summary…' : 'Planning the summary'}
+        duration={status === 'running' ? undefined : 'Thought for 4s'}
+      />
     </ThinkingPanel>
   )
 }
@@ -55,7 +62,7 @@ function Row({
   if (role === 'system')
     return (
       <MessageRow role="system" status={status}>
-        Subtitle · 14:02
+        {status === 'failed' ? 'Couldn’t connect to Drive' : 'Drive connected'} · 14:02
       </MessageRow>
     )
   if (role === 'tool')
@@ -63,23 +70,25 @@ function Row({
       <MessageRow
         role="tool"
         status={status}
-        author="Title"
+        author="Assistant"
         timestamp="14:02"
-        detail={status === 'complete' ? 'Subtitle' : status === 'failed' ? 'Subtitle' : undefined}
+        detail={
+          status === 'complete' ? 'Read 12 pages · 1.8s' : status === 'failed' ? 'File not found' : undefined
+        }
       >
-        Label
+        read_file q3-launch-plan.pdf
       </MessageRow>
     )
   if (role === 'user')
     return (
       <MessageRow role="user" status={status} timestamp="14:02" onRetry={onRetry}>
-        Subtitle
+        {PROMPT}
       </MessageRow>
     )
   return (
     <MessageRow
       status={status}
-      author="Title"
+      author="Assistant"
       timestamp="14:02"
       thinking={
         <Thinking status={status === 'queued' ? 'running' : status === 'failed' ? 'failed' : 'done'} />
@@ -87,20 +96,22 @@ function Row({
       citations={
         status === 'complete' && (
           <>
-            <CitationChip index={1} confidence="high" />
-            <CitationChip index={2} confidence="medium" />
+            <CitationChip index={1} domain="northwind.example/blog" confidence="high" />
+            <CitationChip index={2} domain="marketpulse.example" confidence="medium" />
           </>
         )
       }
       actions={status === 'complete' && <Actions />}
       error={
         <Alert tone="destructive">
-          <AlertTitle>Title</AlertTitle>
-          <AlertDescription>Subtitle</AlertDescription>
+          <AlertTitle>Couldn’t finish the summary</AlertTitle>
+          <AlertDescription>
+            The connection dropped while I was reading q3-launch-plan.pdf. Retry to continue.
+          </AlertDescription>
         </Alert>
       }
     >
-      {status === 'queued' ? null : 'Subtitle'}
+      {status === 'queued' ? null : ANSWER}
     </MessageRow>
   )
 }
@@ -134,6 +145,28 @@ const meta = preview.meta({
       { property: 'show citations', values: 'boolean', code: 'pass `citations` or not' },
       { property: 'show action toolbar', values: 'boolean', code: 'pass `actions` or not' },
     ],
+    guide: {
+      use: [
+        'Every turn in a conversation thread: the user’s prompt, the assistant’s answer, a system event or a tool call.',
+        'Fill the assistant slots only when they exist for that turn: `thinking`, `citations`, `widget`, `error`, `actions`.',
+        'Drive `status` from the stream: queued → streaming → complete, or failed with `error` (assistant) or `onRetry` (user).',
+      ],
+      avoid: [
+        'The empty placeholder before the first token: use Streaming Placeholder.',
+        'Several tool calls in one turn: put a Tool Call Accordion in the assistant row instead of one tool row per call.',
+        'Notices about the conversation itself (memory saved, instructions applied): use Memory Notice or Instructions Banner.',
+      ],
+      content: [
+        'Author: “Assistant” for the agent; the user row says “You”. Timestamps are short local times (“14:02”).',
+        'System rows are one short past-tense event (“Drive connected”). Tool rows show the call (“read_file q3-launch-plan.pdf”) and a past-tense `detail` (“Read 12 pages · 1.8s”).',
+        'Errors say what went wrong and what to do next (“The connection dropped… Retry to continue.”).',
+      ],
+      a11y: [
+        'Each row names its author, so screen readers know who is speaking without the avatar.',
+        'Queued content uses `--muted-foreground` instead of opacity, keeping 4.5:1 contrast.',
+        'Message actions are a toolbar named “Message actions” with labelled icon buttons.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -176,17 +209,24 @@ export const Composition = meta.story({
   render: () => (
     <div className="flex max-w-(--shell-thread-max) flex-col gap-8">
       <MessageRow role="user" timestamp="14:02">
-        Subtitle
+        {PROMPT}
       </MessageRow>
       <MessageRow
-        author="Title"
+        author="Assistant"
         timestamp="14:02"
         thinking={<Thinking status="done" />}
-        citations={<CitationChip index={1} domain="Label" confidence="high" />}
-        widget={<FileOutputCard kind="document" name="Title" meta="Subtitle" href="#file" />}
+        citations={
+          <>
+            <CitationChip index={1} domain="northwind.example/blog" confidence="high" />
+            <CitationChip index={2} domain="marketpulse.example" confidence="medium" />
+          </>
+        }
+        widget={
+          <FileOutputCard kind="document" name="q3-launch-summary.docx" meta="DOCX · 18 KB" href="#file" />
+        }
         actions={<Actions />}
       >
-        Subtitle
+        {ANSWER}
       </MessageRow>
     </div>
   ),
@@ -208,7 +248,7 @@ export const LongContent = meta.story({
       <MessageRow role="user" timestamp="14:02">
         {`${LONG} ${UNBROKEN}`}
       </MessageRow>
-      <MessageRow role="assistant" author="Title" timestamp="14:02">
+      <MessageRow role="assistant" author="Assistant" timestamp="14:02">
         {`${LONG} ${UNBROKEN}`}
       </MessageRow>
     </div>

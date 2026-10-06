@@ -32,6 +32,22 @@ const meta = preview.meta({
         code: 'an `<Icon>` child before or after the label',
       },
     ],
+    guide: {
+      use: [
+        'Navigation: to another page, a document, a source or an external site.',
+        'Inline in running text; `asChild` for router links.',
+      ],
+      avoid: ['An action that does not navigate: use Button (`variant="link"` when it must look like text).'],
+      content: [
+        'Say where it goes: “View all sources”, never “click here”.',
+        'Add the external-link icon when it leaves the product.',
+      ],
+      a11y: [
+        'A real `<a href>`: Enter follows it; focus shows the focus ring.',
+        '`disabled` sets `aria-disabled` and removes it from the tab order; explain why nearby.',
+        'Say so when a link opens in a new tab.',
+      ],
+    },
     docs: {
       description: {
         component:

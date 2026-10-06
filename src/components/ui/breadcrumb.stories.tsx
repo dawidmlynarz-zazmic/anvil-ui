@@ -25,7 +25,7 @@ type DemoProps = {
 }
 
 function DemoBreadcrumb({ back = false, avatar = true, levels = 2, current = true }: DemoProps) {
-  const crumbs = ['Label 1', 'Label 2', 'Label 3'].slice(0, levels)
+  const crumbs = ['Assistant', 'Projects', 'Q3 launch plan'].slice(-levels)
   return (
     <Breadcrumb>
       <BreadcrumbList>
@@ -56,7 +56,7 @@ function DemoBreadcrumb({ back = false, avatar = true, levels = 2, current = tru
           <>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>Label</BreadcrumbPage>
+              <BreadcrumbPage>Files</BreadcrumbPage>
             </BreadcrumbItem>
           </>
         )}
@@ -87,6 +87,27 @@ const meta = preview.meta({
       },
       { property: 'type', values: 'default', code: 'nothing (single value)' },
     ],
+    guide: {
+      use: [
+        'Showing where a page sits in a hierarchy (Projects / Q3 launch plan / Files) and letting people jump up a level.',
+        'A leading back button when the parent is the usual way out (a file opened from a project).',
+        'Collapse long trails with `BreadcrumbEllipsis`, keeping the first and the last two levels.',
+      ],
+      avoid: [
+        'Flat apps with one or two levels: the page title is enough.',
+        'Switching between sibling views: use Tabs. Step-by-step flows: use Stepper.',
+        'Primary navigation: use Sidebar.',
+      ],
+      content: [
+        'Each crumb is the destination’s own title, in sentence case; file names stay as they are.',
+        'The last item is the current page (`BreadcrumbPage`), never a link.',
+      ],
+      a11y: [
+        'Rendered as `nav` labelled “breadcrumb” with an ordered list; separators are hidden from screen readers.',
+        'The current page carries `aria-current="page"`.',
+        'Icon-only back buttons need an `aria-label` (“Back”); the ellipsis has a visually hidden “More” label.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -108,8 +129,8 @@ export const Default = meta.story()
 Default.test('a navigation trail ending on the current page', async ({ canvas }) => {
   const nav = canvas.getByRole('navigation', { name: 'breadcrumb' })
   await expect(nav).toBeInTheDocument()
-  await expect(canvas.getByRole('link', { name: 'Label 1' })).toHaveAttribute('href', '#1')
-  await expect(canvas.getByText('Label', { selector: '[aria-current=page]' })).toBeInTheDocument()
+  await expect(canvas.getByRole('link', { name: 'Projects' })).toHaveAttribute('href', '#1')
+  await expect(canvas.getByText('Files', { selector: '[aria-current=page]' })).toBeInTheDocument()
 })
 
 /** Figma back on, three levels. */
@@ -121,7 +142,7 @@ export const Collapsed = meta.story({
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink href="#1">Label 1</BreadcrumbLink>
+          <BreadcrumbLink href="#1">Assistant</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
@@ -129,11 +150,11 @@ export const Collapsed = meta.story({
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbLink href="#4">Label 4</BreadcrumbLink>
+          <BreadcrumbLink href="#4">Q3 launch plan</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbPage>Label</BreadcrumbPage>
+          <BreadcrumbPage>q3-launch-plan.pdf</BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>

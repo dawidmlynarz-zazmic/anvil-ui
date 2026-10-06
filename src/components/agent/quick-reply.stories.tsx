@@ -46,6 +46,26 @@ const meta = preview.meta({
         code: '`QuickReply` children; render as many as you need',
       },
     ],
+    guide: {
+      use: [
+        'One-tap replies and follow-up suggestions under the assistant’s latest message.',
+        '`QuickReplyFilter` to narrow an answer (“Last 30 days”, “Only PDFs”); pressed means applied.',
+        '`QuickReplyGroup` with a `label` (“Suggested follow-ups”); `layout="list"` for longer questions.',
+      ],
+      avoid: [
+        'A question the agent needs answered before it can continue: use Clarifying Question.',
+        'Tags, filters outside the thread or removable values: use Chip. Commands on a message: use Message Actions.',
+      ],
+      content: [
+        'Write each reply as the user would say it: “Make it shorter”, “Add a timeline”, “Compare with last quarter”.',
+        'Three or four suggestions at most, each one short line, sentence case, no trailing punctuation.',
+      ],
+      a11y: [
+        'Each reply is a real button; the group is a list, so screen readers hear the label and the count.',
+        'Filters expose `aria-pressed`; the remove × on an applied filter is part of the same named control.',
+        'After one is sent, disable the set so it isn’t sent twice.',
+      ],
+    },
     docs: {
       description: {
         component:

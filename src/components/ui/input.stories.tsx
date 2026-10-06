@@ -39,6 +39,27 @@ const meta = preview.meta({
         code: 'nothing (design-only)',
       },
     ],
+    guide: {
+      use: [
+        'Single-line text: names, emails, URLs, numbers, short answers.',
+        'Pass `label` (and `hint`) to get the full field anatomy; `marker` shows required or optional.',
+        'The bare control (no `label`) only where the context names it, e.g. a table cell or a toolbar.',
+      ],
+      avoid: [
+        'Several lines of text: use Textarea. A message to the assistant: use Prompt Input.',
+        'A choice from a known list: use Select or Combobox. Icons or buttons inside the field: use Input Group.',
+        'Wrapping it in another Field: with `label` it already is one.',
+      ],
+      content: [
+        'The label is a short noun (“Email”); the placeholder shows an example format, not instructions.',
+        'The hint states the constraint; an error says what is wrong and how to fix it.',
+      ],
+      a11y: [
+        'A bare input needs `aria-label` or `aria-labelledby`; a placeholder is not a label.',
+        '`aria-invalid` turns the hint into a FieldError (`role="alert"`), linked by `aria-describedby`.',
+        'Set the right `type` and `autoComplete` so browsers and assistive tech can help fill it.',
+      ],
+    },
     docs: {
       description: {
         component:

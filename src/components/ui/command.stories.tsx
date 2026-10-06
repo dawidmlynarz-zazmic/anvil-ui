@@ -14,7 +14,16 @@ import {
   CommandSeparator,
   CommandShortcut,
 } from './command'
-import { ArchiveIcon, FilePlusIcon, Icon, LinkIcon, SettingsIcon } from './icon'
+import {
+  ArchiveIcon,
+  Icon,
+  MessageSquareIcon,
+  MessageSquarePlusIcon,
+  PaperclipIcon,
+  PlugIcon,
+  SearchIcon,
+  SettingsIcon,
+} from './icon'
 import { Kbd } from './kbd'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10942-147'
@@ -22,27 +31,45 @@ const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=1094
 function Items() {
   return (
     <>
-      <CommandGroup heading="Title">
+      <CommandGroup heading="Actions">
         <CommandItem>
-          <Icon icon={FilePlusIcon} />
-          New file<CommandShortcut>⌘N</CommandShortcut>
+          <Icon icon={MessageSquarePlusIcon} />
+          New chat<CommandShortcut>⌘N</CommandShortcut>
         </CommandItem>
         <CommandItem>
-          <Icon icon={LinkIcon} />
-          Copy link
+          <Icon icon={SearchIcon} />
+          Search conversations<CommandShortcut>⌘F</CommandShortcut>
+        </CommandItem>
+        <CommandItem>
+          <Icon icon={PaperclipIcon} />
+          Attach file
         </CommandItem>
         <CommandItem disabled>
           <Icon icon={ArchiveIcon} />
-          Archive
+          Archive conversation
         </CommandItem>
       </CommandGroup>
       <CommandSeparator />
-      <CommandGroup heading="Title">
+      <CommandGroup heading="Recent conversations">
+        <CommandItem>
+          <Icon icon={MessageSquareIcon} />
+          Q3 launch plan
+        </CommandItem>
+        <CommandItem>
+          <Icon icon={MessageSquareIcon} />
+          Competitor pricing research
+        </CommandItem>
+      </CommandGroup>
+      <CommandSeparator />
+      <CommandGroup heading="Settings">
         <CommandItem>
           <Icon icon={SettingsIcon} />
-          Settings
+          Open settings<CommandShortcut>⌘,</CommandShortcut>
         </CommandItem>
-        <CommandItem>Log out</CommandItem>
+        <CommandItem>
+          <Icon icon={PlugIcon} />
+          Connect an app
+        </CommandItem>
       </CommandGroup>
     </>
   )
@@ -55,7 +82,11 @@ type DemoProps = Pick<ComponentProps<typeof Command>, 'loop' | 'shouldFilter' | 
 }
 
 /** A standalone Command; the input is controlled so a story can start with a query. */
-function DemoCommand({ placeholder = 'Placeholder', search: initialSearch = '', ...props }: DemoProps) {
+function DemoCommand({
+  placeholder = 'Search commands and conversations…',
+  search: initialSearch = '',
+  ...props
+}: DemoProps) {
   const [search, setSearch] = useState(initialSearch)
   // The control changed: follow it (state adjusted during render, not in an effect).
   const [prev, setPrev] = useState(initialSearch)
@@ -69,7 +100,7 @@ function DemoCommand({ placeholder = 'Placeholder', search: initialSearch = '', 
       <CommandList>
         <Items />
       </CommandList>
-      <CommandEmpty>Subtitle</CommandEmpty>
+      <CommandEmpty>No results. Try a different search.</CommandEmpty>
     </Command>
   )
 }
@@ -93,12 +124,17 @@ function DemoPalette({ open = false, onOpenChange }: PaletteProps) {
       <Button variant="outline" intent="neutral" onClick={() => onOpenChange?.(true)}>
         Open command palette <Kbd>⌘K</Kbd>
       </Button>
-      <CommandDialog open={open} onOpenChange={onOpenChange} title="Title" description="Subtitle">
-        <CommandInput placeholder="Placeholder" />
+      <CommandDialog
+        open={open}
+        onOpenChange={onOpenChange}
+        title="Command palette"
+        description="Search for a command or a conversation"
+      >
+        <CommandInput placeholder="Search commands and conversations…" />
         <CommandList>
           <Items />
         </CommandList>
-        <CommandEmpty>Subtitle</CommandEmpty>
+        <CommandEmpty>No results. Try a different search.</CommandEmpty>
       </CommandDialog>
     </>
   )
@@ -121,6 +157,26 @@ const meta = preview.type<{ args: PaletteProps }>().meta({
         code: '`CommandEmpty` shows when the search matches nothing (not a prop)',
       },
     ],
+    guide: {
+      use: [
+        'The command palette (`CommandDialog`, ⌘K): jump to any action or conversation by typing.',
+        'A searchable list of many options inside another surface; in a Popover it becomes the Combobox.',
+        'Group items by kind (“Actions”, “Recent conversations”, “Settings”) and show shortcuts with `CommandShortcut`.',
+      ],
+      avoid: [
+        'A short, fixed list of actions on a trigger: use Dropdown Menu. Picking one value in a form: use Select or Combobox.',
+        'The app’s main navigation: use Sidebar. Filtering results shown on the page: use a search field (Input Group).',
+      ],
+      content: [
+        'Items are verbs or the object’s name: “New chat”, “Search conversations”, “Open settings”, “Q3 launch plan”.',
+        'Placeholder says what can be searched (“Search commands and conversations…”). Empty: “No results. Try a different search.”',
+      ],
+      a11y: [
+        'cmdk gives the input `role="combobox"` and the items `role="option"`; arrow keys move the highlight, Enter runs it.',
+        '`CommandDialog` needs a `title` (visually hidden) so the dialog is named; focus starts in the input and Escape closes it.',
+        'Disabled items are skipped by the keyboard; don’t rely on the shortcut alone to describe an item.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -129,7 +185,7 @@ const meta = preview.type<{ args: PaletteProps }>().meta({
     },
   },
   args: {
-    placeholder: 'Placeholder',
+    placeholder: 'Search commands and conversations…',
     search: '',
     loop: false,
     shouldFilter: true,
@@ -149,17 +205,17 @@ export const Default = meta.story()
 
 Default.test('typing filters and highlights the match', async ({ canvas }) => {
   const input = canvas.getByRole('combobox')
-  await userEvent.type(input, 'Settings')
+  await userEvent.type(input, 'Open settings')
   await waitFor(() => expect(canvas.getAllByRole('option')).toHaveLength(1))
-  await expect(canvas.getByRole('option', { name: 'Settings' })).toHaveAttribute('data-selected', 'true')
+  await expect(canvas.getByRole('option', { name: /^Open settings/ })).toHaveAttribute('data-selected', 'true')
 })
 
 /** Figma empty=true: a query with no results. */
-export const Empty = meta.story({ args: { search: 'zzz' } })
+export const Empty = meta.story({ args: { search: 'roadmap' } })
 
 Empty.test('shows the empty state on load', async ({ canvas }) => {
-  await expect(canvas.getByRole('combobox')).toHaveValue('zzz')
-  await expect(await canvas.findByText('Subtitle')).toBeVisible()
+  await expect(canvas.getByRole('combobox')).toHaveValue('roadmap')
+  await expect(await canvas.findByText('No results. Try a different search.')).toBeVisible()
   await expect(canvas.queryAllByRole('option')).toHaveLength(0)
 })
 
@@ -177,7 +233,7 @@ export const Palette = meta.story({
 Palette.test('⌘K opens it with focus in the search, Escape closes it', async ({ canvasElement }) => {
   const body = within(canvasElement.ownerDocument.body)
   await userEvent.keyboard('{Meta>}k{/Meta}')
-  const dialog = await body.findByRole('dialog', { name: 'Title' })
+  const dialog = await body.findByRole('dialog', { name: 'Command palette' })
   await waitFor(() => expect(within(dialog).getByRole('combobox')).toHaveFocus())
   await userEvent.keyboard('{Escape}')
   await waitFor(() => expect(body.queryByRole('dialog')).toBeNull())

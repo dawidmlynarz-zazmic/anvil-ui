@@ -17,6 +17,18 @@ const meta = preview.meta({
     figmaProps: [
       { property: 'frame', values: '1 · 2 · 3', code: 'animation frames of `animate-waveform` (not a prop)' },
     ],
+    guide: {
+      use: [
+        'Live feedback while the microphone is listening, next to the pressed voice button in Prompt Input.',
+        '`active={false}` to freeze it while paused.',
+      ],
+      avoid: ['Playing back a recording: use Widget Audio. Generic loading: use Spinner.'],
+      content: ['Pair it with a visible state such as “Listening…” or the pressed voice button.'],
+      a11y: [
+        'Decorative unless `label` names it; the voice button carries the state with `aria-pressed`.',
+        'It stays still under reduced motion and with the Motion toolbar off.',
+      ],
+    },
     docs: {
       description: {
         component:

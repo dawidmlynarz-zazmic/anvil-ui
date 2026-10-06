@@ -7,6 +7,13 @@ import { MemoryManager, MemoryManagerItem, MemoryManagerSearch } from './memory-
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10730-2779'
 
+const MEMORIES = [
+  { text: 'Prefers concise answers with bullet points', tag: 'Preference' },
+  { text: 'Works in Pacific Time', tag: 'Preference' },
+  { text: 'Team uses Issue Tracker for launch tasks', tag: 'Workspace' },
+  { text: 'Leads the Northwind Sync launch at Northwind Labs', tag: 'Work' },
+]
+
 const meta = preview.meta({
   title: 'Agent Builder/Memory Manager',
   tags: ['agent-builder', 'memory'],
@@ -16,6 +23,27 @@ const meta = preview.meta({
     design: { type: 'figma', url: FIGMA },
     // Figma memory manager has no component properties.
     figmaProps: [],
+    guide: {
+      use: [
+        'In settings or a side panel, where the user reviews, edits and deletes what the assistant remembers about them.',
+        'The header Switch turns memory off for future chats without deleting anything.',
+        'Add `MemoryManagerSearch` once the list can grow past a screen.',
+      ],
+      avoid: [
+        'Telling the user a memory was used, saved or forgotten in a chat: use Memory Notice inline.',
+        'Project or persona instructions: show them in Instructions Banner and edit them in the project settings.',
+      ],
+      content: [
+        'Title: “Memory”; description: what memory does in one sentence.',
+        'Each item: one fact about the user in plain words, with a one-word `tag` (“Preference”, “Workspace”).',
+        '`note`: the count and who can see it; the destructive `action` names the scope (“Clear all”), confirmed with Alert Dialog.',
+      ],
+      a11y: [
+        'The Switch is labelled by the title, so it reads “Memory, on”.',
+        'Memories are a list; the search field is a searchbox named “Search memories”.',
+        'Rows keep `--muted-foreground` while memory is off instead of dropping opacity.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -24,9 +52,9 @@ const meta = preview.meta({
     },
   },
   args: {
-    title: 'Title',
-    description: 'Subtitle',
-    note: 'Subtitle',
+    title: 'Memory',
+    description: 'Assistant remembers details from your chats to make answers more useful.',
+    note: '4 memories · Only you can see them',
     onEnabledChange: fn(),
   },
   argTypes: {
@@ -43,16 +71,16 @@ const meta = preview.meta({
     <MemoryManager
       {...args}
       className="max-w-130"
-      search={<MemoryManagerSearch placeholder="Placeholder" />}
+      search={<MemoryManagerSearch placeholder="Search memories" />}
       action={
         <Button variant="ghost" intent="destructive" size="sm">
           Clear all
         </Button>
       }
     >
-      {['Label 1', 'Label 2', 'Label 3', 'Label 4'].map((label) => (
-        <MemoryManagerItem key={label} tag="Label" onEdit={() => {}} onDelete={() => {}}>
-          {label}
+      {MEMORIES.map((memory) => (
+        <MemoryManagerItem key={memory.text} tag={memory.tag} onEdit={() => {}} onDelete={() => {}}>
+          {memory.text}
         </MemoryManagerItem>
       ))}
     </MemoryManager>
@@ -63,7 +91,7 @@ const meta = preview.meta({
 export const Default = meta.story()
 
 Default.test('the switch turns memory off', async ({ args, canvas }) => {
-  const toggle = canvas.getByRole('switch', { name: 'Title' })
+  const toggle = canvas.getByRole('switch', { name: 'Memory' })
   await expect(toggle).toBeChecked()
   await userEvent.click(toggle)
   await expect(args.onEnabledChange).toHaveBeenCalledWith(false)

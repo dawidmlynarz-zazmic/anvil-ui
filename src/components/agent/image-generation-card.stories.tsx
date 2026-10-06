@@ -52,13 +52,15 @@ type DemoProps = {
   onUse?: (v: string) => void
 }
 
-function Demo({ status = 'ready', prompt = 'Subtitle', onCancel, onUse }: DemoProps) {
+const PROMPT = 'Hero image for the Northwind Sync launch, soft gradients'
+
+function Demo({ status = 'ready', prompt = PROMPT, onCancel, onUse }: DemoProps) {
   const [selected, setSelected] = useState('1')
   return (
     <ImageGenerationCard
       status={status}
       prompt={prompt}
-      statusText="Generating · 8s"
+      statusText="Generating image · 8s"
       onCancel={onCancel}
       actions={actions}
       primaryAction={
@@ -76,13 +78,13 @@ function Demo({ status = 'ready', prompt = 'Subtitle', onCancel, onUse }: DemoPr
       }
       variations={IMAGES.map((src, i) => ({
         value: String(i + 1),
-        label: `Label ${i + 1}`,
+        label: `Variation ${i + 1}`,
         image: <img src={src} alt="" />,
       }))}
       selected={selected}
       onSelectedChange={setSelected}
     >
-      <img src={IMAGES[0]} alt="Subtitle" />
+      <img src={IMAGES[0]} alt="Hero image for the Northwind Sync launch: soft blue and violet gradients" />
     </ImageGenerationCard>
   )
 }
@@ -105,6 +107,28 @@ const meta = preview.meta({
       { property: 'primary action', values: 'instance', code: '`primaryAction` (Variations · Use selected)' },
       { property: 'variation 1–4', values: 'frame', code: '`variations` in a single-choice Toggle Group' },
     ],
+    guide: {
+      use: [
+        'When the agent creates an image from a prompt: show the prompt, progress while generating, then the result.',
+        'Offer variations when the user is choosing a direction: `status` variations with a single-choice pick and Use selected.',
+        'Keep the follow-ups on the card (Download, Edit, Regenerate, Copy) in `actions`.',
+      ],
+      avoid: [
+        'An existing image or audio file in an answer: use Widget Media.',
+        'A generated document, deck or spreadsheet: use File Output Card.',
+        'An image the user attached: use Attachment.',
+      ],
+      content: [
+        '`prompt`: the prompt as the agent used it (“Hero image for the Northwind Sync launch, soft gradients”).',
+        '`statusText` while generating: a present participle with the time so far (“Generating image · 8s”).',
+        'Give each variation a short name (“Variation 1”) and the image `alt` text that describes it.',
+      ],
+      a11y: [
+        'The ready image needs real `alt` text describing what was generated; variation thumbnails are named by their label.',
+        'Variations are a single-choice Toggle Group: arrow keys move, the selection is `aria-checked`.',
+        'Actions are one `toolbar` (“Message actions”) of labelled icon buttons.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -112,7 +136,7 @@ const meta = preview.meta({
       },
     },
   },
-  args: { status: 'ready' as const, prompt: 'Subtitle', onCancel: fn(), onUse: fn() },
+  args: { status: 'ready' as const, prompt: PROMPT, onCancel: fn(), onUse: fn() },
   argTypes: {
     status: { control: 'inline-radio', options: ['generating', 'ready', 'variations'] },
     prompt: { control: 'text' },
@@ -157,7 +181,7 @@ export const Variations = meta.story({
 })
 
 Variations.test('picking a variation and using it', async ({ canvas, args }) => {
-  const second = canvas.getByRole('radio', { name: 'Label 2' })
+  const second = canvas.getByRole('radio', { name: 'Variation 2' })
   await userEvent.click(second)
   await expect(second).toHaveAttribute('aria-checked', 'true')
   await userEvent.click(canvas.getByRole('button', { name: 'Use selected' }))

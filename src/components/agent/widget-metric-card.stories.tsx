@@ -1,15 +1,29 @@
 import preview from '#.storybook/preview'
 import { expect } from 'storybook/test'
 
-import { UsersIcon } from '@/components/ui/icon'
+import { CircleDollarSignIcon, PercentIcon, UserMinusIcon, UsersIcon } from '@/components/ui/icon'
 
 import { WidgetMetricCard, WidgetMetricGroup } from './widget-metric-card'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10663-2929'
 const FIGMA_GROUP = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10663-3065'
 
-const SERIES = [4, 6, 5, 7, 8, 7, 10, 12]
-const DELTA = { up: '+12%', down: '−3%', neutral: '0%' } as const
+// Weekly active users over the last 8 weeks.
+const SERIES = [9800, 10150, 10020, 10640, 11020, 10910, 11530, 12480]
+
+// One real metric per trend (the Variants grid).
+const BY_TREND = {
+  up: { label: 'Weekly active users', value: '12,480', delta: '+8.2%', icon: UsersIcon },
+  down: { label: 'Trial conversion', value: '4.6%', delta: '−0.3 pt', icon: PercentIcon },
+  neutral: { label: 'Churn', value: '2.1%', delta: '0.0 pt', icon: UserMinusIcon },
+} as const
+
+const METRICS = [
+  { ...BY_TREND.up, trend: 'up' },
+  { ...BY_TREND.down, trend: 'down' },
+  { ...BY_TREND.neutral, trend: 'neutral' },
+  { label: 'Revenue', value: '$48.2k', delta: '+5.4%', icon: CircleDollarSignIcon, trend: 'up' },
+] as const
 
 const meta = preview.meta({
   title: 'Agent Builder/Widget Metric Card',
@@ -34,6 +48,28 @@ const meta = preview.meta({
       { property: 'state', values: 'loaded · loading', code: '`loading` prop (Skeletons)' },
       { property: 'widget metric group', values: '—', code: '`WidgetMetricGroup` (no properties)' },
     ],
+    guide: {
+      use: [
+        'When the answer is a number: one key metric with its change and what it compares to.',
+        'Several related metrics side by side: put the cards in a `WidgetMetricGroup` with an `aria-label`.',
+        'Add a `sparkline` when the trend matters more than the single value.',
+      ],
+      avoid: [
+        'Many rows of numbers to compare: use Widget Table.',
+        'A full chart with axes and a legend: use a chart widget, not a stretched sparkline.',
+        'Numbers inside a running sentence: keep them in the message text.',
+      ],
+      content: [
+        '`label`: the metric in sentence case (“Weekly active users”). `value`: formatted and rounded (“12,480”, “$48.2k”).',
+        '`delta` with its sign and unit (“+8.2%”, “−0.3 pt”); `period` says what it compares to (“vs last week”).',
+        'Set `trend` by direction, not by good or bad, so up is always the same colour.',
+      ],
+      a11y: [
+        'The delta Badge carries its sign in text, so the trend isn’t told by colour alone.',
+        'While `loading`, the card is `aria-busy`; the sparkline is decorative.',
+        '`WidgetMetricGroup` is a `group`: name it with `aria-label` (“Northwind Sync this week”).',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -42,10 +78,10 @@ const meta = preview.meta({
     },
   },
   args: {
-    label: 'Label',
-    value: 'Value',
-    delta: '+12%',
-    period: 'Subtitle',
+    label: 'Weekly active users',
+    value: '12,480',
+    delta: '+8.2%',
+    period: 'vs last week',
     trend: 'up' as const,
     icon: UsersIcon,
     size: 'default' as const,
@@ -69,8 +105,8 @@ const meta = preview.meta({
 export const Default = meta.story()
 
 Default.test('shows the value and the delta badge', async ({ canvas }) => {
-  await expect(canvas.getByText('Value')).toBeVisible()
-  await expect(canvas.getByText('+12%')).toHaveAttribute('data-tone', 'success')
+  await expect(canvas.getByText('12,480')).toBeVisible()
+  await expect(canvas.getByText('+8.2%')).toHaveAttribute('data-tone', 'success')
 })
 
 /** Figma trend × size, loaded and loading, with and without a sparkline. */
@@ -84,9 +120,9 @@ export const Variants = meta.story({
             <WidgetMetricCard
               key={trend}
               {...args}
+              {...BY_TREND[trend]}
               size={size}
               trend={trend}
-              delta={DELTA[trend]}
               sparkline={trend === 'up' ? SERIES : undefined}
               className="w-56"
             />
@@ -112,16 +148,9 @@ export const Group = meta.story({
   parameters: { design: { type: 'figma', url: FIGMA_GROUP } },
   decorators: [(Story) => <div className="w-200">{Story()}</div>],
   render: (args) => (
-    <WidgetMetricGroup aria-label="Title">
-      {(['Label 1', 'Label 2', 'Label 3', 'Label 4'] as const).map((label, i) => (
-        <WidgetMetricCard
-          key={label}
-          {...args}
-          label={label}
-          size="compact"
-          trend={i === 1 ? 'down' : i === 3 ? 'neutral' : 'up'}
-          delta={i === 1 ? DELTA.down : i === 3 ? DELTA.neutral : DELTA.up}
-        />
+    <WidgetMetricGroup aria-label="Northwind Sync this week">
+      {METRICS.map((metric) => (
+        <WidgetMetricCard key={metric.label} {...args} {...metric} size="compact" />
       ))}
     </WidgetMetricGroup>
   ),

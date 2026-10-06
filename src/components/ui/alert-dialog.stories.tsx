@@ -95,6 +95,26 @@ const meta = preview.meta({
       },
       { property: 'loading', values: 'false · true', code: '`AlertDialogAction` `loading` prop' },
     ],
+    guide: {
+      use: [
+        'Confirming the user’s own destructive or irreversible action: deleting a conversation, clearing memory, revoking an app.',
+        'When the user must decide before anything else happens: it blocks the page, has no close button and ignores outside clicks.',
+      ],
+      avoid: [
+        'Forms or focused tasks: use Dialog. Side tasks that keep the page in view: use Sheet; on mobile, Drawer.',
+        'Approving an action the agent wants to take: use Approval Card inline in the thread.',
+        'Reversible actions: act right away and offer Undo in a Toast (Sonner).',
+      ],
+      content: [
+        'Title names the object and asks: “Delete “Q3 launch plan”?”. Description states the consequence: “Its 14 messages and 3 files will be permanently removed.”',
+        'Actions: “Cancel” + the verb (“Delete”), never “OK” or “Yes”. Use `intent="destructive"` for the action.',
+      ],
+      a11y: [
+        'Radix gives it `role="alertdialog"`, traps focus and returns it to the trigger; Escape cancels.',
+        'Focus starts on Cancel so Enter never confirms the destructive action by accident.',
+        'Title and description are wired to `aria-labelledby` / `aria-describedby`; always render both.',
+      ],
+    },
     docs: {
       story: { inline: false, height: '320px' },
       description: {

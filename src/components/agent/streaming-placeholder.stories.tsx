@@ -20,6 +20,26 @@ const meta = preview.meta({
         code: '`variant="dots"`; the frames are the `animate-typing-dot` animation',
       },
     ],
+    guide: {
+      use: [
+        'In the assistant’s place in the thread from send until the first token arrives; replace it with the Message Row as soon as text streams.',
+        '`variant="dots"` in compact shells (popover, side panel) or chat-style threads; skeleton when the answer will be long.',
+        'Pick `length` to match the expected answer, so the thread doesn’t jump when it arrives.',
+      ],
+      avoid: [
+        'Showing the reasoning: use Thinking Panel. Showing a running tool: use Tool Log Line or Tool Call Item.',
+        'Loading a page or a list: use Skeleton.',
+        'Keeping it on screen after streaming starts: the streaming caret in Message Row takes over.',
+      ],
+      content: [
+        '`label`: what the agent is doing right now, as a present participle (“Reading q3-launch-plan.pdf…”, “Searching the web…”).',
+        'Dots: the label is not shown but still names the status (“Assistant is typing”).',
+      ],
+      a11y: [
+        'It is a `role="status"` named by `label`, so the wait is announced once, not every frame.',
+        'The shimmer and dots stop under reduced motion.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -27,7 +47,7 @@ const meta = preview.meta({
       },
     },
   },
-  args: { variant: 'skeleton' as const, length: 'short' as const, label: 'Subtitle' },
+  args: { variant: 'skeleton' as const, length: 'short' as const, label: 'Reading q3-launch-plan.pdf…' },
   argTypes: {
     variant: { control: 'inline-radio', options: ['skeleton', 'dots'] },
     length: { control: 'inline-radio', options: ['short', 'medium', 'long'] },
@@ -40,7 +60,7 @@ const meta = preview.meta({
 export const Default = meta.story()
 
 Default.test('is a status named by its label', async ({ canvas }) => {
-  await expect(canvas.getByRole('status', { name: 'Subtitle' })).toBeVisible()
+  await expect(canvas.getByRole('status', { name: 'Reading q3-launch-plan.pdf…' })).toBeVisible()
 })
 
 /** Figma length: short, medium, long. */
@@ -55,9 +75,9 @@ export const Lengths = meta.story({
 })
 
 /** `variant="dots"` (Figma typing indicator): three dots in a muted pill. */
-export const Dots = meta.story({ args: { variant: 'dots' } })
+export const Dots = meta.story({ args: { variant: 'dots', label: 'Assistant is typing' } })
 
 Dots.test('is a named status with three dots', async ({ canvas }) => {
-  const status = canvas.getByRole('status', { name: 'Subtitle' })
+  const status = canvas.getByRole('status', { name: 'Assistant is typing' })
   await expect(status.children).toHaveLength(3)
 })

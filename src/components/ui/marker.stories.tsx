@@ -18,6 +18,24 @@ const meta = preview.meta({
     design: { type: 'figma', url: FIGMA },
     // Figma: no Marker component; the message row draws it with role system (see Message Row).
     figmaProps: [],
+    guide: {
+      use: [
+        'An event line inside a thread: someone joined, files were shared, the connection dropped.',
+        '`variant="separator"` for a day break; a single inline link for a follow-up such as “Undo”.',
+      ],
+      avoid: [
+        'An error that needs action: use Alert or System Banner. A message: use Message Bubble.',
+        'A divider outside a thread: use Separator.',
+      ],
+      content: [
+        'One short line in the past tense, with a time when it helps: “Files shared · 14:02”.',
+        'At most one link, and it says what it does.',
+      ],
+      a11y: [
+        'The icon is decorative; the text is read in thread order.',
+        'It is not a live region: announce important events another way (a Toast or status).',
+      ],
+    },
     docs: {
       description: {
         component:

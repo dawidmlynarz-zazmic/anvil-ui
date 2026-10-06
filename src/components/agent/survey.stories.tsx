@@ -6,15 +6,25 @@ import { Survey, type SurveyQuestion } from './survey'
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10726-2241'
 
 const QUESTIONS: SurveyQuestion[] = [
-  { id: 'q1', kind: 'single', question: 'Title', options: ['Label 1', 'Label 2', 'Label 3', 'Label 4'] },
+  {
+    id: 'q1',
+    kind: 'single',
+    question: 'How often do you use the assistant?',
+    options: ['Every day', 'A few times a week', 'A few times a month', 'Rarely'],
+  },
   {
     id: 'q2',
     kind: 'multiple',
-    question: 'Title',
-    hint: 'Subtitle',
-    options: ['Label 1', 'Label 2', 'Label 3', 'Label 4', 'Label 5'],
+    question: 'What do you use it for?',
+    hint: 'Select all that apply.',
+    options: ['Research', 'Writing drafts', 'Summarizing files', 'Data and charts', 'Planning projects'],
   },
-  { id: 'q3', kind: 'text', question: 'Title', placeholder: 'Placeholder' },
+  {
+    id: 'q3',
+    kind: 'text',
+    question: 'What would make the assistant more useful?',
+    placeholder: 'Tell us in a sentence or two',
+  },
 ]
 
 const meta = preview.meta({
@@ -45,6 +55,27 @@ const meta = preview.meta({
       },
       { property: 'complete · title · detail', values: 'text', code: '`doneTitle`, `doneDescription`' },
     ],
+    guide: {
+      use: [
+        'A short study inside the chat: two to five questions about how people use the product.',
+        'One question per step with progress, so it never feels long; let users Skip any question.',
+      ],
+      avoid: [
+        'A single score: use Rating (one task) or NPS (loyalty). A single choice for a group: use Poll.',
+        'Why one answer was bad: use Feedback Reason.',
+        'Long research surveys: link out to a full form instead of a card in the thread.',
+      ],
+      content: [
+        '`title` names the survey (“Quick survey”); `estimate` sets expectations (“about 1 min”).',
+        'Questions are plain and about the user (“How often do you use the assistant?”); `hint` only when the answer type needs it (“Select all that apply.”).',
+        'Done: thank the user and say what happens next.',
+      ],
+      a11y: [
+        'Each step is a FieldSet whose legend is the question; options use Radio Group or Checkboxes with labels.',
+        'Progress is a labelled progress bar (“Survey progress”) plus the “1 of 3” text.',
+        'The done state is `role="status"`, so finishing is announced.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -53,11 +84,11 @@ const meta = preview.meta({
     },
   },
   args: {
-    title: 'Title',
+    title: 'Quick survey',
     questions: QUESTIONS,
-    estimate: 'Subtitle',
-    doneTitle: 'Title',
-    doneDescription: 'Subtitle',
+    estimate: 'about 1 min',
+    doneTitle: 'Thanks for your answers',
+    doneDescription: 'The Northwind Labs team reads every response.',
     onSubmit: fn(),
     onClose: fn(),
   },
@@ -88,15 +119,19 @@ export const Default = meta.story({
 
 Default.test('walks the steps and submits the answers', async ({ canvas, args }) => {
   await expect(canvas.getByRole('button', { name: 'Back' })).toBeDisabled()
-  await userEvent.click(canvas.getByRole('radio', { name: 'Label 2' }))
+  await userEvent.click(canvas.getByRole('radio', { name: 'A few times a week' }))
   await userEvent.click(canvas.getByRole('button', { name: 'Next' }))
-  await userEvent.click(canvas.getByRole('checkbox', { name: 'Label 1' }))
-  await userEvent.click(canvas.getByRole('checkbox', { name: 'Label 3' }))
+  await userEvent.click(canvas.getByRole('checkbox', { name: 'Research' }))
+  await userEvent.click(canvas.getByRole('checkbox', { name: 'Summarizing files' }))
   await userEvent.click(canvas.getByRole('button', { name: 'Next' }))
-  await userEvent.type(canvas.getByRole('textbox'), 'Value')
+  await userEvent.type(canvas.getByRole('textbox'), 'Remember my launch checklist.')
   await userEvent.click(canvas.getByRole('button', { name: 'Submit' }))
-  await expect(args.onSubmit).toHaveBeenCalledWith({ q1: 'Label 2', q2: ['Label 1', 'Label 3'], q3: 'Value' })
-  await expect(canvas.getByRole('status')).toHaveTextContent('Title')
+  await expect(args.onSubmit).toHaveBeenCalledWith({
+    q1: 'A few times a week',
+    q2: ['Research', 'Summarizing files'],
+    q3: 'Remember my launch checklist.',
+  })
+  await expect(canvas.getByRole('status')).toHaveTextContent('Thanks for your answers')
   await userEvent.click(canvas.getByRole('button', { name: 'Close' }))
   await expect(args.onClose).toHaveBeenCalledOnce()
 })
@@ -105,8 +140,8 @@ Default.test('walks the steps and submits the answers', async ({ canvas, args })
 export const Steps = meta.story({
   render: (args) => (
     <div className="grid w-290 grid-cols-2 items-start gap-4">
-      <Survey {...args} defaultAnswers={{ q1: 'Label 2', q2: ['Label 1', 'Label 2'] }} />
-      <Survey {...args} defaultStep={1} defaultAnswers={{ q2: ['Label 1', 'Label 2'] }} />
+      <Survey {...args} defaultAnswers={{ q1: 'A few times a week', q2: ['Research', 'Writing drafts'] }} />
+      <Survey {...args} defaultStep={1} defaultAnswers={{ q2: ['Research', 'Writing drafts'] }} />
       <Survey {...args} defaultStep={2} />
       <Survey {...args} defaultStep={3} />
     </div>
@@ -116,5 +151,5 @@ export const Steps = meta.story({
 Steps.test('Back returns to the previous step', async ({ canvas }) => {
   const [, second] = canvas.getAllByRole('button', { name: 'Back' })
   await userEvent.click(second)
-  await expect(canvas.getAllByRole('radio', { name: 'Label 1' })).toHaveLength(2)
+  await expect(canvas.getAllByRole('radio', { name: 'Every day' })).toHaveLength(2)
 })

@@ -27,6 +27,24 @@ const meta = preview.meta({
         code: 'selectors: `hover:` (drawn as default) · `focus-visible:` · `disabled:` / `data-[disabled]:` (not a prop)',
       },
     ],
+    guide: {
+      use: [
+        'An approximate value on a continuous scale where the position matters more than the number.',
+        'A range (two thumbs) such as a price or date span.',
+      ],
+      avoid: [
+        'An exact number: use Input (`type="number"`). A few named options: use Radio Group or Toggle Group.',
+      ],
+      content: [
+        'Label it and show the current value with its unit beside it.',
+        'Choose `min`, `max` and `step` so each keyboard step is meaningful.',
+      ],
+      a11y: [
+        'Name it with `aria-label` or a FieldLabel (`aria-labelledby`); the name reaches every thumb.',
+        'Arrow keys step, Page Up / Down jump, Home / End go to the ends.',
+        'Show the value as text, not only as the thumb position.',
+      ],
+    },
     docs: {
       description: {
         component:

@@ -15,6 +15,14 @@ const ACTION: Record<ActionStatusValue, string> = {
   expired: 'Request again',
   undone: 'Redo',
 }
+/** The beta invite email (send_email) through its lifecycle. */
+const MESSAGE: Record<ActionStatusValue, string> = {
+  executing: 'Sending to 24 recipients…',
+  done: 'Sent to 24 recipients',
+  failed: 'Couldn’t reach Mail. Check the connection and try again.',
+  expired: 'Approval expired after 24 hours',
+  undone: 'Email unsent',
+}
 
 const meta = preview.meta({
   title: 'Molecules/Action Status',
@@ -27,6 +35,25 @@ const meta = preview.meta({
       { property: 'state', values: 'executing · done · failed · expired · undone', code: '`status` prop' },
       { property: 'message', values: 'text', code: 'children' },
     ],
+    guide: {
+      use: [
+        'The bottom strip of an action card (Approval Card, Connector Card) once the user has decided: executing with `progress`, then done, failed, expired or undone.',
+        'One follow-up `action` per state: Cancel while running, Undo when done, Retry when failed, Request again when expired.',
+      ],
+      avoid: [
+        'Progress of the agent’s own steps: use Tool Log Line or Tool Call Accordion. A page-level notice: use Alert or a Toast (Sonner).',
+        'A standalone progress indicator with no card: use Progress.',
+      ],
+      content: [
+        'Present participle while running (“Sending to 24 recipients…”), past tense when done (“Sent to 24 recipients”).',
+        'Failures say what went wrong and what to do (“Couldn’t reach Mail. Check the connection and try again.”).',
+      ],
+      a11y: [
+        '`role="status"`: each change is announced politely without moving focus.',
+        'The state is carried by the icon and the message text, not only the tint.',
+        'The progress bar is a named `progressbar`; the xs action is a real Button.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -34,7 +61,7 @@ const meta = preview.meta({
       },
     },
   },
-  args: { status: 'executing' as const, progress: 40, children: 'Subtitle' },
+  args: { status: 'executing' as const, progress: 40, children: MESSAGE.executing },
   argTypes: {
     status: { control: 'select', options: STATUSES },
     progress: { control: { type: 'range', min: 0, max: 100, step: 5 } },
@@ -59,7 +86,7 @@ const meta = preview.meta({
 export const Default = meta.story()
 
 Default.test('announces the status', async ({ canvas }) => {
-  await expect(canvas.getByRole('status')).toHaveTextContent('Subtitle')
+  await expect(canvas.getByRole('status')).toHaveTextContent('Sending to 24 recipients…')
   await expect(canvas.getByRole('progressbar')).toBeInTheDocument()
 })
 
@@ -72,6 +99,7 @@ export const Statuses = meta.story({
           <ActionStatus
             {...args}
             status={status}
+            children={MESSAGE[status]}
             action={
               <Button variant="ghost" intent="neutral" size="xs">
                 {ACTION[status]}

@@ -12,16 +12,50 @@ import {
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10734-3012'
 
+/** The three calls of one turn: search the web, read the plan, chart the metrics. */
+const CALLS = [
+  {
+    name: 'web_search',
+    running: 'Searching the web…',
+    done: 'Searched 6 sites',
+    duration: '1.6s',
+    input: '{\n  "query": "Northwind Sync competitor pricing 2026",\n  "max_results": 6\n}',
+    output: 'Found 6 results from marketpulse.example, devsurvey.example and 4 more.',
+  },
+  {
+    name: 'read_file',
+    running: 'Reading q3-launch-plan.pdf…',
+    done: 'Read q3-launch-plan.pdf',
+    duration: '0.9s',
+    input: '{\n  "path": "q3-launch-plan.pdf"\n}',
+    output: '12 pages · 4,860 words. Sections: Goals, Timeline, Pricing, Risks.',
+  },
+  {
+    name: 'create_chart',
+    running: 'Creating the chart…',
+    done: 'Created a line chart',
+    duration: '1.7s',
+    input: '{\n  "type": "line",\n  "metric": "weekly_active_users",\n  "weeks": 8\n}',
+    output: 'Weekly active users, last 8 weeks: 12,480 (+8.2%).',
+  },
+] as const
+
 function Call({ index, ...props }: React.ComponentProps<typeof ToolCallItem> & { index: number }) {
+  const call = CALLS[index - 1]
+  const running = props.status === 'running'
   return (
     <ToolCallItem {...props}>
-      <ToolCallItemTrigger name={<>Label {index}</>} summary="Subtitle" duration="1.4s" />
+      <ToolCallItemTrigger
+        name={call.name}
+        summary={running ? call.running : call.done}
+        duration={running ? undefined : call.duration}
+      />
       <ToolCallItemContent>
         <ToolCallItemSection label="Input">
-          <ToolCallItemCode>{'{ "key": "Value" }'}</ToolCallItemCode>
+          <ToolCallItemCode>{call.input}</ToolCallItemCode>
         </ToolCallItemSection>
         <ToolCallItemSection label="Output">
-          <p>Subtitle</p>
+          <p>{call.output}</p>
         </ToolCallItemSection>
       </ToolCallItemContent>
     </ToolCallItem>
@@ -32,7 +66,11 @@ function Group(props: React.ComponentProps<typeof ToolCallAccordion>) {
   const running = props.status === 'running'
   return (
     <ToolCallAccordion {...props}>
-      <ToolCallAccordionTrigger title="Title" summary="Label 1, Label 2, Label 3" duration="4.2s" />
+      <ToolCallAccordionTrigger
+        title={running ? 'Using tools…' : 'Used 3 tools'}
+        summary={running ? 'web_search, read_file' : 'web_search, read_file, create_chart'}
+        duration={running ? undefined : '4.2s'}
+      />
       <ToolCallAccordionContent>
         <Call index={1} status="done" />
         <Call index={2} status={running ? 'running' : 'done'} />
@@ -56,6 +94,26 @@ const meta = preview.meta({
         code: 'collapsed / expanded = `open` prop (`data-[state=open]`); running = `status="running"`',
       },
     ],
+    guide: {
+      use: [
+        'Two or more tool calls in one assistant turn, collapsed to one line above the answer.',
+        'While the agent works, `status="running"` shows the pulse and the calls so far; switch to done when the last call ends.',
+      ],
+      avoid: [
+        'A single call: use Tool Call Item on its own.',
+        'Inline progress with nothing to inspect: use Tool Log Line.',
+        'Reasoning without tool calls: use Thinking Panel.',
+      ],
+      content: [
+        'Title: the count, past tense when done (“Used 3 tools”); “Using tools…” while running.',
+        '`summary`: the tool ids in call order (“web_search, read_file, create_chart”); it truncates, so keep the order meaningful.',
+        '`duration`: total time for the group (“4.2s”), only once done.',
+      ],
+      a11y: [
+        'The header and each call are separate disclosure buttons with `aria-expanded`.',
+        'Opening the group doesn’t open the calls; each opens on its own, so keyboard users aren’t flooded with detail.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -77,8 +135,8 @@ const meta = preview.meta({
 export const Default = meta.story()
 
 Default.test('opens to the calls; each call opens on its own', async ({ canvas }) => {
-  await userEvent.click(canvas.getByRole('button', { name: /Title/ }))
-  const call = canvas.getByRole('button', { name: /^Label 2/ })
+  await userEvent.click(canvas.getByRole('button', { name: /Used 3 tools/ }))
+  const call = canvas.getByRole('button', { name: /^read_file/ })
   await userEvent.click(call)
   await expect(call).toHaveAttribute('aria-expanded', 'true')
   await expect(canvas.getByText('Input')).toBeVisible()
@@ -90,7 +148,11 @@ export const States = meta.story({
     <div className="flex flex-col gap-6">
       <Group />
       <ToolCallAccordion defaultOpen>
-        <ToolCallAccordionTrigger title="Title" summary="Label 1, Label 2, Label 3" duration="4.2s" />
+        <ToolCallAccordionTrigger
+          title="Used 3 tools"
+          summary="web_search, read_file, create_chart"
+          duration="4.2s"
+        />
         <ToolCallAccordionContent>
           <Call index={1} status="done" />
           <Call index={2} status="done" defaultOpen />

@@ -15,7 +15,7 @@ import {
 } from './select'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=56-121'
-const OPTIONS = ['Label 1', 'Label 2', 'Label 3']
+const OPTIONS = ['Concise', 'Balanced', 'Detailed']
 
 type DemoProps = SelectTriggerProps & {
   defaultValue?: string
@@ -31,7 +31,7 @@ function DemoSelect({
   disabled,
   open,
   onOpenChange,
-  placeholder = 'Placeholder',
+  placeholder = 'Choose a style',
   ...trigger
 }: DemoProps) {
   return (
@@ -52,23 +52,23 @@ function DemoSelect({
 
 /** Groups, labels and a separator inside the list. */
 function GroupedSelect({ open, onOpenChange }: Pick<DemoProps, 'open' | 'onOpenChange'>) {
-  const [value, setValue] = useState('1')
+  const [value, setValue] = useState('balanced')
   return (
     <Select value={value} onValueChange={setValue} open={open} onOpenChange={onOpenChange}>
-      <SelectTrigger label="Label">
+      <SelectTrigger label="Model">
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectLabel>Title</SelectLabel>
-          <SelectItem value="1">Label 1</SelectItem>
-          <SelectItem value="2">Label 2</SelectItem>
+          <SelectLabel>Included</SelectLabel>
+          <SelectItem value="fast">Fast</SelectItem>
+          <SelectItem value="balanced">Balanced</SelectItem>
         </SelectGroup>
         <SelectSeparator />
         <SelectGroup>
-          <SelectLabel>Title</SelectLabel>
-          <SelectItem value="3" disabled>
-            Label 3
+          <SelectLabel>Requires upgrade</SelectLabel>
+          <SelectItem value="deep" disabled>
+            Deep reasoning
           </SelectItem>
         </SelectGroup>
       </SelectContent>
@@ -104,6 +104,27 @@ const meta = preview.meta({
       },
       { property: 'open', values: 'false · true', code: '`open` prop on `Select` (`data-[state=open]`)' },
     ],
+    guide: {
+      use: [
+        'Choosing one value from a short, fixed list in a form or settings: “Response style” (Concise · Balanced · Detailed), “Model”.',
+        'When the current choice matters more than seeing every option at once.',
+      ],
+      avoid: [
+        'Long or searchable lists (people, projects, files): use Combobox.',
+        '2–4 options people should compare at a glance: use Radio Group, or Toggle Group for compact view switches.',
+        'Triggering actions: use Dropdown Menu.',
+      ],
+      content: [
+        'Label names the setting (“Response style”); the hint says what it changes.',
+        'Options are short and parallel; group with `SelectLabel` only when it helps, and disable options people can’t pick yet with a reason in the group label.',
+        'Use a placeholder (“Choose a style”) only when there is no sensible default.',
+      ],
+      a11y: [
+        'The trigger is a `combobox` named by `label` (or `aria-label`) and described by `hint`.',
+        'Arrow keys and typing move through options; Enter picks, Escape closes and returns focus.',
+        'With `aria-invalid` the hint becomes the error and is announced.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -113,9 +134,9 @@ const meta = preview.meta({
   },
   args: {
     open: false,
-    label: 'Label',
-    hint: 'Subtitle',
-    placeholder: 'Placeholder',
+    label: 'Response style',
+    hint: 'How long the assistant’s answers are.',
+    placeholder: 'Choose a style',
     size: 'default',
     marker: 'none',
     disabled: false,
@@ -150,22 +171,22 @@ const body = (canvasElement: HTMLElement) => within(canvasElement.ownerDocument.
 export const Default = meta.story()
 
 Default.test('trigger opens the list and picks an option', async ({ canvas, canvasElement }) => {
-  const trigger = canvas.getByRole('combobox', { name: 'Label' })
-  await expect(trigger).toHaveAccessibleDescription('Subtitle')
+  const trigger = canvas.getByRole('combobox', { name: 'Response style' })
+  await expect(trigger).toHaveAccessibleDescription('How long the assistant’s answers are.')
   await userEvent.click(trigger)
-  await userEvent.click(await body(canvasElement).findByRole('option', { name: 'Label 2' }))
-  await expect(trigger).toHaveTextContent('Label 2')
+  await userEvent.click(await body(canvasElement).findByRole('option', { name: 'Balanced' }))
+  await expect(trigger).toHaveTextContent('Balanced')
   // Let the list finish its exit animation before the a11y check runs.
   await waitFor(() => expect(body(canvasElement).queryByRole('listbox')).toBeNull())
 })
 
 Default.test('disabled', { args: { disabled: true } }, async ({ canvas }) => {
-  await expect(canvas.getByRole('combobox', { name: 'Label' })).toBeDisabled()
+  await expect(canvas.getByRole('combobox', { name: 'Response style' })).toBeDisabled()
 })
 
 /** Without a label: the bare trigger (show label off in Figma). */
 export const Bare = meta.story({
-  args: { label: undefined, hint: undefined, 'aria-label': 'Label', defaultValue: OPTIONS[0] },
+  args: { label: undefined, hint: undefined, 'aria-label': 'Response style', defaultValue: OPTIONS[0] },
 })
 
 /** 32 / 40 / 48 px. */
@@ -173,7 +194,7 @@ export const Sizes = meta.story({
   render: () => (
     <div className="flex flex-col gap-4">
       {(['sm', 'default', 'lg'] as const).map((size) => (
-        <DemoSelect key={size} size={size} label="Label" defaultValue={OPTIONS[0]} />
+        <DemoSelect key={size} size={size} label="Response style" defaultValue={OPTIONS[0]} />
       ))}
     </div>
   ),
@@ -183,16 +204,21 @@ export const Sizes = meta.story({
 export const States = meta.story({
   render: () => (
     <div className="flex flex-col gap-4">
-      <DemoSelect label="Label" />
-      <DemoSelect label="Label" defaultValue={OPTIONS[0]} />
+      <DemoSelect label="Response style" />
+      <DemoSelect label="Response style" defaultValue={OPTIONS[0]} />
       <span className="pseudo-hover-all contents">
-        <DemoSelect label="Label" defaultValue={OPTIONS[0]} />
+        <DemoSelect label="Response style" defaultValue={OPTIONS[0]} />
       </span>
       <span className="pseudo-focus-visible-all contents">
-        <DemoSelect label="Label" defaultValue={OPTIONS[0]} />
+        <DemoSelect label="Response style" defaultValue={OPTIONS[0]} />
       </span>
-      <DemoSelect label="Label" defaultValue={OPTIONS[0]} aria-invalid hint="Subtitle" />
-      <DemoSelect label="Label" defaultValue={OPTIONS[0]} disabled />
+      <DemoSelect
+        label="Response style"
+        defaultValue={OPTIONS[0]}
+        aria-invalid
+        hint="Choose a response style."
+      />
+      <DemoSelect label="Response style" defaultValue={OPTIONS[0]} disabled />
     </div>
   ),
 })
@@ -213,11 +239,11 @@ Open.test('shows the list with the value checked', async ({ canvasElement }) => 
 })
 
 export const Invalid = meta.story({
-  args: { 'aria-invalid': true, hint: 'Subtitle' },
+  args: { 'aria-invalid': true, hint: 'Choose a response style.' },
 })
 
 Invalid.test('shows the hint as an error', async ({ canvas }) => {
-  await expect(canvas.getByRole('alert')).toHaveTextContent('Subtitle')
+  await expect(canvas.getByRole('alert')).toHaveTextContent('Choose a response style.')
 })
 
 /** Groups, labels and a separator inside the list. */

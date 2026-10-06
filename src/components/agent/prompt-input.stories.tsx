@@ -54,11 +54,11 @@ function AttachItems() {
       <DropdownMenuSub>
         <DropdownMenuSubTrigger>
           <Icon icon={HardDriveIcon} />
-          Label
+          Add from Drive
         </DropdownMenuSubTrigger>
         <DropdownMenuSubContent className="rounded-xl p-1.5">
-          <DropdownMenuItem>Label 1</DropdownMenuItem>
-          <DropdownMenuItem>Label 2</DropdownMenuItem>
+          <DropdownMenuItem>Q3 launch</DropdownMenuItem>
+          <DropdownMenuItem>Northwind Sync research</DropdownMenuItem>
         </DropdownMenuSubContent>
       </DropdownMenuSub>
       <DropdownMenuSub>
@@ -67,12 +67,12 @@ function AttachItems() {
           Recent files
         </DropdownMenuSubTrigger>
         <DropdownMenuSubContent className="rounded-xl p-1.5">
-          <DropdownMenuItem>Label 1</DropdownMenuItem>
-          <DropdownMenuItem>Label 2</DropdownMenuItem>
+          <DropdownMenuItem>pricing-research.xlsx</DropdownMenuItem>
+          <DropdownMenuItem>launch-deck.pptx</DropdownMenuItem>
         </DropdownMenuSubContent>
       </DropdownMenuSub>
       <DropdownMenuSeparator />
-      <p className="px-2.5 py-1.5 type-text-xs-normal text-muted-foreground">Subtitle</p>
+      <p className="px-2.5 py-1.5 type-text-xs-normal text-muted-foreground">PDF, DOCX, XLSX up to 25 MB</p>
     </>
   )
 }
@@ -93,11 +93,11 @@ function Files() {
           <Icon icon={ImageIcon} />
         </AttachmentMedia>
         <AttachmentContent>
-          <AttachmentTitle>Title</AttachmentTitle>
-          <AttachmentDescription>Subtitle</AttachmentDescription>
+          <AttachmentTitle>hero-image.png</AttachmentTitle>
+          <AttachmentDescription>PNG · 1.2 MB</AttachmentDescription>
         </AttachmentContent>
         <AttachmentActions>
-          <AttachmentAction aria-label="Remove">
+          <AttachmentAction aria-label="Remove file">
             <Icon icon={XIcon} />
           </AttachmentAction>
         </AttachmentActions>
@@ -107,11 +107,11 @@ function Files() {
           <Icon icon={FileTextIcon} />
         </AttachmentMedia>
         <AttachmentContent>
-          <AttachmentTitle>Title</AttachmentTitle>
-          <AttachmentDescription>Subtitle</AttachmentDescription>
+          <AttachmentTitle>q3-launch-plan.pdf</AttachmentTitle>
+          <AttachmentDescription>Uploading · 2.4 MB</AttachmentDescription>
         </AttachmentContent>
         <AttachmentActions>
-          <AttachmentAction aria-label="Remove">
+          <AttachmentAction aria-label="Remove file">
             <Icon icon={XIcon} />
           </AttachmentAction>
         </AttachmentActions>
@@ -138,7 +138,7 @@ function Demo({ size, status, listening, withFiles, defaultValue, onSubmit, onSt
       status={status}
       listening={voice}
       defaultValue={defaultValue}
-      placeholder="Placeholder"
+      placeholder="Ask Assistant anything…"
       onSubmit={onSubmit}
       onStop={onStop}
       onVoice={() => setVoice((v) => !v)}
@@ -177,6 +177,28 @@ const meta = preview.meta({
       { property: 'show voice button', values: 'boolean', code: 'pass `onVoice` or not' },
       { property: 'show tools menu', values: 'boolean', code: 'pass `tools` or not' },
     ],
+    guide: {
+      use: [
+        'The one composer at the bottom of a conversation: the user types, attaches files and sends.',
+        '`size` compact in narrow shells (popover, side panel, mobile); default in full-screen chat.',
+        'Pass `status="streaming"` while the agent answers so Send becomes Stop; `response` after a stop offers Regenerate and Continue.',
+      ],
+      avoid: [
+        'Form fields or search boxes: use Textarea, Text field or Search.',
+        'Choosing between known answers: use Clarifying Question instead of asking the user to type.',
+        'A second composer in the same thread (for example, for edits): reuse this one.',
+      ],
+      content: [
+        'Placeholder: an invitation that names the assistant (“Ask Assistant anything…”), not instructions.',
+        'Attachment chips: the file name, then type or status and size (“PDF · 2.4 MB”, “Uploading · 2.4 MB”).',
+        '`tokenCount`: used / limit (“1,204 / 200k”), only when the limit matters to the user.',
+      ],
+      a11y: [
+        'The textarea is named “Prompt”; every icon button has a name (Attach files, Voice input, Send, Stop).',
+        'Enter sends and Shift+Enter adds a line; Send is disabled while the prompt is empty.',
+        'The response controls are a group with a polite status line, so “Stopped” is announced.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -203,8 +225,8 @@ Default.test('send is off while empty; Enter sends the text', async ({ canvas, a
   const send = canvas.getByRole('button', { name: 'Send' })
   await expect(send).toBeDisabled()
   const field = canvas.getByRole('textbox', { name: 'Prompt' })
-  await userEvent.type(field, 'Value{Enter}')
-  await expect(args.onSubmit).toHaveBeenCalledWith('Value')
+  await userEvent.type(field, 'Summarize the Q3 launch plan{Enter}')
+  await expect(args.onSubmit).toHaveBeenCalledWith('Summarize the Q3 launch plan')
   await expect(field).toHaveValue('')
 })
 
@@ -218,8 +240,8 @@ export const States = meta.story({
           className={size === 'compact' ? 'flex max-w-90 flex-col gap-4' : 'flex flex-col gap-4'}
         >
           <Demo {...args} size={size} />
-          <Demo {...args} size={size} defaultValue="Subtitle" />
-          <Demo {...args} size={size} defaultValue="Subtitle" withFiles />
+          <Demo {...args} size={size} defaultValue="Summarize the Q3 launch plan" />
+          <Demo {...args} size={size} defaultValue="Summarize the Q3 launch plan" withFiles />
           <Demo {...args} size={size} listening />
           <Demo {...args} size={size} status="streaming" />
         </div>
@@ -263,12 +285,12 @@ export const Response = meta.story({
   render: (args) => (
     <div className="flex w-160 flex-col gap-24 pt-14">
       <PromptInput
-        placeholder="Placeholder"
+        placeholder="Ask Assistant anything…"
         response="stopped"
         onRegenerate={args.onSubmit as () => void}
         onContinue={args.onStop}
       />
-      <PromptInput placeholder="Placeholder" response="incomplete" onContinue={args.onStop} />
+      <PromptInput placeholder="Ask Assistant anything…" response="incomplete" onContinue={args.onStop} />
     </div>
   ),
 })

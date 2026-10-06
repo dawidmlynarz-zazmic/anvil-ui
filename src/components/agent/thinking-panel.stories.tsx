@@ -16,20 +16,31 @@ const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=1066
 
 const STATUSES = ['running', 'done', 'failed'] as const
 
+/** The header copy for each status: present participle while running, past when done. */
+const HEADER = {
+  running: { title: 'Planning the summary…', duration: '4s' },
+  done: { title: 'Planning the summary', duration: 'Thought for 4s' },
+  failed: { title: 'Couldn’t finish planning', duration: 'Stopped after 4s' },
+} as const
+
+const REASONING =
+  'Maya wants a summary of the Q3 launch plan. She prefers concise answers with bullet points, so I’ll read the plan, pull out the dates, goals and risks, and check the latest trial conversion numbers.'
+
 function Panel({
   steps = false,
   ...props
 }: React.ComponentProps<typeof ThinkingPanel> & { steps?: boolean }) {
+  const header = HEADER[props.status ?? 'running']
   return (
     <ThinkingPanel {...props}>
-      <ThinkingPanelTrigger title="Title" duration="Subtitle" />
+      <ThinkingPanelTrigger title={header.title} duration={header.duration} />
       <ThinkingPanelContent>
-        <p>Subtitle</p>
+        <p>{REASONING}</p>
         {steps && (
           <ThinkingPanelSteps>
-            <ThinkingPanelStep>Label 1</ThinkingPanelStep>
-            <ThinkingPanelStep>Label 2</ThinkingPanelStep>
-            <ThinkingPanelStep>Label 3</ThinkingPanelStep>
+            <ThinkingPanelStep>Read q3-launch-plan.pdf</ThinkingPanelStep>
+            <ThinkingPanelStep>Pulled the launch dates, goals and risks</ThinkingPanelStep>
+            <ThinkingPanelStep>Checked trial conversion in the weekly metrics</ThinkingPanelStep>
           </ThinkingPanelSteps>
         )}
       </ThinkingPanelContent>
@@ -62,6 +73,28 @@ const meta = preview.meta({
       { property: 'show duration', values: 'boolean', code: 'pass `duration` or not' },
       { property: 'show step list', values: 'boolean', code: 'render `ThinkingPanelSteps` or not' },
     ],
+    guide: {
+      use: [
+        'Above an assistant answer, to show the model’s reasoning collapsed to one line the user can open.',
+        'Keep it collapsed by default; the header alone tells the user the agent is (or was) thinking.',
+        'Add `ThinkingPanelSteps` when the reasoning maps to a short list of concrete steps.',
+      ],
+      avoid: [
+        'Tool calls with inputs and outputs: use Tool Call Item, or Tool Call Accordion for several.',
+        'A single running action line (“Searching the web…”): use Tool Log Line.',
+        'Waiting for the first token with nothing to show yet: use Streaming Placeholder.',
+      ],
+      content: [
+        'Title: what the agent is working on, present participle while running (“Planning the summary…”), plain when done.',
+        'Duration: “Thought for 4s” when done; “Stopped after 4s” when failed.',
+        'Reasoning: short first-person prose; steps are past-tense actions (“Read q3-launch-plan.pdf”).',
+      ],
+      a11y: [
+        'The header is a disclosure button with `aria-expanded`; Enter and Space toggle it.',
+        'Status is shown by icon and title text, not color alone.',
+        'Agent and danger titles switch to the -medium tone in dark to keep 4.5:1 contrast.',
+      ],
+    },
     docs: {
       description: {
         component:
@@ -84,11 +117,11 @@ const meta = preview.meta({
 export const Default = meta.story()
 
 Default.test('the header toggles the reasoning', async ({ canvas }) => {
-  const trigger = canvas.getByRole('button', { name: /Title/ })
+  const trigger = canvas.getByRole('button', { name: /Planning the summary/ })
   await expect(trigger).toHaveAttribute('aria-expanded', 'false')
   await userEvent.click(trigger)
   await expect(trigger).toHaveAttribute('aria-expanded', 'true')
-  await expect(canvas.getByText('Subtitle', { selector: 'p' })).toBeVisible()
+  await expect(canvas.getByText(REASONING, { selector: 'p' })).toBeVisible()
 })
 
 /** Figma status × state: each status collapsed and expanded. */
@@ -119,12 +152,15 @@ export const InMessage = meta.story({
       <Message>
         <MessageContent>
           <MessageHeader>
-            <strong>Title</strong>
+            <strong>Assistant</strong>
             <span>14:02</span>
           </MessageHeader>
           <Panel status="done" />
           <MessageBubble variant="ghost">
-            <MessageBubbleContent>Subtitle</MessageBubbleContent>
+            <MessageBubbleContent>
+              Northwind Sync launches on September 16 after a two-week beta with 24 design partners. The plan
+              focuses on lifting trial conversion, which slipped to 4.6% last month.
+            </MessageBubbleContent>
           </MessageBubble>
         </MessageContent>
       </Message>
