@@ -179,14 +179,17 @@ export const catalog: CatalogArea[] = [
     id: 'primitives-states',
     name: 'Agent states',
     description: 'What the agent is doing right now: indicators, reasoning and tool calls.',
-    items: prim('Agent States', [
-      'Pulse Dot',
-      'Text Shimmer',
-      'Typing Indicator',
-      'Step Status Icon',
-      'Thinking Panel',
-      'Tool Call Item',
-    ]),
+    items: [
+      ...prim('Agent States', [
+        'Pulse Dot',
+        'Text Shimmer',
+        'Step Status Icon',
+        'Thinking Panel',
+        'Tool Call Item',
+      ]),
+      // Figma typing indicator is Streaming Placeholder variant dots.
+      { name: 'Typing Indicator', title: 'Agent Primitives/Messages/Streaming Placeholder' },
+    ],
   },
   {
     section: 'Agent Primitives',
@@ -203,7 +206,10 @@ export const catalog: CatalogArea[] = [
     items: [
       // Figma system banner = Alert, size sm (audit M2).
       { name: 'System Banner', title: 'UI Components/Alert' },
-      ...prim('System & Context', ['Instructions Banner', 'Memory Chip', 'Memory In Use', 'Action Status']),
+      ...prim('System & Context', ['Instructions Banner', 'Memory Notice', 'Action Status']),
+      // Figma memory chip and memory in use are Memory Notice.
+      { name: 'Memory Chip', title: 'Agent Primitives/System & Context/Memory Notice' },
+      { name: 'Memory In Use', title: 'Agent Primitives/System & Context/Memory Notice' },
     ],
   },
   {
@@ -224,7 +230,7 @@ export const catalog: CatalogArea[] = [
     id: 'primitives-feedback',
     name: 'Feedback & surveys',
     description: 'A single rating control.',
-    items: prim('Feedback & Surveys', ['Rating']),
+    items: prim('Feedback & Surveys', ['Rating', 'Rating Scale']),
   },
   // Agent Blocks: features.
   {

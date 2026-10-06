@@ -12,16 +12,24 @@ const meta = preview.meta({
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
-    figmaProps: [{ property: 'length', values: 'short · medium · long', code: '`length` prop' }],
+    figmaProps: [
+      { property: 'length', values: 'short · medium · long', code: '`length` prop' },
+      {
+        property: 'typing indicator (10734:2807) · frame',
+        values: '1 · 2 · 3',
+        code: '`variant="dots"`; the frames are the `animate-typing-dot` animation',
+      },
+    ],
     docs: {
       description: {
         component:
-          "Holds the assistant's place before the first token arrives (`@/components/agent/streaming-placeholder`, on Skeleton): the agent avatar, a shimmering `label` and skeleton lines; `length` short · medium · long. A status named by its label. Replace it with the message once it starts streaming.",
+          "Holds the assistant's place before the first token arrives (`@/components/agent/streaming-placeholder`, on Skeleton): `variant` skeleton (the agent avatar, a shimmering `label` and skeleton lines; `length` short · medium · long) or dots (the typing pill; Figma typing indicator). A status named by its label. Replace it with the message once it starts streaming.",
       },
     },
   },
-  args: { length: 'short', label: 'Subtitle' },
+  args: { variant: 'skeleton' as const, length: 'short' as const, label: 'Subtitle' },
   argTypes: {
+    variant: { control: 'inline-radio', options: ['skeleton', 'dots'] },
     length: { control: 'inline-radio', options: ['short', 'medium', 'long'] },
     label: { control: 'text' },
     icon: { control: false },
@@ -44,4 +52,12 @@ export const Lengths = meta.story({
       <StreamingPlaceholder {...args} length="long" />
     </div>
   ),
+})
+
+/** `variant="dots"` (Figma typing indicator): three dots in a muted pill. */
+export const Dots = meta.story({ args: { variant: 'dots' } })
+
+Dots.test('is a named status with three dots', async ({ canvas }) => {
+  const status = canvas.getByRole('status', { name: 'Subtitle' })
+  await expect(status.children).toHaveLength(3)
 })

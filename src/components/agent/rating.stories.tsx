@@ -1,7 +1,7 @@
 import preview from '#.storybook/preview'
 import { expect, fn, userEvent } from 'storybook/test'
 
-import { Rating, RatingScale } from './rating'
+import { Rating } from './rating'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10726-1937'
 
@@ -27,7 +27,7 @@ const meta = preview.meta({
     docs: {
       description: {
         component:
-          'A satisfaction check after a task (`@/components/agent/rating`): `kind` stars · faces · csat (1–5), `value` / `defaultValue` / `onValueChange`; once rated it thanks the user and, with `onComment`, offers Add a comment. Composed from Card, Toggle Group (single choice), Icon and Button. `RatingScale` is the scale on its own (stars, faces or numbers `min`–`max`); NPS uses it for 0–10.',
+          'A satisfaction check after a task (`@/components/agent/rating`): `kind` stars · faces · csat (1–5), `value` / `defaultValue` / `onValueChange`; once rated it thanks the user and, with `onComment`, offers Add a comment. Composed from Card, Rating Scale, Icon and Button.',
       },
     },
   },
@@ -87,30 +87,4 @@ Kinds.test('faces and scores are single choice', async ({ canvas }) => {
   const [three] = canvas.getAllByRole('radio', { name: '3' })
   await userEvent.click(three)
   await expect(three).toHaveAttribute('aria-checked', 'true')
-})
-
-/** Rating Scale on its own: stars, faces, numbers 1–5 and 0–10 (NPS). */
-export const Scale = meta.story({
-  render: () => (
-    <div className="flex w-120 flex-col gap-6">
-      <RatingScale scale="stars" aria-label="Label 1" defaultValue={3} />
-      <RatingScale scale="faces" aria-label="Label 2" />
-      <RatingScale aria-label="Label 3" lowLabel="Subtitle" highLabel="Subtitle" />
-      <RatingScale
-        aria-label="Label 4"
-        min={0}
-        max={10}
-        defaultValue={9}
-        lowLabel="Subtitle"
-        highLabel="Subtitle"
-      />
-    </div>
-  ),
-})
-
-Scale.test('the keyboard moves between scores', async ({ canvas }) => {
-  const one = canvas.getAllByRole('radio', { name: '1' })[0]
-  one.focus()
-  await userEvent.keyboard('{ArrowRight}')
-  await expect(canvas.getAllByRole('radio', { name: '2' })[0]).toHaveFocus()
 })
