@@ -3,9 +3,10 @@ import preview from '#.storybook/preview'
 import { expect, fn, userEvent } from 'storybook/test'
 
 import { Button } from '@/components/ui/button'
+import { ShellFooter } from '@/components/anvil/shell'
 import { CheckIcon, ExternalLinkIcon, Icon, PencilIcon, RotateCcwIcon } from '@/components/ui/icon'
 
-import { ApprovalCard, ApprovalCardField, ApprovalCardFooter, type ApprovalStatus } from './approval-card'
+import { ApprovalCard, ApprovalCardField, type ApprovalStatus } from './approval-card'
 import { ActionStatus } from './action-status'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10728-2418'
@@ -24,7 +25,7 @@ function Footer({
   switch (status) {
     case 'pending':
       return (
-        <ApprovalCardFooter>
+        <ShellFooter variant="card">
           <Button variant="ghost" intent="neutral" size="sm">
             <Icon icon={PencilIcon} />
             Edit
@@ -37,25 +38,25 @@ function Footer({
             <Icon icon={CheckIcon} />
             Approve
           </Button>
-        </ApprovalCardFooter>
+        </ShellFooter>
       )
     case 'approved':
       return (
-        <ApprovalCardFooter message="Subtitle">
+        <ShellFooter variant="card" note="Subtitle">
           <Button variant="ghost" intent="neutral" size="sm">
             <Icon icon={ExternalLinkIcon} />
             Open
           </Button>
-        </ApprovalCardFooter>
+        </ShellFooter>
       )
     case 'denied':
       return (
-        <ApprovalCardFooter message="Subtitle">
+        <ShellFooter variant="card" note="Subtitle">
           <Button variant="ghost" intent="neutral" size="sm">
             <Icon icon={PencilIcon} />
             Edit and retry
           </Button>
-        </ApprovalCardFooter>
+        </ShellFooter>
       )
     case 'executing':
       return (
@@ -137,7 +138,7 @@ const meta = preview.meta({
     docs: {
       description: {
         component:
-          'Confirmation before an action with side effects (`@/components/agent/approval-card`). `status` pending · approved · denied · executing · failed · expired sets the tile, badge and detail tone; `title`, `subtitle` (the action), `badge` (overrides the status label), `note` (pending warning). Details are `ApprovalCardField` rows; `footer` is `ApprovalCardFooter` (actions) or `ActionStatus` (the shared lifecycle strip with `progress` and `action`).',
+          'Confirmation before an action with side effects (`@/components/agent/approval-card`). `status` pending · approved · denied · executing · failed · expired sets the tile, badge and detail tone; `title`, `subtitle` (the action), `badge` (overrides the status label), `note` (pending warning). Details are `ApprovalCardField` rows; `footer` is `ShellFooter` (variant card) (actions) or `ActionStatus` (the shared lifecycle strip with `progress` and `action`).',
       },
     },
   },

@@ -3,11 +3,11 @@ import preview from '#.storybook/preview'
 import { expect, fn, userEvent } from 'storybook/test'
 
 import { Button } from '@/components/ui/button'
+import { ShellFooter } from '@/components/anvil/shell'
 import { ArrowRightIcon, Icon, PlugIcon, RotateCcwIcon, SettingsIcon } from '@/components/ui/icon'
 
 import {
   ConnectorCard,
-  ConnectorCardFooter,
   ConnectorCardItem,
   ConnectorCardPermission,
   type ConnectorStatus,
@@ -43,7 +43,7 @@ function Example({ onConnect, ...props }: ExampleProps) {
             Subtitle
           </ActionStatus>
         ) : (
-          <ConnectorCardFooter>
+          <ShellFooter variant="card">
             {status === 'suggest' && (
               <Button variant="ghost" intent="neutral" size="sm">
                 Not now
@@ -69,7 +69,7 @@ function Example({ onConnect, ...props }: ExampleProps) {
               />
               {status === 'connected' ? 'Continue' : status === 'reconnect' ? 'Reconnect' : 'Connect'}
             </Button>
-          </ConnectorCardFooter>
+          </ShellFooter>
         )
       }
     >
@@ -108,7 +108,7 @@ const meta = preview.meta({
     docs: {
       description: {
         component:
-          'Asks to connect an app, then shows the result (`@/components/agent/connector-card`). `status` suggest · connected · reconnect · connecting sets the badge; `icon` (a neutral app icon; the partner logo in product), `title`, `description`, `badge`. Body: `ConnectorCardPermission` rows or `ConnectorCardItem` results. `footer`: `ConnectorCardFooter` or `ActionStatus` (executing while connecting).',
+          'Asks to connect an app, then shows the result (`@/components/agent/connector-card`). `status` suggest · connected · reconnect · connecting sets the badge; `icon` (a neutral app icon; the partner logo in product), `title`, `description`, `badge`. Body: `ConnectorCardPermission` rows or `ConnectorCardItem` results. `footer`: `ShellFooter` (variant card) or `ActionStatus` (executing while connecting).',
       },
     },
   },

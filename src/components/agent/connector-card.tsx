@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'
+import { ShellDescription, ShellHeader, ShellTitle } from '@/components/anvil/shell'
 import { Badge } from '@/components/ui/badge'
 import { CircleCheckIcon, FileTextIcon, HardDriveIcon, Icon, type LucideIcon } from '@/components/ui/icon'
 import { IconTile } from '@/components/anvil/icon-tile'
@@ -11,7 +12,7 @@ import { IconTile } from '@/components/anvil/icon-tile'
 // in product), title text/sm/semibold, description text/xs muted, status Badge (semantic, xs,
 // indicator). Body (16px sides and bottom):
 // ConnectorCardPermission rows (Figma part / check row) or ConnectorCardItem results. Then
-// ConnectorCardFooter (--muted bar) or ActionStatus (executing while connecting: pulse + progress).
+// ShellFooter variant card (--muted bar) or ActionStatus (executing while connecting: pulse + progress).
 // Figma `state` → `status` suggest · connected · reconnect · connecting.
 
 type ConnectorStatus = 'suggest' | 'connected' | 'reconnect' | 'connecting'
@@ -44,7 +45,7 @@ function ConnectorCard({
   description?: React.ReactNode
   /** Overrides the status label. */
   badge?: React.ReactNode
-  /** ConnectorCardFooter, or ActionStatus (executing) while connecting. */
+  /** ShellFooter variant="card", or ActionStatus (executing) while connecting. */
   footer?: React.ReactNode
 }) {
   const titleId = React.useId()
@@ -60,25 +61,19 @@ function ConnectorCard({
       )}
       {...props}
     >
-      <header className="flex flex-wrap items-start gap-3 p-4">
-        <IconTile icon={icon} />
-        <div className="flex min-w-0 grow basis-48 flex-col gap-1">
-          <h3 id={titleId} className="type-text-sm-semibold text-foreground">
-            {title}
-          </h3>
-          {description && <p className="type-text-xs-normal text-muted-foreground">{description}</p>}
-        </div>
-        <Badge
-          data-slot="connector-card-badge"
-          variant="semantic"
-          tone={tag.tone}
-          size="xs"
-          indicator
-          className="shrink-0"
-        >
-          {badge ?? tag.label}
-        </Badge>
-      </header>
+      <ShellHeader
+        variant="card"
+        className="items-start border-b-0"
+        media={<IconTile icon={icon} />}
+        trailing={
+          <Badge data-slot="connector-card-badge" variant="semantic" tone={tag.tone} size="xs" indicator>
+            {badge ?? tag.label}
+          </Badge>
+        }
+      >
+        <ShellTitle id={titleId}>{title}</ShellTitle>
+        {description && <ShellDescription>{description}</ShellDescription>}
+      </ShellHeader>
       {children && <div className="flex flex-col gap-1.5 px-4 pb-4">{children}</div>}
       {footer}
     </article>
@@ -120,21 +115,4 @@ function ConnectorCardItem({
   )
 }
 
-/** The action bar (Figma part / card footer): leading action, then the primary action at the end. */
-function ConnectorCardFooter({ className, ...props }: React.ComponentProps<'div'>) {
-  return (
-    <div
-      data-slot="connector-card-footer"
-      className={cn('flex flex-wrap items-center gap-2 border-t bg-muted px-4 py-3', className)}
-      {...props}
-    />
-  )
-}
-
-export {
-  ConnectorCard,
-  ConnectorCardFooter,
-  ConnectorCardItem,
-  ConnectorCardPermission,
-  type ConnectorStatus,
-}
+export { ConnectorCard, ConnectorCardItem, ConnectorCardPermission, type ConnectorStatus }

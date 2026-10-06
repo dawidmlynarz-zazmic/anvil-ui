@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'
+import { ShellDescription, ShellFooter, ShellHeader, ShellTitle } from '@/components/anvil/shell'
 import { Button } from '@/components/ui/button'
 import { ArrowRightIcon, CheckIcon, CircleHelpIcon, Icon } from '@/components/ui/icon'
 import { IconTile } from '@/components/anvil/icon-tile'
@@ -67,17 +68,14 @@ function ClarifyingQuestion({
       )}
       {...props}
     >
-      <header className="flex items-center gap-3 p-4">
-        <IconTile icon={CircleHelpIcon} tone="agent" size="sm" />
-        <div className="flex min-w-0 flex-col">
-          <h3 id={titleId} className="type-text-sm-semibold text-foreground">
-            {title}
-          </h3>
-          {(answer || description) && (
-            <p className="type-text-xs-normal text-muted-foreground">{answer ? 'Answered' : description}</p>
-          )}
-        </div>
-      </header>
+      <ShellHeader
+        variant="card"
+        className="border-b-0"
+        media={<IconTile icon={CircleHelpIcon} tone="agent" size="sm" />}
+      >
+        <ShellTitle id={titleId}>{title}</ShellTitle>
+        {(answer || description) && <ShellDescription>{answer ? 'Answered' : description}</ShellDescription>}
+      </ShellHeader>
       {answer ? (
         <div className="px-4 pb-4">
           <div className="flex items-center gap-2.5 rounded-lg bg-info-subtle px-3 py-2.5 inset-ring inset-ring-border-action">
@@ -107,16 +105,13 @@ function ClarifyingQuestion({
               </li>
             ))}
           </ol>
-          <footer className="flex items-center justify-between gap-2 border-t bg-muted px-4 py-3">
-            <p className="type-text-xs-normal text-muted-foreground">
-              {hint ?? `Press 1–${options.length} or type your own answer`}
-            </p>
+          <ShellFooter variant="card" note={hint ?? `Press 1–${options.length} or type your own answer`}>
             {onSkip && (
               <Button variant="ghost" intent="neutral" size="xs" onClick={onSkip}>
                 Skip
               </Button>
             )}
-          </footer>
+          </ShellFooter>
         </>
       )}
     </section>

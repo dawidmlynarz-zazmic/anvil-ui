@@ -3,10 +3,16 @@ import preview from '#.storybook/preview'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
+import { Badge } from '@/components/ui/badge'
+import { SparklesIcon } from '@/components/ui/icon'
+
+import { IconTile } from './icon-tile'
 import {
   ShellCloseButton,
+  ShellDescription,
   ShellFooter,
   ShellHeader,
+  ShellTitle,
   shellDescriptionClassName,
   shellTitleClassName,
 } from './shell'
@@ -25,6 +31,16 @@ const meta = preview.meta({
     figmaProps: [
       { property: '.shell header · variant', values: 'bar · inline', code: '`ShellHeader` `variant` prop' },
       { property: '.shell footer · variant', values: 'bar · inline', code: '`ShellFooter` `variant` prop' },
+      {
+        property: 'part / card header',
+        values: 'title · subtitle · show tile · show trailing · trailing',
+        code: '`ShellHeader variant="card"`: `ShellTitle`, `ShellDescription`, `media` (tile), `trailing`',
+      },
+      {
+        property: 'part / card footer',
+        values: 'leading action(s) · note · secondary · primary',
+        code: '`ShellFooter variant="card"`: `note`, then the actions as children',
+      },
       {
         property: '.shell footer · align',
         values: 'end · between · stretch',
@@ -135,6 +151,37 @@ export const Footer = meta.story({
           </div>
         )),
       )}
+    </div>
+  ),
+})
+
+/**
+ * Figma part / card header and part / card footer (audit M3): the same header and footer as the
+ * overlays, in their card variant, as used by Approval Card, Connector Card, Clarifying Question and
+ * Memory Manager.
+ */
+export const Card = meta.story({
+  render: () => (
+    <div className="max-w-140 overflow-hidden rounded-xl border bg-card shadow-sm">
+      <ShellHeader
+        variant="card"
+        media={<IconTile icon={SparklesIcon} tone="agent" size="sm" />}
+        trailing={
+          <Badge variant="semantic" tone="info" size="xs" indicator>
+            Label
+          </Badge>
+        }
+      >
+        <ShellTitle>Title</ShellTitle>
+        <ShellDescription>Subtitle</ShellDescription>
+      </ShellHeader>
+      <div className="p-4 type-text-sm-normal text-muted-foreground">Subtitle</div>
+      <ShellFooter variant="card" note="Subtitle">
+        <Button size="sm" variant="outline" intent="neutral">
+          Cancel
+        </Button>
+        <Button size="sm">Save</Button>
+      </ShellFooter>
     </div>
   ),
 })

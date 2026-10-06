@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'
+import { ShellDescription, ShellFooter, ShellHeader, ShellTitle } from '@/components/anvil/shell'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
@@ -57,23 +58,23 @@ function MemoryManager({
       )}
       {...props}
     >
-      <header className="flex items-center gap-3 border-b p-4">
-        <IconTile icon={BrainIcon} tone="agent" size="sm" />
-        <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-          <h3 id={titleId} className="type-text-sm-semibold text-foreground">
-            {title}
-          </h3>
-          {description && <p className="type-text-xs-normal text-muted-foreground">{description}</p>}
-        </div>
-        <Switch
-          aria-labelledby={titleId}
-          checked={on}
-          onCheckedChange={(next) => {
-            setUncontrolled(next)
-            onEnabledChange?.(next)
-          }}
-        />
-      </header>
+      <ShellHeader
+        variant="card"
+        media={<IconTile icon={BrainIcon} tone="agent" size="sm" />}
+        trailing={
+          <Switch
+            aria-labelledby={titleId}
+            checked={on}
+            onCheckedChange={(next) => {
+              setUncontrolled(next)
+              onEnabledChange?.(next)
+            }}
+          />
+        }
+      >
+        <ShellTitle id={titleId}>{title}</ShellTitle>
+        {description && <ShellDescription>{description}</ShellDescription>}
+      </ShellHeader>
       {(search || children) && (
         <div className="flex flex-col gap-2 p-4">
           {search}
@@ -81,10 +82,9 @@ function MemoryManager({
         </div>
       )}
       {(note || action) && (
-        <footer className="flex flex-wrap items-center gap-2 border-t bg-muted px-4 py-3">
-          {note && <p className="min-w-30 flex-1 type-text-xs-normal text-muted-foreground">{note}</p>}
+        <ShellFooter variant="card" note={note}>
           {action}
-        </footer>
+        </ShellFooter>
       )}
     </article>
   )
