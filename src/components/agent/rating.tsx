@@ -26,7 +26,7 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 // - stars: 24px items with 16px stars (Figma 14px, part / rating display), filled --warning up to
 //   the value, --input outline after it.
 // - faces: 44px --muted circles with 22px faces; selected = --info-subtle + --border-action ring.
-// - numbers: outline Toggles 6px apart that share the row (Figma 38px; Toggle default 40px), text
+// - numbers: outline Toggles 6px apart (4px past five scores, NPS) that share the row (Figma 38px; Toggle default 40px), text
 //   --foreground; selected = --primary fill, --primary-foreground text. `lowLabel` / `highLabel` sit
 //   under the ends (text/xs muted).
 
@@ -77,7 +77,7 @@ function RatingScale({
     <ToggleGroup
       type="single"
       variant={scale === 'numbers' ? 'outline' : 'default'}
-      spacing={scale === 'stars' ? 0.5 : scale === 'faces' ? 2 : 1.5}
+      spacing={scale === 'stars' ? 0.5 : scale === 'faces' ? 2 : scores.length > 5 ? 1 : 1.5}
       value={current === undefined ? '' : String(current)}
       onValueChange={(next) => {
         if (!next) return
