@@ -36,7 +36,7 @@ function Surface({ intent, children }: { intent?: string; children: ReactNode })
   )
 }
 
-const Label = ({ children }: { children: ReactNode }) => (
+const RowLabel = ({ children }: { children: ReactNode }) => (
   <div className="w-24 shrink-0 type-text-xs-medium text-muted-foreground">{children}</div>
 )
 
@@ -176,7 +176,7 @@ export const Variants = meta.story({
     <div className="flex flex-col gap-2">
       {intents.map((intent) => (
         <div key={intent} className="flex items-center gap-2">
-          <Label>{intent}</Label>
+          <RowLabel>{intent}</RowLabel>
           <Surface intent={intent}>
             {variants.map((variant) => (
               <Button key={variant} variant={variant} intent={intent}>
@@ -236,7 +236,7 @@ export const States = meta.story({
   render: () => (
     <div className="flex flex-col gap-2">
       <div className="flex items-center gap-2">
-        <Label>{''}</Label>
+        <RowLabel>{''}</RowLabel>
         <div className="flex gap-3 px-3">
           {['default', 'hover', 'focus', 'disabled', 'loading'].map((state) => (
             <div key={state} className="w-24 type-text-xs-medium text-muted-foreground">
@@ -248,9 +248,9 @@ export const States = meta.story({
       {intents.map((intent) =>
         variants.map((variant) => (
           <div key={intent + variant} className="flex items-center gap-2">
-            <Label>
+            <RowLabel>
               {intent} · {variant}
-            </Label>
+            </RowLabel>
             <Surface intent={intent}>
               <Button variant={variant} intent={intent}>
                 Label
@@ -309,7 +309,7 @@ export const IconButtons = meta.story({
     <div className="flex flex-col gap-2">
       {intents.map((intent) => (
         <div key={intent} className="flex items-center gap-2">
-          <Label>{intent}</Label>
+          <RowLabel>{intent}</RowLabel>
           <Surface intent={intent}>
             {variants.map((variant) => (
               <Button key={variant} size="icon" variant={variant} intent={intent} aria-label="Add">
