@@ -121,6 +121,7 @@ export const catalog: CatalogArea[] = [
       c('Carousel'),
       c('Avatar'),
       c('Icon Tile'),
+      c('Sparkline'),
       c('Item'),
       c('Code Block'),
     ],
@@ -210,7 +211,11 @@ export const catalog: CatalogArea[] = [
     id: 'primitives-widgets',
     name: 'Widgets & artifacts',
     description: 'Single pieces of rich output.',
-    items: prim('Widgets & Artifacts', ['Widget Metric Card']),
+    items: [
+      ...prim('Widgets & Artifacts', ['Widget Metric Card']),
+      // Widget metric group lives in the Widget Metric Card stories.
+      { name: 'Widget Metric Group', title: 'Agent Primitives/Widgets & Artifacts/Widget Metric Card' },
+    ],
   },
   {
     section: 'Agent Primitives',
@@ -269,7 +274,6 @@ export const catalog: CatalogArea[] = [
     description: 'Rich output inside the thread: tables, media and artifacts.',
     items: block('Widgets & Artifacts', [
       'Artifact Panel',
-      'Widget Metric Group',
       'Widget Table',
       'Widget Media',
       'Widget Audio',
