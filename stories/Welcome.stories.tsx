@@ -1,5 +1,4 @@
 import preview from '#.storybook/preview'
-import { expect, waitFor } from 'storybook/test'
 
 import { WelcomePage } from './welcome/WelcomePage'
 
@@ -21,31 +20,6 @@ const meta = preview.meta({
   },
 })
 
+// One page: no Story.test here (tests show as sub-pages in the sidebar). The story itself still
+// renders in light and dark with accessibility checks.
 export const Welcome = meta.story()
-
-Welcome.test('follows the theme toolbar', async ({ globals }) => {
-  await expect(document.documentElement.classList.contains('dark')).toBe(globals.theme === 'dark')
-})
-
-Welcome.test('introduces the system and lists every level', async ({ canvas }) => {
-  await expect(canvas.getByRole('heading', { level: 1, name: 'Anvil UI' })).toBeVisible()
-  for (const level of ['Foundations', 'Atoms', 'Molecules', 'Organisms', 'Agent Builder']) {
-    await expect(canvas.getByRole('region', { name: level })).toBeInTheDocument()
-  }
-  for (const area of [
-    'Foundations · Foundations',
-    'Atoms · Controls',
-    'Molecules · Forms',
-    'Agent Builder · Input',
-  ]) {
-    await waitFor(() => expect(canvas.getByRole('list', { name: area })).toBeInTheDocument())
-  }
-})
-
-Welcome.test('names the contributors and the main contact', async ({ canvas }) => {
-  await expect(canvas.getByRole('heading', { name: 'Dawid Młynarz' })).toBeVisible()
-  await expect(canvas.getByRole('link', { name: 'dawid.mlynarz@zazmic.ai' })).toHaveAttribute(
-    'href',
-    'mailto:dawid.mlynarz@zazmic.ai',
-  )
-})
