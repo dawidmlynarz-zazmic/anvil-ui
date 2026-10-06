@@ -9,10 +9,7 @@ import {
   ToolCallItemActions,
   ToolCallItemCode,
   ToolCallItemContent,
-  ToolCallItemDuration,
-  ToolCallItemName,
   ToolCallItemSection,
-  ToolCallItemSummary,
   ToolCallItemTrigger,
 } from './tool-call-item'
 
@@ -24,11 +21,7 @@ function Call(props: React.ComponentProps<typeof ToolCallItem>) {
   const failed = props.status === 'failed'
   return (
     <ToolCallItem {...props}>
-      <ToolCallItemTrigger>
-        <ToolCallItemName>Label</ToolCallItemName>
-        <ToolCallItemSummary>Subtitle</ToolCallItemSummary>
-        <ToolCallItemDuration>1.4s</ToolCallItemDuration>
-      </ToolCallItemTrigger>
+      <ToolCallItemTrigger name="Label" summary="Subtitle" duration="1.4s" />
       <ToolCallItemContent>
         <ToolCallItemSection label="Input">
           <ToolCallItemCode>{'{ "key": "Value" }'}</ToolCallItemCode>
@@ -66,14 +59,14 @@ const meta = preview.meta({
         values: 'collapsed · expanded',
         code: '`open` / `defaultOpen` prop (`data-[state=open]`)',
       },
-      { property: 'tool name', values: 'text', code: '`ToolCallItemName` children' },
-      { property: 'summary', values: 'text', code: '`ToolCallItemSummary` children' },
-      { property: 'duration', values: 'text', code: '`ToolCallItemDuration` children' },
+      { property: 'tool name', values: 'text', code: '`ToolCallItemTrigger` `name`' },
+      { property: 'summary', values: 'text', code: '`ToolCallItemTrigger` `summary`' },
+      { property: 'duration', values: 'text', code: '`ToolCallItemTrigger` `duration`' },
     ],
     docs: {
       description: {
         component:
-          'One tool call (`@/components/agent/tool-call-item`, on Collapsible). `ToolCallItem` (`status` running · done · failed; `open` / `defaultOpen`) › `ToolCallItemTrigger` (adds the status icon and chevron) › `ToolCallItemName`, `ToolCallItemSummary`, `ToolCallItemDuration`; `ToolCallItemContent` › `ToolCallItemSection` (`label`: Input, Output, Error) with `ToolCallItemCode` or text, and `ToolCallItemActions`. Figma state collapsed · expanded is the open state.',
+          'One tool call (`@/components/agent/tool-call-item`, on Collapsible). `ToolCallItem` (`status` running · done · failed; `open` / `defaultOpen`) › `ToolCallItemTrigger` (`name`, `summary`, `duration`; adds the status icon and chevron); `ToolCallItemContent` › `ToolCallItemSection` (`label`: Input, Output, Error) with `ToolCallItemCode` or text, and `ToolCallItemActions`. Figma state collapsed · expanded is the open state.',
       },
     },
   },

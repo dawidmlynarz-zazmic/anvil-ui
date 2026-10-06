@@ -7,10 +7,8 @@ import { Message, MessageContent, MessageHeader } from '@/components/ui/message'
 import {
   ThinkingPanel,
   ThinkingPanelContent,
-  ThinkingPanelDuration,
   ThinkingPanelStep,
   ThinkingPanelSteps,
-  ThinkingPanelTitle,
   ThinkingPanelTrigger,
 } from './thinking-panel'
 
@@ -24,10 +22,7 @@ function Panel({
 }: React.ComponentProps<typeof ThinkingPanel> & { steps?: boolean }) {
   return (
     <ThinkingPanel {...props}>
-      <ThinkingPanelTrigger>
-        <ThinkingPanelTitle>Title</ThinkingPanelTitle>
-        <ThinkingPanelDuration>Subtitle</ThinkingPanelDuration>
-      </ThinkingPanelTrigger>
+      <ThinkingPanelTrigger title="Title" duration="Subtitle" />
       <ThinkingPanelContent>
         <p>Subtitle</p>
         {steps && (
@@ -60,17 +55,17 @@ const meta = preview.meta({
         values: 'collapsed · expanded',
         code: '`open` / `defaultOpen` prop (`data-[state=open]`)',
       },
-      { property: 'summary title', values: 'text', code: '`ThinkingPanelTitle` children' },
-      { property: 'duration label', values: 'text', code: '`ThinkingPanelDuration` children' },
+      { property: 'summary title', values: 'text', code: '`ThinkingPanelTrigger` `title`' },
+      { property: 'duration label', values: 'text', code: '`ThinkingPanelTrigger` `duration`' },
       { property: 'reasoning body', values: 'text', code: '`ThinkingPanelContent` children' },
       { property: 'show pulse indicator', values: 'boolean', code: 'render the part or not' },
-      { property: 'show duration', values: 'boolean', code: 'render `ThinkingPanelDuration` or not' },
+      { property: 'show duration', values: 'boolean', code: 'pass `duration` or not' },
       { property: 'show step list', values: 'boolean', code: 'render `ThinkingPanelSteps` or not' },
     ],
     docs: {
       description: {
         component:
-          "The agent's reasoning, collapsed to one line (`@/components/agent/thinking-panel`, on Collapsible). `ThinkingPanel` (`status` running · done · failed, shared with tool calls; `open` / `defaultOpen` / `onOpenChange`) › `ThinkingPanelTrigger` (adds the pulse dot, check or alert icon and the chevron) › `ThinkingPanelTitle` + `ThinkingPanelDuration`; `ThinkingPanelContent` › text and optional `ThinkingPanelSteps` › `ThinkingPanelStep`. Figma state collapsed · expanded is the open state.",
+          "The agent's reasoning, collapsed to one line (`@/components/agent/thinking-panel`, on Collapsible). `ThinkingPanel` (`status` running · done · failed, shared with tool calls; `open` / `defaultOpen` / `onOpenChange`) › `ThinkingPanelTrigger` (`title`, `duration`; adds the pulse dot, check or alert icon and the chevron); `ThinkingPanelContent` › text and optional `ThinkingPanelSteps` › `ThinkingPanelStep`. Figma state collapsed · expanded is the open state.",
       },
     },
   },

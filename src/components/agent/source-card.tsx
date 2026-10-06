@@ -5,6 +5,7 @@ import type { Confidence } from '@/components/agent/citation-chip'
 import { Badge } from '@/components/ui/badge'
 import { IconTile } from '@/components/anvil/icon-tile'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import {
   BanIcon,
   ExternalLinkIcon,
@@ -16,7 +17,7 @@ import {
 
 // Figma Agent Builder › Core Kit › source card (10713:887): a source with its confidence and usage
 // (Figma credibility → `confidence`, the same name and scale as citation chips; audit M9)
-// (deep research, ticketing). --card, --border, radius xl, shadow-sm, 16px padding, 12px gap, up to
+// (deep research, ticketing). Card (--card, --border, radius xl, shadow-sm), 16px padding, 12px gap, up to
 // --shell-widget-max. Header: 24px --muted icon tile (14px icon), publisher text/xs/medium + meta
 // text/xs --muted-foreground, optional tag (outline badge, e.g. "Report"). Title text/sm/semibold.
 // Excerpt text/xs --muted-foreground behind a 2px --border-strong bar. Footer: confidence legend
@@ -67,94 +68,94 @@ function SourceCard({
   onRestore?: () => void
 }) {
   return (
-    <article
-      data-slot="source-card"
-      data-excluded={excluded || undefined}
+    <Card
+      asChild
       className={cn(
-        'group/source flex w-full max-w-(--shell-widget-max) flex-col gap-3 rounded-xl border bg-card p-4 text-card-foreground shadow-sm wrap-break-word',
+        'group/source w-full max-w-(--shell-widget-max) min-w-0 gap-3 rounded-xl border-border bg-card p-4 text-card-foreground shadow-sm wrap-break-word',
         className,
       )}
-      {...props}
     >
-      <header className="flex items-center gap-2">
-        <IconTile icon={icon} size="xs" className="group-data-[excluded]/source:opacity-55" />
-        <div className="flex min-w-0 flex-1 flex-col">
-          <span className="truncate type-text-xs-medium text-foreground group-data-[excluded]/source:text-muted-foreground">
-            {publisher}
-          </span>
-          {meta && <span className="truncate type-text-xs-normal text-muted-foreground">{meta}</span>}
-        </div>
-        {tag && (
-          <Badge variant="outline" intent="neutral" size="sm">
-            {tag}
-          </Badge>
-        )}
-      </header>
-      <h3 className="type-text-sm-semibold text-foreground group-data-[excluded]/source:text-muted-foreground">
-        {title}
-      </h3>
-      {excerpt && (
-        <blockquote className="border-s-2 border-border-strong px-3 py-1 type-text-xs-normal text-muted-foreground">
-          {excerpt}
-        </blockquote>
-      )}
-      <footer className="flex items-center gap-2">
-        {confidence && (
-          <span className="flex items-center gap-1.5 type-text-xs-normal text-foreground group-data-[excluded]/source:text-muted-foreground">
-            <span
-              className={cn(
-                'size-2.5 shrink-0 rounded-full group-data-[excluded]/source:opacity-55',
-                CONFIDENCE[confidence].dot,
-              )}
-            />
-            {CONFIDENCE[confidence].label}
-          </span>
-        )}
-        {excluded ? (
-          <Badge variant="semantic" tone="destructive" size="xs">
-            Excluded
-          </Badge>
-        ) : (
-          usage && (
-            <Badge variant="subtle" intent="neutral" size="xs">
-              {usage}
+      <article data-slot="source-card" data-excluded={excluded || undefined} {...props}>
+        <header className="flex items-center gap-2">
+          <IconTile icon={icon} size="xs" className="group-data-[excluded]/source:opacity-55" />
+          <div className="flex min-w-0 flex-1 flex-col">
+            <span className="truncate type-text-xs-medium text-foreground group-data-[excluded]/source:text-muted-foreground">
+              {publisher}
+            </span>
+            {meta && <span className="truncate type-text-xs-normal text-muted-foreground">{meta}</span>}
+          </div>
+          {tag && (
+            <Badge variant="outline" intent="neutral" size="sm">
+              {tag}
             </Badge>
-          )
-        )}
-        <span className="ms-auto flex items-center gap-1">
-          {href && (
-            <Button asChild variant="ghost" intent="neutral" size="icon-xs">
-              <a href={href} target="_blank" rel="noreferrer" aria-label="Open source">
-                <Icon icon={ExternalLinkIcon} />
-              </a>
-            </Button>
           )}
-          {excluded
-            ? onRestore && (
-                <Button
-                  variant="ghost"
-                  intent="neutral"
-                  size="icon-xs"
-                  aria-label="Restore source"
-                  onClick={onRestore}
-                >
-                  <Icon icon={RotateCcwIcon} />
-                </Button>
-              )
-            : onExclude && (
-                <Button
-                  variant="ghost"
-                  intent="neutral"
-                  size="icon-xs"
-                  aria-label="Exclude source"
-                  onClick={onExclude}
-                >
-                  <Icon icon={BanIcon} />
-                </Button>
-              )}
-        </span>
-      </footer>
-    </article>
+        </header>
+        <h3 className="type-text-sm-semibold text-foreground group-data-[excluded]/source:text-muted-foreground">
+          {title}
+        </h3>
+        {excerpt && (
+          <blockquote className="border-s-2 border-border-strong px-3 py-1 type-text-xs-normal text-muted-foreground">
+            {excerpt}
+          </blockquote>
+        )}
+        <footer className="flex items-center gap-2">
+          {confidence && (
+            <span className="flex items-center gap-1.5 type-text-xs-normal text-foreground group-data-[excluded]/source:text-muted-foreground">
+              <span
+                className={cn(
+                  'size-2.5 shrink-0 rounded-full group-data-[excluded]/source:opacity-55',
+                  CONFIDENCE[confidence].dot,
+                )}
+              />
+              {CONFIDENCE[confidence].label}
+            </span>
+          )}
+          {excluded ? (
+            <Badge variant="semantic" tone="destructive" size="xs">
+              Excluded
+            </Badge>
+          ) : (
+            usage && (
+              <Badge variant="subtle" intent="neutral" size="xs">
+                {usage}
+              </Badge>
+            )
+          )}
+          <span className="ms-auto flex items-center gap-1">
+            {href && (
+              <Button asChild variant="ghost" intent="neutral" size="icon-xs">
+                <a href={href} target="_blank" rel="noreferrer" aria-label="Open source">
+                  <Icon icon={ExternalLinkIcon} />
+                </a>
+              </Button>
+            )}
+            {excluded
+              ? onRestore && (
+                  <Button
+                    variant="ghost"
+                    intent="neutral"
+                    size="icon-xs"
+                    aria-label="Restore source"
+                    onClick={onRestore}
+                  >
+                    <Icon icon={RotateCcwIcon} />
+                  </Button>
+                )
+              : onExclude && (
+                  <Button
+                    variant="ghost"
+                    intent="neutral"
+                    size="icon-xs"
+                    aria-label="Exclude source"
+                    onClick={onExclude}
+                  >
+                    <Icon icon={BanIcon} />
+                  </Button>
+                )}
+          </span>
+        </footer>
+      </article>
+    </Card>
   )
 }
 

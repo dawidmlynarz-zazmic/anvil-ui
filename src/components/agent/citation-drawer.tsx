@@ -11,14 +11,15 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
+import { EmptyState, EmptyStateDescription, EmptyStateMedia } from '@/components/ui/empty-state'
 import { Skeleton } from '@/components/ui/skeleton'
 
 // Figma Agent Builder › Core Kit › citation drawer (10663:2792), built on Sheet: every source behind
 // an answer. Figma layout side (400px, right edge) · bottom (rounded-2xl top, mobile) =
 // `layout`. Header: title text/base/semibold ("Sources (6)") and the Sheet close. Optional filter
 // (Figma show search) under the header. Figma state loading · loaded · empty = what the body holds:
-// `CitationDrawerLoading` (skeleton rows: 20px circle + two lines), `CitationDrawerList` of
-// CitationSourceItems, or `CitationDrawerEmpty` (globe + text/sm --muted-foreground). Figma's shadow/2xl
+// `status` loading (skeleton rows: 20px circle + two lines), ready (your `CitationDrawerList` of
+// CitationSourceItems) or empty (Empty State: globe + `emptyMessage`, text/sm --muted-foreground). Figma's shadow/2xl
 // → elevation/modal (Sheet's).
 
 const CitationDrawer = Sheet
@@ -26,6 +27,8 @@ const CitationDrawerTrigger = SheetTrigger
 
 function CitationDrawerContent({
   layout = 'side',
+  status = 'ready',
+  emptyMessage = 'No sources for this answer.',
   title,
   description,
   className,
@@ -33,6 +36,10 @@ function CitationDrawerContent({
   ...props
 }: Omit<React.ComponentProps<typeof SheetContent>, 'side' | 'title'> & {
   layout?: 'side' | 'bottom'
+  /** Figma state loaded · loading · empty: ready shows the children (search + list). */
+  status?: 'ready' | 'loading' | 'empty'
+  /** Empty: what to say. */
+  emptyMessage?: React.ReactNode
   title: React.ReactNode
   /** Screen-reader description of the drawer; visually hidden. */
   description?: React.ReactNode
@@ -53,7 +60,13 @@ function CitationDrawerContent({
         <SheetTitle className="type-text-base-semibold">{title}</SheetTitle>
         <SheetDescription className="sr-only">{description ?? 'Sources for this answer'}</SheetDescription>
       </SheetHeader>
-      {children}
+      {status === 'loading' ? (
+        <CitationDrawerLoading />
+      ) : status === 'empty' ? (
+        <CitationDrawerEmpty>{emptyMessage}</CitationDrawerEmpty>
+      ) : (
+        children
+      )}
     </SheetContent>
   )
 }
@@ -89,20 +102,15 @@ function CitationDrawerList({ className, ...props }: React.ComponentProps<'ul'>)
 }
 
 /** Figma state loading: skeleton rows while sources load. */
-function CitationDrawerLoading({
-  rows = 4,
-  className,
-  ...props
-}: React.ComponentProps<'div'> & { rows?: number }) {
+function CitationDrawerLoading() {
   return (
     <div
       data-slot="citation-drawer-loading"
       role="status"
       aria-label="Loading sources"
-      className={cn('flex flex-1 flex-col gap-4 p-4', className)}
-      {...props}
+      className="flex flex-1 flex-col gap-4 p-4"
     >
-      {Array.from({ length: rows }, (_, i) => (
+      {Array.from({ length: 4 }, (_, i) => (
         <div key={i} className="flex items-start gap-3">
           <Skeleton shape="circle" className="size-5" />
           <div className="flex w-40 flex-col gap-2">
@@ -115,20 +123,17 @@ function CitationDrawerLoading({
   )
 }
 
-/** Figma state empty. */
-function CitationDrawerEmpty({ className, children, ...props }: React.ComponentProps<'div'>) {
+/** Figma state empty: Empty State with a globe. */
+function CitationDrawerEmpty({ children }: { children: React.ReactNode }) {
   return (
-    <div
-      data-slot="citation-drawer-empty"
-      className={cn(
-        'flex flex-1 flex-col items-center justify-center gap-2 p-4 type-text-sm-normal text-muted-foreground',
-        className,
-      )}
-      {...props}
-    >
-      <Icon icon={GlobeIcon} className="size-6 text-foreground" />
-      {children}
-    </div>
+    <EmptyState data-slot="citation-drawer-empty" className="flex-1 gap-2 border-0 p-4 md:p-4">
+      <EmptyStateMedia className="mb-0">
+        <Icon icon={GlobeIcon} className="size-6 text-foreground" />
+      </EmptyStateMedia>
+      <EmptyStateDescription className="type-text-sm-normal text-muted-foreground">
+        {children}
+      </EmptyStateDescription>
+    </EmptyState>
   )
 }
 
@@ -138,6 +143,4 @@ export {
   CitationDrawerContent,
   CitationDrawerSearch,
   CitationDrawerList,
-  CitationDrawerLoading,
-  CitationDrawerEmpty,
 }

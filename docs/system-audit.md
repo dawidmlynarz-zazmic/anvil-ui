@@ -112,14 +112,14 @@ deprecated feature) are the verdict and its note.
 | Step Status Icon | Primitives · element | Atom (Agent Status) | base | Thinking Panel, Tool Call Item, Tool Log Line | ✓ | keep |
 | Typing Indicator | Primitives · element | — | base | — | ✓ | **merge into Streaming Placeholder** (`variant` dots) — same job: hold the reply's place |
 | Voice Waveform | Primitives · element | Atom (Input) | base | Prompt Input, Widget Media, Live Voice Session | ✓ | keep (still used after Live Voice Session goes) |
-| Citation Chip | Primitives · element | Atom (Sources) | base | Citation Hovercard, Source Card, … | ✓ | simplify: build on `chipVariants` instead of its own pill |
+| Citation Chip | Primitives · element | Atom (Sources) | base | Citation Hovercard, Source Card, … | ✓ | keep (§3) |
 | Mic Button | Primitives · element | — | base | Prompt Input | ✓ | **remove**; Prompt Input uses Button `size="icon-sm"` + Mic icon, `aria-pressed` while listening |
 | Quick Reply (+ Filter, Group) | Primitives · element | Molecule (Messages) | composite | Feedback Reason | ✓ | keep; text left-aligned (Phase 9) |
 | Rating Scale | inside Rating | Molecule (Feedback) | composite | Rating, NPS | ✓ | **split into its own file and story** — it is the reusable part |
 | Message Actions | Primitives · composite | Molecule (Messages) | composite | Artifact Panel, Image Generation Card | ✓ | keep |
 | Message Edit | Primitives · composite | Molecule (Messages) | composite | — | ✓ | keep (Textarea + Buttons; branch navigation) |
-| Action Status | Primitives · composite | Molecule (Actions) | composite | Approval Card, Connector Card | ✓ | simplify: build on Alert + Progress |
-| Citation Source Item | Primitives · composite | Molecule (Sources) | composite | Citation Drawer | ✓ | simplify: build on Item |
+| Action Status | Primitives · composite | Molecule (Actions) | composite | Approval Card, Connector Card | ✓ | keep (§3) |
+| Citation Source Item | Primitives · composite | Molecule (Sources) | composite | Citation Drawer | ✓ | keep (§3) |
 | Tool Log Line | Primitives · composite | Molecule (Agent Status) | composite | — | ✓ | keep (inline, not expandable — different job from Tool Call Item) |
 | Memory Chip | Primitives · composite | — | composite | — | ✓ | **merge with Memory In Use → Memory Notice** |
 | Memory In Use | Primitives · composite | — | composite | — | ✓ | **merge → Memory Notice** (`status` used · not used · saved · updated · forgotten) |
@@ -169,9 +169,13 @@ Item), menu styles (Dropdown Menu, Context Menu, Menubar).
   `action` is the button.
 - **Drop Overlay → keep, but compose Empty State** (dashed, tinted) instead of drawing its own
   column.
-- **Action Status → keep, but compose Alert + Progress.**
-- **Citation Chip → keep, but compose `chipVariants`.** Citation Source Item → compose Item.
-  Source Card → compose Card.
+- **Source Card → compose Card** (done).
+- **Action Status, Citation Chip, Citation Source Item → keep as they are** (decided while
+  implementing): Action Status is a strip at the bottom of a card (no radius, top border only, a
+  pulse dot instead of an icon, its own status tints), so on Alert it would be more overrides than
+  code; Citation Chip is a 16px inline marker, a size Chip doesn't have; Citation Source Item is a
+  `<button>` / `<a>` row and Item's parts are `<div>`s, which can't sit inside a button. All three
+  already compose the parts that exist (Pulse Dot, Progress, Button, Citation Confidence on Badge).
 - **Bubble reactions → remove** (no user anywhere); Bubble becomes Message Bubble.
 - **Rating Scale → its own file and story** (Rating and NPS share it).
 
@@ -223,8 +227,7 @@ context live in each story's tags and title, and the relationships come from the
 1. This audit.
 2. Simplify: removals (Live Voice Session, Mic Button, Bubble reactions), merges (Typing
    Indicator, Memory Notice), renames (Empty State, Message Bubble), Rating Scale split,
-   subcomponent props, recompositions (Action Status, Citation Chip / Source Item, Source Card,
-   Drop Overlay).
+   subcomponent props, recompositions (Source Card, Drop Overlay).
 3. Taxonomy + Storybook + badges + relationships.
 4. Content (realistic agent copy above atoms) and docs (UX + implementation) per level.
 5. The Phase 9 component changes (Badge, Date Picker, Carousel, overlays, Label, Quick Reply,

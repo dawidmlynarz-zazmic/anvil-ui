@@ -1,26 +1,12 @@
 import { useEffect, useState } from 'react'
 
-import {
-  ThinkingPanel,
-  ThinkingPanelContent,
-  ThinkingPanelDuration,
-  ThinkingPanelTitle,
-  ThinkingPanelTrigger,
-} from '@/components/agent/thinking-panel'
+import { ThinkingPanel, ThinkingPanelContent, ThinkingPanelTrigger } from '@/components/agent/thinking-panel'
 import {
   ToolCallAccordion,
   ToolCallAccordionContent,
-  ToolCallAccordionSummary,
-  ToolCallAccordionTitle,
   ToolCallAccordionTrigger,
 } from '@/components/agent/tool-call-accordion'
-import {
-  ToolCallItem,
-  ToolCallItemDuration,
-  ToolCallItemName,
-  ToolCallItemSummary,
-  ToolCallItemTrigger,
-} from '@/components/agent/tool-call-item'
+import { ToolCallItem, ToolCallItemTrigger } from '@/components/agent/tool-call-item'
 import { StreamingPlaceholder } from '@/components/agent/streaming-placeholder'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
@@ -203,14 +189,10 @@ function AgentTurn({ turn }: { turn: Extract<Turn, { kind: 'agent' }> }) {
         {turn.typing && <StreamingPlaceholder variant="dots" label="Typing" />}
         {turn.thinking && (
           <ThinkingPanel status={turn.thinking === 'active' ? 'running' : 'done'}>
-            <ThinkingPanelTrigger>
-              <ThinkingPanelTitle>
-                {turn.thinking === 'active' ? 'Planning the search' : 'Planned the search'}
-              </ThinkingPanelTitle>
-              <ThinkingPanelDuration>
-                {turn.thinking === 'active' ? 'Thinking…' : 'Thought for 1.8s'}
-              </ThinkingPanelDuration>
-            </ThinkingPanelTrigger>
+            <ThinkingPanelTrigger
+              title={turn.thinking === 'active' ? 'Planning the search' : 'Planned the search'}
+              duration={turn.thinking === 'active' ? 'Thinking…' : 'Thought for 1.8s'}
+            />
             <ThinkingPanelContent>
               <p>Search direct and one-stop flights, then compare fares across airlines.</p>
             </ThinkingPanelContent>
@@ -218,22 +200,24 @@ function AgentTurn({ turn }: { turn: Extract<Turn, { kind: 'agent' }> }) {
         )}
         {tools && (
           <ToolCallAccordion status={toolsDone ? 'done' : 'running'} open={!toolsDone}>
-            <ToolCallAccordionTrigger>
-              <ToolCallAccordionTitle>
-                {toolsDone
-                  ? `Used ${tools.list.length} ${tools.list.length === 1 ? 'tool' : 'tools'}`
-                  : `Using tools · ${tools.done + 1} of ${tools.list.length}`}
-              </ToolCallAccordionTitle>
-              <ToolCallAccordionSummary>{tools.list.map((t) => t.name).join(', ')}</ToolCallAccordionSummary>
-            </ToolCallAccordionTrigger>
+            <ToolCallAccordionTrigger
+              title={
+                <>
+                  {toolsDone
+                    ? `Used ${tools.list.length} ${tools.list.length === 1 ? 'tool' : 'tools'}`
+                    : `Using tools · ${tools.done + 1} of ${tools.list.length}`}
+                </>
+              }
+              summary={tools.list.map((t) => t.name).join(', ')}
+            />
             <ToolCallAccordionContent>
               {tools.list.slice(0, tools.done + 1).map((tool, i) => (
                 <ToolCallItem key={tool.name} status={i < tools.done ? 'done' : 'running'}>
-                  <ToolCallItemTrigger>
-                    <ToolCallItemName>{tool.name}</ToolCallItemName>
-                    <ToolCallItemSummary>{i < tools.done ? tool.summary : 'Working…'}</ToolCallItemSummary>
-                    {i < tools.done && <ToolCallItemDuration>{tool.duration}</ToolCallItemDuration>}
-                  </ToolCallItemTrigger>
+                  <ToolCallItemTrigger
+                    name={tool.name}
+                    summary={i < tools.done ? tool.summary : 'Working…'}
+                    duration={i < tools.done ? tool.duration : undefined}
+                  />
                 </ToolCallItem>
               ))}
             </ToolCallAccordionContent>

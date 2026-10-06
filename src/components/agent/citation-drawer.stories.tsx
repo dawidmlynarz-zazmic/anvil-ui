@@ -8,9 +8,7 @@ import type { Confidence } from './citation-chip'
 import {
   CitationDrawer,
   CitationDrawerContent,
-  CitationDrawerEmpty,
   CitationDrawerList,
-  CitationDrawerLoading,
   CitationDrawerSearch,
   CitationDrawerTrigger,
 } from './citation-drawer'
@@ -54,12 +52,12 @@ function Demo({
       </CitationDrawerTrigger>
       <CitationDrawerContent
         layout={layout}
+        status={body === 'loaded' ? 'ready' : body}
+        emptyMessage="Subtitle"
         title={`Title (${SOURCES.length})`}
         onOpenAutoFocus={focusOnOpen ? undefined : (e) => e.preventDefault()}
       >
         {search && <CitationDrawerSearch />}
-        {body === 'loading' && <CitationDrawerLoading />}
-        {body === 'empty' && <CitationDrawerEmpty>Subtitle</CitationDrawerEmpty>}
         {body === 'loaded' && (
           <CitationDrawerList>
             {SOURCES.map((source, i) => (
@@ -103,13 +101,13 @@ const meta = preview.meta({
       {
         property: 'state',
         values: 'loading · loaded · empty',
-        code: 'the body you render: `CitationDrawerLoading` · `CitationDrawerList` · `CitationDrawerEmpty` (not a prop)',
+        code: '`status` loading · ready (your `CitationDrawerList`) · empty (`emptyMessage`)',
       },
     ],
     docs: {
       description: {
         component:
-          'Every source behind an answer (`@/components/agent/citation-drawer`, on Sheet). `CitationDrawer` › `CitationDrawerTrigger` + `CitationDrawerContent` (`layout` side · bottom, `title`) › optional `CitationDrawerSearch`, then the body: `CitationDrawerList` of CitationSourceItems, `CitationDrawerLoading` or `CitationDrawerEmpty` (Figma state loading · loaded · empty is what you render). Selecting a source sets it `active`.',
+          'Every source behind an answer (`@/components/agent/citation-drawer`, on Sheet). `CitationDrawer` › `CitationDrawerTrigger` + `CitationDrawerContent` (`layout` side · bottom, `title`) › optional `CitationDrawerSearch`, then the body: `status` ready shows your `CitationDrawerList` of CitationSourceItems; loading shows skeleton rows; empty shows an Empty State with `emptyMessage` (Figma state loading · loaded · empty). Selecting a source sets it `active`.',
       },
       story: { inline: false, height: '720px' },
     },

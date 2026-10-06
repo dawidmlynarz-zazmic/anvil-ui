@@ -39,9 +39,15 @@ function ToolCallAccordion({
 /** The header: status tile, children (title, tool list, duration), chevron. */
 function ToolCallAccordionTrigger({
   className,
-  children,
+  title,
+  summary,
+  duration,
   ...props
-}: React.ComponentProps<typeof CollapsibleTrigger>) {
+}: Omit<React.ComponentProps<typeof CollapsibleTrigger>, 'children' | 'title' | 'name'> & {
+  title?: React.ReactNode
+  summary?: React.ReactNode
+  duration?: React.ReactNode
+}) {
   const status = React.useContext(ToolCallAccordionContext)
   return (
     <CollapsibleTrigger
@@ -55,7 +61,9 @@ function ToolCallAccordionTrigger({
       <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-agent-subtle text-agent dark:text-agent-medium">
         {status === 'running' ? <PulseDot /> : <Icon icon={WrenchIcon} className="size-3.5" />}
       </span>
-      {children}
+      {title !== undefined && <ToolCallAccordionTitle>{title}</ToolCallAccordionTitle>}
+      {summary !== undefined && <ToolCallAccordionSummary>{summary}</ToolCallAccordionSummary>}
+      {duration !== undefined && <ToolCallAccordionDuration>{duration}</ToolCallAccordionDuration>}
       <Icon
         icon={ChevronRightIcon}
         className="size-3.5 shrink-0 text-muted-foreground transition-transform group-data-[state=open]/tool-calls:rotate-90"
@@ -109,11 +117,4 @@ function ToolCallAccordionContent({ className, ...props }: React.ComponentProps<
   )
 }
 
-export {
-  ToolCallAccordion,
-  ToolCallAccordionTrigger,
-  ToolCallAccordionTitle,
-  ToolCallAccordionSummary,
-  ToolCallAccordionDuration,
-  ToolCallAccordionContent,
-}
+export { ToolCallAccordion, ToolCallAccordionTrigger, ToolCallAccordionContent }
