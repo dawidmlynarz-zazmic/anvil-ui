@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'
+import { ShellDescription, ShellHeader, ShellTitle } from '@/components/anvil/shell'
 import { Badge } from '@/components/ui/badge'
 import {
   Icon,
@@ -17,7 +18,7 @@ import { IconTile } from '@/components/anvil/icon-tile'
 // radius-lg tile + title text/sm/semibold + subtitle text/xs muted + a Badge (semantic, xs,
 // indicator). Details (16px, 10px
 // gap): ApprovalCardField rows (96px label column) and an optional warning `note`. Then either
-// ApprovalCardFooter (--muted bar, 16/12px, 8px gap) or ActionStatus (Figma action status:
+// ShellFooter variant card (--muted bar, `note`) or ActionStatus (Figma action status:
 // executing --agent-subtle with pulse + progress · failed --danger-subtle · expired --muted).
 // Figma `state` → `status` (domain status, never an interaction state). Denied and expired dim
 // the details with --muted-foreground instead of Figma's 55% opacity (contrast).
@@ -64,7 +65,7 @@ function ApprovalCard({
   badge?: React.ReactNode
   /** Warning shown above the actions while pending, e.g. "This can't be undone once sent." */
   note?: React.ReactNode
-  /** ApprovalCardFooter (pending · approved · denied) or ActionStatus (executing · failed · expired). */
+  /** ShellFooter variant="card" (pending · approved · denied) or ActionStatus (executing · failed · expired). */
   footer?: React.ReactNode
 }) {
   const titleId = React.useId()
@@ -81,25 +82,18 @@ function ApprovalCard({
       )}
       {...props}
     >
-      <header className="flex flex-wrap items-center gap-3 border-b p-4">
-        <IconTile icon={tile.icon} tone={tile.tone} size="sm" />
-        <div className="flex min-w-0 grow basis-48 flex-col gap-0.5">
-          <h3 id={titleId} className="type-text-sm-semibold text-foreground">
-            {title}
-          </h3>
-          {subtitle && <p className="type-text-xs-normal text-muted-foreground">{subtitle}</p>}
-        </div>
-        <Badge
-          data-slot="approval-card-badge"
-          variant="semantic"
-          tone={tag.tone}
-          size="xs"
-          indicator
-          className="shrink-0"
-        >
-          {badge ?? tag.label}
-        </Badge>
-      </header>
+      <ShellHeader
+        variant="card"
+        media={<IconTile icon={tile.icon} tone={tile.tone} size="sm" />}
+        trailing={
+          <Badge data-slot="approval-card-badge" variant="semantic" tone={tag.tone} size="xs" indicator>
+            {badge ?? tag.label}
+          </Badge>
+        }
+      >
+        <ShellTitle id={titleId}>{title}</ShellTitle>
+        {subtitle && <ShellDescription>{subtitle}</ShellDescription>}
+      </ShellHeader>
       {(children || (note && status === 'pending')) && (
         <div className="flex flex-col gap-2.5 p-4">
           {children}
@@ -136,26 +130,4 @@ function ApprovalCardField({
   )
 }
 
-/**
- * The action bar (Figma part / card footer). Pending: leading ghost action, then Deny (outline
- * destructive) and Approve (brand). Approved / denied: a `message` and one ghost action.
- */
-function ApprovalCardFooter({
-  message,
-  className,
-  children,
-  ...props
-}: React.ComponentProps<'div'> & { message?: React.ReactNode }) {
-  return (
-    <div
-      data-slot="approval-card-footer"
-      className={cn('flex flex-wrap items-center gap-2 border-t bg-muted px-4 py-3', className)}
-      {...props}
-    >
-      {message && <p className="min-w-0 flex-1 type-text-xs-normal text-muted-foreground">{message}</p>}
-      {children}
-    </div>
-  )
-}
-
-export { ApprovalCard, ApprovalCardField, ApprovalCardFooter, type ApprovalStatus }
+export { ApprovalCard, ApprovalCardField, type ApprovalStatus }
