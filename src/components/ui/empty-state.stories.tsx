@@ -29,20 +29,22 @@ function DemoEmpty({ media = 'default', link = false, bordered = false }: DemoPr
         <EmptyStateMedia variant={media}>
           <Icon icon={InboxIcon} />
         </EmptyStateMedia>
-        <EmptyStateTitle>Title</EmptyStateTitle>
-        <EmptyStateDescription>Subtitle</EmptyStateDescription>
+        <EmptyStateTitle>No conversations yet</EmptyStateTitle>
+        <EmptyStateDescription>
+          Start a chat to plan, research or draft with Assistant. Your conversations appear here.
+        </EmptyStateDescription>
       </EmptyStateHeader>
       <EmptyStateContent>
         <Button variant="default" intent="neutral">
           <Icon icon={PlusIcon} />
-          Add
+          New chat
         </Button>
         {link && (
           <a
             href="#more"
             className="rounded-sm type-text-xs-link text-foreground-link outline-none focus-visible:focus-ring"
           >
-            Learn more
+            How chats are saved
           </a>
         )}
       </EmptyStateContent>
@@ -99,8 +101,8 @@ const meta = preview.meta({
 export const Default = meta.story()
 
 Default.test('title, description and the next action', async ({ canvas }) => {
-  await expect(canvas.getByText('Title')).toBeVisible()
-  await expect(canvas.getByRole('button', { name: 'Add' })).toBeEnabled()
+  await expect(canvas.getByText('No conversations yet')).toBeVisible()
+  await expect(canvas.getByRole('button', { name: 'New chat' })).toBeEnabled()
 })
 
 /** shadcn EmptyStateMedia variant="icon", a dashed outline and the optional link. */
