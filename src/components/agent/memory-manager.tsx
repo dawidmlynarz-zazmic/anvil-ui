@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'
+import { Item, ItemActions, ItemContent } from '@/components/ui/item'
 import { ShellDescription, ShellFooter, ShellHeader, ShellTitle } from '@/components/anvil/shell'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -115,30 +116,30 @@ function MemoryManagerItem({
   ...props
 }: React.ComponentProps<'li'> & { tag?: React.ReactNode; onEdit?: () => void; onDelete?: () => void }) {
   return (
-    <li
-      data-slot="memory-manager-item"
-      className={cn('flex items-center gap-2.5 rounded-md border px-3 py-2.5', className)}
-      {...props}
-    >
-      <span className="min-w-0 flex-1 type-text-sm-normal text-foreground group-data-[enabled=false]/memory:text-muted-foreground">
-        {children}
-      </span>
-      {tag && (
-        <Badge variant="outline" intent="neutral" size="xs" className="shrink-0">
-          {tag}
-        </Badge>
-      )}
-      {onEdit && (
-        <Button variant="ghost" intent="neutral" size="icon-xs" aria-label="Edit" onClick={onEdit}>
-          <Icon icon={PencilIcon} />
-        </Button>
-      )}
-      {onDelete && (
-        <Button variant="ghost" intent="neutral" size="icon-xs" aria-label="Delete" onClick={onDelete}>
-          <Icon icon={Trash2Icon} />
-        </Button>
-      )}
-    </li>
+    <Item asChild variant="outline" size="sm" className={cn('flex-nowrap gap-2.5', className)}>
+      <li data-slot="memory-manager-item" {...props}>
+        <ItemContent className="type-text-sm-normal text-foreground group-data-[enabled=false]/memory:text-muted-foreground">
+          {children}
+        </ItemContent>
+        <ItemActions className="gap-2.5">
+          {tag && (
+            <Badge variant="outline" intent="neutral" size="xs" className="shrink-0">
+              {tag}
+            </Badge>
+          )}
+          {onEdit && (
+            <Button variant="ghost" intent="neutral" size="icon-xs" aria-label="Edit" onClick={onEdit}>
+              <Icon icon={PencilIcon} />
+            </Button>
+          )}
+          {onDelete && (
+            <Button variant="ghost" intent="neutral" size="icon-xs" aria-label="Delete" onClick={onDelete}>
+              <Icon icon={Trash2Icon} />
+            </Button>
+          )}
+        </ItemActions>
+      </li>
+    </Item>
   )
 }
 

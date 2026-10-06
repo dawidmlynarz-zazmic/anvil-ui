@@ -5,6 +5,13 @@ import { Slot } from 'radix-ui'
 
 import { Separator } from '@/components/ui/separator'
 
+// shadcn/ui Item, restyled to Anvil tokens (audit M11): the row the agent components share —
+// Instructions Banner, Memory Manager rows, Citation Source Item; Figma's icon tile is "built on
+// shadcn/ui: Item" (put an IconTile in ItemMedia). No Figma component of its own. `variant`
+// default · outline (--border) · muted (--muted); `size` default (16px, 16px gap) · sm (Anvil rows:
+// 12 / 10px, 12px gap, description text/xs). Title text/sm/medium, description text/sm (xs at sm)
+// --muted-foreground. Focus → focus/ring.
+
 function ItemGroup({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
@@ -28,17 +35,17 @@ function ItemSeparator({ className, ...props }: React.ComponentProps<typeof Sepa
 }
 
 const itemVariants = cva(
-  'group/item flex flex-wrap items-center rounded-md border border-transparent text-sm transition-colors duration-100 outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [a]:transition-colors [a]:hover:bg-accent/50',
+  'group/item flex flex-wrap items-center rounded-md border border-transparent type-text-sm-normal transition-colors duration-(--duration-fast) outline-none focus-visible:focus-ring [a]:hover:bg-muted',
   {
     variants: {
       variant: {
         default: 'bg-transparent',
         outline: 'border-border',
-        muted: 'bg-muted/50',
+        muted: 'bg-muted',
       },
       size: {
         default: 'gap-4 p-4',
-        sm: 'gap-2.5 px-4 py-3',
+        sm: 'gap-3 px-3 py-2.5',
       },
     },
     defaultVariants: {
@@ -73,8 +80,8 @@ const itemMediaVariants = cva(
     variants: {
       variant: {
         default: 'bg-transparent',
-        icon: "size-8 rounded-sm border bg-muted [&_svg:not([class*='size-'])]:size-4",
-        image: 'size-10 overflow-hidden rounded-sm [&_img]:size-full [&_img]:object-cover',
+        icon: "size-8 rounded-lg bg-muted [&_svg:not([class*='size-'])]:size-4",
+        image: 'size-10 overflow-hidden rounded-lg [&_img]:size-full [&_img]:object-cover',
       },
     },
     defaultVariants: {
@@ -102,7 +109,10 @@ function ItemContent({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="item-content"
-      className={cn('flex flex-1 flex-col gap-1 [&+[data-slot=item-content]]:flex-none', className)}
+      className={cn(
+        'flex min-w-0 flex-1 flex-col gap-1 group-data-[size=sm]/item:gap-0.5 [&+[data-slot=item-content]]:flex-none',
+        className,
+      )}
       {...props}
     />
   )
@@ -112,7 +122,10 @@ function ItemTitle({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="item-title"
-      className={cn('flex w-fit items-center gap-2 text-sm leading-snug font-medium', className)}
+      className={cn(
+        'flex w-fit max-w-full items-center gap-2 type-text-sm-medium text-foreground',
+        className,
+      )}
       {...props}
     />
   )
@@ -123,8 +136,8 @@ function ItemDescription({ className, ...props }: React.ComponentProps<'p'>) {
     <p
       data-slot="item-description"
       className={cn(
-        'line-clamp-2 text-sm leading-normal font-normal text-balance text-muted-foreground',
-        '[&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary',
+        'line-clamp-2 type-text-sm-normal text-balance text-muted-foreground group-data-[size=sm]/item:type-text-xs-normal',
+        '[&>a]:text-foreground-link [&>a]:underline [&>a]:underline-offset-4',
         className,
       )}
       {...props}
