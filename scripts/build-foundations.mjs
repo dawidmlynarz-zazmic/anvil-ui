@@ -160,6 +160,7 @@ const radii = dims
     utility: `rounded-${t.path[2]}`,
     code: figmaExt(t).codeSyntax,
     value: resolve(model, t, 'desktop'),
+    mobile: resolve(model, t, 'mobile'),
     description: t.$description ?? '',
   }))
   .sort((a, b) => a.value - b.value)
@@ -238,8 +239,8 @@ const pages = {
   Radius: page(
     'Radius',
     '8272:456',
-    'Every radius derives from `--radius` (8px), so changing it rethemes the system. `rounded-full` is `calc(infinity * 1px)`.',
-    `<Blocks.RadiusScale radii={data.radii} />`,
+    'One base, `--radius` (8px): every step is `calc(var(--radius) ± n)`, so changing the base rounds or squares the whole system at once. Use the step a component already uses; nest rounder surfaces outside squarer ones (a card at xl holds buttons at md). `rounded-full` is `calc(infinity * 1px)` for pills and circles.',
+    `<Blocks.RadiusScale radii={data.radii} />\n\n## Nesting\n\nAn inner element’s radius is the outer radius minus the padding between them, so curves stay parallel.\n\n<Blocks.RadiusNesting />`,
   ),
   Elevation: page(
     'Elevation',

@@ -39,7 +39,7 @@ const GLYPHS: [string, LucideIcon][] = [
 const tones = ['neutral', 'brand', 'info', 'success', 'warning', 'destructive', 'agent'] as const
 
 const meta = preview.meta({
-  title: 'Foundations/Icon',
+  title: 'Atoms/Icon',
   tags: ['atom'],
   component: Icon,
   parameters: {
@@ -47,6 +47,25 @@ const meta = preview.meta({
     design: { type: 'figma', url: FIGMA },
     // Figma: the Icons (Lucide) page has glyphs only, no component properties.
     figmaProps: [],
+    guide: {
+      use: [
+        'Every icon in the kit: inside Button, Badge, menus and agent components, or on its own next to text.',
+        'Leave `size` unset inside components (they size their icons); set `size` xs (12px) or default (16px) only when it stands alone.',
+        '`tone` for status and agent colours; otherwise it inherits the text colour.',
+      ],
+      avoid: [
+        'Importing from `lucide-react` directly (ESLint blocks it): the stroke and size would drift from Figma.',
+        'An icon on a tinted square or circle: use Icon Tile. An icon-only action: use Button `size="icon*"` with `aria-label`.',
+      ],
+      content: [
+        'Pick the glyph that names the action or object (pencil = edit, trash = delete); keep one glyph per meaning across the product.',
+      ],
+      a11y: [
+        'Decorative by default (`aria-hidden`): the text beside it names the thing.',
+        'When the icon alone carries meaning, pass `label` (it becomes `role="img"` with that name).',
+        'Colour never carries meaning alone: pair a status tone with text.',
+      ],
+    },
     docs: {
       description: {
         component:
