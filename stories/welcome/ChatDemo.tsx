@@ -24,7 +24,7 @@ import {
 import { TypingIndicator } from '@/components/agent/typing-indicator'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
-import { Bubble, BubbleContent } from '@/components/ui/bubble'
+import { MessageBubble, MessageBubbleContent } from '@/components/ui/message-bubble'
 import { Button } from '@/components/ui/button'
 import { ArrowUpIcon, BotIcon, Icon, TicketIcon } from '@/components/ui/icon'
 import { Marker, MarkerContent, MarkerIcon } from '@/components/ui/marker'
@@ -240,9 +240,9 @@ function AgentTurn({ turn }: { turn: Extract<Turn, { kind: 'agent' }> }) {
           </ToolCallAccordion>
         )}
         {turn.text && (
-          <Bubble variant="ghost">
-            <BubbleContent>{turn.text}</BubbleContent>
-          </Bubble>
+          <MessageBubble variant="ghost">
+            <MessageBubbleContent>{turn.text}</MessageBubbleContent>
+          </MessageBubble>
         )}
       </MessageContent>
     </Message>
@@ -311,9 +311,9 @@ export function ChatDemo() {
                       {turn.kind === 'user' && (
                         <Message align="end">
                           <MessageContent>
-                            <Bubble variant="muted">
-                              <BubbleContent>{turn.text}</BubbleContent>
-                            </Bubble>
+                            <MessageBubble variant="muted">
+                              <MessageBubbleContent>{turn.text}</MessageBubbleContent>
+                            </MessageBubble>
                           </MessageContent>
                         </Message>
                       )}

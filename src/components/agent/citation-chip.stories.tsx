@@ -1,7 +1,7 @@
 import preview from '#.storybook/preview'
 import { expect, fn, userEvent } from 'storybook/test'
 
-import { Bubble, BubbleContent } from '@/components/ui/bubble'
+import { MessageBubble, MessageBubbleContent } from '@/components/ui/message-bubble'
 import { GlobeIcon, Icon } from '@/components/ui/icon'
 
 import { CitationChip } from './citation-chip'
@@ -101,12 +101,12 @@ export const WithFavicon = meta.story({
 export const InText = meta.story({
   render: () => (
     <div className="w-120">
-      <Bubble variant="ghost">
-        <BubbleContent>
+      <MessageBubble variant="ghost">
+        <MessageBubbleContent>
           Subtitle <CitationChip index={1} confidence="high" /> Subtitle{' '}
           <CitationChip index={2} confidence="medium" /> Subtitle <CitationChip index={3} confidence="low" />
-        </BubbleContent>
-      </Bubble>
+        </MessageBubbleContent>
+      </MessageBubble>
     </div>
   ),
 })

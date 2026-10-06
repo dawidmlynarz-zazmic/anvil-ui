@@ -2,7 +2,14 @@ import preview from '#.storybook/preview'
 import { expect } from 'storybook/test'
 
 import { Button } from './button'
-import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from './empty'
+import {
+  EmptyState,
+  EmptyStateContent,
+  EmptyStateDescription,
+  EmptyStateHeader,
+  EmptyStateMedia,
+  EmptyStateTitle,
+} from './empty-state'
 import { Icon, InboxIcon, PlusIcon } from './icon'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=1623-6410'
@@ -17,15 +24,15 @@ type DemoProps = {
 
 function DemoEmpty({ media = 'default', link = false, bordered = false }: DemoProps) {
   return (
-    <Empty className={bordered ? 'w-120 border' : 'w-120'}>
-      <EmptyHeader>
-        <EmptyMedia variant={media}>
+    <EmptyState className={bordered ? 'w-120 border' : 'w-120'}>
+      <EmptyStateHeader>
+        <EmptyStateMedia variant={media}>
           <Icon icon={InboxIcon} />
-        </EmptyMedia>
-        <EmptyTitle>Title</EmptyTitle>
-        <EmptyDescription>Subtitle</EmptyDescription>
-      </EmptyHeader>
-      <EmptyContent>
+        </EmptyStateMedia>
+        <EmptyStateTitle>Title</EmptyStateTitle>
+        <EmptyStateDescription>Subtitle</EmptyStateDescription>
+      </EmptyStateHeader>
+      <EmptyStateContent>
         <Button variant="default" intent="neutral">
           <Icon icon={PlusIcon} />
           Add
@@ -38,27 +45,27 @@ function DemoEmpty({ media = 'default', link = false, bordered = false }: DemoPr
             Learn more
           </a>
         )}
-      </EmptyContent>
-    </Empty>
+      </EmptyStateContent>
+    </EmptyState>
   )
 }
 
 const meta = preview.meta({
-  title: 'UI Components/Empty',
+  title: 'UI Components/Empty State',
   tags: ['composite'],
   component: DemoEmpty,
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [
-      { property: 'title', values: 'text', code: '`EmptyTitle` children' },
-      { property: 'description', values: 'text', code: '`EmptyDescription` children' },
-      { property: 'show actions', values: 'boolean', code: 'render `EmptyContent` (actions) or not' },
+      { property: 'title', values: 'text', code: '`EmptyStateTitle` children' },
+      { property: 'description', values: 'text', code: '`EmptyStateDescription` children' },
+      { property: 'show actions', values: 'boolean', code: 'render `EmptyStateContent` (actions) or not' },
     ],
     docs: {
       description: {
         component:
-          'A placeholder for empty lists and zero-data views (shadcn/ui Empty): `EmptyMedia` (icon or illustration), `EmptyHeader` with `EmptyTitle` and `EmptyDescription`, and `EmptyContent` for actions. Say what is empty and what to do next.',
+          'A placeholder for empty lists and zero-data views (shadcn/ui Empty, named Empty State in Anvil): `EmptyStateMedia` (icon or illustration), `EmptyStateHeader` with `EmptyStateTitle` and `EmptyStateDescription`, and `EmptyStateContent` for actions. Say what is empty and what to do next.',
       },
     },
   },
@@ -77,5 +84,5 @@ Default.test('title, description and the next action', async ({ canvas }) => {
   await expect(canvas.getByRole('button', { name: 'Add' })).toBeEnabled()
 })
 
-/** shadcn EmptyMedia variant="icon", a dashed outline and the optional link. */
+/** shadcn EmptyStateMedia variant="icon", a dashed outline and the optional link. */
 export const IconTile = meta.story({ args: { media: 'icon', bordered: true, link: true } })

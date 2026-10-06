@@ -4,14 +4,14 @@ import { cn } from '@/lib/utils'
 import { MessageActions } from '@/components/agent/message-actions'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { Empty, EmptyDescription, EmptyMedia } from '@/components/ui/empty'
+import { EmptyState, EmptyStateDescription, EmptyStateMedia } from '@/components/ui/empty-state'
 import { Icon, ImageIcon, SparklesIcon } from '@/components/ui/icon'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 
 // Figma Agent Builder › Core Kit › image generation card (10732:2829): an image the agent generates,
 // with its prompt. Composed, nothing re-drawn: Card (--card, --border, radius xl, up to 480px); the
 // prompt row (Figma part / meta item: 12px agent sparkles + text/xs muted); a 16px-inset media area
-// (radius lg): generating = Empty on --muted (28px image icon + `statusText` text/xs/medium agent),
+// (radius lg): generating = Empty State on --muted (28px image icon + `statusText` text/xs/medium agent),
 // ready = your `<img>`, variations = a 2 × 2 single-choice Toggle Group of images (8px gap; selected
 // = 3px --border-action ring); the action row (16 / 12px): generating shows a note (text/xs, Figma
 // --foreground-subtle → --muted-foreground for contrast) and Cancel (ghost xs); ready and variations
@@ -72,17 +72,17 @@ function ImageGenerationCard({
       </p>
       <div className="px-4">
         {status === 'generating' && (
-          <Empty className="aspect-video gap-2 rounded-lg border-0 bg-muted p-0 md:p-0">
-            <EmptyMedia className="mb-0 text-muted-foreground [&_svg]:size-7">
+          <EmptyState className="aspect-video gap-2 rounded-lg border-0 bg-muted p-0 md:p-0">
+            <EmptyStateMedia className="mb-0 text-muted-foreground [&_svg]:size-7">
               <Icon icon={ImageIcon} />
-            </EmptyMedia>
-            <EmptyDescription
+            </EmptyStateMedia>
+            <EmptyStateDescription
               className="type-text-xs-medium text-agent dark:text-agent-medium"
               aria-live="polite"
             >
               {statusText}
-            </EmptyDescription>
-          </Empty>
+            </EmptyStateDescription>
+          </EmptyState>
         )}
         {status === 'ready' && (
           <div className="aspect-video overflow-hidden rounded-lg bg-accent *:[img]:size-full *:[img]:object-cover">

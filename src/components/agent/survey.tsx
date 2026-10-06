@@ -6,7 +6,13 @@ import { ShellFooter, ShellHeader, ShellTitle } from '@/components/anvil/shell'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
+import {
+  EmptyState,
+  EmptyStateDescription,
+  EmptyStateHeader,
+  EmptyStateMedia,
+  EmptyStateTitle,
+} from '@/components/ui/empty-state'
 import { FieldDescription, FieldLegend, FieldSet } from '@/components/ui/field'
 import { ChevronLeftIcon, CircleCheckIcon, Icon } from '@/components/ui/icon'
 import { Label } from '@/components/ui/label'
@@ -21,7 +27,7 @@ import { Textarea } from '@/components/ui/textarea'
 // - the step (16px, 12px gap) as a FieldSet: the question is its legend (text/base/medium), an
 //   optional hint (Field Description) and the answer — single: Radio Group with inline Labels ·
 //   multiple: Checkboxes with inline Labels · text: Textarea. Options sit 10px apart.
-// - done: Empty (32 / 16px) with a success Icon Tile (40px), title heading/xl, description.
+// - done: Empty State (32 / 16px) with a success Icon Tile (40px), title heading/xl, description.
 // - Shell Footer card `align` between: Back (ghost sm, chevron; disabled on the first step) | Skip
 //   (ghost sm) + Next (brand sm; Submit on the last step). Done: Close (outline sm).
 // Figma step single · multiple · text · complete = the current question's `kind`, or done.
@@ -123,17 +129,19 @@ function Survey({
         />
       </ShellHeader>
       {done ? (
-        <Empty role="status" className="gap-3 border-0 px-4 py-8 md:px-4 md:py-8">
-          <EmptyHeader>
-            <EmptyMedia className="[&_svg:not([class*='size-'])]:size-4.5">
+        <EmptyState role="status" className="gap-3 border-0 px-4 py-8 md:px-4 md:py-8">
+          <EmptyStateHeader>
+            <EmptyStateMedia className="[&_svg:not([class*='size-'])]:size-4.5">
               <IconTile icon={CircleCheckIcon} tone="success" />
-            </EmptyMedia>
-            <EmptyTitle>{doneTitle}</EmptyTitle>
+            </EmptyStateMedia>
+            <EmptyStateTitle>{doneTitle}</EmptyStateTitle>
             {doneDescription && (
-              <EmptyDescription className="text-muted-foreground">{doneDescription}</EmptyDescription>
+              <EmptyStateDescription className="text-muted-foreground">
+                {doneDescription}
+              </EmptyStateDescription>
             )}
-          </EmptyHeader>
-        </Empty>
+          </EmptyStateHeader>
+        </EmptyState>
       ) : (
         <FieldSet key={q.id} className="gap-3 p-4">
           <FieldLegend className="mb-0 type-text-base-medium">{q.question}</FieldLegend>

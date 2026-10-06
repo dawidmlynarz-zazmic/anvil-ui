@@ -2,7 +2,7 @@ import preview from '#.storybook/preview'
 import { expect } from 'storybook/test'
 
 import { Avatar, AvatarFallback } from './avatar'
-import { Bubble, BubbleContent } from './bubble'
+import { MessageBubble, MessageBubbleContent } from './message-bubble'
 import { Button } from './button'
 import { BotIcon, CircleAlertIcon, CopyIcon, Icon, RotateCcwIcon, ThumbsDownIcon, ThumbsUpIcon } from './icon'
 import { Message, MessageAvatar, MessageContent, MessageFooter, MessageGroup, MessageHeader } from './message'
@@ -56,7 +56,7 @@ const meta = preview.meta({
     docs: {
       description: {
         component:
-          'One turn in a conversation (shadcn/ui Message): `Message` (`align` start for the assistant, end for the user) › `MessageAvatar`, `MessageContent` › `MessageHeader` (author in `<strong>`, then the time), a `Bubble`, `MessageFooter` (actions or status). `MessageGroup` stacks turns. Figma draws it as the Agent Builder › Core Kit message row; the Core Kit component composes these parts.',
+          'One turn in a conversation (shadcn/ui Message): `Message` (`align` start for the assistant, end for the user) › `MessageAvatar`, `MessageContent` › `MessageHeader` (author in `<strong>`, then the time), a `MessageBubble`, `MessageFooter` (actions or status). `MessageGroup` stacks turns. Figma draws it as the Agent Builder › Core Kit message row; the Core Kit component composes these parts.',
       },
     },
   },
@@ -71,9 +71,9 @@ const meta = preview.meta({
             <strong>Title</strong>
             <span>14:02</span>
           </MessageHeader>
-          <Bubble variant={args.align === 'end' ? 'muted' : 'ghost'}>
-            <BubbleContent>Subtitle</BubbleContent>
-          </Bubble>
+          <MessageBubble variant={args.align === 'end' ? 'muted' : 'ghost'}>
+            <MessageBubbleContent>Subtitle</MessageBubbleContent>
+          </MessageBubble>
         </MessageContent>
       </Message>
     </div>
@@ -104,9 +104,9 @@ export const WithActions = meta.story({
             <strong>Title</strong>
             <span>14:02</span>
           </MessageHeader>
-          <Bubble variant="ghost">
-            <BubbleContent>Subtitle</BubbleContent>
-          </Bubble>
+          <MessageBubble variant="ghost">
+            <MessageBubbleContent>Subtitle</MessageBubbleContent>
+          </MessageBubble>
           <Actions />
         </MessageContent>
       </Message>
@@ -130,9 +130,9 @@ export const Failed = meta.story({
             <strong>Title</strong>
             <span>14:02</span>
           </MessageHeader>
-          <Bubble variant="muted">
-            <BubbleContent aria-invalid>Subtitle</BubbleContent>
-          </Bubble>
+          <MessageBubble variant="muted">
+            <MessageBubbleContent aria-invalid>Subtitle</MessageBubbleContent>
+          </MessageBubble>
           <MessageFooter className="text-danger-medium">
             <Icon icon={CircleAlertIcon} size="xs" />
             Failed to send ·
@@ -163,9 +163,9 @@ export const Thread = meta.story({
             <strong>Title</strong>
             <span>14:02</span>
           </MessageHeader>
-          <Bubble variant="muted">
-            <BubbleContent>Subtitle</BubbleContent>
-          </Bubble>
+          <MessageBubble variant="muted">
+            <MessageBubbleContent>Subtitle</MessageBubbleContent>
+          </MessageBubble>
         </MessageContent>
       </Message>
       <Message>
@@ -175,9 +175,9 @@ export const Thread = meta.story({
             <strong>Title</strong>
             <span>14:02</span>
           </MessageHeader>
-          <Bubble variant="ghost">
-            <BubbleContent>Subtitle</BubbleContent>
-          </Bubble>
+          <MessageBubble variant="ghost">
+            <MessageBubbleContent>Subtitle</MessageBubbleContent>
+          </MessageBubble>
           <Actions />
         </MessageContent>
       </Message>
@@ -187,12 +187,12 @@ export const Thread = meta.story({
             <strong>Title</strong>
             <span>14:03</span>
           </MessageHeader>
-          <Bubble variant="muted">
-            <BubbleContent>Subtitle</BubbleContent>
-          </Bubble>
-          <Bubble variant="muted">
-            <BubbleContent>Subtitle</BubbleContent>
-          </Bubble>
+          <MessageBubble variant="muted">
+            <MessageBubbleContent>Subtitle</MessageBubbleContent>
+          </MessageBubble>
+          <MessageBubble variant="muted">
+            <MessageBubbleContent>Subtitle</MessageBubbleContent>
+          </MessageBubble>
         </MessageContent>
       </Message>
     </MessageGroup>

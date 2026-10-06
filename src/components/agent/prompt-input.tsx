@@ -1,11 +1,10 @@
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'
-import { MicButton } from '@/components/agent/mic-button'
 import { VoiceWaveform } from '@/components/agent/voice-waveform'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { ArrowUpIcon, Icon, PaperclipIcon, RotateCcwIcon } from '@/components/ui/icon'
+import { ArrowUpIcon, Icon, MicIcon, PaperclipIcon, RotateCcwIcon } from '@/components/ui/icon'
 
 // Figma Agent Builder › Core Kit › prompt input (10663:2292), built on Input Group: the composer.
 // --background, --input stroke (1.5px --border-action while focused), radius 2xl, 12px padding,
@@ -170,12 +169,19 @@ function PromptInput({
         <span className="type-text-xs-normal text-muted-foreground">{tokenCount}</span>
       )}
       {onVoice && (
-        <MicButton
-          size="sm"
-          status={listening ? 'listening' : 'idle'}
+        <Button
+          type="button"
+          variant={listening ? 'default' : 'outline'}
+          intent={listening ? 'destructive' : 'neutral'}
+          size="icon-sm"
+          shape="circle"
+          aria-label="Voice input"
+          aria-pressed={listening}
           disabled={streaming}
           onClick={onVoice}
-        />
+        >
+          <Icon icon={MicIcon} />
+        </Button>
       )}
       {streaming ? (
         <Button
