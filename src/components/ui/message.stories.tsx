@@ -40,10 +40,11 @@ function Actions() {
 }
 
 const meta = preview.meta({
-  title: 'Agent Primitives/Messages/Message',
-  tags: ['composite'],
+  title: 'Molecules/Message',
+  tags: ['molecule', 'messages'],
   component: Message,
   parameters: {
+    shadcn: 'message',
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

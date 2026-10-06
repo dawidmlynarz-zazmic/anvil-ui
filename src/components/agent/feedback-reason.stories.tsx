@@ -9,8 +9,8 @@ const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=1072
 const REASONS = ['Label 1', 'Label 2', 'Label 3', 'Label 4', 'Label 5', 'Label 6', 'Label 7']
 
 const meta = preview.meta({
-  title: 'Agent Blocks/Feedback & Surveys/Feedback Reason',
-  tags: ['feature'],
+  title: 'Agent Builder/Feedback Reason',
+  tags: ['agent-builder', 'feedback'],
   component: FeedbackReason,
   parameters: {
     layout: 'padded',

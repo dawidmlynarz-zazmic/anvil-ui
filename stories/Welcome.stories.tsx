@@ -27,22 +27,16 @@ Welcome.test('follows the theme toolbar', async ({ globals }) => {
   await expect(document.documentElement.classList.contains('dark')).toBe(globals.theme === 'dark')
 })
 
-Welcome.test('introduces the system and lists every tier', async ({ canvas }) => {
+Welcome.test('introduces the system and lists every level', async ({ canvas }) => {
   await expect(canvas.getByRole('heading', { level: 1, name: 'Anvil UI' })).toBeVisible()
-  for (const tier of [
-    'Foundations',
-    'UI Components',
-    'Agent Primitives',
-    'Agent Blocks',
-    'Agent Templates',
-  ]) {
-    await expect(canvas.getByRole('region', { name: tier })).toBeInTheDocument()
+  for (const level of ['Foundations', 'Atoms', 'Molecules', 'Organisms', 'Agent Builder']) {
+    await expect(canvas.getByRole('region', { name: level })).toBeInTheDocument()
   }
   for (const area of [
     'Foundations · Foundations',
-    'UI Components · Forms',
-    'Agent Primitives · Input',
-    'Agent Blocks · Input',
+    'Atoms · Controls',
+    'Molecules · Forms',
+    'Agent Builder · Input',
   ]) {
     await waitFor(() => expect(canvas.getByRole('list', { name: area })).toBeInTheDocument())
   }

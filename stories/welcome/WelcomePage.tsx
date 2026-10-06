@@ -31,7 +31,7 @@ import {
 import { Kbd } from '@/components/ui/kbd'
 import { cn } from '@/lib/utils'
 
-import { CUSTOM_TAG, SECTIONS } from '../../.storybook/taxonomy'
+import { LEVELS } from '../../.storybook/taxonomy'
 
 import { catalog, type CatalogItem } from './catalog'
 import { ChatDemo } from './ChatDemo'
@@ -53,36 +53,30 @@ type IndexEntry = {
 
 function useStorybookPaths() {
   const [paths, setPaths] = useState<Map<string, string> | null>(null)
-  const [custom, setCustom] = useState<Set<string>>(new Set())
   useEffect(() => {
     let cancelled = false
     fetch('index.json')
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
       .then((index: { entries: Record<string, IndexEntry> }) => {
         const map = new Map<string, string>()
-        const customTitles = new Set<string>()
         for (const entry of Object.values(index.entries)) {
-          if (entry.tags?.includes(CUSTOM_TAG)) customTitles.add(entry.title)
           if (map.has(entry.title)) continue
           if (entry.type === 'docs') map.set(entry.title, `/docs/${entry.id}`)
           else if (entry.subtype !== 'test') map.set(entry.title, `/story/${entry.id}`)
         }
-        // A group item (e.g. "Agent Blocks/Checkout") links to the first page inside it.
+        // A group item (e.g. "Agent Builder/Checkout") links to the first page inside it.
         for (const [title, path] of [...map]) {
           const parent = title.slice(0, title.lastIndexOf('/'))
           if (parent && !map.has(parent)) map.set(parent, path)
         }
-        if (!cancelled) {
-          setPaths(map)
-          setCustom(customTitles)
-        }
+        if (!cancelled) setPaths(map)
       })
       .catch(() => !cancelled && setPaths(new Map()))
     return () => {
       cancelled = true
     }
   }, [])
-  return { paths, custom }
+  return { paths }
 }
 
 /** A link to another Storybook page: navigates the manager (no reload); new-tab still works. */
@@ -355,7 +349,7 @@ function Status({ ready }: { ready: boolean }) {
   )
 }
 
-function CatalogRow({ item, path, custom }: { item: CatalogItem; path?: string; custom?: boolean }) {
+function CatalogRow({ item, path }: { item: CatalogItem; path?: string }) {
   return (
     <li className="flex min-h-8 items-center justify-between gap-2">
       {path ? (
@@ -365,14 +359,6 @@ function CatalogRow({ item, path, custom }: { item: CatalogItem; path?: string; 
       ) : (
         <span className="type-text-sm-normal text-muted-foreground">{item.name}</span>
       )}
-      {custom && (
-        <span
-          title="Anvil-only: no shadcn/ui counterpart, outside the shadcn sync"
-          className="ml-auto rounded-sm bg-muted px-1 py-0.5 type-text-2xs-medium text-muted-foreground"
-        >
-          Anvil
-        </span>
-      )}
       <Status ready={Boolean(path)} />
     </li>
   )
@@ -381,21 +367,19 @@ function CatalogRow({ item, path, custom }: { item: CatalogItem; path?: string; 
 // Explore groups: the sidebar's sections, Foundations first.
 const exploreGroups = [
   { key: 'Foundations', label: 'Foundations', description: 'Tokens pulled from Figma.' },
-  ...SECTIONS.map((section) => ({
-    key: section.title,
-    label: section.title,
-    description: section.description,
+  ...LEVELS.map((level) => ({
+    key: level.title,
+    label: level.title,
+    description: level.description,
   })),
 ]
 
 function Explore({
   paths,
-  custom,
   ready,
   total,
 }: {
   paths: Map<string, string> | null
-  custom: Set<string>
   ready: number
   total: number
 }) {
@@ -463,12 +447,7 @@ function Explore({
                     </div>
                     <ul className="flex flex-col" aria-label={`${group.label} · ${area.name}`}>
                       {area.items.map((item) => (
-                        <CatalogRow
-                          key={item.title}
-                          item={item}
-                          path={paths?.get(item.title)}
-                          custom={custom.has(item.title)}
-                        />
+                        <CatalogRow key={item.title} item={item} path={paths?.get(item.title)} />
                       ))}
                     </ul>
                   </div>
@@ -488,14 +467,14 @@ const tips: { icon: LucideIcon; title: string; body: ReactNode }[] = [
     title: 'Sidebar',
     body: (
       <>
-        <strong className="text-foreground">Foundations</strong> (tokens), then{' '}
-        <strong className="text-foreground">UI Components</strong> (shadcn/ui and Anvil-only controls, A–Z),{' '}
-        <strong className="text-foreground">Agent Primitives</strong> (elements and composites),{' '}
-        <strong className="text-foreground">Agent Blocks</strong> (features) and{' '}
-        <strong className="text-foreground">Agent Templates</strong>. Agent sections keep the Figma section a
-        component comes from (Input, Messages, Sources…). Every docs page shows how the component is built
-        (Element, Composite, Feature or Template); filter by it, or by <code>anvil-custom</code>, with the
-        sidebar&apos;s tag filter.
+        <strong className="text-foreground">Foundations</strong> (tokens), then the levels:{' '}
+        <strong className="text-foreground">Atoms</strong> (single elements),{' '}
+        <strong className="text-foreground">Molecules</strong> (a few atoms with one job),{' '}
+        <strong className="text-foreground">Organisms</strong> (complete sections) and{' '}
+        <strong className="text-foreground">Agent Builder</strong> (ready-to-use agent experiences), A–Z.
+        Every docs page shows the level, the context it is used in (Messages, Sources…), a{' '}
+        <strong className="text-foreground">shadcn</strong> link when it has a counterpart, and what it is
+        built with and used in. Filter by level or context with the sidebar&apos;s tag filter.
       </>
     ),
   },
@@ -642,12 +621,10 @@ function Footer() {
 // ---------------------------------------------------------------------------------------------
 
 export function WelcomePage() {
-  const { paths, custom } = useStorybookPaths()
+  const { paths } = useStorybookPaths()
   const items = catalog.flatMap((area) => area.items)
   const ready = items.filter((item) => paths?.has(item.title)).length
-  const firstComponent = items.find(
-    (item) => item.title.startsWith('UI Components/') && paths?.has(item.title),
-  )
+  const firstComponent = items.find((item) => item.title.startsWith('Atoms/') && paths?.has(item.title))
 
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -656,7 +633,7 @@ export function WelcomePage() {
         <Audience />
         <Goals />
         <Architecture />
-        <Explore paths={paths} custom={custom} ready={ready} total={items.length} />
+        <Explore paths={paths} ready={ready} total={items.length} />
         <UsingStorybook />
         <Contributors />
         <Footer />

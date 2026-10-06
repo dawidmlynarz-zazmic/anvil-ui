@@ -9,8 +9,8 @@ const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=1066
 const FIGMA_FOLLOW_UPS = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10668-15663'
 
 const meta = preview.meta({
-  title: 'Agent Primitives/Input/Quick Reply',
-  tags: ['element'],
+  title: 'Molecules/Quick Reply',
+  tags: ['molecule', 'messages'],
   component: QuickReply,
   parameters: {
     layout: 'centered',

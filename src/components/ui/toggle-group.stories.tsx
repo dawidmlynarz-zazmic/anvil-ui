@@ -41,10 +41,11 @@ function DemoToggleGroup({
 }
 
 const meta = preview.meta({
-  title: 'UI Components/Toggle Group',
-  tags: ['composite'],
+  title: 'Molecules/Toggle Group',
+  tags: ['molecule'],
   component: DemoToggleGroup,
   parameters: {
+    shadcn: 'toggle-group',
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [{ property: 'variant', values: 'default · outline', code: '`variant` prop' }],

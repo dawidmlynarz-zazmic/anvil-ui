@@ -106,10 +106,11 @@ function DemoPalette({ open = false, onOpenChange }: PaletteProps) {
 
 // `open` / `onOpenChange` are args of the Palette story only (the palette's Dialog).
 const meta = preview.type<{ args: PaletteProps }>().meta({
-  title: 'UI Components/Command',
-  tags: ['feature'],
+  title: 'Organisms/Command',
+  tags: ['organism'],
   component: DemoCommand,
   parameters: {
+    shadcn: 'command',
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

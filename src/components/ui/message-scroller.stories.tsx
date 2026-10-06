@@ -55,10 +55,11 @@ function Demo({ count = 12, ...props }: DemoProps) {
 }
 
 const meta = preview.meta({
-  title: 'Agent Primitives/Messages/Message Scroller',
-  tags: ['composite'],
+  title: 'Organisms/Message Scroller',
+  tags: ['organism', 'messages'],
   component: Demo,
   parameters: {
+    shadcn: 'message-scroller',
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
     // Figma: no scroller component; the thread is drawn on Agent Builder › Surfaces.

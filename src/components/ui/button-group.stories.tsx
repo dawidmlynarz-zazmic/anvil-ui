@@ -33,10 +33,11 @@ function DemoButtonGroup({ orientation = 'horizontal', variant = 'outline', size
 }
 
 const meta = preview.meta({
-  title: 'UI Components/Button Group',
-  tags: ['composite'],
+  title: 'Molecules/Button Group',
+  tags: ['molecule'],
   component: DemoButtonGroup,
   parameters: {
+    shadcn: 'button-group',
     layout: 'centered',
     design: { type: 'figma', url: 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=11160-516' },
     figmaProps: [{ property: 'orientation', values: 'horizontal · vertical', code: '`orientation` prop' }],

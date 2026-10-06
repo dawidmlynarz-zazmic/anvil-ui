@@ -128,38 +128,16 @@ export default definePreview({
     docs: { page: AnvilDocsPage },
     controls: { matchers: { color: /(background|color)$/i, date: /Date$/i }, sort: 'requiredFirst' },
     options: {
-      // Sections in a fixed order (Welcome, Foundations, then the taxonomy sections); inside an agent section, the
-      // sections follow the Figma Core Kit; components A–Z inside a section, stories in file order.
+      // Levels in a fixed order (Welcome, Foundations, Atoms, Molecules, Organisms, Agent Builder);
+      // components A–Z inside a level, stories in file order.
       // Plain JS, no outside references: Storybook evaluates this function's source on its own.
       storySort: (a, b) => {
-        const groups = [
-          'Welcome',
-          'Foundations',
-          'UI Components',
-          'Agent Primitives',
-          'Agent Blocks',
-          'Agent Templates',
-        ]
-        const sections = [
-          'Shell',
-          'Input',
-          'Messages',
-          'Agent States',
-          'Sources',
-          'System & Context',
-          'Widgets & Artifacts',
-          'Feedback & Surveys',
-        ]
+        const groups = ['Welcome', 'Foundations', 'Atoms', 'Molecules', 'Organisms', 'Agent Builder']
         const pa = a.title.split('/')
         const pb = b.title.split('/')
         const ga = groups.indexOf(pa[0])
         const gb = groups.indexOf(pb[0])
         if (ga !== gb) return (ga === -1 ? 99 : ga) - (gb === -1 ? 99 : gb)
-        if (pa.length > 2 && pb.length > 2 && pa[1] !== pb[1]) {
-          const sa = sections.indexOf(pa[1])
-          const sb = sections.indexOf(pb[1])
-          if (sa !== sb) return (sa === -1 ? 99 : sa) - (sb === -1 ? 99 : sb)
-        }
         if (pa[0] === 'Welcome' || pa[0] === 'Foundations' || a.title === b.title) return 0
         return a.title.localeCompare(b.title)
       },

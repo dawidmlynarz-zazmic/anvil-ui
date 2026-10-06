@@ -48,10 +48,11 @@ function DemoCalendar({
 }
 
 const meta = preview.meta({
-  title: 'UI Components/Calendar',
-  tags: ['feature'],
+  title: 'Molecules/Calendar',
+  tags: ['molecule'],
   component: DemoCalendar,
   parameters: {
+    shadcn: 'calendar',
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

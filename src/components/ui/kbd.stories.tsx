@@ -9,10 +9,11 @@ import { Tooltip, TooltipContent, TooltipTrigger } from './tooltip'
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=2534-31422'
 
 const meta = preview.meta({
-  title: 'UI Components/Kbd',
-  tags: ['element'],
+  title: 'Atoms/Kbd',
+  tags: ['atom'],
   component: Kbd,
   parameters: {
+    shadcn: 'kbd',
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     // Figma: badge/shortcut has no component properties (the key text is the children).

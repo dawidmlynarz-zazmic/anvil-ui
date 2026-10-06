@@ -9,10 +9,11 @@ const variants = ['default', 'outline'] as const
 const sizes = ['sm', 'default', 'lg'] as const
 
 const meta = preview.meta({
-  title: 'UI Components/Toggle',
-  tags: ['element'],
+  title: 'Atoms/Toggle',
+  tags: ['atom'],
   component: Toggle,
   parameters: {
+    shadcn: 'toggle',
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

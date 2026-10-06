@@ -45,10 +45,11 @@ function DemoAvatar({ size = 'default', shape = 'circle', type = 'text', label =
 }
 
 const meta = preview.meta({
-  title: 'UI Components/Avatar',
-  tags: ['element'],
+  title: 'Atoms/Avatar',
+  tags: ['atom'],
   component: DemoAvatar,
   parameters: {
+    shadcn: 'avatar',
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

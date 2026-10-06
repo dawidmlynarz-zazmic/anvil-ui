@@ -56,10 +56,11 @@ function DemoCard({
 }
 
 const meta = preview.meta({
-  title: 'UI Components/Card',
-  tags: ['composite'],
+  title: 'Molecules/Card',
+  tags: ['molecule'],
   component: DemoCard,
   parameters: {
+    shadcn: 'card',
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

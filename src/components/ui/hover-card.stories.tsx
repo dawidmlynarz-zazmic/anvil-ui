@@ -51,10 +51,11 @@ function DemoHoverCard({ open, onOpenChange, side = 'bottom', openDelay = 700 }:
 }
 
 const meta = preview.meta({
-  title: 'UI Components/Hover Card',
-  tags: ['composite'],
+  title: 'Molecules/Hover Card',
+  tags: ['molecule'],
   component: DemoHoverCard,
   parameters: {
+    shadcn: 'hover-card',
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     // Figma: hover card is an example on the Cards page (a card static inside HoverCard); no component properties.

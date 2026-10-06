@@ -12,8 +12,8 @@ const SERIES = [4, 6, 5, 7, 8, 7, 10, 12]
 const DELTA = { up: '+12%', down: '−3%', neutral: '0%' } as const
 
 const meta = preview.meta({
-  title: 'Agent Primitives/Widgets & Artifacts/Widget Metric Card',
-  tags: ['composite'],
+  title: 'Agent Builder/Widget Metric Card',
+  tags: ['agent-builder', 'widgets'],
   component: WidgetMetricCard,
   parameters: {
     layout: 'padded',

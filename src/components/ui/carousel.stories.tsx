@@ -61,10 +61,11 @@ function DemoCarousel({
 }
 
 const meta = preview.meta({
-  title: 'UI Components/Carousel',
-  tags: ['composite'],
+  title: 'Organisms/Carousel',
+  tags: ['organism'],
   component: DemoCarousel,
   parameters: {
+    shadcn: 'carousel',
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

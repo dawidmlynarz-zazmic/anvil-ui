@@ -230,13 +230,16 @@ Lucide    → Icon (@/components/ui/icon) → every component and story
 
 0. **Reuse first, at every stage (no duplicates).** Before building, and again before calling it
    done, check what already exists: the Welcome catalog (`stories/welcome/catalog.ts`),
-   `src/components/{ui,anvil,agent}`, and the instances the Figma component nests
-   (`docs/composition-audit.md`).
+   `src/components/{ui,anvil,agent}`, the inventory in `docs/system-audit.md`, the docs pages'
+   **Built with / Used in** lists, and the instances the Figma component nests.
    - If an existing component does the job, use it; extend it with a variant or prop rather than
      adding a near-copy.
-   - Compose features from composites and composites from elements: Button, Badge, Icon Tile,
-     Alert, Item, Chip, Dropdown Menu, Toolbar, Textarea, the shell header / footer, Action
-     Status, Step Status Icon, …
+   - Compose Agent Builder components from organisms, molecules and atoms: Button, Badge, Icon
+     Tile, Alert, Item, Chip, Card, Empty State, Dropdown Menu, Toolbar, Textarea, the shell header /
+     footer, Action Status, Step Status Icon, …
+   - Prefer a variant or a prop to a new component, and a prop to a subcomponent that only wraps
+     text. A ready-to-use agent experience built from a primitive (Citation Drawer on Sheet) is an
+     Agent Builder component, never a variant of that primitive.
    - Never re-draw an element (raw `<button>`, `<textarea>`, hand-built badge or tile) or wrap a
      UI composite in a preset-only component (e.g. a menu with fixed items: pass the items to the
      feature instead).
@@ -251,24 +254,24 @@ Lucide    → Icon (@/components/ui/icon) → every component and story
 4. Write `<name>.stories.tsx` in **CSF Next** (`import preview from '#.storybook/preview'`,
    `preview.meta({...})`, `meta.story({...})`): Default with controls, Variants grid, Sizes, States
    reference grid, With icons, Composition. Add `parameters.design` with the Figma URL.
-   - **Titles** place it in the sidebar by section: `Foundations/<Name>`, `UI Components/<Name>`
-     (shadcn components and Anvil-only controls; Anvil-only ones, code in `components/anvil`, also
-     carry the `anvil-custom` tag), `Agent Primitives/<Section>/<Name>`, `Agent Blocks/<Section>/<Name>`,
-     `Agent Templates/<Name>`. `<Section>` is the Figma section the component comes from (Core Kit:
-     Shell · Input · Messages · Agent States · Sources · System & Context · Widgets & Artifacts ·
-     Feedback & Surveys; Agent Patterns sections later). Tiers and sections keep that order, names
-     sort A–Z (`storySort` in `preview.tsx`); every item is listed in `stories/welcome/catalog.ts`.
-     Figma keeps its own page structure (by flow); the docs page links each component to it.
-   - **Category tag:** every meta has exactly one category tag (`.storybook/taxonomy.ts`,
-     `docs/composition-audit.md`): `element` (can't be split further; uses no other component but
-     `Icon`), `composite` (a few elements as one unit with one job), `feature` (a distinct section with
-     its own structure or flow) or `template` (a page layout). The section must allow it: UI
-     Components take element · composite · feature, Agent Primitives element · composite, Agent
-     Blocks feature, Agent Templates template. Build larger components from the smaller ones (a
-     feature composes composites; nothing re-draws a part that exists). `scripts/check-stories.mjs`
-     enforces the tag rules.
-   - **Docs page** (autodocs, `.storybook/docs-page.tsx`): title, tier, Figma link, description,
-     controls, then `parameters.figmaProps`: one row per Figma component property
+   - **Level** (`.storybook/taxonomy.ts`, `docs/system-audit.md`): every meta has exactly one level
+     tag and the title starts with it: `atom` → `Atoms/<Name>` (one element; uses no other Anvil
+     component except Icon), `molecule` → `Molecules/<Name>` (a few atoms with one job),
+     `organism` → `Organisms/<Name>` (a complete, reusable section: overlays, navigation, data),
+     `agent-builder` → `Agent Builder/<Name>` (a ready-to-use agent experience built from the
+     others). The Icon stays `Foundations/Icon`. Names sort A–Z inside a level (`storySort` in
+     `preview.tsx`); every item is listed in `stories/welcome/catalog.ts` (Figma names that live
+     elsewhere in code are aliases). Code stays flat (`components/{ui,anvil,agent}`, by origin):
+     never mirror levels in folders.
+   - **Context tag** (optional, only where it helps): `messages` · `input` · `agent-status` ·
+     `sources` · `memory` · `actions` · `widgets` · `feedback`. Button has none; Citation Chip has
+     `sources`.
+   - **shadcn:** a component with a shadcn/ui counterpart sets `parameters.shadcn: '<slug>'` (the
+     docs slug, e.g. `'empty'` for Empty State); the docs page links it. No ownership badge
+     otherwise. `scripts/check-stories.mjs` enforces the tag and title rules.
+   - **Docs page** (autodocs, `.storybook/docs-page.tsx`): title, level / context / shadcn badges,
+     Figma link, description, **Relationships** (Built with / Used in, generated from the imports
+     by `.storybook/relationships.ts`: never hand-written), controls, then `parameters.figmaProps`: one row per Figma component property
      (`{ property, values, code }`; names exactly as in Figma) saying what it is in code: a prop, a
      selector, a slot / child, or nothing. `pnpm lint` runs `scripts/check-stories.mjs`.
    - **Stories open in their resting state.** Never use `play`: interactions are

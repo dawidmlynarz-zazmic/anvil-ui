@@ -81,10 +81,11 @@ function GroupedSelect({ open, onOpenChange }: Pick<DemoProps, 'open' | 'onOpenC
 const openListA11y = { config: { rules: [{ id: 'aria-hidden-focus', enabled: false }] } }
 
 const meta = preview.meta({
-  title: 'UI Components/Select',
-  tags: ['composite'],
+  title: 'Molecules/Select',
+  tags: ['molecule'],
   component: DemoSelect,
   parameters: {
+    shadcn: 'select',
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

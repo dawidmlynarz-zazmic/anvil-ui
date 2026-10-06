@@ -120,8 +120,8 @@ function Example({ onApprove, onDeny, ...props }: ExampleProps) {
 }
 
 const meta = preview.meta({
-  title: 'Agent Blocks/System & Context/Approval Card',
-  tags: ['feature'],
+  title: 'Agent Builder/Approval Card',
+  tags: ['agent-builder', 'actions'],
   component: Example,
   parameters: {
     layout: 'padded',

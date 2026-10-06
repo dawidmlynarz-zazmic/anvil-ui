@@ -10,8 +10,8 @@ const DOWN = [12, 11, 12, 9, 8, 8, 6, 5]
 const FLAT = [6, 7, 6, 7, 6, 7, 6, 6]
 
 const meta = preview.meta({
-  title: 'UI Components/Sparkline',
-  tags: ['element', 'anvil-custom'],
+  title: 'Atoms/Sparkline',
+  tags: ['atom'],
   component: Sparkline,
   parameters: {
     layout: 'padded',

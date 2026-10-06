@@ -37,10 +37,11 @@ function DemoSeparator({
 }
 
 const meta = preview.meta({
-  title: 'UI Components/Separator',
-  tags: ['element'],
+  title: 'Atoms/Separator',
+  tags: ['atom'],
   component: DemoSeparator,
   parameters: {
+    shadcn: 'separator',
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

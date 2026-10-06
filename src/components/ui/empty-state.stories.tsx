@@ -51,10 +51,11 @@ function DemoEmpty({ media = 'default', link = false, bordered = false }: DemoPr
 }
 
 const meta = preview.meta({
-  title: 'UI Components/Empty State',
-  tags: ['composite'],
+  title: 'Molecules/Empty State',
+  tags: ['molecule'],
   component: DemoEmpty,
   parameters: {
+    shadcn: 'empty',
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

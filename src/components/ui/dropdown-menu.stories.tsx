@@ -89,10 +89,11 @@ function DemoMenu({ open, onOpenChange, side = 'bottom', align = 'start', modal 
 }
 
 const meta = preview.meta({
-  title: 'UI Components/Dropdown Menu',
-  tags: ['composite'],
+  title: 'Molecules/Dropdown Menu',
+  tags: ['molecule'],
   component: DemoMenu,
   parameters: {
+    shadcn: 'dropdown-menu',
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

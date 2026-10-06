@@ -11,8 +11,8 @@ const INTENTS = ['brand', 'neutral', 'destructive', 'inverse'] as const
 const STATES = ['default', 'hover', 'focus', 'disabled'] as const
 
 const meta = preview.meta({
-  title: 'UI Components/Link',
-  tags: ['element', 'anvil-custom'],
+  title: 'Atoms/Link',
+  tags: ['atom'],
   component: Link,
   parameters: {
     layout: 'centered',

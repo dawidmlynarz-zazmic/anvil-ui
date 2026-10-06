@@ -34,10 +34,11 @@ function DemoScrollArea({ orientation = 'vertical', type = 'hover' }: DemoProps)
 }
 
 const meta = preview.meta({
-  title: 'UI Components/Scroll Area',
-  tags: ['element'],
+  title: 'Atoms/Scroll Area',
+  tags: ['atom'],
   component: DemoScrollArea,
   parameters: {
+    shadcn: 'scroll-area',
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

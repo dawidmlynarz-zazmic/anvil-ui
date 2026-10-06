@@ -133,8 +133,8 @@ function Demo({ copy = true, retry = true, edit = false, feedback = true, share 
 }
 
 const meta = preview.meta({
-  title: 'Agent Primitives/Messages/Message Actions',
-  tags: ['composite'],
+  title: 'Molecules/Message Actions',
+  tags: ['molecule', 'messages'],
   component: Demo,
   parameters: {
     layout: 'centered',

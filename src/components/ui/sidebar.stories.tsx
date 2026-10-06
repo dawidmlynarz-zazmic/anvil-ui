@@ -386,10 +386,11 @@ function DemoSidebar({
 }
 
 const meta = preview.meta({
-  title: 'UI Components/Sidebar',
-  tags: ['feature'],
+  title: 'Organisms/Sidebar',
+  tags: ['organism'],
   component: DemoSidebar,
   parameters: {
+    shadcn: 'sidebar',
     layout: 'fullscreen',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

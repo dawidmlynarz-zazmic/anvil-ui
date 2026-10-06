@@ -74,10 +74,11 @@ function DemoContextMenu({ modal = true, onSelect }: DemoProps) {
 }
 
 const meta = preview.meta({
-  title: 'UI Components/Context Menu',
-  tags: ['composite'],
+  title: 'Molecules/Context Menu',
+  tags: ['molecule'],
   component: DemoContextMenu,
   parameters: {
+    shadcn: 'context-menu',
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     // Figma `context menu` is an example, not a component; its items are Dropdown Menu `dropdown item`s.

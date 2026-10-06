@@ -29,10 +29,11 @@ function DemoTooltip({ open, onOpenChange, side = 'top', text = 'Add' }: DemoPro
 }
 
 const meta = preview.meta({
-  title: 'UI Components/Tooltip',
-  tags: ['composite'],
+  title: 'Molecules/Tooltip',
+  tags: ['molecule'],
   component: DemoTooltip,
   parameters: {
+    shadcn: 'tooltip',
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

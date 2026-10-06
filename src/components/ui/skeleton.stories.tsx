@@ -6,10 +6,11 @@ import { Skeleton } from './skeleton'
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10671-2510'
 
 const meta = preview.meta({
-  title: 'UI Components/Skeleton',
-  tags: ['element'],
+  title: 'Atoms/Skeleton',
+  tags: ['atom'],
   component: Skeleton,
   parameters: {
+    shadcn: 'skeleton',
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [{ property: 'shape', values: 'line · block · circle', code: '`shape` prop' }],

@@ -19,10 +19,11 @@ import {
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10843-4460'
 
 const meta = preview.meta({
-  title: 'UI Components/Item',
-  tags: ['composite'],
+  title: 'Molecules/Item',
+  tags: ['molecule'],
   component: Item,
   parameters: {
+    shadcn: 'item',
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
     // No Figma item component: Figma's icon tile is "built on shadcn/ui: Item" (its media).

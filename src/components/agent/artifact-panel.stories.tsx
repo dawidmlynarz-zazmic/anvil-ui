@@ -132,8 +132,8 @@ function Demo({ view = 'preview', title = 'Title', status, editing, onPublish, o
 }
 
 const meta = preview.meta({
-  title: 'Agent Blocks/Widgets & Artifacts/Artifact Panel',
-  tags: ['feature'],
+  title: 'Agent Builder/Artifact Panel',
+  tags: ['agent-builder', 'widgets'],
   component: Demo,
   parameters: {
     layout: 'padded',

@@ -28,10 +28,11 @@ function Surface({ intent, children }: { intent?: string | null; children: React
 }
 
 const meta = preview.meta({
-  title: 'UI Components/Badge',
-  tags: ['element'],
+  title: 'Atoms/Badge',
+  tags: ['atom'],
   component: Badge,
   parameters: {
+    shadcn: 'badge',
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

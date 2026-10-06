@@ -85,10 +85,11 @@ function DemoMenubar({ defaultValue, onSelect }: DemoProps) {
 }
 
 const meta = preview.meta({
-  title: 'UI Components/Menubar',
-  tags: ['feature'],
+  title: 'Organisms/Menubar',
+  tags: ['organism'],
   component: DemoMenubar,
   parameters: {
+    shadcn: 'menubar',
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [

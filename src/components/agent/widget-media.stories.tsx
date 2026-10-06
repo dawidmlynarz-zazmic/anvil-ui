@@ -15,8 +15,8 @@ const IMAGE =
   )
 
 const meta = preview.meta({
-  title: 'Agent Primitives/Widgets & Artifacts/Widget Media',
-  tags: ['composite'],
+  title: 'Agent Builder/Widget Media',
+  tags: ['agent-builder', 'widgets'],
   component: WidgetMedia,
   parameters: {
     layout: 'padded',

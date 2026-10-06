@@ -18,10 +18,11 @@ function Slots({ count = 6 }: { count?: number }) {
 }
 
 const meta = preview.meta({
-  title: 'UI Components/Input OTP',
-  tags: ['composite'],
+  title: 'Molecules/Input OTP',
+  tags: ['molecule'],
   component: InputOTP,
   parameters: {
+    shadcn: 'input-otp',
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [
