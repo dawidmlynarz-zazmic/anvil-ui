@@ -2,10 +2,8 @@ import * as React from 'react'
 
 import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
 import { CircleCheckIcon, FileTextIcon, HardDriveIcon, Icon, type LucideIcon } from '@/components/ui/icon'
 import { IconTile } from '@/components/anvil/icon-tile'
-import { PulseDot } from '@/components/agent/pulse-dot'
 
 // Figma Agent Builder › Core Kit › connector card (10730:2985): asks to connect an app, then shows
 // the result. --card, border, radius xl, shadow-sm, max 640px. Header (16px, 12px gap, no
@@ -13,7 +11,7 @@ import { PulseDot } from '@/components/agent/pulse-dot'
 // in product), title text/sm/semibold, description text/xs muted, status Badge (semantic, xs,
 // indicator). Body (16px sides and bottom):
 // ConnectorCardPermission rows (Figma part / check row) or ConnectorCardItem results. Then
-// ConnectorCardFooter (--muted bar) or ConnectorCardStatus (connecting strip: pulse + progress).
+// ConnectorCardFooter (--muted bar) or ActionStatus (executing while connecting: pulse + progress).
 // Figma `state` → `status` suggest · connected · reconnect · connecting.
 
 type ConnectorStatus = 'suggest' | 'connected' | 'reconnect' | 'connecting'
@@ -46,7 +44,7 @@ function ConnectorCard({
   description?: React.ReactNode
   /** Overrides the status label. */
   badge?: React.ReactNode
-  /** ConnectorCardFooter, or ConnectorCardStatus while connecting. */
+  /** ConnectorCardFooter, or ActionStatus (executing) while connecting. */
   footer?: React.ReactNode
 }) {
   const titleId = React.useId()
@@ -133,41 +131,10 @@ function ConnectorCardFooter({ className, ...props }: React.ComponentProps<'div'
   )
 }
 
-/** The connecting strip (Figma action status, executing): pulse, message, `progress` and `action`. */
-function ConnectorCardStatus({
-  progress,
-  action,
-  className,
-  children,
-  ...props
-}: React.ComponentProps<'div'> & { progress?: number; action?: React.ReactNode }) {
-  return (
-    <div
-      data-slot="connector-card-status"
-      role="status"
-      className={cn(
-        'flex items-center gap-2.5 border-t border-agent-soft bg-agent-subtle py-2.5 pr-3 pl-4 text-agent-strong dark:text-foreground',
-        className,
-      )}
-      {...props}
-    >
-      <PulseDot />
-      <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-        <p className="type-text-sm-medium">{children}</p>
-        {progress !== undefined && (
-          <Progress tone="agent" size="sm" value={progress} aria-label="Progress" className="bg-agent-soft" />
-        )}
-      </div>
-      {action}
-    </div>
-  )
-}
-
 export {
   ConnectorCard,
   ConnectorCardFooter,
   ConnectorCardItem,
   ConnectorCardPermission,
-  ConnectorCardStatus,
   type ConnectorStatus,
 }
