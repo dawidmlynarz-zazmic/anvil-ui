@@ -82,7 +82,10 @@ function RatingScale({
             >
               <Icon
                 icon={StarIcon}
-                className={cn(filled ? 'fill-warning text-warning' : 'text-input', 'transition-colors')}
+                className={cn(
+                  filled ? 'fill-warning text-warning' : 'text-input',
+                  'transition-colors duration-(--duration-fast) ease-out',
+                )}
               />
             </ToggleGroupItem>
           )

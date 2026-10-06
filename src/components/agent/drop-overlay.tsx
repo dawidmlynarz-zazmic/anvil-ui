@@ -37,6 +37,7 @@ function DropOverlay({
       aria-live="polite"
       className={cn(
         'min-h-55 w-full gap-2 rounded-2xl border-[1.5px] border-dashed p-6 md:p-6',
+        'animate-in fade-in-0 duration-(--duration-fast) ease-out transition-colors',
         invalid ? 'border-danger bg-danger-subtle' : 'border-border-action bg-info-subtle',
         className,
       )}
