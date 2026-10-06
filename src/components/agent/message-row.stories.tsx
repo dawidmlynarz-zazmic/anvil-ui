@@ -20,7 +20,7 @@ const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=1066
 const ROLES = ['user', 'assistant', 'system', 'tool'] as const
 const STATUSES = ['queued', 'streaming', 'complete', 'failed'] as const
 
-function Thinking({ status }: { status: 'active' | 'completed' | 'failed' }) {
+function Thinking({ status }: { status: 'running' | 'done' | 'failed' }) {
   return (
     <ThinkingPanel status={status}>
       <ThinkingPanelTrigger>
@@ -90,7 +90,7 @@ function Row({
       author="Title"
       timestamp="14:02"
       thinking={
-        <Thinking status={status === 'queued' ? 'active' : status === 'failed' ? 'failed' : 'completed'} />
+        <Thinking status={status === 'queued' ? 'running' : status === 'failed' ? 'failed' : 'done'} />
       }
       citations={
         status === 'complete' && (
@@ -189,7 +189,7 @@ export const Composition = meta.story({
       <MessageRow
         author="Title"
         timestamp="14:02"
-        thinking={<Thinking status="completed" />}
+        thinking={<Thinking status="done" />}
         citations={<CitationChip index={1} domain="Label" confidence="high" />}
         widget={<FileOutputCard kind="document" name="Title" meta="Subtitle" href="#file" />}
         actions={<Actions />}

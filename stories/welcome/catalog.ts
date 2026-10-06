@@ -182,6 +182,7 @@ export const catalog: CatalogArea[] = [
       'Pulse Dot',
       'Text Shimmer',
       'Typing Indicator',
+      'Step Status Icon',
       'Thinking Panel',
       'Tool Call Item',
     ]),

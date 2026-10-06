@@ -1,6 +1,14 @@
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'
+import {
+  Attachment,
+  AttachmentAction,
+  AttachmentActions,
+  AttachmentContent,
+  AttachmentDescription,
+  AttachmentTitle,
+} from '@/components/ui/attachment'
 import { Button } from '@/components/ui/button'
 import {
   DownloadIcon,
@@ -11,6 +19,7 @@ import {
   FileTypeIcon,
   Icon,
   PresentationIcon,
+  RotateCcwIcon,
   XIcon,
   type LucideIcon,
 } from '@/components/ui/icon'
@@ -23,7 +32,9 @@ import { Progress } from '@/components/ui/progress'
 // spreadsheet --success-subtle · pdf --danger-subtle, 18px icon in the base tone. Name
 // text/sm/semibold (one line). `status` generating: agent status text/xs (--agent-medium in dark)
 // + 4px agent Progress + Cancel; ready: meta text/xs --muted-foreground + Preview, Download (ghost
-// icon-xs) and Open (outline xs).
+// icon-xs) and Open (outline xs); failed: Attachment's error look (--danger-muted stroke, danger
+// meta) + Retry (Figma draws no failed file output card; the look is prompt attachment invalid).
+// Built on Attachment (size lg; audit M8): generating = processing, ready = done, failed = error.
 
 type FileKind = 'document' | 'presentation' | 'spreadsheet' | 'pdf'
 
@@ -34,6 +45,8 @@ const KIND: Record<FileKind, { tone: 'info' | 'warning' | 'success' | 'destructi
   pdf: { tone: 'destructive', icon: FileTypeIcon },
 }
 
+const STATE = { generating: 'processing', ready: 'done', failed: 'error' } as const
+
 function FileOutputCard({
   kind = 'document',
   status = 'ready',
@@ -41,6 +54,7 @@ function FileOutputCard({
   meta,
   progress,
   onCancel,
+  onRetry,
   onPreview,
   onDownload,
   href,
@@ -49,13 +63,14 @@ function FileOutputCard({
 }: Omit<React.ComponentProps<'div'>, 'children'> & {
   /** Figma type: which file it is. */
   kind?: FileKind
-  status?: 'generating' | 'ready'
+  status?: 'generating' | 'ready' | 'failed'
   name: React.ReactNode
-  /** Ready: format, size, pages. Generating: what the agent is doing. */
+  /** Ready: format, size, pages. Generating: what the agent is doing. Failed: what went wrong. */
   meta?: React.ReactNode
   /** Generating: 0–100. */
   progress?: number
   onCancel?: () => void
+  onRetry?: () => void
   onPreview?: () => void
   onDownload?: () => void
   /** Ready: opens the file. */
@@ -63,65 +78,64 @@ function FileOutputCard({
 }) {
   const generating = status === 'generating'
   return (
-    <div
+    <Attachment
       data-slot="file-output-card"
       data-status={status}
-      className={cn(
-        'flex w-full max-w-(--shell-widget-max) items-center gap-3 rounded-xl border bg-card p-3 text-card-foreground shadow-sm',
-        className,
-      )}
+      size="lg"
+      state={STATE[status]}
+      className={cn('w-full max-w-(--shell-widget-max) flex-nowrap', className)}
       {...props}
     >
       <IconTile icon={KIND[kind].icon} tone={KIND[kind].tone} />
-      <div className="flex min-w-0 flex-1 flex-col gap-1">
-        <span className="truncate type-text-sm-semibold text-foreground">{name}</span>
+      <AttachmentContent>
+        <AttachmentTitle className="group-data-[state=processing]/attachment:animate-none group-data-[state=processing]/attachment:bg-none group-data-[state=processing]/attachment:text-foreground">
+          {name}
+        </AttachmentTitle>
         {meta && (
-          <span
-            className={cn(
-              'type-text-xs-normal',
-              generating ? 'text-agent dark:text-agent-medium' : 'text-muted-foreground',
-            )}
+          <AttachmentDescription
+            className={cn('whitespace-normal', generating && 'text-agent dark:text-agent-medium')}
           >
             {meta}
-          </span>
+          </AttachmentDescription>
         )}
         {generating && <Progress tone="agent" size="sm" value={progress} aria-label="Generating" />}
-      </div>
-      {generating ? (
-        onCancel && (
-          <Button variant="ghost" intent="neutral" size="icon-xs" aria-label="Cancel" onClick={onCancel}>
+      </AttachmentContent>
+      <AttachmentActions className="gap-1">
+        {generating && onCancel && (
+          <AttachmentAction aria-label="Cancel" onClick={onCancel}>
             <Icon icon={XIcon} />
+          </AttachmentAction>
+        )}
+        {status === 'failed' && onRetry && (
+          <Button variant="outline" intent="neutral" size="xs" onClick={onRetry}>
+            <Icon icon={RotateCcwIcon} />
+            Retry
           </Button>
-        )
-      ) : (
-        <div className="flex shrink-0 items-center gap-1">
-          {onPreview && (
-            <Button variant="ghost" intent="neutral" size="icon-xs" aria-label="Preview" onClick={onPreview}>
-              <Icon icon={EyeIcon} />
-            </Button>
-          )}
-          {onDownload && (
-            <Button
-              variant="ghost"
-              intent="neutral"
-              size="icon-xs"
-              aria-label="Download"
-              onClick={onDownload}
-            >
-              <Icon icon={DownloadIcon} />
-            </Button>
-          )}
-          {href && (
-            <Button asChild variant="outline" intent="neutral" size="xs">
-              <a href={href} target="_blank" rel="noreferrer">
-                <Icon icon={ExternalLinkIcon} />
-                Open
-              </a>
-            </Button>
-          )}
-        </div>
-      )}
-    </div>
+        )}
+        {status === 'ready' && (
+          <>
+            {onPreview && (
+              <AttachmentAction aria-label="Preview" onClick={onPreview}>
+                <Icon icon={EyeIcon} />
+              </AttachmentAction>
+            )}
+            {onDownload && (
+              <AttachmentAction aria-label="Download" onClick={onDownload}>
+                <Icon icon={DownloadIcon} />
+              </AttachmentAction>
+            )}
+            {href && (
+              <Button asChild variant="outline" intent="neutral" size="xs">
+                <a href={href} target="_blank" rel="noreferrer">
+                  <Icon icon={ExternalLinkIcon} />
+                  Open
+                </a>
+              </Button>
+            )}
+          </>
+        )}
+      </AttachmentActions>
+    </Attachment>
   )
 }
 

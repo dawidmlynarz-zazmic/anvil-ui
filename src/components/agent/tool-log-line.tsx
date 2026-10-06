@@ -1,9 +1,8 @@
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'
-import { PulseDot } from '@/components/agent/pulse-dot'
+import { StepStatusIcon, type StepStatus } from '@/components/agent/step-status'
 import { TextShimmer } from '@/components/agent/text-shimmer'
-import { CheckIcon, CircleAlertIcon, Icon } from '@/components/ui/icon'
 
 // Figma Agent Builder › Core Kit › tool log line (10735:2892): one inline tool status, lighter than a
 // Tool Call Item. `status` running (pulse dot + shimmering label, text/sm/medium) · done (14px
@@ -11,7 +10,7 @@ import { CheckIcon, CircleAlertIcon, Icon } from '@/components/ui/icon'
 // --danger-strong). `action` sits after the label: Details when done, Retry when failed (ghost ·
 // neutral · xs buttons). 8px gap, 4px vertical padding, up to --shell-widget-max.
 
-type ToolLogStatus = 'running' | 'done' | 'failed'
+type ToolLogStatus = StepStatus
 
 function ToolLogLine({
   status = 'running',
@@ -29,15 +28,12 @@ function ToolLogLine({
     >
       {status === 'running' ? (
         <>
-          <PulseDot />
+          <StepStatusIcon status="running" />
           <TextShimmer className="truncate">{children}</TextShimmer>
         </>
       ) : (
         <>
-          <Icon
-            icon={status === 'failed' ? CircleAlertIcon : CheckIcon}
-            className={cn('size-3.5', status === 'failed' ? 'text-danger' : 'text-muted-foreground')}
-          />
+          <StepStatusIcon status={status} appearance="subtle" className="size-3.5" />
           <span
             className={cn(
               'min-w-0 truncate type-text-sm-normal',

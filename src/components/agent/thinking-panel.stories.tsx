@@ -16,7 +16,7 @@ import {
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10667-13166'
 
-const STATUSES = ['active', 'completed', 'failed'] as const
+const STATUSES = ['running', 'done', 'failed'] as const
 
 function Panel({
   steps = false,
@@ -50,7 +50,11 @@ const meta = preview.meta({
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [
-      { property: 'status', values: 'active · completed · failed', code: '`status` prop' },
+      {
+        property: 'status',
+        values: 'running · done · failed',
+        code: '`status` prop (the shared step vocabulary)',
+      },
       {
         property: 'state',
         values: 'collapsed · expanded',
@@ -66,11 +70,11 @@ const meta = preview.meta({
     docs: {
       description: {
         component:
-          "The agent's reasoning, collapsed to one line (`@/components/agent/thinking-panel`, on Collapsible). `ThinkingPanel` (`status` active · completed · failed; `open` / `defaultOpen` / `onOpenChange`) › `ThinkingPanelTrigger` (adds the pulse dot, check or alert icon and the chevron) › `ThinkingPanelTitle` + `ThinkingPanelDuration`; `ThinkingPanelContent` › text and optional `ThinkingPanelSteps` › `ThinkingPanelStep`. Figma state collapsed · expanded is the open state.",
+          "The agent's reasoning, collapsed to one line (`@/components/agent/thinking-panel`, on Collapsible). `ThinkingPanel` (`status` running · done · failed, shared with tool calls; `open` / `defaultOpen` / `onOpenChange`) › `ThinkingPanelTrigger` (adds the pulse dot, check or alert icon and the chevron) › `ThinkingPanelTitle` + `ThinkingPanelDuration`; `ThinkingPanelContent` › text and optional `ThinkingPanelSteps` › `ThinkingPanelStep`. Figma state collapsed · expanded is the open state.",
       },
     },
   },
-  args: { status: 'active', open: false, steps: false },
+  args: { status: 'running' as const, open: false, steps: false },
   argTypes: {
     status: { control: 'inline-radio', options: STATUSES },
     open: { control: 'boolean' },
@@ -107,7 +111,7 @@ export const Statuses = meta.story({
 })
 
 /** Figma show step list: the actions behind the reasoning. */
-export const WithSteps = meta.story({ args: { status: 'completed', open: true, steps: true } })
+export const WithSteps = meta.story({ args: { status: 'done', open: true, steps: true } })
 
 WithSteps.test('steps are a list', async ({ canvas }) => {
   await expect(canvas.getAllByRole('listitem')).toHaveLength(3)
@@ -123,7 +127,7 @@ export const InMessage = meta.story({
             <strong>Title</strong>
             <span>14:02</span>
           </MessageHeader>
-          <Panel status="completed" />
+          <Panel status="done" />
           <Bubble variant="ghost">
             <BubbleContent>Subtitle</BubbleContent>
           </Bubble>
