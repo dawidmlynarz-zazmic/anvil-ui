@@ -259,7 +259,7 @@ Lucide    → Icon (@/components/ui/icon) → every component and story
      component except Icon), `molecule` → `Molecules/<Name>` (a few atoms with one job),
      `organism` → `Organisms/<Name>` (a complete, reusable section: overlays, navigation, data),
      `agent-builder` → `Agent Builder/<Name>` (a ready-to-use agent experience built from the
-     others). The Icon stays `Foundations/Icon`. Names sort A–Z inside a level (`storySort` in
+     others). The Icon is an atom (`Atoms/Icon`). Names sort A–Z inside a level (`storySort` in
      `preview.tsx`); every item is listed in `stories/welcome/catalog.ts` (Figma names that live
      elsewhere in code are aliases). Code stays flat (`components/{ui,anvil,agent}`, by origin):
      never mirror levels in folders.

@@ -33,8 +33,8 @@ export const catalog: CatalogArea[] = [
     section: 'Foundations',
     id: 'foundations',
     name: 'Foundations',
-    description: 'Tokens pulled from Figma: color, type, spacing, radius, elevation and icons.',
-    items: foundation('Colors', 'Typography', 'Spacing', 'Radius', 'Elevation', 'Icon'),
+    description: 'Tokens pulled from Figma: color, type, spacing, radius and elevation.',
+    items: foundation('Colors', 'Typography', 'Spacing', 'Radius', 'Elevation'),
   },
   // Atoms: one element, context-agnostic.
   {
@@ -62,6 +62,7 @@ export const catalog: CatalogArea[] = [
     name: 'Display',
     description: 'Labels, status and structure.',
     items: atom(
+      'Icon',
       'Badge',
       'Kbd',
       'Avatar',

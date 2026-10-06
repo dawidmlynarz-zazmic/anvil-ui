@@ -306,25 +306,92 @@ export function ShellTable({
   )
 }
 
+/** Where each radius step is used in Anvil (from the components' code). */
+const RADIUS_USE: Record<string, string> = {
+  'radius/none': 'Edge-to-edge surfaces: table cells, side sheets, full-bleed media',
+  'radius/2xs': 'Tiny marks: the streaming caret, waveform bars',
+  'radius/sm': 'Badge, Kbd, Checkbox, xs buttons, inline code',
+  'radius/md': 'Button, Input, Select, Textarea, Toggle, Card, menu items',
+  'radius/base': 'The base step every other one derives from',
+  'radius/lg': 'Alert, Popover, menus, Calendar, large buttons, Tool Call Accordion',
+  'radius/xl': 'Dialog, Alert Dialog, agent cards (Approval, Rating, Survey, Poll)',
+  'radius/2xl': 'Prompt Input, Drawer (top corners), Message Bubble, Drop Overlay',
+  'radius/full': 'Pills and circles: Avatar, Chip and Quick Reply, pill Badge, Switch',
+}
+
 export function RadiusScale({
   radii,
 }: {
-  radii: readonly { figma: string; utility: string; code: string; value: number; description: string }[]
+  radii: readonly {
+    figma: string
+    utility: string
+    code: string
+    value: number
+    mobile: number
+    description: string
+  }[]
 }) {
+  const label = (v: number) => (v >= 9999 ? 'full' : `${v}px`)
+  // Show desktop and mobile only when a step changes between them.
+  const responsive = radii.some((r) => r.mobile !== r.value)
   return (
-    <ModePanels className="flex flex-wrap gap-6">
-      {() =>
-        radii.map((r) => (
-          <div key={r.figma} className="flex w-28 flex-col gap-1">
-            <div className={cn(r.utility, 'size-20 border border-border-strong bg-muted')} />
-            <Code>{r.utility}</Code>
-            <div className="type-text-xs-normal text-muted-foreground">
-              {r.value === 9999 ? 'full' : `${r.value}px`} · {r.code}
+    <Table head={['Step', 'Preview', ...(responsive ? ['Desktop', 'Mobile'] : ['Value']), 'Code', 'Use']}>
+      {radii.map((r) => (
+        <tr key={r.figma}>
+          <Td className="type-text-sm-medium">{r.figma.replace('radius/', '')}</Td>
+          <Td>
+            <div
+              className="size-14 border-2 border-primary bg-info-subtle"
+              style={{ borderRadius: r.value >= 9999 ? 9999 : r.value }}
+              aria-hidden
+            />
+          </Td>
+          <Td>{label(r.value)}</Td>
+          {responsive && (
+            <Td className={r.mobile !== r.value ? 'type-text-sm-semibold' : undefined}>{label(r.mobile)}</Td>
+          )}
+          <Td>
+            <div className="flex flex-col items-start gap-1">
+              <Code>{r.utility}</Code>
+              <span className="type-code-xs text-muted-foreground">{r.code}</span>
             </div>
+          </Td>
+          <Td className="text-muted-foreground">{RADIUS_USE[r.figma] ?? ''}</Td>
+        </tr>
+      ))}
+    </Table>
+  )
+}
+
+/** Outer radius − padding = inner radius: an xl (12px) surface with 6px padding holds md (6px) content. */
+export function RadiusNesting() {
+  const cases = [
+    { outer: 'rounded-xl', outerPx: 12, pad: 'p-1.5', padPx: 6, inner: 'rounded-md', innerPx: 6, ok: true },
+    { outer: 'rounded-xl', outerPx: 12, pad: 'p-1.5', padPx: 6, inner: 'rounded-xl', innerPx: 12, ok: false },
+  ]
+  return (
+    <div className="sb-unstyled flex flex-wrap gap-6">
+      {cases.map((c) => (
+        <figure key={c.inner} className="flex flex-col gap-2">
+          <div className={cn(c.outer, c.pad, 'w-56 border border-border bg-muted')}>
+            <div className={cn(c.inner, 'h-16 border border-primary bg-background')} />
           </div>
-        ))
-      }
-    </ModePanels>
+          <figcaption className="type-text-xs-normal text-muted-foreground">
+            <span
+              className={
+                c.ok
+                  ? 'text-success-strong dark:text-success-medium'
+                  : 'text-danger-strong dark:text-danger-medium'
+              }
+            >
+              {c.ok ? 'Do' : 'Don’t'}
+            </span>{' '}
+            · outer {c.outerPx}px − padding {c.padPx}px = inner{' '}
+            {c.ok ? `${c.innerPx}px` : `${c.outerPx - c.padPx}px, not ${c.innerPx}px`}
+          </figcaption>
+        </figure>
+      ))}
+    </div>
   )
 }
 

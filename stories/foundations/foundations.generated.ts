@@ -2818,6 +2818,7 @@ export const radii = [
     "utility": "rounded-none",
     "code": "var(--radius-none)",
     "value": 0,
+    "mobile": 0,
     "description": "Tailwind rounded-none (0px desktop). shadcn: 0."
   },
   {
@@ -2825,6 +2826,7 @@ export const radii = [
     "utility": "rounded-2xs",
     "code": "calc(var(--radius) - 6px)",
     "value": 2,
+    "mobile": 2,
     "description": ""
   },
   {
@@ -2832,6 +2834,7 @@ export const radii = [
     "utility": "rounded-sm",
     "code": "calc(var(--radius) - 4px)",
     "value": 4,
+    "mobile": 4,
     "description": "Tailwind rounded-sm (4px desktop). shadcn: calc(var(--radius) - 4px)."
   },
   {
@@ -2839,6 +2842,7 @@ export const radii = [
     "utility": "rounded-md",
     "code": "calc(var(--radius) - 2px)",
     "value": 6,
+    "mobile": 6,
     "description": "Tailwind rounded-md (6px desktop). shadcn: calc(var(--radius) - 2px)."
   },
   {
@@ -2846,6 +2850,7 @@ export const radii = [
     "utility": "rounded-base",
     "code": "var(--radius)",
     "value": 8,
+    "mobile": 8,
     "description": ""
   },
   {
@@ -2853,6 +2858,7 @@ export const radii = [
     "utility": "rounded-lg",
     "code": "var(--radius)",
     "value": 8,
+    "mobile": 8,
     "description": "Tailwind rounded-lg (8px desktop). shadcn: var(--radius) — this is --radius."
   },
   {
@@ -2860,6 +2866,7 @@ export const radii = [
     "utility": "rounded-xl",
     "code": "calc(var(--radius) + 4px)",
     "value": 12,
+    "mobile": 12,
     "description": "Tailwind rounded-xl (12px desktop). shadcn: calc(var(--radius) + 4px)."
   },
   {
@@ -2867,6 +2874,7 @@ export const radii = [
     "utility": "rounded-2xl",
     "code": "calc(var(--radius) + 8px)",
     "value": 16,
+    "mobile": 16,
     "description": "Tailwind rounded-2xl (16px desktop). shadcn: calc(var(--radius) + 8px)."
   },
   {
@@ -2874,6 +2882,7 @@ export const radii = [
     "utility": "rounded-full",
     "code": "calc(infinity * 1px)",
     "value": 9999,
+    "mobile": 9999,
     "description": "Tailwind rounded-full (80px desktop). shadcn: 9999px."
   }
 ] as const
