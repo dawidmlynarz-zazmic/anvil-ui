@@ -254,3 +254,30 @@ AttachMenu.test('the attach button opens the attach menu', async ({ canvas, canv
   await waitFor(() => expect(body.getByRole('menuitem', { name: 'Upload files' })).toBeVisible())
   await expect(body.getByRole('menuitem', { name: 'Recent files' })).toBeInTheDocument()
 })
+
+/**
+ * Figma response controls, after a response stops: a status line + Buttons above the composer
+ * (`response` stopped · incomplete). While streaming, Send is Stop, so there is no pill.
+ */
+export const Response = meta.story({
+  render: (args) => (
+    <div className="flex w-160 flex-col gap-24 pt-14">
+      <PromptInput
+        placeholder="Placeholder"
+        response="stopped"
+        onRegenerate={args.onSubmit as () => void}
+        onContinue={args.onStop}
+      />
+      <PromptInput placeholder="Placeholder" response="incomplete" onContinue={args.onStop} />
+    </div>
+  ),
+})
+
+Response.test('Regenerate and Continue call back', async ({ canvas, args }) => {
+  const [stopped, incomplete] = canvas.getAllByRole('group', { name: 'Response controls' })
+  await expect(stopped).toHaveTextContent('Stopped')
+  await userEvent.click(within(stopped).getByRole('button', { name: 'Regenerate' }))
+  await expect(args.onSubmit).toHaveBeenCalledOnce()
+  await userEvent.click(within(incomplete).getByRole('button', { name: 'Continue generating' }))
+  await expect(args.onStop).toHaveBeenCalledOnce()
+})

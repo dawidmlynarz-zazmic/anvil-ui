@@ -1,10 +1,11 @@
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'
+import { MicButton } from '@/components/agent/mic-button'
 import { VoiceWaveform } from '@/components/agent/voice-waveform'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { ArrowUpIcon, Icon, MicIcon, PaperclipIcon } from '@/components/ui/icon'
+import { ArrowUpIcon, Icon, PaperclipIcon, RotateCcwIcon } from '@/components/ui/icon'
 
 // Figma Agent Builder › Core Kit › prompt input (10663:2292), built on Input Group: the composer.
 // --background, --input stroke (1.5px --border-action while focused), radius 2xl, 12px padding,
@@ -19,7 +20,10 @@ import { ArrowUpIcon, Icon, MicIcon, PaperclipIcon } from '@/components/ui/icon'
 // attachment menu, 280px, radius xl) or `onAttach` (the button alone); leading action (instance
 // swap) = `leading`, any control in that place. Show tools / voice / token count = `tools`,
 // `onVoice`, `tokenCount`. The attach menu is composed here from Button + Dropdown Menu, not a
-// component of its own (audit follow-up).
+// component of its own (audit follow-up). `response` stopped · incomplete shows Figma's response
+// controls above the composer as a status line + Buttons in a --popover pill (Regenerate ghost +
+// Continue outline · Continue generating primary); while streaming the send button is already
+// Stop, so no pill. The status line is a polite live region.
 
 type PromptInputProps = Omit<React.ComponentProps<'form'>, 'onSubmit' | 'onChange'> & {
   size?: 'default' | 'compact'
@@ -54,6 +58,12 @@ type PromptInputProps = Omit<React.ComponentProps<'form'>, 'onSubmit' | 'onChang
   listening?: boolean
   /** Lets an empty prompt send (e.g. attachments only). */
   canSendEmpty?: boolean
+  /** Figma response controls after a response stops: stopped (Regenerate, Continue) · incomplete. */
+  response?: 'stopped' | 'incomplete'
+  /** Overrides the status line ("Stopped", "Reached the length limit"). */
+  responseMessage?: React.ReactNode
+  onRegenerate?: () => void
+  onContinue?: () => void
 }
 
 function PromptInput({
@@ -75,6 +85,10 @@ function PromptInput({
   onVoice,
   listening = false,
   canSendEmpty = false,
+  response,
+  responseMessage,
+  onRegenerate,
+  onContinue,
   className,
   ...props
 }: PromptInputProps) {
@@ -156,19 +170,12 @@ function PromptInput({
         <span className="type-text-xs-normal text-muted-foreground">{tokenCount}</span>
       )}
       {onVoice && (
-        <Button
-          type="button"
-          variant="outline"
-          intent="neutral"
-          size="icon-sm"
-          shape={compact ? 'circle' : 'default'}
-          aria-label={listening ? 'Stop voice input' : 'Voice input'}
-          aria-pressed={listening}
+        <MicButton
+          size="sm"
+          status={listening ? 'listening' : 'idle'}
           disabled={streaming}
           onClick={onVoice}
-        >
-          <Icon icon={MicIcon} />
-        </Button>
+        />
       )}
       {streaming ? (
         <Button
@@ -206,7 +213,7 @@ function PromptInput({
         submit()
       }}
       className={cn(
-        'flex w-full max-w-(--shell-thread-max) flex-col gap-2 rounded-2xl bg-background p-3 text-foreground inset-ring inset-ring-input',
+        'relative flex w-full max-w-(--shell-thread-max) flex-col gap-2 rounded-2xl bg-background p-3 text-foreground inset-ring inset-ring-input',
         'transition-shadow duration-(--duration-fast) focus-within:inset-ring-[1.5px] focus-within:inset-ring-border-action',
         streaming && 'inset-ring-[1.5px] inset-ring-border-action',
         compact && 'p-1.5',
@@ -214,6 +221,48 @@ function PromptInput({
       )}
       {...props}
     >
+      {response && (
+        <div
+          role="group"
+          aria-label="Response controls"
+          data-slot="prompt-input-response"
+          data-response={response}
+          className="absolute bottom-full left-1/2 mb-3 inline-flex -translate-x-1/2 items-center gap-1 rounded-full border bg-popover p-1 ps-3 whitespace-nowrap text-popover-foreground"
+        >
+          <span aria-live="polite" className="type-text-xs-medium text-muted-foreground">
+            {responseMessage ?? (response === 'stopped' ? 'Stopped' : 'Reached the length limit')}
+          </span>
+          {response === 'stopped' ? (
+            <>
+              <Button
+                type="button"
+                variant="ghost"
+                intent="neutral"
+                size="sm"
+                shape="pill"
+                onClick={onRegenerate}
+              >
+                <Icon icon={RotateCcwIcon} />
+                Regenerate
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                intent="neutral"
+                size="sm"
+                shape="pill"
+                onClick={onContinue}
+              >
+                Continue
+              </Button>
+            </>
+          ) : (
+            <Button type="button" size="sm" shape="pill" onClick={onContinue}>
+              Continue generating
+            </Button>
+          )}
+        </div>
+      )}
       {attachments && (
         <div className={cn('flex flex-wrap gap-2', compact && 'flex-col items-start p-1.5')}>
           {attachments}

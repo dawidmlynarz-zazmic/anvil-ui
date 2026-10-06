@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { VoiceWaveform } from '@/components/agent/voice-waveform'
 import {
@@ -29,33 +30,37 @@ const STATUS_TEXT: Record<SessionStatus, string> = {
   camera: 'Looking through your camera',
 }
 
+/** A session control: a 60px circle Button (inverse on the dark stage; end call is destructive). */
 function Control({
   icon,
   label,
   pressed,
   tone = 'default',
+  className,
   ...props
-}: React.ComponentProps<'button'> & {
+}: Omit<React.ComponentProps<typeof Button>, 'variant' | 'intent' | 'size' | 'shape'> & {
   icon: LucideIcon
   label: string
   pressed?: boolean
   tone?: 'default' | 'end'
 }) {
   return (
-    <button
-      type="button"
+    <Button
+      intent={tone === 'end' ? 'destructive' : 'inverse'}
+      size="icon-lg"
+      shape="circle"
       aria-label={label}
       aria-pressed={pressed}
       className={cn(
-        'flex size-15 items-center justify-center rounded-full outline-none transition-colors duration-(--duration-fast) focus-visible:focus-ring focus-visible:ring-offset-background-inverse',
-        tone === 'end'
-          ? 'bg-destructive text-destructive-foreground hover:bg-button-destructive-hover'
-          : 'bg-overlay-inverse-16 text-foreground-inverse hover:bg-overlay-inverse-24 aria-pressed:bg-background aria-pressed:text-foreground',
+        'size-15 focus-visible:ring-offset-background-inverse [&_svg]:size-6',
+        tone !== 'end' &&
+          'bg-overlay-inverse-16 hover:bg-overlay-inverse-24 aria-pressed:bg-background aria-pressed:text-foreground',
+        className,
       )}
       {...props}
     >
-      <Icon icon={icon} className="size-6" />
-    </button>
+      <Icon icon={icon} />
+    </Button>
   )
 }
 
