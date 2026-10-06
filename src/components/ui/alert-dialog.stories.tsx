@@ -39,18 +39,18 @@ function DemoAlertDialog({
   intent = 'brand',
   loading = false,
   size = 'default',
-  title = 'Title',
-  description = 'Subtitle',
+  title = 'Archive “Q3 launch plan”?',
+  description = 'It moves to Archived. You can restore it any time.',
   media = false,
   onAction,
   focusOnOpen = true,
 }: DemoProps) {
-  const actionLabel = intent === 'destructive' ? 'Delete' : 'Continue'
+  const actionLabel = intent === 'destructive' ? 'Delete' : 'Archive'
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogTrigger asChild>
         <Button variant="outline" intent="neutral">
-          {intent === 'destructive' ? 'Delete' : 'Open dialog'}
+          {intent === 'destructive' ? 'Delete conversation' : 'Archive conversation'}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent
@@ -119,7 +119,7 @@ const meta = preview.meta({
       story: { inline: false, height: '320px' },
       description: {
         component:
-          'Blocking confirmation for destructive or irreversible actions (shadcn/ui Alert Dialog on Radix). Inline header (title + description) and footer (Cancel + Continue, or Delete when destructive; size sm). Figma `variant` destructive → `AlertDialogAction intent="destructive"`; `loading` → `AlertDialogAction loading` with a disabled Cancel. Unlike Dialog it has no close button and an outside click does not dismiss it; focus starts on Cancel.',
+          'One modal family, one shell: Dialog (a focused task, centred) · Alert Dialog (a decision the user must answer; no close button, no outside-click dismiss) · Sheet (a side panel that keeps the page in view) · Drawer (the mobile bottom panel). All four share the Shell header / footer, the --overlay scrim, elevation/modal and the same surface (--background, 1px --overlay-16 border). Blocking confirmation for destructive or irreversible actions (shadcn/ui Alert Dialog on Radix). Inline header (title + description) and footer (Cancel + the action that names itself — Archive, or Delete when destructive; size sm). Figma `variant` destructive → `AlertDialogAction intent="destructive"`; `loading` → `AlertDialogAction loading` with a disabled Cancel. Unlike Dialog it has no close button and an outside click does not dismiss it; focus starts on Cancel.',
       },
     },
   },
@@ -128,8 +128,8 @@ const meta = preview.meta({
     intent: 'brand',
     loading: false,
     size: 'default',
-    title: 'Title',
-    description: 'Subtitle',
+    title: 'Archive “Q3 launch plan”?',
+    description: 'It moves to Archived. You can restore it any time.',
     media: false,
     onAction: fn(),
   },
@@ -157,10 +157,10 @@ const body = (canvasElement: HTMLElement) => within(canvasElement.ownerDocument.
 export const Default = meta.story()
 
 Default.test('opens on Cancel; Escape closes and focus returns', async ({ canvas, canvasElement }) => {
-  const trigger = canvas.getByRole('button', { name: 'Open dialog' })
+  const trigger = canvas.getByRole('button', { name: 'Archive conversation' })
   await userEvent.click(trigger)
-  const dialog = await body(canvasElement).findByRole('alertdialog', { name: 'Title' })
-  await expect(dialog).toHaveAccessibleDescription('Subtitle')
+  const dialog = await body(canvasElement).findByRole('alertdialog', { name: 'Archive “Q3 launch plan”?' })
+  await expect(dialog).toHaveAccessibleDescription('It moves to Archived. You can restore it any time.')
   const cancel = within(dialog).getByRole('button', { name: 'Cancel' })
   await waitFor(() => expect(cancel).toHaveFocus())
   await userEvent.keyboard('{Escape}')
@@ -169,16 +169,16 @@ Default.test('opens on Cancel; Escape closes and focus returns', async ({ canvas
 })
 
 Default.test('the action runs and closes it', async ({ canvas, canvasElement, args }) => {
-  await userEvent.click(canvas.getByRole('button', { name: 'Open dialog' }))
+  await userEvent.click(canvas.getByRole('button', { name: 'Archive conversation' }))
   const dialog = await body(canvasElement).findByRole('alertdialog')
-  const action = within(dialog).getByRole('button', { name: 'Continue' })
+  const action = within(dialog).getByRole('button', { name: 'Archive' })
   await userEvent.click(action)
   await expect(args.onAction).toHaveBeenCalledTimes(1)
   await waitFor(() => expect(body(canvasElement).queryByRole('alertdialog')).toBeNull())
 })
 
 Default.test('an outside click does not dismiss it', async ({ canvas, canvasElement }) => {
-  await userEvent.click(canvas.getByRole('button', { name: 'Open dialog' }))
+  await userEvent.click(canvas.getByRole('button', { name: 'Archive conversation' }))
   await body(canvasElement).findByRole('alertdialog')
   await userEvent.click(canvasElement.ownerDocument.body, { pointerEventsCheck: 0 })
   await expect(body(canvasElement).getByRole('alertdialog')).toBeInTheDocument()
@@ -188,7 +188,15 @@ Default.test('an outside click does not dismiss it', async ({ canvas, canvasElem
 export const Open = meta.story({ args: { open: true, focusOnOpen: false } })
 
 /** Figma variant=destructive: the action is a destructive Button. */
-export const Destructive = meta.story({ args: { open: true, focusOnOpen: false, intent: 'destructive' } })
+export const Destructive = meta.story({
+  args: {
+    open: true,
+    focusOnOpen: false,
+    intent: 'destructive',
+    title: 'Delete “Q3 launch plan”?',
+    description: 'This conversation and its 14 messages will be permanently removed. This can’t be undone.',
+  },
+})
 
 /** Figma loading=true: the action shows its spinner, Cancel is disabled, nothing dismisses it. */
 export const Loading = meta.story({ args: { open: true, focusOnOpen: false, loading: true } })
@@ -196,7 +204,7 @@ export const Loading = meta.story({ args: { open: true, focusOnOpen: false, load
 Loading.test('the action is busy and keeps it open', async ({ canvasElement, args }) => {
   const dialog = await body(canvasElement).findByRole('alertdialog')
   const cancel = within(dialog).getByRole('button', { name: 'Cancel' })
-  const action = within(dialog).getByRole('button', { name: 'Continue' })
+  const action = within(dialog).getByRole('button', { name: 'Archive' })
   await expect(cancel).toBeDisabled()
   await expect(action).toHaveAttribute('aria-busy', 'true')
   action.focus()

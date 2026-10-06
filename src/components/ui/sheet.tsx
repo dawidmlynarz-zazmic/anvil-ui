@@ -52,7 +52,9 @@ function SheetOverlay({ className, ...props }: React.ComponentProps<typeof Sheet
 const sheetContentVariants = cva(
   [
     'fixed z-(--z-modal) flex flex-col bg-background text-foreground outline-none',
-    'inset-ring inset-ring-overlay-16 shadow-elevation-modal',
+    // A real border (Figma inside stroke): an inset ring is painted under the header and footer
+    // bars' backgrounds, which left the outline around the body only.
+    'border border-overlay-16 shadow-elevation-modal',
     'transition ease-out data-[state=closed]:animate-out data-[state=closed]:duration-(--duration-base) data-[state=open]:animate-in data-[state=open]:duration-(--duration-slow)',
   ],
   {
