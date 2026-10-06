@@ -45,7 +45,7 @@ function DemoEmpty({ media = 'default', link = false, bordered = false }: DemoPr
 
 const meta = preview.meta({
   title: 'UI Components/Empty',
-  tags: ['ui-component'],
+  tags: ['composite'],
   component: DemoEmpty,
   parameters: {
     layout: 'centered',

@@ -35,7 +35,7 @@ function DemoScrollArea({ orientation = 'vertical', type = 'hover' }: DemoProps)
 
 const meta = preview.meta({
   title: 'UI Components/Scroll Area',
-  tags: ['ui-component'],
+  tags: ['element'],
   component: DemoScrollArea,
   parameters: {
     layout: 'centered',

@@ -9,7 +9,7 @@ const SCORES = { high: '92%', medium: '64%', low: '31%' } as const
 
 const meta = preview.meta({
   title: 'Agent Primitives/Sources/Citation Source Item',
-  tags: ['agent-primitive'],
+  tags: ['composite'],
   component: CitationSourceItem,
   parameters: {
     layout: 'centered',

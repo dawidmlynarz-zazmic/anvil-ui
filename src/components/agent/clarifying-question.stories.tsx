@@ -9,7 +9,7 @@ const OPTIONS = [1, 2, 3, 4].map((i) => ({ value: `label-${i}`, label: `Label ${
 
 const meta = preview.meta({
   title: 'Agent Blocks/Input/Clarifying Question',
-  tags: ['agent-block'],
+  tags: ['feature'],
   component: ClarifyingQuestion,
   parameters: {
     layout: 'centered',

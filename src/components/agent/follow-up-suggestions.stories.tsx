@@ -30,8 +30,8 @@ function Demo({
 }
 
 const meta = preview.meta({
-  title: 'Agent Blocks/Input/Follow-up Suggestions',
-  tags: ['agent-block'],
+  title: 'Agent Primitives/Input/Follow-up Suggestions',
+  tags: ['composite'],
   component: Demo,
   parameters: {
     layout: 'padded',

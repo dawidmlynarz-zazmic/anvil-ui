@@ -6,8 +6,8 @@ import { ResponseControls } from './response-controls'
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10735-3117'
 
 const meta = preview.meta({
-  title: 'Agent Blocks/Input/Response Controls',
-  tags: ['agent-block'],
+  title: 'Agent Primitives/Input/Response Controls',
+  tags: ['composite'],
   component: ResponseControls,
   parameters: {
     layout: 'centered',

@@ -52,8 +52,8 @@ function Demo({ open, onOpenChange, onUploadFiles, onPhotos, onTakePhoto }: Demo
 }
 
 const meta = preview.meta({
-  title: 'Agent Blocks/Input/Attachment Menu',
-  tags: ['agent-block'],
+  title: 'Agent Primitives/Input/Attachment Menu',
+  tags: ['composite'],
   component: Demo,
   parameters: {
     layout: 'centered',

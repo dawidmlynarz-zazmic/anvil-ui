@@ -57,7 +57,7 @@ function DemoAlert({
 
 const meta = preview.meta({
   title: 'UI Components/Alert',
-  tags: ['ui-component'],
+  tags: ['composite'],
   component: DemoAlert,
   parameters: {
     layout: 'padded',

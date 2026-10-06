@@ -34,7 +34,7 @@ function DemoButtonGroup({ orientation = 'horizontal', variant = 'outline', size
 
 const meta = preview.meta({
   title: 'UI Components/Button Group',
-  tags: ['ui-component'],
+  tags: ['composite'],
   component: DemoButtonGroup,
   parameters: {
     layout: 'centered',

@@ -236,7 +236,7 @@ Lucide    → Icon (@/components/ui/icon) → every component and story
 4. Write `<name>.stories.tsx` in **CSF Next** (`import preview from '#.storybook/preview'`,
    `preview.meta({...})`, `meta.story({...})`): Default with controls, Variants grid, Sizes, States
    reference grid, With icons, Composition. Add `parameters.design` with the Figma URL.
-   - **Titles** place it in the sidebar by tier: `Foundations/<Name>`, `UI Components/<Name>`
+   - **Titles** place it in the sidebar by section: `Foundations/<Name>`, `UI Components/<Name>`
      (shadcn components and Anvil-only controls; Anvil-only ones, code in `components/anvil`, also
      carry the `anvil-custom` tag), `Agent Primitives/<Section>/<Name>`, `Agent Blocks/<Section>/<Name>`,
      `Agent Templates/<Name>`. `<Section>` is the Figma section the component comes from (Core Kit:
@@ -244,11 +244,14 @@ Lucide    → Icon (@/components/ui/icon) → every component and story
      Feedback & Surveys; Agent Patterns sections later). Tiers and sections keep that order, names
      sort A–Z (`storySort` in `preview.tsx`); every item is listed in `stories/welcome/catalog.ts`.
      Figma keeps its own page structure (by flow); the docs page links each component to it.
-   - **Tier tag:** every meta has exactly one `tags` tier (`.storybook/tiers.ts`) matching its title's
-     section: `ui-component` (Tier 1: shadcn components and Anvil-only controls), `agent-primitive`
-     (Tier 2: one message part, indicator, chip or row), `agent-block` (Tier 3: a composed
-     interactive agent feature), `agent-template` (Tier 4: surfaces and templates). The docs page
-     shows it; `scripts/check-stories.mjs` fails when tag and section disagree.
+   - **Category tag:** every meta has exactly one category tag (`.storybook/taxonomy.ts`,
+     `docs/composition-audit.md`): `element` (can't be split further; uses no other component but
+     `Icon`), `composite` (a few elements as one unit with one job), `feature` (a distinct section with
+     its own structure or flow) or `template` (a page layout). The section must allow it: UI
+     Components take element · composite · feature, Agent Primitives element · composite, Agent
+     Blocks feature, Agent Templates template. Build larger components from the smaller ones (a
+     feature composes composites; nothing re-draws a part that exists). `scripts/check-stories.mjs`
+     enforces the tag rules.
    - **Docs page** (autodocs, `.storybook/docs-page.tsx`): title, tier, Figma link, description,
      controls, then `parameters.figmaProps`: one row per Figma component property
      (`{ property, values, code }`; names exactly as in Figma) saying what it is in code: a prop, a

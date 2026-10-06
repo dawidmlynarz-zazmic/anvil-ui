@@ -86,7 +86,7 @@ function DemoMenubar({ defaultValue, onSelect }: DemoProps) {
 
 const meta = preview.meta({
   title: 'UI Components/Menubar',
-  tags: ['ui-component'],
+  tags: ['feature'],
   component: DemoMenubar,
   parameters: {
     layout: 'centered',

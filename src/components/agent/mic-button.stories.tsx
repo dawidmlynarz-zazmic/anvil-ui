@@ -10,7 +10,7 @@ const STATUSES = ['idle', 'listening', 'processing', 'error'] as const
 
 const meta = preview.meta({
   title: 'Agent Primitives/Input/Mic Button',
-  tags: ['agent-primitive'],
+  tags: ['element'],
   component: MicButton,
   parameters: {
     layout: 'centered',

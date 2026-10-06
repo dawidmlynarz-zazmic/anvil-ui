@@ -387,7 +387,7 @@ function DemoSidebar({
 
 const meta = preview.meta({
   title: 'UI Components/Sidebar',
-  tags: ['ui-component'],
+  tags: ['feature'],
   component: DemoSidebar,
   parameters: {
     layout: 'fullscreen',

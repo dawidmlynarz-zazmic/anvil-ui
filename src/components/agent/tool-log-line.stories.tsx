@@ -40,7 +40,7 @@ function Demo({
 
 const meta = preview.meta({
   title: 'Agent Primitives/Messages/Tool Log Line',
-  tags: ['agent-primitive'],
+  tags: ['composite'],
   component: Demo,
   parameters: {
     layout: 'centered',

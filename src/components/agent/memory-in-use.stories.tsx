@@ -26,7 +26,7 @@ const actions = (
 
 const meta = preview.meta({
   title: 'Agent Primitives/System & Context/Memory In Use',
-  tags: ['agent-primitive'],
+  tags: ['composite'],
   component: MemoryInUse,
   parameters: {
     layout: 'padded',

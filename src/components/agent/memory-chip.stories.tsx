@@ -17,7 +17,7 @@ const manage = (
 
 const meta = preview.meta({
   title: 'Agent Primitives/System & Context/Memory Chip',
-  tags: ['agent-primitive'],
+  tags: ['composite'],
   component: MemoryChip,
   parameters: {
     layout: 'padded',

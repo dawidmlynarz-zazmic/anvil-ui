@@ -75,7 +75,7 @@ function DemoContextMenu({ modal = true, onSelect }: DemoProps) {
 
 const meta = preview.meta({
   title: 'UI Components/Context Menu',
-  tags: ['ui-component'],
+  tags: ['composite'],
   component: DemoContextMenu,
   parameters: {
     layout: 'centered',

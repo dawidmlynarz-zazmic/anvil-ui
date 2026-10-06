@@ -12,7 +12,7 @@ const STATES = ['default', 'hover', 'focus', 'disabled'] as const
 
 const meta = preview.meta({
   title: 'UI Components/Link',
-  tags: ['ui-component', 'anvil-custom'],
+  tags: ['element', 'anvil-custom'],
   component: Link,
   parameters: {
     layout: 'centered',

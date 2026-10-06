@@ -27,7 +27,7 @@ function Surface({ intent, children }: { intent?: string | null; children: React
 
 const meta = preview.meta({
   title: 'UI Components/Badge',
-  tags: ['ui-component'],
+  tags: ['element'],
   component: Badge,
   parameters: {
     layout: 'padded',

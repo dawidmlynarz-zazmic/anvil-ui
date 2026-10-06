@@ -42,7 +42,7 @@ function DemoToggleGroup({
 
 const meta = preview.meta({
   title: 'UI Components/Toggle Group',
-  tags: ['ui-component'],
+  tags: ['composite'],
   component: DemoToggleGroup,
   parameters: {
     layout: 'centered',

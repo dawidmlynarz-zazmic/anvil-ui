@@ -32,7 +32,7 @@ function Search({ size }: { size?: 'sm' | 'default' | 'lg' }) {
 
 const meta = preview.meta({
   title: 'UI Components/Input Group',
-  tags: ['ui-component'],
+  tags: ['composite'],
   component: InputGroup,
   parameters: {
     layout: 'padded',

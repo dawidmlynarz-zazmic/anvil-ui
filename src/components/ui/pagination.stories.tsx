@@ -72,7 +72,7 @@ function DemoPagination({ type = 'full', page: initial = 5, total = 12 }: DemoPr
 
 const meta = preview.meta({
   title: 'UI Components/Pagination',
-  tags: ['ui-component'],
+  tags: ['composite'],
   component: DemoPagination,
   parameters: {
     layout: 'centered',

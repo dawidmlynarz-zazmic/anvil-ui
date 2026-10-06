@@ -48,7 +48,7 @@ function Demo({
 
 const meta = preview.meta({
   title: 'Agent Primitives/Input/Attachment',
-  tags: ['agent-primitive'],
+  tags: ['composite'],
   component: Demo,
   parameters: {
     layout: 'centered',

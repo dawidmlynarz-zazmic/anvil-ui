@@ -43,8 +43,8 @@ function Panel({
 }
 
 const meta = preview.meta({
-  title: 'Agent Blocks/Agent States/Thinking Panel',
-  tags: ['agent-block'],
+  title: 'Agent Primitives/Agent States/Thinking Panel',
+  tags: ['composite'],
   component: Panel,
   parameters: {
     layout: 'padded',

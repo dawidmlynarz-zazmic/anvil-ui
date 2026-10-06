@@ -77,7 +77,7 @@ function DemoDialog({
 
 const meta = preview.meta({
   title: 'UI Components/Dialog',
-  tags: ['ui-component'],
+  tags: ['feature'],
   component: DemoDialog,
   parameters: {
     layout: 'centered',

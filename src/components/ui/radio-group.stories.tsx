@@ -14,7 +14,7 @@ const OPTIONS = [
 
 const meta = preview.meta({
   title: 'UI Components/Radio Group',
-  tags: ['ui-component'],
+  tags: ['element'],
   component: RadioGroup,
   parameters: {
     layout: 'padded',
