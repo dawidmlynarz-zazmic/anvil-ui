@@ -9,7 +9,7 @@ import { IconTile } from '@/components/anvil/icon-tile'
 // Figma Agent Builder › Core Kit › connector card (10730:2985): asks to connect an app, then shows
 // the result. --card, border, radius xl, shadow-sm, max 640px. Header (16px, 12px gap, no
 // divider): 40px --muted radius-lg tile with an 18px app icon (neutral; swap in the partner logo
-// in product), title text/sm/semibold, description text/xs muted, status Badge (semantic, xs,
+// in product), title text/sm/semibold, description text/xs muted, status Badge (subtle, xs,
 // indicator). Body (16px sides and bottom):
 // ConnectorCardPermission rows (Figma part / check row) or ConnectorCardItem results. Then
 // ShellFooter variant card (--muted bar) or ActionStatus (executing while connecting: pulse + progress).
@@ -66,7 +66,7 @@ function ConnectorCard({
         className="items-start border-b-0"
         media={<IconTile icon={icon} />}
         trailing={
-          <Badge data-slot="connector-card-badge" variant="semantic" tone={tag.tone} size="xs" indicator>
+          <Badge data-slot="connector-card-badge" variant="subtle" tone={tag.tone} size="xs" indicator>
             {badge ?? tag.label}
           </Badge>
         }

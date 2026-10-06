@@ -99,7 +99,7 @@ function Demo({ loading, empty, striped }: DemoProps) {
           <TableCell className="text-right tabular-nums">{row.signups.toLocaleString('en')}</TableCell>
           <TableCell className="text-right tabular-nums">{row.rate}%</TableCell>
           <TableCell>
-            <Badge variant="semantic" tone={row.status} size="sm">
+            <Badge variant="subtle" tone={row.status} size="sm">
               {STATUS[row.status]}
             </Badge>
           </TableCell>
@@ -142,7 +142,7 @@ const meta = preview.meta({
       use: [
         'When the answer is a set of records to compare: launch tasks, metrics by channel, search results with several fields.',
         'Up to a few dozen rows; add `pagination` beyond one screen and sortable heads (`sort` / `onSort`) for numeric columns.',
-        'Status columns as semantic Badges, so the table scans at a glance.',
+        'Status columns as subtle Badges, so the table scans at a glance.',
       ],
       avoid: [
         'Tables in app pages and settings: use the UI Table directly, without the widget card.',

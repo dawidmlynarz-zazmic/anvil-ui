@@ -123,7 +123,7 @@ function MemoryManagerItem({
         </ItemContent>
         <ItemActions className="gap-2.5">
           {tag && (
-            <Badge variant="outline" intent="neutral" size="xs" className="shrink-0">
+            <Badge variant="outline" size="xs" className="shrink-0">
               {tag}
             </Badge>
           )}

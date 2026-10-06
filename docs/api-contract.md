@@ -110,7 +110,7 @@ Focus uses the focus/ring effect style; disabled uses 50% opacity (shadcn `disab
 | Figma component · page | Variants | shadcn/ui target |
 | --- | --- | --- |
 | button, icon button · Button | variant × intent × size × state × shape; loading | Button (icon button = Button size icon*) |
-| badge, status badge · Badge | variant × intent × size; tone | Badge |
+| badge, status badge · Badge | tone × variant (default = solid · subtle · outline) × shape (default · pill) × size | Badge (next phase: `intent` and `variant="semantic"` removed; every tone has all three treatments) |
 | label · Forms | marker none · required · optional × state default · disabled · invalid | Label / FieldLabel |
 | text field · Forms | size × state × empty; nested Label; hint | Field + FieldLabel + Input + FieldDescription |
 | textarea · Forms | state × empty | Field + FieldLabel + Textarea + FieldDescription |

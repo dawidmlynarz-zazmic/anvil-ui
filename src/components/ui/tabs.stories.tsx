@@ -71,7 +71,7 @@ function DemoTabs({
             {showIcon && <Icon icon={icon} />}
             {label}
             {showBadge && (
-              <Badge variant="subtle" intent="neutral" size="xs">
+              <Badge variant="subtle" size="xs">
                 {count}
               </Badge>
             )}
@@ -200,7 +200,7 @@ export const ItemStates = meta.story({
                 >
                   <Icon icon={icon} />
                   {label}
-                  <Badge variant="subtle" intent="neutral" size="xs">
+                  <Badge variant="subtle" size="xs">
                     {count}
                   </Badge>
                 </TabsTrigger>

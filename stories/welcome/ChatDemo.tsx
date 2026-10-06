@@ -267,7 +267,7 @@ export function ChatDemo() {
             <span className="type-text-sm-semibold text-foreground">Travel assistant</span>
             <span className="type-text-xs-normal text-muted-foreground">Powered by Anvil UI</span>
           </div>
-          <Badge variant="subtle" intent="neutral" size="sm" className="ms-auto">
+          <Badge variant="subtle" size="sm" className="ms-auto">
             Online
           </Badge>
         </header>

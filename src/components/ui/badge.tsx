@@ -4,14 +4,68 @@ import { Slot } from 'radix-ui'
 
 import { cn } from '@/lib/utils'
 
-// Figma: Badge page → `badge` (1482:30693) and `status badge` (8399:1766), one component in code
-// (audit M5). Static label for counts, metadata and status. `variant` default · outline · subtle
-// (× `intent` neutral · inverse) or semantic (× `tone` neutral · info · success · warning ·
-// destructive · agent: --{tone}-subtle surface, --{tone}-medium text; neutral is the accessible
-// --muted pair). `indicator` adds an 8px dot in the tone, `count` a trailing number, `shape` pill
-// rounds it (Figma rounded=on, for tags and provenance labels). Icons are children (14 / 12 / 10px
-// by size). Outline strokes are inset rings (Figma inside stroke). Focus ring only matters when
-// rendered asChild as a link.
+// Figma: Badge page → `badge` (1482:30693) and `status badge` (8399:1766), one component in code.
+// A static label for counts, metadata and status. One colour prop and one treatment prop:
+// - `tone` neutral · brand · info · success · warning · destructive · agent (API Contract tones).
+// - `variant` default (solid: --{tone} fill, --{tone}-foreground text; neutral = --background-inverse)
+//   · subtle (--{tone}-subtle fill, --{tone}-medium text; neutral = the --muted pair; brand =
+//   --info-subtle + --primary) · outline (--background, a --{tone}-muted inset ring, --{tone}-medium
+//   text; neutral = --input ring, --foreground).
+// `shape` default (radius sm) · pill (Figma rounded=on: tags and provenance labels). `indicator`
+// adds an 8px dot in the tone (the current colour on solid), `count` a trailing number. Icons are
+// children (14 / 12 / 10px by size). Outline strokes are inset rings (Figma inside stroke). Focus
+// ring only matters when rendered asChild as a link. (Next phase: `variant="semantic"` and
+// `intent` are gone; every tone has all three treatments.)
+
+type Tone = 'neutral' | 'brand' | 'info' | 'success' | 'warning' | 'destructive' | 'agent'
+
+/** Fill and text per tone × treatment (danger tokens back the destructive tone). */
+const TONES: Record<Tone, { default: string; subtle: string; outline: string; dot: string }> = {
+  neutral: {
+    default: 'bg-background-inverse text-foreground-inverse',
+    subtle: 'bg-muted text-muted-foreground',
+    outline: 'bg-background text-foreground inset-ring-input',
+    dot: 'bg-muted-foreground',
+  },
+  brand: {
+    default: 'bg-primary text-primary-foreground',
+    subtle: 'bg-info-subtle text-primary dark:text-info-medium',
+    outline: 'bg-background text-primary inset-ring-info-muted dark:text-info-medium',
+    dot: 'bg-primary',
+  },
+  info: {
+    default: 'bg-info text-info-foreground',
+    subtle: 'bg-info-subtle text-info-medium',
+    outline: 'bg-background text-info-medium inset-ring-info-muted',
+    dot: 'bg-info',
+  },
+  success: {
+    // --success (green-50) is 4.2:1 with either foreground: solid uses green-30 in both themes.
+    default: 'bg-success-medium text-success-foreground dark:bg-success-muted',
+    subtle: 'bg-success-subtle text-success-medium',
+    outline: 'bg-background text-success-medium inset-ring-success-muted',
+    dot: 'bg-success',
+  },
+  warning: {
+    default: 'bg-warning text-warning-foreground',
+    subtle: 'bg-warning-subtle text-warning-medium',
+    outline: 'bg-background text-warning-medium inset-ring-warning-muted',
+    dot: 'bg-warning',
+  },
+  destructive: {
+    default: 'bg-danger text-danger-foreground',
+    subtle: 'bg-danger-subtle text-danger-medium',
+    outline: 'bg-background text-danger-medium inset-ring-danger-muted',
+    dot: 'bg-danger',
+  },
+  agent: {
+    default: 'bg-agent text-agent-foreground',
+    subtle: 'bg-agent-subtle text-agent-medium',
+    outline: 'bg-background text-agent-medium inset-ring-agent-muted',
+    dot: 'bg-agent',
+  },
+}
+
 const badgeVariants = cva(
   [
     'inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-sm px-1 whitespace-nowrap',
@@ -21,77 +75,21 @@ const badgeVariants = cva(
   ],
   {
     variants: {
-      variant: {
-        default: '',
-        outline: 'inset-ring',
-        subtle: '',
-        semantic: '',
-      },
-      tone: {
-        neutral: '',
-        info: '',
-        success: '',
-        warning: '',
-        destructive: '',
-        agent: '',
-      },
-      shape: {
-        default: '',
-        pill: 'rounded-full px-2',
-      },
-      intent: {
-        neutral: '',
-        inverse: '',
-      },
+      variant: { default: '', subtle: '', outline: 'inset-ring' },
+      shape: { default: '', pill: 'rounded-full px-2' },
       size: {
-        default: 'h-6 type-text-sm-medium [&>svg]:size-3.5',
+        default: 'h-6 gap-2 type-text-sm-medium [&>svg]:size-3.5',
         sm: 'h-5 type-text-xs-medium [&>svg]:size-3',
         xs: 'h-4.5 type-text-2xs-medium [&>svg]:size-2.5',
       },
     },
-    compoundVariants: [
-      { variant: 'default', intent: 'neutral', className: 'bg-background-inverse text-foreground-inverse' },
-      { variant: 'default', intent: 'inverse', className: 'bg-background text-foreground' },
-      { variant: 'outline', intent: 'neutral', className: 'bg-background text-foreground inset-ring-input' },
-      {
-        variant: 'outline',
-        intent: 'inverse',
-        className: 'bg-transparent text-foreground-inverse inset-ring-overlay-inverse-24',
-      },
-      // Figma: bg --accent (muted-foreground on accent is 3.99:1 in dark) → the accessible muted pair.
-      { variant: 'subtle', intent: 'neutral', className: 'bg-muted text-muted-foreground' },
-      // Figma: text --primary-foreground (white in both modes, invisible on the dark-mode inverse surface).
-      { variant: 'subtle', intent: 'inverse', className: 'bg-overlay-inverse-16 text-foreground-inverse' },
-      // semantic: Figma --accent / --muted-foreground for neutral is 3.99:1 in dark → the --muted pair.
-      { variant: 'semantic', tone: 'neutral', className: 'bg-muted text-muted-foreground' },
-      { variant: 'semantic', tone: 'info', className: 'bg-info-subtle text-info-medium' },
-      { variant: 'semantic', tone: 'success', className: 'bg-success-subtle text-success-medium' },
-      { variant: 'semantic', tone: 'warning', className: 'bg-warning-subtle text-warning-medium' },
-      { variant: 'semantic', tone: 'destructive', className: 'bg-danger-subtle text-danger-medium' },
-      { variant: 'semantic', tone: 'agent', className: 'bg-agent-subtle text-agent-medium' },
-      { size: 'default', className: 'gap-2' },
-    ],
-    defaultVariants: {
-      variant: 'default',
-      intent: 'neutral',
-      tone: 'neutral',
-      shape: 'default',
-      size: 'default',
-    },
+    defaultVariants: { variant: 'default', shape: 'default', size: 'default' },
   },
 )
 
-const INDICATOR = {
-  neutral: 'bg-muted-foreground',
-  info: 'bg-info',
-  success: 'bg-success',
-  warning: 'bg-warning',
-  destructive: 'bg-danger',
-  agent: 'bg-agent',
-} as const
-
 type BadgeProps = React.ComponentProps<'span'> &
   VariantProps<typeof badgeVariants> & {
+    tone?: Tone
     asChild?: boolean
     /** An 8px dot in the tone before the label (Figma indicator). */
     indicator?: boolean
@@ -102,7 +100,6 @@ type BadgeProps = React.ComponentProps<'span'> &
 function Badge({
   className,
   variant = 'default',
-  intent = 'neutral',
   tone = 'neutral',
   shape = 'default',
   size = 'default',
@@ -119,10 +116,9 @@ function Badge({
     <Comp
       data-slot="badge"
       data-variant={variant}
-      data-intent={variant === 'semantic' ? undefined : intent}
-      data-tone={variant === 'semantic' ? tone : undefined}
+      data-tone={tone}
       data-size={size}
-      className={cn(badgeVariants({ variant, intent, tone, shape, size }), className)}
+      className={cn(badgeVariants({ variant, shape, size }), TONES[tone][variant ?? 'default'], className)}
       {...props}
     >
       {decorated && !asChild ? (
@@ -131,7 +127,10 @@ function Badge({
             <span
               aria-hidden
               data-slot="badge-indicator"
-              className={cn('size-2 shrink-0 rounded-full', INDICATOR[tone ?? 'neutral'])}
+              className={cn(
+                'size-2 shrink-0 rounded-full',
+                variant === 'default' ? 'bg-current' : TONES[tone].dot,
+              )}
             />
           )}
           {children}
@@ -148,4 +147,4 @@ function Badge({
   )
 }
 
-export { Badge, badgeVariants, type BadgeProps }
+export { Badge, badgeVariants, type BadgeProps, type Tone as BadgeTone }

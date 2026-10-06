@@ -94,12 +94,12 @@ function ToolbarToggleItem({
 }
 
 /** Figma selection count: an --info-subtle pill. */
-/** A count in the toolbar, e.g. selected items: a Badge (semantic info, pill, sm). */
+/** A count in the toolbar, e.g. selected items: a Badge (subtle info, pill, sm). */
 function ToolbarCount({ className, ...props }: React.ComponentProps<'span'>) {
   return (
     <Badge
       data-slot="toolbar-count"
-      variant="semantic"
+      variant="subtle"
       tone="info"
       shape="pill"
       size="sm"

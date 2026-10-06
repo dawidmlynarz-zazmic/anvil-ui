@@ -85,7 +85,7 @@ function SourceCard({
             {meta && <span className="truncate type-text-xs-normal text-muted-foreground">{meta}</span>}
           </div>
           {tag && (
-            <Badge variant="outline" intent="neutral" size="sm">
+            <Badge variant="outline" size="sm">
               {tag}
             </Badge>
           )}
@@ -111,12 +111,12 @@ function SourceCard({
             </span>
           )}
           {excluded ? (
-            <Badge variant="semantic" tone="destructive" size="xs">
+            <Badge variant="subtle" tone="destructive" size="xs">
               Excluded
             </Badge>
           ) : (
             usage && (
-              <Badge variant="subtle" intent="neutral" size="xs">
+              <Badge variant="subtle" size="xs">
                 {usage}
               </Badge>
             )

@@ -16,7 +16,7 @@ import { IconTile } from '@/components/anvil/icon-tile'
 
 // Figma Agent Builder › Core Kit › approval card (10728:2418): confirmation before an action with
 // side effects. --card, border, radius xl, shadow-sm, max 640px. Header (16px, divider): 32px
-// radius-lg tile + title text/sm/semibold + subtitle text/xs muted + a Badge (semantic, xs,
+// radius-lg tile + title text/sm/semibold + subtitle text/xs muted + a Badge (subtle, xs,
 // indicator). Details (16px, 10px
 // gap): ApprovalCardField rows (96px label column) and an optional warning `note` (Alert, size xs). Then either
 // ShellFooter variant card (--muted bar, `note`) or ActionStatus (Figma action status:
@@ -87,7 +87,7 @@ function ApprovalCard({
         variant="card"
         media={<IconTile icon={tile.icon} tone={tile.tone} size="sm" />}
         trailing={
-          <Badge data-slot="approval-card-badge" variant="semantic" tone={tag.tone} size="xs" indicator>
+          <Badge data-slot="approval-card-badge" variant="subtle" tone={tag.tone} size="xs" indicator>
             {badge ?? tag.label}
           </Badge>
         }

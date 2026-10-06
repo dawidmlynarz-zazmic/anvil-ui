@@ -7,24 +7,12 @@ import { Icon, ClockIcon, SparklesIcon } from './icon'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=1482-30693'
 const FIGMA_STATUS = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=8399-1766'
-const variants = ['default', 'outline', 'subtle'] as const
-const tones = ['neutral', 'info', 'success', 'warning', 'destructive', 'agent'] as const
-const intents = ['neutral', 'inverse'] as const
+const variants = ['default', 'subtle', 'outline'] as const
+const tones = ['neutral', 'brand', 'info', 'success', 'warning', 'destructive', 'agent'] as const
 const sizes = ['default', 'sm', 'xs'] as const
 
-/** Inverse badges sit on inverse surfaces. */
-function Surface({ intent, children }: { intent?: string | null; children: ReactNode }) {
-  return (
-    <div
-      className={
-        intent === 'inverse'
-          ? 'flex flex-wrap items-center gap-3 rounded-lg bg-background-inverse p-3'
-          : 'flex flex-wrap items-center gap-3 p-3'
-      }
-    >
-      {children}
-    </div>
-  )
+function Row({ children }: { children: ReactNode }) {
+  return <div className="flex flex-wrap items-center gap-3 p-3">{children}</div>
 }
 
 const meta = preview.meta({
@@ -36,14 +24,22 @@ const meta = preview.meta({
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
     figmaProps: [
-      { property: 'variant', values: 'default · outline · subtle', code: '`variant` prop' },
-      { property: 'intent', values: 'neutral · inverse', code: '`intent` prop' },
+      {
+        property: 'variant',
+        values: 'default · outline · subtle',
+        code: '`variant` default (solid) · subtle · outline, for every `tone`',
+      },
+      {
+        property: 'intent',
+        values: 'neutral · inverse',
+        code: 'neutral → `tone="neutral"`; inverse removed (next phase: no consumer)',
+      },
       { property: 'size', values: 'default · sm · xs', code: '`size` prop' },
       { property: 'label', values: 'text', code: 'children' },
       {
-        property: 'status badge · variant / tone',
-        values: 'default · semantic × info · destructive · warning · success · neutral · agent',
-        code: '`variant="semantic"` + `tone` (Figma variant default · semantic draw the same tinted style)',
+        property: 'status badge · tone',
+        values: 'info · destructive · warning · success · neutral · agent',
+        code: '`tone` (plus brand) with `variant="subtle"`; solid and outline exist for every tone',
       },
       { property: 'status badge · indicator', values: 'boolean', code: '`indicator` prop' },
       { property: 'status badge · rounded', values: 'off · on', code: '`shape` default · pill' },
@@ -58,7 +54,8 @@ const meta = preview.meta({
     guide: {
       use: [
         'A static label for status, counts or metadata: connection state, unread count, version, provenance.',
-        '`variant="semantic"` with a `tone` for status; `indicator` adds a dot, `count` a trailing number.',
+        '`tone` picks the colour (neutral · brand · info · success · warning · destructive · agent); `variant` the weight: solid (`default`) for the strongest emphasis, `subtle` for status in lists and cards, `outline` for quiet metadata.',
+        '`indicator` adds a dot, `count` a trailing number.',
         '`shape="pill"` for tags and provenance labels.',
       ],
       avoid: [
@@ -78,15 +75,14 @@ const meta = preview.meta({
     docs: {
       description: {
         component:
-          'Compact label for counts, metadata and status (shadcn/ui Badge; Figma badge and status badge are one component in code). `variant` default (solid) · outline · subtle with `intent` neutral · inverse (on inverse surfaces), or semantic with `tone` neutral · info · success · warning · destructive · agent. `indicator` adds a dot in the tone, `count` a trailing number, `shape="pill"` rounds it for tags and provenance labels. Agent components use it for status: Approval Card, Connector Card, citation confidence, Source Card, Memory In Use, Toolbar count.',
+          'Compact label for counts, metadata and status (shadcn/ui Badge; Figma badge and status badge are one component in code). Two props set the look: `tone` neutral · brand · info · success · warning · destructive · agent, and `variant` default (solid) · subtle · outline — every tone has all three. `shape` default · pill, `size` default · sm · xs; `indicator` adds a dot in the tone, `count` a trailing number.',
       },
     },
   },
-  args: { children: 'Label', variant: 'default', intent: 'neutral', size: 'default' },
+  args: { children: 'Label', variant: 'default', tone: 'neutral', size: 'default' },
   argTypes: {
-    variant: { control: 'inline-radio', options: [...variants, 'semantic'] },
-    intent: { control: 'inline-radio', options: intents, if: { arg: 'variant', neq: 'semantic' } },
-    tone: { control: 'select', options: tones, if: { arg: 'variant', eq: 'semantic' } },
+    variant: { control: 'inline-radio', options: variants },
+    tone: { control: 'select', options: tones },
     shape: { control: 'inline-radio', options: ['default', 'pill'] },
     indicator: { control: 'boolean' },
     count: { control: 'text' },
@@ -95,9 +91,9 @@ const meta = preview.meta({
     asChild: { table: { disable: true } },
   },
   render: (args) => (
-    <Surface intent={args.intent}>
+    <Row>
       <Badge {...args} />
-    </Surface>
+    </Row>
   ),
 })
 
@@ -108,17 +104,43 @@ Default.test('renders a badge', async ({ canvas }) => {
   await expect(canvas.getByText('Label')).toHaveAttribute('data-slot', 'badge')
 })
 
+/** Every tone × treatment: solid (`default`), subtle, outline. */
 export const Variants = meta.story({
   render: () => (
-    <div className="flex flex-col gap-2">
-      {intents.map((intent) => (
-        <Surface key={intent} intent={intent}>
+    <div className="flex flex-col gap-1">
+      {variants.map((variant) => (
+        <Row key={variant}>
+          <span className="w-16 type-text-xs-medium text-muted-foreground">{variant}</span>
+          {tones.map((tone) => (
+            <Badge key={tone} variant={variant} tone={tone}>
+              {tone[0].toUpperCase() + tone.slice(1)}
+            </Badge>
+          ))}
+        </Row>
+      ))}
+    </div>
+  ),
+})
+
+Variants.test('every tone has all three treatments', async ({ canvasElement }) => {
+  for (const variant of variants)
+    await expect(canvasElement.querySelectorAll(`[data-slot=badge][data-variant=${variant}]`)).toHaveLength(
+      tones.length,
+    )
+})
+
+/** `shape` default and pill, in every treatment. */
+export const Shapes = meta.story({
+  render: () => (
+    <div className="flex flex-col gap-1">
+      {(['default', 'pill'] as const).map((shape) => (
+        <Row key={shape}>
           {variants.map((variant) => (
-            <Badge key={variant} variant={variant} intent={intent}>
+            <Badge key={variant} variant={variant} tone="brand" shape={shape}>
               Label
             </Badge>
           ))}
-        </Surface>
+        </Row>
       ))}
     </div>
   ),
@@ -129,13 +151,13 @@ export const Sizes = meta.story({
   render: () => (
     <div className="flex flex-col gap-2">
       {variants.map((variant) => (
-        <Surface key={variant}>
+        <Row key={variant}>
           {sizes.map((size) => (
             <Badge key={size} variant={variant} size={size}>
               Label
             </Badge>
           ))}
-        </Surface>
+        </Row>
       ))}
     </div>
   ),
@@ -143,7 +165,7 @@ export const Sizes = meta.story({
 
 export const WithIcons = meta.story({
   render: () => (
-    <Surface>
+    <Row>
       <Badge>
         <Icon icon={SparklesIcon} />
         Label
@@ -153,7 +175,7 @@ export const WithIcons = meta.story({
         Label
       </Badge>
       <Badge variant="subtle">12</Badge>
-    </Surface>
+    </Row>
   ),
 })
 
@@ -180,28 +202,35 @@ Composition.test('asChild renders a link styled as a badge', async ({ canvas }) 
   await expect(canvas.getByRole('link', { name: 'Label 2' })).toHaveAttribute('data-slot', 'badge')
 })
 
-/** Figma status badge: `variant="semantic"` × `tone`, square and pill, with indicator, icon and count. */
+/** Figma status badge: `variant="subtle"` × `tone`, square and pill, with indicator, icon and count; the indicator also on solid and outline. */
 export const Semantic = meta.story({
   parameters: { design: { type: 'figma', url: FIGMA_STATUS } },
   render: () => (
     <div className="flex flex-col gap-2">
       {(['default', 'pill'] as const).map((shape) => (
-        <Surface key={shape}>
+        <Row key={shape}>
           {tones.map((tone) => (
-            <Badge key={tone} variant="semantic" tone={tone} shape={shape} indicator>
+            <Badge key={tone} variant="subtle" tone={tone} shape={shape} indicator>
               Label
             </Badge>
           ))}
-        </Surface>
+        </Row>
       ))}
-      <Surface>
+      <Row>
+        {variants.map((variant) => (
+          <Badge key={variant} variant={variant} tone="success" indicator>
+            Connected
+          </Badge>
+        ))}
+      </Row>
+      <Row>
         {sizes.map((size) => (
-          <Badge key={size} variant="semantic" tone="agent" size={size} count={12}>
+          <Badge key={size} variant="subtle" tone="agent" size={size} count={12}>
             <Icon icon={SparklesIcon} />
             Label
           </Badge>
         ))}
-      </Surface>
+      </Row>
     </div>
   ),
 })

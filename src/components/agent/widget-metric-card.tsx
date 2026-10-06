@@ -9,7 +9,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 
 // Figma Agent Builder › Core Kit › widget metric card (10663:2929) and widget metric group
 // (10663:3065). Built from existing parts (no re-drawn elements): Card (radius xl, --border, 160px
-// min, 8px gap; 16px padding, 12px when compact), the delta is a Badge (semantic, sm: up = success,
+// min, 8px gap; 16px padding, 12px when compact), the delta is a Badge (subtle, sm: up = success,
 // down = destructive, neutral), loading is Skeleton (28px value, 16px delta), the trend is a
 // Sparkline. Label text/xs muted (one line) with an optional 16px icon at the end; value
 // heading/3xl (compact heading/2xl); period text/xs muted after the delta. `trend` drives the delta
@@ -79,7 +79,7 @@ function WidgetMetricCard({
           {(delta || period) && (
             <div className="flex min-w-0 items-center gap-2">
               {delta && (
-                <Badge variant="semantic" tone={DELTA_TONE[trend]} size="sm" className="min-w-5">
+                <Badge variant="subtle" tone={DELTA_TONE[trend]} size="sm" className="min-w-5">
                   {delta}
                 </Badge>
               )}

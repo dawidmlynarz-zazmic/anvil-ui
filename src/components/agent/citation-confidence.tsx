@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
 import type { Confidence } from '@/components/agent/citation-chip'
 
-// Figma's confidence badge inside citation source item and citation hovercard: a Badge (semantic,
+// Figma's confidence badge inside citation source item and citation hovercard: a Badge (subtle,
 // xs) with the score, e.g. "92%". high = success, medium = warning, low = destructive; no
 // confidence = an em dash. Maps confidence to tone and adds the screen-reader label.
 
@@ -42,7 +42,7 @@ function CitationConfidence({
     <Badge
       data-slot="citation-confidence"
       data-confidence={confidence}
-      variant="semantic"
+      variant="subtle"
       tone={TONE[confidence]}
       size="xs"
       className={cn('min-w-4', className)}

@@ -192,7 +192,7 @@ export const Card = meta.story({
         variant="card"
         media={<IconTile icon={SparklesIcon} tone="agent" size="sm" />}
         trailing={
-          <Badge variant="semantic" tone="info" size="xs" indicator>
+          <Badge variant="subtle" tone="info" size="xs" indicator>
             Pending
           </Badge>
         }
