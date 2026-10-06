@@ -21,7 +21,7 @@ import {
   ToolCallItemSummary,
   ToolCallItemTrigger,
 } from '@/components/agent/tool-call-item'
-import { TypingIndicator } from '@/components/agent/typing-indicator'
+import { StreamingPlaceholder } from '@/components/agent/streaming-placeholder'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { MessageBubble, MessageBubbleContent } from '@/components/ui/message-bubble'
@@ -200,7 +200,7 @@ function AgentTurn({ turn }: { turn: Extract<Turn, { kind: 'agent' }> }) {
     <Message>
       <AgentAvatar />
       <MessageContent>
-        {turn.typing && <TypingIndicator />}
+        {turn.typing && <StreamingPlaceholder variant="dots" label="Typing" />}
         {turn.thinking && (
           <ThinkingPanel status={turn.thinking === 'active' ? 'running' : 'done'}>
             <ThinkingPanelTrigger>

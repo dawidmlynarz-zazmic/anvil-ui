@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'
-import { RatingScale } from '@/components/agent/rating'
+import { RatingScale } from '@/components/agent/rating-scale'
 import { ShellFooter } from '@/components/anvil/shell'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
