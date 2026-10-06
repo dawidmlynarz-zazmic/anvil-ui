@@ -9,7 +9,7 @@ const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=1071
 const CONFIDENCE = ['high', 'medium', 'low'] as const
 
 const meta = preview.meta({
-  title: 'Agent Builder/Source Card',
+  title: 'Agent Builder/Sources/Source Card',
   tags: ['agent-builder', 'sources'],
   component: SourceCard,
   parameters: {

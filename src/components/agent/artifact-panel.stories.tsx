@@ -171,7 +171,7 @@ function Demo({
 }
 
 const meta = preview.meta({
-  title: 'Agent Builder/Artifact Panel',
+  title: 'Agent Builder/Widgets & artifacts/Artifact Panel',
   tags: ['agent-builder', 'widgets'],
   component: Demo,
   parameters: {

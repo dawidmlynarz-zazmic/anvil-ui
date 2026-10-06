@@ -16,7 +16,7 @@ const REASONS = [
 ]
 
 const meta = preview.meta({
-  title: 'Agent Builder/Feedback Reason',
+  title: 'Agent Builder/Feedback/Feedback Reason',
   tags: ['agent-builder', 'feedback'],
   component: FeedbackReason,
   parameters: {

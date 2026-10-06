@@ -4,7 +4,7 @@
 // index at runtime, so this list only changes when the scope changes. `title` is the Storybook
 // title the item has (or will have). Figma names that live elsewhere in code are aliases to it.
 
-import type { LevelTitle } from '../../.storybook/taxonomy'
+import type { AgentBuilderGroup, LevelTitle } from '../../.storybook/taxonomy'
 
 export type CatalogItem = { name: string; title: string }
 export type CatalogArea = {
@@ -24,7 +24,11 @@ const foundation = at('Foundations')
 const atom = at('Atoms')
 const molecule = at('Molecules')
 const organism = at('Organisms')
-const builder = at('Agent Builder')
+/** Agent Builder items live one folder deeper, in their group. */
+const builder =
+  (group: AgentBuilderGroup) =>
+  (...names: string[]): CatalogItem[] =>
+    names.map((name) => ({ name, title: `Agent Builder/${group}/${name}` }))
 /** A Figma name that is part of another component in code. */
 const alias = (name: string, title: string): CatalogItem => ({ name, title })
 
@@ -183,91 +187,44 @@ export const catalog: CatalogArea[] = [
     description: 'The thread and the answer’s content.',
     items: organism('Message Scroller', 'Content Block'),
   },
-  // Agent Builder: ready-to-use agent experiences, grouped by context.
+  // Agent Builder: ready-to-use agent experiences. Each area is a sidebar folder
+  // (`Agent Builder/<Group>/<Name>`, AGENT_BUILDER_GROUPS in .storybook/taxonomy.ts).
   {
     section: 'Agent Builder',
-    id: 'builder-input',
-    name: 'Input',
-    description: 'The composer, dropping files and answering the agent’s questions.',
+    id: 'builder-surfaces',
+    name: 'Surfaces',
+    description:
+      'Where the agent lives: the chat shell in full screen, side panel, popover or mobile, and the split canvas.',
     items: [
-      ...builder('Prompt Input', 'Clarifying Question', 'Drop Overlay'),
-      alias('Attachment Menu', 'Agent Builder/Prompt Input'),
-      alias('Response Controls', 'Agent Builder/Prompt Input'),
+      ...builder('Surfaces')('Chat Shell', 'Launcher', 'Split Canvas'),
+      alias('Full Screen', 'Agent Builder/Surfaces/Chat Shell'),
+      alias('Side Panel', 'Agent Builder/Surfaces/Chat Shell'),
+      alias('Popover', 'Agent Builder/Surfaces/Chat Shell'),
     ],
   },
   {
     section: 'Agent Builder',
-    id: 'builder-messages',
-    name: 'Messages',
-    description: 'A full turn in the thread.',
-    items: builder('Message Row'),
-  },
-  {
-    section: 'Agent Builder',
-    id: 'builder-status',
-    name: 'Agent status',
-    description: 'What the agent is doing: placeholders, reasoning and tool calls.',
-    items: [
-      ...builder('Streaming Placeholder', 'Thinking Panel', 'Tool Call Item', 'Tool Call Accordion'),
-      alias('Typing Indicator', 'Agent Builder/Streaming Placeholder'),
-    ],
-  },
-  {
-    section: 'Agent Builder',
-    id: 'builder-sources',
-    name: 'Sources',
-    description: 'Previews, cards and the full list of sources behind an answer.',
-    items: builder('Citation Hovercard', 'Source Card', 'Citation Drawer'),
-  },
-  {
-    section: 'Agent Builder',
-    id: 'builder-memory',
-    name: 'Memory',
-    description: 'Thread instructions and what the agent remembers.',
-    items: [
-      ...builder('Instructions Banner', 'Memory Notice', 'Memory Manager'),
-      alias('Memory Chip', 'Agent Builder/Memory Notice'),
-      alias('Memory In Use', 'Agent Builder/Memory Notice'),
-    ],
-  },
-  {
-    section: 'Agent Builder',
-    id: 'builder-actions',
-    name: 'Actions',
-    description: 'Approvals and connected apps.',
-    items: builder('Approval Card', 'Connector Card'),
-  },
-  {
-    section: 'Agent Builder',
-    id: 'builder-widgets',
-    name: 'Widgets & artifacts',
-    description: 'Rich output inside the thread: files, data, media and artifacts.',
-    items: [
-      ...builder(
-        'File Output Card',
-        'Widget Metric Card',
-        'Widget Media',
-        'Widget Table',
-        'Image Generation Card',
-        'Artifact Panel',
-      ),
-      alias('Widget Audio', 'Agent Builder/Widget Media'),
-      alias('Widget Metric Group', 'Agent Builder/Widget Metric Card'),
-    ],
-  },
-  {
-    section: 'Agent Builder',
-    id: 'builder-feedback',
-    name: 'Feedback',
-    description: 'Asking the user how it went.',
-    items: builder('Rating', 'Feedback Reason', 'NPS', 'Survey', 'Poll'),
+    id: 'builder-in-page',
+    name: 'In-page assist',
+    description:
+      'The agent inside the host page: on a selection, in a palette, as a nudge or a guided overlay.',
+    items: builder('In-page assist')(
+      'Selection Toolbar',
+      'Inline Suggestion',
+      'Ghost Text',
+      'Command Palette',
+      'Announcement Bar',
+      'Proactive Drawer',
+      'Element Spotlight',
+      'Co-browse Bar',
+    ),
   },
   {
     section: 'Agent Builder',
     id: 'builder-shell',
     name: 'Shell',
     description: 'The chat around the thread: welcome, starters, model picker, sharing and projects.',
-    items: builder(
+    items: builder('Shell')(
       'Welcome State',
       'Starter Prompt Card',
       'Model and Tools Picker',
@@ -278,33 +235,160 @@ export const catalog: CatalogArea[] = [
   },
   {
     section: 'Agent Builder',
-    id: 'builder-patterns',
-    name: 'Agent patterns',
-    description: 'Task and commerce flows from the Figma Agent Patterns page.',
-    items: builder(
-      'Task Lifecycle',
-      'Evidence & Decisions',
-      'Catalog & Offers',
-      'Scheduling',
-      'Checkout',
-      'After Purchase',
-      'Trust & Preferences',
+    id: 'builder-input',
+    name: 'Input',
+    description: 'The composer, dropping files and answering the agent’s questions.',
+    items: [
+      ...builder('Input')('Prompt Input', 'Clarifying Question', 'Drop Overlay'),
+      alias('Attachment Menu', 'Agent Builder/Input/Prompt Input'),
+      alias('Response Controls', 'Agent Builder/Input/Prompt Input'),
+    ],
+  },
+  {
+    section: 'Agent Builder',
+    id: 'builder-messages',
+    name: 'Messages',
+    description: 'A full turn in the thread.',
+    items: builder('Messages')('Message Row'),
+  },
+  {
+    section: 'Agent Builder',
+    id: 'builder-status',
+    name: 'Agent status',
+    description: 'What the agent is doing: placeholders, reasoning and tool calls.',
+    items: [
+      ...builder('Agent status')(
+        'Streaming Placeholder',
+        'Thinking Panel',
+        'Tool Call Item',
+        'Tool Call Accordion',
+      ),
+      alias('Typing Indicator', 'Agent Builder/Agent status/Streaming Placeholder'),
+    ],
+  },
+  {
+    section: 'Agent Builder',
+    id: 'builder-sources',
+    name: 'Sources',
+    description: 'Previews, cards and the full list of sources behind an answer.',
+    items: builder('Sources')('Citation Hovercard', 'Source Card', 'Citation Drawer'),
+  },
+  {
+    section: 'Agent Builder',
+    id: 'builder-memory',
+    name: 'Memory',
+    description: 'Thread instructions and what the agent remembers.',
+    items: [
+      ...builder('Memory')('Instructions Banner', 'Memory Notice', 'Memory Manager'),
+      alias('Memory Chip', 'Agent Builder/Memory/Memory Notice'),
+      alias('Memory In Use', 'Agent Builder/Memory/Memory Notice'),
+    ],
+  },
+  {
+    section: 'Agent Builder',
+    id: 'builder-actions',
+    name: 'Actions',
+    description: 'Approvals and connected apps.',
+    items: builder('Actions')('Approval Card', 'Connector Card'),
+  },
+  {
+    section: 'Agent Builder',
+    id: 'builder-widgets',
+    name: 'Widgets & artifacts',
+    description: 'Rich output inside the thread: files, data, media and artifacts.',
+    items: [
+      ...builder('Widgets & artifacts')(
+        'File Output Card',
+        'Widget Metric Card',
+        'Widget Media',
+        'Widget Table',
+        'Image Generation Card',
+        'Artifact Panel',
+      ),
+      alias('Widget Audio', 'Agent Builder/Widgets & artifacts/Widget Media'),
+      alias('Widget Metric Group', 'Agent Builder/Widgets & artifacts/Widget Metric Card'),
+    ],
+  },
+  {
+    section: 'Agent Builder',
+    id: 'builder-feedback',
+    name: 'Feedback',
+    description: 'Asking the user how it went.',
+    items: builder('Feedback')('Rating', 'Feedback Reason', 'NPS', 'Survey', 'Poll'),
+  },
+  {
+    section: 'Agent Builder',
+    id: 'builder-tasks',
+    name: 'Tasks',
+    description:
+      'A long task from brief to summary: scope, plan, limits, progress, changes and parallel agents.',
+    items: builder('Tasks')(
+      'Task Brief',
+      'Question Set',
+      'Task Settings',
+      'Run Limits',
+      'Task Plan',
+      'Change Review',
+      'Progress Timeline',
+      'Activity Feed',
+      'Parallel Agents',
+      'Task Summary',
     ),
   },
   {
     section: 'Agent Builder',
-    id: 'builder-surfaces',
-    name: 'Surfaces & templates',
-    description: 'Where the agent lives: full screen, side panel, popover, split canvas and more.',
-    items: builder(
-      'Full Screen',
-      'Side Panel',
-      'Popover & Launcher',
-      'Split Canvas',
-      'Inline Assist',
-      'Command Palette',
-      'Proactive',
-      'Ambient Overlay',
+    id: 'builder-evidence',
+    name: 'Evidence & decisions',
+    description: 'Findings with their confidence, open questions, conflicts and comparisons.',
+    items: builder('Evidence & decisions')(
+      'Insight Card',
+      'Open Items',
+      'Conflict Resolver',
+      'Criteria Matrix',
+      'Deliverable Outline',
+    ),
+  },
+  {
+    section: 'Agent Builder',
+    id: 'builder-catalog',
+    name: 'Catalog & scheduling',
+    description: 'Things to book or buy, where they are, and when they’re available.',
+    items: builder('Catalog & scheduling')(
+      'Offer Card',
+      'Offer Carousel',
+      'Item Detail',
+      'Comparison Table',
+      'Location List',
+      'Map View',
+      'Media Gallery',
+      'Availability Calendar',
+      'Slot List',
+      'Quantity Selector',
+    ),
+  },
+  {
+    section: 'Agent Builder',
+    id: 'builder-checkout',
+    name: 'Checkout & orders',
+    description: 'From basket to confirmation, and what happens after.',
+    items: builder('Checkout & orders')(
+      'Order Summary',
+      'Extras',
+      'Checkout Handoff',
+      'Confirmation',
+      'Status Tracker',
+    ),
+  },
+  {
+    section: 'Agent Builder',
+    id: 'builder-trust',
+    name: 'Trust & handoff',
+    description: 'Saved preferences, identity checks and handing over to a person.',
+    items: builder('Trust & handoff')(
+      'Preference Capture',
+      'Identity Check',
+      'Human Handoff',
+      'Response Time',
     ),
   },
 ]

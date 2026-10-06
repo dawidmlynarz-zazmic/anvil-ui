@@ -211,8 +211,10 @@ context live in each story's tags and title, and the relationships come from the
 
 ## 6. Storybook
 
-- Sidebar: **Foundations · Atoms · Molecules · Organisms · Agent Builder**, flat inside each
-  (names A–Z). Title = `<Level>/<Name>`.
+- Sidebar: **Foundations · Atoms · Molecules · Organisms · Agent Builder**. Atoms, Molecules and
+  Organisms are flat (names A–Z, title `<Level>/<Name>`). Agent Builder adds a group folder by job
+  (title `Agent Builder/<Group>/<Name>`; groups in `AGENT_BUILDER_GROUPS`, decided 2026-10-06 when
+  the level grew past ~30 entries toward ~77).
 - Tags: one level tag (`atom` · `molecule` · `organism` · `agent-builder`), plus a context tag
   where it helps (`messages` · `input` · `agent-status` · `sources` · `memory` · `actions` ·
   `widgets` · `feedback`). The sidebar's tag filter works on both.

@@ -130,7 +130,7 @@ function Demo({
 }
 
 const meta = preview.meta({
-  title: 'Agent Builder/Citation Drawer',
+  title: 'Agent Builder/Sources/Citation Drawer',
   tags: ['agent-builder', 'sources'],
   component: Demo,
   parameters: {

@@ -6,7 +6,7 @@ import { Nps } from './nps'
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10726-2049'
 
 const meta = preview.meta({
-  title: 'Agent Builder/NPS',
+  title: 'Agent Builder/Feedback/NPS',
   tags: ['agent-builder', 'feedback'],
   component: Nps,
   parameters: {

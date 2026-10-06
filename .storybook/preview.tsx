@@ -129,16 +129,36 @@ export default definePreview({
     controls: { matchers: { color: /(background|color)$/i, date: /Date$/i }, sort: 'requiredFirst' },
     options: {
       // Levels in a fixed order (Welcome, Foundations, Atoms, Molecules, Organisms, Agent Builder);
-      // components A–Z inside a level, stories in file order.
+      // Agent Builder's group folders in AGENT_BUILDER_GROUPS order (.storybook/taxonomy.ts);
+      // components A–Z inside a level or group, stories in file order.
       // Plain JS, no outside references: Storybook evaluates this function's source on its own.
       storySort: (a, b) => {
-        const groups = ['Welcome', 'Foundations', 'Atoms', 'Molecules', 'Organisms', 'Agent Builder']
+        const levels = ['Welcome', 'Foundations', 'Atoms', 'Molecules', 'Organisms', 'Agent Builder']
+        const groups = [
+          'Surfaces',
+          'In-page assist',
+          'Shell',
+          'Input',
+          'Messages',
+          'Agent status',
+          'Sources',
+          'Memory',
+          'Actions',
+          'Widgets & artifacts',
+          'Feedback',
+          'Tasks',
+          'Evidence & decisions',
+          'Catalog & scheduling',
+          'Checkout & orders',
+          'Trust & handoff',
+        ]
+        // indexOf + 1, so an unknown name (0) sorts last: (n || 99).
         const pa = a.title.split('/')
         const pb = b.title.split('/')
-        const ga = groups.indexOf(pa[0])
-        const gb = groups.indexOf(pb[0])
-        if (ga !== gb) return (ga === -1 ? 99 : ga) - (gb === -1 ? 99 : gb)
+        if (pa[0] !== pb[0]) return (levels.indexOf(pa[0]) + 1 || 99) - (levels.indexOf(pb[0]) + 1 || 99)
         if (pa[0] === 'Welcome' || pa[0] === 'Foundations' || a.title === b.title) return 0
+        if (pa[0] === 'Agent Builder' && pa[1] !== pb[1])
+          return (groups.indexOf(pa[1]) + 1 || 99) - (groups.indexOf(pb[1]) + 1 || 99)
         return a.title.localeCompare(b.title)
       },
     },

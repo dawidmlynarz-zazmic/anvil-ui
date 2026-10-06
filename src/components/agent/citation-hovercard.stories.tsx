@@ -27,7 +27,7 @@ function Demo({ open, onOpenChange }: { open?: boolean; onOpenChange?: (open: bo
 }
 
 const meta = preview.meta({
-  title: 'Agent Builder/Citation Hovercard',
+  title: 'Agent Builder/Sources/Citation Hovercard',
   tags: ['agent-builder', 'sources'],
   component: Demo,
   parameters: {

@@ -25,7 +25,7 @@ const METRICS = [
 ] as const
 
 const meta = preview.meta({
-  title: 'Agent Builder/Widget Metric Card',
+  title: 'Agent Builder/Widgets & artifacts/Widget Metric Card',
   tags: ['agent-builder', 'widgets'],
   component: WidgetMetricCard,
   parameters: {

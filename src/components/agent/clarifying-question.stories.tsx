@@ -47,7 +47,7 @@ const QUESTIONS: ClarifyingQuestionItem[] = [
 const ANSWERS: ClarifyingAnswersValue = { audience: 'beta', tone: 'friendly', cta: 'start' }
 
 const meta = preview.meta({
-  title: 'Agent Builder/Clarifying Question',
+  title: 'Agent Builder/Input/Clarifying Question',
   tags: ['agent-builder', 'input'],
   component: ClarifyingQuestion,
   parameters: {

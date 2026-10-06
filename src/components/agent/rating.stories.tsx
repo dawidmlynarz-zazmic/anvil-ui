@@ -6,7 +6,7 @@ import { Rating } from './rating'
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10726-1937'
 
 const meta = preview.meta({
-  title: 'Agent Builder/Rating',
+  title: 'Agent Builder/Feedback/Rating',
   tags: ['agent-builder', 'feedback'],
   component: Rating,
   parameters: {

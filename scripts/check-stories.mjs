@@ -1,5 +1,6 @@
 // Story standards check (run by `pnpm lint`). Every component meta must have a title under its
-// level (Atoms/…, Molecules/…, Organisms/…, Agent Builder/…; Foundations/… for the Icon), exactly one
+// level (Atoms/<Name>, Molecules/…, Organisms/…; Agent Builder/<Group>/<Name> with a known group;
+// Foundations/… for the Icon), exactly one
 // level tag that matches it, only known context tags (.storybook/taxonomy.ts), a shadcn slug only
 // as `parameters.shadcn: '<slug>'`, parameters.layout, a Figma link
 // (parameters.design), the usage guide (parameters.guide, starting with `use`), the Figma → code table (parameters.figmaProps; `[]` with a comment when
@@ -14,6 +15,24 @@ const LEVELS = {
   organism: 'Organisms',
   'agent-builder': 'Agent Builder',
 }
+const AGENT_BUILDER_GROUPS = [
+  'Surfaces',
+  'In-page assist',
+  'Shell',
+  'Input',
+  'Messages',
+  'Agent status',
+  'Sources',
+  'Memory',
+  'Actions',
+  'Widgets & artifacts',
+  'Feedback',
+  'Tasks',
+  'Evidence & decisions',
+  'Catalog & scheduling',
+  'Checkout & orders',
+  'Trust & handoff',
+]
 const CONTEXTS = ['messages', 'input', 'agent-status', 'sources', 'memory', 'actions', 'widgets', 'feedback']
 const RETIRED = ['element', 'composite', 'feature', 'template', 'anvil-custom']
 const files = [...globSync('src/**/*.stories.tsx'), ...globSync('stories/**/*.stories.tsx')].sort()
@@ -39,6 +58,14 @@ for (const file of files) {
   const expected = section === 'Foundations' ? 'Foundations' : LEVELS[levels[0]]
   if (levels.length === 1 && section !== expected && !(section === 'Foundations' && levels[0] === 'atom'))
     problems.push(`${file}: a ${levels[0]} lives under ${LEVELS[levels[0]]}/, not ${section}/`)
+  const parts = title.split('/')
+  if (section === 'Agent Builder') {
+    if (parts.length !== 3 || !AGENT_BUILDER_GROUPS.includes(parts[1]))
+      problems.push(
+        `${file}: Agent Builder titles are 'Agent Builder/<Group>/<Name>' (groups: ${AGENT_BUILDER_GROUPS.join(' · ')})`,
+      )
+  } else if (section !== 'Foundations' && parts.length !== 2)
+    problems.push(`${file}: ${section} titles are '${section}/<Name>' (no folders)`)
   for (const tag of tags) {
     if (RETIRED.includes(tag)) problems.push(`${file}: retired tag '${tag}'`)
     else if (!(tag in LEVELS) && !CONTEXTS.includes(tag) && tag !== '!autodocs')

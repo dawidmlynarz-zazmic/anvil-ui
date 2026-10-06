@@ -152,7 +152,7 @@ function Demo({ size, status, listening, withFiles, defaultValue, onSubmit, onSt
 }
 
 const meta = preview.meta({
-  title: 'Agent Builder/Prompt Input',
+  title: 'Agent Builder/Input/Prompt Input',
   tags: ['agent-builder', 'input'],
   component: Demo,
   parameters: {

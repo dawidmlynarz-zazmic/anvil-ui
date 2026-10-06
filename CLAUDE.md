@@ -262,9 +262,12 @@ Lucide    → Icon (@/components/ui/icon) → every component and story
      tag and the title starts with it: `atom` → `Atoms/<Name>` (one element; uses no other Anvil
      component except Icon), `molecule` → `Molecules/<Name>` (a few atoms with one job),
      `organism` → `Organisms/<Name>` (a complete, reusable section: overlays, navigation, data),
-     `agent-builder` → `Agent Builder/<Name>` (a ready-to-use agent experience built from the
-     others). The Icon is an atom (`Atoms/Icon`). Names sort A–Z inside a level (`storySort` in
-     `preview.tsx`); every item is listed in `stories/welcome/catalog.ts` (Figma names that live
+     `agent-builder` → `Agent Builder/<Group>/<Name>` (a ready-to-use agent experience built from
+     the others; `<Group>` is one of `AGENT_BUILDER_GROUPS`: Surfaces · In-page assist · Shell ·
+     Input · Messages · Agent status · Sources · Memory · Actions · Widgets & artifacts · Feedback ·
+     Tasks · Evidence & decisions · Catalog & scheduling · Checkout & orders · Trust & handoff).
+     The Icon is an atom (`Atoms/Icon`). Names sort A–Z inside a level or group, groups in that
+     order (`storySort` in `preview.tsx`); every item is listed in `stories/welcome/catalog.ts` (Figma names that live
      elsewhere in code are aliases). Code stays flat (`components/{ui,anvil,agent}`, by origin):
      never mirror levels in folders.
    - **Context tag** (optional, only where it helps): `messages` · `input` · `agent-status` ·

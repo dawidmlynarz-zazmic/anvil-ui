@@ -81,7 +81,7 @@ function Group(props: React.ComponentProps<typeof ToolCallAccordion>) {
 }
 
 const meta = preview.meta({
-  title: 'Agent Builder/Tool Call Accordion',
+  title: 'Agent Builder/Agent status/Tool Call Accordion',
   tags: ['agent-builder', 'agent-status'],
   component: Group,
   parameters: {

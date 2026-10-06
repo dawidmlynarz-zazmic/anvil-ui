@@ -92,7 +92,7 @@ function Example({ onConnect, ...props }: ExampleProps) {
 }
 
 const meta = preview.meta({
-  title: 'Agent Builder/Connector Card',
+  title: 'Agent Builder/Actions/Connector Card',
   tags: ['agent-builder', 'actions'],
   component: Example,
   parameters: {

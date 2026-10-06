@@ -3,6 +3,8 @@
 // - The LEVEL says what a component is and how reusable it is (Atomic Design): Atoms, Molecules,
 //   Organisms, Agent Builder. It is the first part of every story title (`Molecules/Field`) and a
 //   tag (`tags: ['molecule']`); each meta has exactly one.
+// - The Agent Builder level is large, so its titles add a GROUP folder by job:
+//   `Agent Builder/Sources/Citation Drawer`. The other levels stay flat (`Atoms/Button`).
 // - The CONTEXT says where in an agent UI a component is used (Messages, Sources, …). It is an
 //   optional tag, set only where it helps; generic components have none.
 // - `parameters.shadcn` names the shadcn/ui counterpart (its docs slug), when there is one.
@@ -38,6 +40,32 @@ export const LEVELS = [
       'A ready-to-use agent experience built from the levels above, used as-is in an agent UI: a citation drawer, an approval, a survey.',
   },
 ] as const
+
+/**
+ * Folders inside Agent Builder, in sidebar order: where the agent lives, then the conversation
+ * (input → messages → status → sources → memory → actions → output → feedback), then the task and
+ * commerce patterns. Mirrored in scripts/check-stories.mjs and the storySort in preview.tsx.
+ */
+export const AGENT_BUILDER_GROUPS = [
+  'Surfaces',
+  'In-page assist',
+  'Shell',
+  'Input',
+  'Messages',
+  'Agent status',
+  'Sources',
+  'Memory',
+  'Actions',
+  'Widgets & artifacts',
+  'Feedback',
+  'Tasks',
+  'Evidence & decisions',
+  'Catalog & scheduling',
+  'Checkout & orders',
+  'Trust & handoff',
+] as const
+
+export type AgentBuilderGroup = (typeof AGENT_BUILDER_GROUPS)[number]
 
 export type LevelTag = (typeof LEVELS)[number]['tag']
 export type LevelTitle = (typeof LEVELS)[number]['title']

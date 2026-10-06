@@ -15,7 +15,7 @@ const MEMORIES = [
 ]
 
 const meta = preview.meta({
-  title: 'Agent Builder/Memory Manager',
+  title: 'Agent Builder/Memory/Memory Manager',
   tags: ['agent-builder', 'memory'],
   component: MemoryManager,
   parameters: {
