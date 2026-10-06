@@ -198,3 +198,22 @@ export const Scrolling = meta.story({
     </DemoDialog>
   ),
 })
+
+Default.test('reduced motion turns the zoom into a fade (global rule present)', async () => {
+  // Media queries can't be toggled from a story, so this guards the rule itself.
+  const rules = [...document.styleSheets].flatMap((sheet) => {
+    try {
+      return [...sheet.cssRules]
+    } catch {
+      return []
+    }
+  })
+  const flatten = (list: CSSRule[]): CSSRule[] =>
+    list.flatMap((rule) =>
+      'cssRules' in rule ? [rule, ...flatten([...(rule as CSSGroupingRule).cssRules])] : [rule],
+    )
+  const reduced = flatten(rules).filter(
+    (rule) => rule instanceof CSSMediaRule && rule.conditionText.includes('prefers-reduced-motion: reduce'),
+  )
+  await expect(reduced.some((rule) => rule.cssText.includes('--tw-enter-scale'))).toBe(true)
+})
