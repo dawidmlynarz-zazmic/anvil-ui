@@ -142,12 +142,14 @@ export const catalog: CatalogArea[] = [
     items: [
       // Figma prompt attachment = the shadcn Attachment primitive.
       { name: 'Prompt Attachment', title: 'Agent Primitives/Input/Attachment' },
-      ...prim('Input', ['Quick Reply', 'Mic Button', 'Voice Waveform', 'Drop Overlay', 'Response Controls']),
+      ...prim('Input', ['Quick Reply', 'Mic Button', 'Voice Waveform', 'Drop Overlay']),
       // Quick reply group and follow up suggestions live in the Quick Reply stories (audit M1).
       { name: 'Quick Reply Group', title: 'Agent Primitives/Input/Quick Reply' },
       { name: 'Follow-up Suggestions', title: 'Agent Primitives/Input/Quick Reply' },
       // Figma attachment menu = Prompt Input's attach button + Dropdown Menu.
       { name: 'Attachment Menu', title: 'Agent Blocks/Input/Prompt Input' },
+      // Figma response controls = Prompt Input's `response` (Buttons + status line).
+      { name: 'Response Controls', title: 'Agent Blocks/Input/Prompt Input' },
     ],
   },
   {
@@ -163,10 +165,12 @@ export const catalog: CatalogArea[] = [
       'Content Block',
       'Message Actions',
       'Message Edit',
-      'Regenerate Menu',
       'File Output Card',
       'Tool Log Line',
       'Streaming Placeholder',
+    ]).concat([
+      // Figma regenerate menu = Message Actions' retry menu (Dropdown Menu items).
+      { name: 'Regenerate Menu', title: 'Agent Primitives/Messages/Message Actions' },
     ]),
   },
   {

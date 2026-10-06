@@ -202,7 +202,7 @@ export const Composition = meta.story({
 
 Composition.test('the user turn and the answer are both present', async ({ canvas }) => {
   await expect(canvas.getByText('You')).toBeVisible()
-  await expect(canvas.getByRole('group', { name: 'Message actions' })).toBeVisible()
+  await expect(canvas.getByRole('toolbar', { name: 'Message actions' })).toBeVisible()
 })
 
 const LONG =

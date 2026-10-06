@@ -2,6 +2,7 @@ import * as React from 'react'
 
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
 import {
   ArrowUpIcon,
   ChevronLeftIcon,
@@ -12,10 +13,9 @@ import {
 } from '@/components/ui/icon'
 
 // Figma Agent Builder › Core Kit › message edit (10728:2229): editing a sent user message, and
-// moving between the branches an edit creates. Figma state editing = `MessageEditor`: --card, 2px
-// --ring stroke while focused (--input otherwise), radius xl, 12px padding and gap, a textarea
-// (text/sm) that grows with its text, Cancel (ghost) + Send (primary, arrow) at the end, and a
-// text/xs --muted-foreground hint below. Escape cancels, ⌘/Ctrl+Enter sends. Figma state branched =
+// moving between the branches an edit creates. Figma state editing = `MessageEditor`: the UI
+// Textarea (its hint carries the branch note) + Cancel (ghost) and Send (primary, arrow) Buttons
+// at the end — composed, not re-drawn. Escape cancels, ⌘/Ctrl+Enter sends. Figma state branched =
 // `MessageBranch` under the bubble: "Edited" + previous / position / next + Edit and Copy (ghost
 // icon-xs). Figma's "Edited" is --foreground-subtle; code uses --muted-foreground (contrast).
 
@@ -38,38 +38,35 @@ function MessageEditor({
   return (
     <form
       data-slot="message-editor"
-      className={cn('flex w-full max-w-(--shell-widget-max) flex-col items-end gap-2', className)}
+      className={cn('flex w-full max-w-(--shell-widget-max) flex-col gap-2', className)}
       onSubmit={(event) => {
         event.preventDefault()
         send()
       }}
       {...props}
     >
-      <div className="flex w-full flex-col gap-3 rounded-xl bg-card p-3 inset-ring inset-ring-input focus-within:inset-ring-2 focus-within:inset-ring-ring">
-        <textarea
-          aria-label="Edit message"
-          value={value}
-          onChange={(event) => setValue(event.target.value)}
-          onKeyDown={(event) => {
-            if (event.key === 'Escape') onCancel?.()
-            if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
-              event.preventDefault()
-              send()
-            }
-          }}
-          className="min-h-5 w-full resize-none bg-transparent type-text-sm-normal text-foreground outline-none [field-sizing:content]"
-        />
-        <div className="flex items-center justify-end gap-2">
-          <Button type="button" variant="ghost" intent="neutral" size="sm" onClick={onCancel}>
-            Cancel
-          </Button>
-          <Button type="submit" size="sm" disabled={!value.trim()}>
-            <Icon icon={ArrowUpIcon} />
-            Send
-          </Button>
-        </div>
+      <Textarea
+        aria-label="Edit message"
+        hint={hint ?? undefined}
+        value={value}
+        onChange={(event) => setValue(event.target.value)}
+        onKeyDown={(event) => {
+          if (event.key === 'Escape') onCancel?.()
+          if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
+            event.preventDefault()
+            send()
+          }
+        }}
+      />
+      <div className="flex items-center justify-end gap-2">
+        <Button type="button" variant="ghost" intent="neutral" size="sm" onClick={onCancel}>
+          Cancel
+        </Button>
+        <Button type="submit" size="sm" disabled={!value.trim()}>
+          <Icon icon={ArrowUpIcon} />
+          Send
+        </Button>
       </div>
-      {hint && <p className="type-text-xs-normal text-muted-foreground">{hint}</p>}
     </form>
   )
 }

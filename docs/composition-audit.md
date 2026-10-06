@@ -110,3 +110,29 @@ Each one applies to code and Figma.
 - Hover Card, Popover and Tooltip.
 - Marker and System Banner: an event line in the thread vs a notice with an action.
 - Message Actions, Regenerate Menu and Response Controls: composition, not merge. Message Actions' retry opens Regenerate Menu.
+
+## 5. Agent Primitives that re-draw UI Components (follow-up, 2026-10-06)
+
+Done (code and Figma):
+- **Folded into the feature that uses them:**
+  - Attachment Menu → Prompt Input `attachMenu` (Dropdown Menu items).
+  - Regenerate Menu → Message Actions `menu` (Dropdown Menu items).
+  - Response Controls → Prompt Input `response` (Buttons + a status line).
+  - Figma keeps them as private examples.
+- **Built on the UI element:**
+  - Mic Button on Button, used by Prompt Input.
+  - Live Voice Session controls on Button.
+  - Message Edit as Textarea + Buttons.
+  - Message Actions on Toolbar.
+- **Kept as is:** Prompt Input keeps its own input.
+
+Open (look-alikes, not yet changed):
+
+| Primitive | Close to | Option |
+| --- | --- | --- |
+| Drop Overlay | Empty | Compose Empty (dashed, tinted) |
+| Action Status | Alert (Figma: built on Alert) | Alert strip variant |
+| Citation Chip | Chip (not a toggle) | `chipVariants` for the look |
+| Memory Chip | Badge (semantic pill) + Button | Compose Badge + Button |
+| Source Card | Card | Card + ShellHeader card |
+| Clarifying Question options | Choice Card (planned) | Compose Choice Card |
