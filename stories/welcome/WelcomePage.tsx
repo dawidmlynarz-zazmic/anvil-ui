@@ -174,12 +174,8 @@ function Hero({ firstComponent }: { firstComponent?: string }) {
     <div className="grid gap-(--space-2xl) lg:grid-cols-[1.2fr_1fr] lg:items-center">
       <div className="flex flex-col gap-(--space-lg)">
         <div className="flex flex-wrap items-center gap-2">
-          <Badge variant="default" intent="neutral">
-            Zazmic Design System for Agents
-          </Badge>
-          <Badge variant="outline" intent="neutral">
-            React · shadcn/ui · Tailwind CSS
-          </Badge>
+          <Badge>Zazmic Design System for Agents</Badge>
+          <Badge variant="outline">React · shadcn/ui · Tailwind CSS</Badge>
         </div>
         <div className="flex flex-col gap-3">
           <h1 className="type-heading-6xl text-foreground">Anvil UI</h1>
@@ -565,13 +561,13 @@ function Contributors() {
             </div>
           </div>
           <div className="flex flex-wrap gap-2">
-            <Badge variant="subtle" intent="neutral" size="sm">
+            <Badge variant="subtle" size="sm">
               Founder of the idea
             </Badge>
-            <Badge variant="subtle" intent="neutral" size="sm">
+            <Badge variant="subtle" size="sm">
               Main contact
             </Badge>
-            <Badge variant="subtle" intent="neutral" size="sm">
+            <Badge variant="subtle" size="sm">
               Contributor
             </Badge>
           </div>

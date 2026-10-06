@@ -16,7 +16,7 @@ import {
 // - used: an --agent-subtle pill (8/10px × 4px, 6px gap, 14px brain, text/xs/medium
 //   --agent-strong). With `title` / `description` / `actions` it opens a Popover (12px padding,
 //   10px gap, elevation/raised) explaining what was used.
-// - not-used: a neutral pill Badge (semantic, sm) with `action` (e.g. Undo) beside it.
+// - not-used: a neutral pill Badge (subtle, sm) with `action` (e.g. Undo) beside it.
 // - saved · updated · forgotten: a --muted pill (8/4px, 6px gap): 14px status icon (check ·
 //   pencil --primary · x muted), the status label text/xs/medium, the memory text/xs
 //   --muted-foreground after a middle dot, then `action` (ghost xs pill Button, e.g. Manage).
@@ -113,7 +113,7 @@ function MemoryNotice({
         className={cn('flex flex-col items-start gap-2', className)}
         {...props}
       >
-        <Badge variant="semantic" tone="neutral" shape="pill" size="sm">
+        <Badge variant="subtle" tone="neutral" shape="pill" size="sm">
           <Icon icon={BrainIcon} />
           {children}
         </Badge>

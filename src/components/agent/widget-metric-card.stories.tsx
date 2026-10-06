@@ -35,7 +35,7 @@ const meta = preview.meta({
     figmaProps: [
       { property: 'label', values: 'text', code: '`label` prop' },
       { property: 'value', values: 'text', code: '`value` prop' },
-      { property: 'delta · show delta', values: 'text · boolean', code: '`delta` prop (a semantic Badge)' },
+      { property: 'delta · show delta', values: 'text · boolean', code: '`delta` prop (a subtle Badge)' },
       { property: 'period', values: 'text', code: '`period` prop' },
       { property: 'show icon · icon', values: 'boolean · instance', code: '`icon` prop' },
       {
@@ -73,7 +73,7 @@ const meta = preview.meta({
     docs: {
       description: {
         component:
-          'One number in an answer (`@/components/agent/widget-metric-card`), built from Card, a semantic Badge (the delta), Skeleton (loading) and Sparkline. `label`, `value`, `delta`, `period`, `trend` up · down · neutral, `icon`, `sparkline` (a series), `size` default · compact, `loading`. `WidgetMetricGroup` lays several out in a wrapping row.',
+          'One number in an answer (`@/components/agent/widget-metric-card`), built from Card, a subtle Badge (the delta), Skeleton (loading) and Sparkline. `label`, `value`, `delta`, `period`, `trend` up · down · neutral, `icon`, `sparkline` (a series), `size` default · compact, `loading`. `WidgetMetricGroup` lays several out in a wrapping row.',
       },
     },
   },

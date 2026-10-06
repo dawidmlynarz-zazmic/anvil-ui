@@ -56,7 +56,7 @@ const actions = (
 )
 
 const synced = (
-  <Badge variant="semantic" tone="success" shape="pill">
+  <Badge variant="subtle" tone="success" shape="pill">
     <Icon icon={CircleCheckIcon} size="xs" />
     Synced · v4
   </Badge>
@@ -175,7 +175,7 @@ const meta = preview.meta({
         values: 'text',
         code: '`version`; `versions` + `onVersionChange` make it a Dropdown Menu',
       },
-      { property: 'sync indicator', values: 'instance', code: '`sync` (a semantic pill Badge)' },
+      { property: 'sync indicator', values: 'instance', code: '`sync` (a subtle pill Badge)' },
       { property: 'actions', values: 'history · copy · download', code: '`actions` (MessageAction icon-xs)' },
       { property: 'publish · close', values: 'button', code: '`onPublish`, `onClose`' },
       { property: 'status bar', values: 'text', code: '`status` (Shell Footer note)' },
@@ -254,20 +254,20 @@ export const Code = meta.story({ args: { view: 'code' } })
 /** Figma state editing: a selection and the inline assist prompt (Surfaces). */
 export const Editing = meta.story({ args: { editing: true, status: 'Editing selection · chart' } })
 
-/** The `sync` slot: the Figma sync indicator states as semantic pill Badges. */
+/** The `sync` slot: the Figma sync indicator states as subtle pill Badges. */
 export const Sync = meta.story({
   render: () => (
     <div className="flex flex-wrap gap-2">
-      <Badge variant="semantic" tone="agent" shape="pill">
+      <Badge variant="subtle" tone="agent" shape="pill">
         <Spinner />
         Updating
       </Badge>
       {synced}
-      <Badge variant="semantic" tone="warning" shape="pill">
+      <Badge variant="subtle" tone="warning" shape="pill">
         <Icon icon={RotateCcwIcon} size="xs" />
         Out of date
       </Badge>
-      <Badge variant="semantic" tone="destructive" shape="pill">
+      <Badge variant="subtle" tone="destructive" shape="pill">
         <Icon icon={TriangleAlertIcon} size="xs" />
         Conflict
       </Badge>

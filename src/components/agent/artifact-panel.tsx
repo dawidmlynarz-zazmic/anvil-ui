@@ -19,7 +19,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 // artifact (a dashboard, a document, code) lives. Composed, nothing re-drawn: Card (--card,
 // --border, radius xl, shadow/md as drawn) → Shell Header (bar, 10 / 12px): title text/sm/semibold,
 // the version picker (ghost xs Button → Dropdown Menu radio items), `sync` (the Surfaces sync
-// indicator: a semantic pill Badge), then the Preview / Code view switch (Tabs; Figma draws it as a
+// indicator: a subtle pill Badge), then the Preview / Code view switch (Tabs; Figma draws it as a
 // --muted segmented control, active item --card + shadow/xs, styled here), `actions` in Message
 // Actions (MessageAction icon-xs: history, copy, download), Publish (brand xs) and Close → the body:
 // preview (--background, 20px padding, 16px gap) or `code` (--muted, edge to edge) → Shell Footer
@@ -54,7 +54,7 @@ function ArtifactPanel({
   /** Versions to pick from (Dropdown Menu radio items); omit for a static label. */
   versions?: { value: string; label: React.ReactNode }[]
   onVersionChange?: (value: string) => void
-  /** Sync with the chat: a semantic pill Badge (Figma sync indicator). */
+  /** Sync with the chat: a subtle pill Badge (Figma sync indicator). */
   sync?: React.ReactNode
   view?: ArtifactView
   defaultView?: ArtifactView
