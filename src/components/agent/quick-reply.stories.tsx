@@ -15,7 +15,7 @@ const FOLLOW_UPS = [
 ]
 
 const meta = preview.meta({
-  title: 'Molecules/Quick Reply',
+  title: 'Design System/Molecules/Quick Reply',
   tags: ['molecule', 'messages'],
   component: QuickReply,
   parameters: {

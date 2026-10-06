@@ -8,7 +8,7 @@ const tones = ['brand', 'agent', 'success', 'warning', 'destructive', 'neutral']
 const sizes = ['sm', 'default', 'lg'] as const
 
 const meta = preview.meta({
-  title: 'Atoms/Progress',
+  title: 'Design System/Atoms/Progress',
   tags: ['atom'],
   component: Progress,
   parameters: {

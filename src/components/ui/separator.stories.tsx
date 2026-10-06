@@ -37,7 +37,7 @@ function DemoSeparator({
 }
 
 const meta = preview.meta({
-  title: 'Atoms/Separator',
+  title: 'Design System/Atoms/Separator',
   tags: ['atom'],
   component: DemoSeparator,
   parameters: {

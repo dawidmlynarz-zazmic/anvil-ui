@@ -39,7 +39,7 @@ const GLYPHS: [string, LucideIcon][] = [
 const tones = ['neutral', 'brand', 'info', 'success', 'warning', 'destructive', 'agent'] as const
 
 const meta = preview.meta({
-  title: 'Atoms/Icon',
+  title: 'Design System/Atoms/Icon',
   tags: ['atom'],
   component: Icon,
   parameters: {

@@ -87,7 +87,7 @@ function Sheet({ toasts, theme }: { toasts: DemoProps[]; theme?: 'light' | 'dark
 }
 
 const meta = preview.meta({
-  title: 'Molecules/Toast',
+  title: 'Design System/Molecules/Toast',
   tags: ['molecule'],
   component: DemoToast,
   parameters: {

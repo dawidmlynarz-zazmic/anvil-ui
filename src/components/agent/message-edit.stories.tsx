@@ -17,7 +17,7 @@ const VERSIONS = [
 ]
 
 const meta = preview.meta({
-  title: 'Molecules/Message Edit',
+  title: 'Design System/Molecules/Message Edit',
   tags: ['molecule', 'messages'],
   component: MessageEditor,
   parameters: {

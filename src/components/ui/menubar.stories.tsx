@@ -86,7 +86,7 @@ function DemoMenubar({ defaultValue, onSelect }: DemoProps) {
 }
 
 const meta = preview.meta({
-  title: 'Organisms/Menubar',
+  title: 'Design System/Organisms/Menubar',
   tags: ['organism'],
   component: DemoMenubar,
   parameters: {

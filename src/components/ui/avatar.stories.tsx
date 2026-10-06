@@ -45,7 +45,7 @@ function DemoAvatar({ size = 'default', shape = 'circle', type = 'text', label =
 }
 
 const meta = preview.meta({
-  title: 'Atoms/Avatar',
+  title: 'Design System/Atoms/Avatar',
   tags: ['atom'],
   component: DemoAvatar,
   parameters: {

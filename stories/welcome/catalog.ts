@@ -1,5 +1,5 @@
 // Everything Anvil UI covers, grouped like the Storybook sidebar: Foundations, then the levels
-// (Atoms, Molecules, Organisms, Agent Builder; docs/system-audit.md). Inside a level, areas group
+// (Design System › Atoms, Molecules, Organisms; Agent Builder; docs/system-audit.md). Inside a level, areas group
 // related components. Whether an item is available (and where it links) is read from Storybook's
 // index at runtime, so this list only changes when the scope changes. `title` is the Storybook
 // title the item has (or will have). Figma names that live elsewhere in code are aliases to it.
@@ -8,7 +8,7 @@ import type { AgentBuilderGroup, LevelTitle } from '../../.storybook/taxonomy'
 
 export type CatalogItem = { name: string; title: string }
 export type CatalogArea = {
-  /** The sidebar group the area's components live in. */
+  /** The level the area's components belong to. */
   section: 'Foundations' | LevelTitle
   id: string
   name: string
@@ -17,13 +17,13 @@ export type CatalogArea = {
 }
 
 const at =
-  (level: 'Foundations' | LevelTitle) =>
+  (path: string) =>
   (...names: string[]): CatalogItem[] =>
-    names.map((name) => ({ name, title: `${level}/${name}` }))
+    names.map((name) => ({ name, title: `${path}/${name}` }))
 const foundation = at('Foundations')
-const atom = at('Atoms')
-const molecule = at('Molecules')
-const organism = at('Organisms')
+const atom = at('Design System/Atoms')
+const molecule = at('Design System/Molecules')
+const organism = at('Design System/Organisms')
 /** Agent Builder items live one folder deeper, in their group. */
 const builder =
   (group: AgentBuilderGroup) =>
@@ -139,7 +139,7 @@ export const catalog: CatalogArea[] = [
         'Pagination',
         'Resizable',
       ),
-      alias('System Banner', 'Molecules/Alert'),
+      alias('System Banner', 'Design System/Molecules/Alert'),
     ],
   },
   {
@@ -159,10 +159,10 @@ export const catalog: CatalogArea[] = [
         'Citation Source Item',
         'Tool Log Line',
       ),
-      alias('Prompt Attachment', 'Molecules/Attachment'),
-      alias('Quick Reply Group', 'Molecules/Quick Reply'),
-      alias('Follow-up Suggestions', 'Molecules/Quick Reply'),
-      alias('Regenerate Menu', 'Molecules/Message Actions'),
+      alias('Prompt Attachment', 'Design System/Molecules/Attachment'),
+      alias('Quick Reply Group', 'Design System/Molecules/Quick Reply'),
+      alias('Follow-up Suggestions', 'Design System/Molecules/Quick Reply'),
+      alias('Regenerate Menu', 'Design System/Molecules/Message Actions'),
     ],
   },
   // Organisms: complete, reusable sections.

@@ -8,7 +8,7 @@ const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=1066
 const STATUSES = ['running', 'done', 'failed'] as const
 
 const meta = preview.meta({
-  title: 'Atoms/Step Status Icon',
+  title: 'Design System/Atoms/Step Status Icon',
   tags: ['atom', 'agent-status'],
   component: StepStatusIcon,
   parameters: {

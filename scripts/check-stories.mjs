@@ -1,6 +1,6 @@
 // Story standards check (run by `pnpm lint`). Every component meta must have a title under its
-// level (Atoms/<Name>, Molecules/…, Organisms/…; Agent Builder/<Group>/<Name> with a known group;
-// Foundations/… for the Icon), exactly one
+// level (Design System/Atoms/<Name>, Design System/Molecules/…, Design System/Organisms/…;
+// Agent Builder/<Group>/<Name> with a known group), exactly one
 // level tag that matches it, only known context tags (.storybook/taxonomy.ts), a shadcn slug only
 // as `parameters.shadcn: '<slug>'`, parameters.layout, a Figma link
 // (parameters.design), the usage guide (parameters.guide, starting with `use`), the Figma → code table (parameters.figmaProps; `[]` with a comment when
@@ -10,9 +10,9 @@ import { globSync, readFileSync } from 'node:fs'
 
 // Mirrors .storybook/taxonomy.ts.
 const LEVELS = {
-  atom: 'Atoms',
-  molecule: 'Molecules',
-  organism: 'Organisms',
+  atom: 'Design System/Atoms',
+  molecule: 'Design System/Molecules',
+  organism: 'Design System/Organisms',
   'agent-builder': 'Agent Builder',
 }
 const AGENT_BUILDER_GROUPS = [
@@ -54,18 +54,17 @@ for (const file of files) {
     problems.push(
       `${file}: needs exactly one level tag (${Object.keys(LEVELS).join(' · ')}), has ${levels.length}`,
     )
-  const section = title.split('/')[0]
-  const expected = section === 'Foundations' ? 'Foundations' : LEVELS[levels[0]]
-  if (levels.length === 1 && section !== expected && !(section === 'Foundations' && levels[0] === 'atom'))
-    problems.push(`${file}: a ${levels[0]} lives under ${LEVELS[levels[0]]}/, not ${section}/`)
+  const path = LEVELS[levels[0]]
   const parts = title.split('/')
-  if (section === 'Agent Builder') {
+  if (levels.length === 1 && !title.startsWith(`${path}/`))
+    problems.push(`${file}: a ${levels[0]} lives under ${path}/, not ${parts.slice(0, -1).join('/')}/`)
+  else if (path === 'Agent Builder') {
     if (parts.length !== 3 || !AGENT_BUILDER_GROUPS.includes(parts[1]))
       problems.push(
         `${file}: Agent Builder titles are 'Agent Builder/<Group>/<Name>' (groups: ${AGENT_BUILDER_GROUPS.join(' · ')})`,
       )
-  } else if (section !== 'Foundations' && parts.length !== 2)
-    problems.push(`${file}: ${section} titles are '${section}/<Name>' (no folders)`)
+  } else if (path && parts.length !== 3)
+    problems.push(`${file}: titles are '${path}/<Name>' (no deeper folders)`)
   for (const tag of tags) {
     if (RETIRED.includes(tag)) problems.push(`${file}: retired tag '${tag}'`)
     else if (!(tag in LEVELS) && !CONTEXTS.includes(tag) && tag !== '!autodocs')
@@ -76,7 +75,7 @@ for (const file of files) {
   if (!/^ {4}figmaProps: \[/m.test(source))
     problems.push(`${file}: no parameters.figmaProps (Figma → code table)`)
   if (!/^ {2}argTypes: \{/m.test(source)) problems.push(`${file}: no argTypes`)
-  if (section !== 'Foundations' && !/^ {4}guide: \{\n {6}use: \[/m.test(source))
+  if (!/^ {4}guide: \{\n {6}use: \[/m.test(source))
     problems.push(`${file}: no parameters.guide (Usage: use, avoid, content, a11y)`)
   if (/^\s+play:/m.test(source)) problems.push(`${file}: uses play (use Story.test instead)`)
 }

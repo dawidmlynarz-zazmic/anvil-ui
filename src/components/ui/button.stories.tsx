@@ -41,7 +41,7 @@ const RowLabel = ({ children }: { children: ReactNode }) => (
 )
 
 const meta = preview.meta({
-  title: 'Atoms/Button',
+  title: 'Design System/Atoms/Button',
   tags: ['atom'],
   component: Button,
   parameters: {

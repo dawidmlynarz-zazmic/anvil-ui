@@ -9,7 +9,7 @@ import { Message, MessageContent, MessageGroup } from './message'
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10663-3597'
 
 const meta = preview.meta({
-  title: 'Atoms/Marker',
+  title: 'Design System/Atoms/Marker',
   tags: ['atom', 'messages'],
   component: Marker,
   parameters: {

@@ -134,7 +134,7 @@ function Demo({ copy = true, retry = true, edit = false, feedback = true, share 
 }
 
 const meta = preview.meta({
-  title: 'Molecules/Message Actions',
+  title: 'Design System/Molecules/Message Actions',
   tags: ['molecule', 'messages'],
   component: Demo,
   parameters: {

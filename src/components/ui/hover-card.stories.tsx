@@ -53,7 +53,7 @@ function DemoHoverCard({ open, onOpenChange, side = 'bottom', openDelay = 700 }:
 }
 
 const meta = preview.meta({
-  title: 'Molecules/Hover Card',
+  title: 'Design System/Molecules/Hover Card',
   tags: ['molecule'],
   component: DemoHoverCard,
   parameters: {

@@ -81,7 +81,7 @@ function GroupedSelect({ open, onOpenChange }: Pick<DemoProps, 'open' | 'onOpenC
 const openListA11y = { config: { rules: [{ id: 'aria-hidden-focus', enabled: false }] } }
 
 const meta = preview.meta({
-  title: 'Molecules/Select',
+  title: 'Design System/Molecules/Select',
   tags: ['molecule'],
   component: DemoSelect,
   parameters: {

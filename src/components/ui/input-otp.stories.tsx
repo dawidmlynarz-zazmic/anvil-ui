@@ -18,7 +18,7 @@ function Slots({ count = 6 }: { count?: number }) {
 }
 
 const meta = preview.meta({
-  title: 'Molecules/Input OTP',
+  title: 'Design System/Molecules/Input OTP',
   tags: ['molecule'],
   component: InputOTP,
   parameters: {

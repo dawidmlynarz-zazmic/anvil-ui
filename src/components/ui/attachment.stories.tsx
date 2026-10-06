@@ -58,7 +58,7 @@ function Demo({
 }
 
 const meta = preview.meta({
-  title: 'Molecules/Attachment',
+  title: 'Design System/Molecules/Attachment',
   tags: ['molecule', 'input'],
   component: Demo,
   parameters: {

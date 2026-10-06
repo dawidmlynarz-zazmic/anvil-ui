@@ -69,7 +69,7 @@ function DemoSheet({
 }
 
 const meta = preview.meta({
-  title: 'Organisms/Sheet',
+  title: 'Design System/Organisms/Sheet',
   tags: ['organism'],
   component: DemoSheet,
   parameters: {

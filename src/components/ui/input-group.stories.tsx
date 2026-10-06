@@ -31,7 +31,7 @@ function Search({ size }: { size?: 'sm' | 'default' | 'lg' }) {
 }
 
 const meta = preview.meta({
-  title: 'Molecules/Input Group',
+  title: 'Design System/Molecules/Input Group',
   tags: ['molecule'],
   component: InputGroup,
   parameters: {

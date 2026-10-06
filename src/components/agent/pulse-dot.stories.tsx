@@ -6,7 +6,7 @@ import { PulseDot } from './pulse-dot'
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10667-13158'
 
 const meta = preview.meta({
-  title: 'Atoms/Pulse Dot',
+  title: 'Design System/Atoms/Pulse Dot',
   tags: ['atom', 'agent-status'],
   component: PulseDot,
   parameters: {

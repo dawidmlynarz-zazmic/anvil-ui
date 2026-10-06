@@ -82,7 +82,10 @@ function DocsLink({ title }: { title: string }) {
   return (
     <a href={`/?path=${path}`} target="_top" onClick={onClick}>
       {parts.at(-1)}
-      <span className="sb-unstyled type-text-xs-normal text-muted-foreground"> · {parts[0]}</span>
+      <span className="sb-unstyled type-text-xs-normal text-muted-foreground">
+        {' '}
+        · {parts[0] === 'Design System' ? parts[1] : parts[0]}
+      </span>
     </a>
   )
 }

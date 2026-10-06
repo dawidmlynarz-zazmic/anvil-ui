@@ -34,7 +34,7 @@ function DemoScrollArea({ orientation = 'vertical', type = 'hover' }: DemoProps)
 }
 
 const meta = preview.meta({
-  title: 'Atoms/Scroll Area',
+  title: 'Design System/Atoms/Scroll Area',
   tags: ['atom'],
   component: DemoScrollArea,
   parameters: {

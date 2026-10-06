@@ -66,7 +66,7 @@ function DemoBreadcrumb({ back = false, avatar = true, levels = 2, current = tru
 }
 
 const meta = preview.meta({
-  title: 'Molecules/Breadcrumb',
+  title: 'Design System/Molecules/Breadcrumb',
   tags: ['molecule'],
   component: DemoBreadcrumb,
   parameters: {

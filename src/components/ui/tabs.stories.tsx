@@ -92,7 +92,7 @@ function DemoTabs({
 }
 
 const meta = preview.meta({
-  title: 'Molecules/Tabs',
+  title: 'Design System/Molecules/Tabs',
   tags: ['molecule'],
   component: DemoTabs,
   parameters: {

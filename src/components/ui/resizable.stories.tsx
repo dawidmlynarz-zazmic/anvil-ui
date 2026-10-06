@@ -30,7 +30,7 @@ function DemoResizable({ orientation = 'horizontal', withHandle = true }: DemoPr
 }
 
 const meta = preview.meta({
-  title: 'Molecules/Resizable',
+  title: 'Design System/Molecules/Resizable',
   tags: ['molecule'],
   component: DemoResizable,
   parameters: {
