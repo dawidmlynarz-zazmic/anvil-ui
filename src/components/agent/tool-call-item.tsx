@@ -41,9 +41,15 @@ function ToolCallItem({
 /** The row: status indicator, children (name, summary, duration), chevron. Toggles the detail. */
 function ToolCallItemTrigger({
   className,
-  children,
+  name,
+  summary,
+  duration,
   ...props
-}: React.ComponentProps<typeof CollapsibleTrigger>) {
+}: Omit<React.ComponentProps<typeof CollapsibleTrigger>, 'children' | 'title' | 'name'> & {
+  name?: React.ReactNode
+  summary?: React.ReactNode
+  duration?: React.ReactNode
+}) {
   const status = React.useContext(ToolCallItemContext)
   return (
     <CollapsibleTrigger
@@ -57,7 +63,9 @@ function ToolCallItemTrigger({
       <span className="flex size-4 shrink-0 items-center justify-center">
         <StepStatusIcon status={status} />
       </span>
-      {children}
+      {name !== undefined && <ToolCallItemName>{name}</ToolCallItemName>}
+      {summary !== undefined && <ToolCallItemSummary>{summary}</ToolCallItemSummary>}
+      {duration !== undefined && <ToolCallItemDuration>{duration}</ToolCallItemDuration>}
       <Icon
         icon={ChevronRightIcon}
         className="size-3.5 text-muted-foreground transition-transform group-data-[state=open]/tool-call:rotate-90"
@@ -151,9 +159,6 @@ function ToolCallItemActions({ className, ...props }: React.ComponentProps<'div'
 export {
   ToolCallItem,
   ToolCallItemTrigger,
-  ToolCallItemName,
-  ToolCallItemSummary,
-  ToolCallItemDuration,
   ToolCallItemContent,
   ToolCallItemSection,
   ToolCallItemCode,

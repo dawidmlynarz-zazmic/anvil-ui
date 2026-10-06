@@ -8,12 +8,7 @@ import { CitationChip } from './citation-chip'
 import { FileOutputCard } from './file-output-card'
 import { MessageAction, MessageActions } from './message-actions'
 import { MessageRow } from './message-row'
-import {
-  ThinkingPanel,
-  ThinkingPanelDuration,
-  ThinkingPanelTitle,
-  ThinkingPanelTrigger,
-} from './thinking-panel'
+import { ThinkingPanel, ThinkingPanelTrigger } from './thinking-panel'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10663-3597'
 
@@ -23,10 +18,7 @@ const STATUSES = ['queued', 'streaming', 'complete', 'failed'] as const
 function Thinking({ status }: { status: 'running' | 'done' | 'failed' }) {
   return (
     <ThinkingPanel status={status}>
-      <ThinkingPanelTrigger>
-        <ThinkingPanelTitle>Title</ThinkingPanelTitle>
-        <ThinkingPanelDuration>Subtitle</ThinkingPanelDuration>
-      </ThinkingPanelTrigger>
+      <ThinkingPanelTrigger title="Title" duration="Subtitle" />
     </ThinkingPanel>
   )
 }

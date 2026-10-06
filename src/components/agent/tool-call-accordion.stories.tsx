@@ -1,22 +1,12 @@
 import preview from '#.storybook/preview'
 import { expect, userEvent } from 'storybook/test'
 
-import {
-  ToolCallAccordion,
-  ToolCallAccordionContent,
-  ToolCallAccordionDuration,
-  ToolCallAccordionSummary,
-  ToolCallAccordionTitle,
-  ToolCallAccordionTrigger,
-} from './tool-call-accordion'
+import { ToolCallAccordion, ToolCallAccordionContent, ToolCallAccordionTrigger } from './tool-call-accordion'
 import {
   ToolCallItem,
   ToolCallItemCode,
   ToolCallItemContent,
-  ToolCallItemDuration,
-  ToolCallItemName,
   ToolCallItemSection,
-  ToolCallItemSummary,
   ToolCallItemTrigger,
 } from './tool-call-item'
 
@@ -25,11 +15,7 @@ const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=1073
 function Call({ index, ...props }: React.ComponentProps<typeof ToolCallItem> & { index: number }) {
   return (
     <ToolCallItem {...props}>
-      <ToolCallItemTrigger>
-        <ToolCallItemName>Label {index}</ToolCallItemName>
-        <ToolCallItemSummary>Subtitle</ToolCallItemSummary>
-        <ToolCallItemDuration>1.4s</ToolCallItemDuration>
-      </ToolCallItemTrigger>
+      <ToolCallItemTrigger name={<>Label {index}</>} summary="Subtitle" duration="1.4s" />
       <ToolCallItemContent>
         <ToolCallItemSection label="Input">
           <ToolCallItemCode>{'{ "key": "Value" }'}</ToolCallItemCode>
@@ -46,11 +32,7 @@ function Group(props: React.ComponentProps<typeof ToolCallAccordion>) {
   const running = props.status === 'running'
   return (
     <ToolCallAccordion {...props}>
-      <ToolCallAccordionTrigger>
-        <ToolCallAccordionTitle>Title</ToolCallAccordionTitle>
-        <ToolCallAccordionSummary>Label 1, Label 2, Label 3</ToolCallAccordionSummary>
-        <ToolCallAccordionDuration>4.2s</ToolCallAccordionDuration>
-      </ToolCallAccordionTrigger>
+      <ToolCallAccordionTrigger title="Title" summary="Label 1, Label 2, Label 3" duration="4.2s" />
       <ToolCallAccordionContent>
         <Call index={1} status="done" />
         <Call index={2} status={running ? 'running' : 'done'} />
@@ -77,7 +59,7 @@ const meta = preview.meta({
     docs: {
       description: {
         component:
-          'Tool calls grouped under one line (`@/components/agent/tool-call-accordion`, on Collapsible, built from Tool Call Item). `ToolCallAccordion` (`status` done · running; `open` / `defaultOpen`) › `ToolCallAccordionTrigger` (adds the wrench or pulse tile and the chevron) › `ToolCallAccordionTitle`, `ToolCallAccordionSummary` (the tools, truncated), `ToolCallAccordionDuration`; `ToolCallAccordionContent` › `ToolCallItem`s. Figma state collapsed · expanded is the open state; running is `status`.',
+          'Tool calls grouped under one line (`@/components/agent/tool-call-accordion`, on Collapsible, built from Tool Call Item). `ToolCallAccordion` (`status` done · running; `open` / `defaultOpen`) › `ToolCallAccordionTrigger` (`title`, `summary` — the tools, truncated — and `duration`; adds the wrench or pulse tile and the chevron); `ToolCallAccordionContent` › `ToolCallItem`s. Figma state collapsed · expanded is the open state; running is `status`.',
       },
     },
   },
@@ -108,11 +90,7 @@ export const States = meta.story({
     <div className="flex flex-col gap-6">
       <Group />
       <ToolCallAccordion defaultOpen>
-        <ToolCallAccordionTrigger>
-          <ToolCallAccordionTitle>Title</ToolCallAccordionTitle>
-          <ToolCallAccordionSummary>Label 1, Label 2, Label 3</ToolCallAccordionSummary>
-          <ToolCallAccordionDuration>4.2s</ToolCallAccordionDuration>
-        </ToolCallAccordionTrigger>
+        <ToolCallAccordionTrigger title="Title" summary="Label 1, Label 2, Label 3" duration="4.2s" />
         <ToolCallAccordionContent>
           <Call index={1} status="done" />
           <Call index={2} status="done" defaultOpen />

@@ -54,9 +54,13 @@ function ThinkingPanel({
 /** The header row: status indicator, children (title, duration), chevron. Toggles the panel. */
 function ThinkingPanelTrigger({
   className,
-  children,
+  title,
+  duration,
   ...props
-}: React.ComponentProps<typeof CollapsibleTrigger>) {
+}: Omit<React.ComponentProps<typeof CollapsibleTrigger>, 'children' | 'title' | 'name'> & {
+  title?: React.ReactNode
+  duration?: React.ReactNode
+}) {
   const status = React.useContext(ThinkingPanelContext)
   return (
     <CollapsibleTrigger
@@ -68,7 +72,8 @@ function ThinkingPanelTrigger({
       {...props}
     >
       <StepStatusIcon status={status} appearance="subtle" />
-      {children}
+      {title !== undefined && <ThinkingPanelTitle>{title}</ThinkingPanelTitle>}
+      {duration !== undefined && <ThinkingPanelDuration>{duration}</ThinkingPanelDuration>}
       <Icon
         icon={ChevronRightIcon}
         className="ms-auto text-muted-foreground transition-transform group-data-[state=open]/thinking:rotate-90"
@@ -134,8 +139,6 @@ function ThinkingPanelStep({
 export {
   ThinkingPanel,
   ThinkingPanelTrigger,
-  ThinkingPanelTitle,
-  ThinkingPanelDuration,
   ThinkingPanelContent,
   ThinkingPanelSteps,
   ThinkingPanelStep,
