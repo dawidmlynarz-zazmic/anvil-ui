@@ -110,7 +110,7 @@ function Demo({ loading, empty, striped }: DemoProps) {
 }
 
 const meta = preview.meta({
-  title: 'Agent Builder/Widget Table',
+  title: 'Agent Builder/Widgets & artifacts/Widget Table',
   tags: ['agent-builder', 'widgets'],
   component: Demo,
   parameters: {

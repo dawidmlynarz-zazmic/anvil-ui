@@ -75,7 +75,7 @@ function DemoContextMenu({ modal = true, onSelect }: DemoProps) {
 }
 
 const meta = preview.meta({
-  title: 'Molecules/Context Menu',
+  title: 'Design System/Molecules/Context Menu',
   tags: ['molecule'],
   component: DemoContextMenu,
   parameters: {

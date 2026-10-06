@@ -80,7 +80,7 @@ function DemoAlertDialog({
 }
 
 const meta = preview.meta({
-  title: 'Organisms/Alert Dialog',
+  title: 'Design System/Organisms/Alert Dialog',
   tags: ['organism'],
   component: DemoAlertDialog,
   parameters: {

@@ -7,7 +7,7 @@ const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=1089
 const markers = ['none', 'required', 'optional'] as const
 
 const meta = preview.meta({
-  title: 'Atoms/Label',
+  title: 'Design System/Atoms/Label',
   tags: ['atom'],
   component: Label,
   parameters: {

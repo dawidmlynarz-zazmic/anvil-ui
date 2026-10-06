@@ -89,7 +89,7 @@ function DemoMenu({ open, onOpenChange, side = 'bottom', align = 'start', modal 
 }
 
 const meta = preview.meta({
-  title: 'Molecules/Dropdown Menu',
+  title: 'Design System/Molecules/Dropdown Menu',
   tags: ['molecule'],
   component: DemoMenu,
   parameters: {

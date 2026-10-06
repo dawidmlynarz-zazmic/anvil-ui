@@ -51,7 +51,7 @@ function DemoAccordion({ type = 'single', collapsible = true, disabledItem = fal
 }
 
 const meta = preview.meta({
-  title: 'Molecules/Accordion',
+  title: 'Design System/Molecules/Accordion',
   tags: ['molecule'],
   component: DemoAccordion,
   parameters: {

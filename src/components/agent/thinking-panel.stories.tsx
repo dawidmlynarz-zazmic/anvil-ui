@@ -49,7 +49,7 @@ function Panel({
 }
 
 const meta = preview.meta({
-  title: 'Agent Builder/Thinking Panel',
+  title: 'Agent Builder/Agent status/Thinking Panel',
   tags: ['agent-builder', 'agent-status'],
   component: Panel,
   parameters: {

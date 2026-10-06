@@ -46,7 +46,7 @@ const actionFor = (status: MemoryNoticeStatus) =>
   status === 'not-used' ? undo : status === 'used' ? undefined : manage
 
 const meta = preview.meta({
-  title: 'Agent Builder/Memory Notice',
+  title: 'Agent Builder/Memory/Memory Notice',
   tags: ['agent-builder', 'memory'],
   component: MemoryNotice,
   parameters: {

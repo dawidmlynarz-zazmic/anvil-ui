@@ -65,7 +65,7 @@ function Demo({ count = 12, ...props }: DemoProps) {
 }
 
 const meta = preview.meta({
-  title: 'Organisms/Message Scroller',
+  title: 'Design System/Organisms/Message Scroller',
   tags: ['organism', 'messages'],
   component: Demo,
   parameters: {

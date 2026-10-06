@@ -69,7 +69,7 @@ function Blocks() {
 }
 
 const meta = preview.meta({
-  title: 'Organisms/Content Block',
+  title: 'Design System/Organisms/Content Block',
   tags: ['organism', 'messages'],
   component: ContentBlocks,
   parameters: {

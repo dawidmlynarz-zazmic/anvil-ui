@@ -29,7 +29,7 @@ function DemoTooltip({ open, onOpenChange, side = 'top', text = 'New chat' }: De
 }
 
 const meta = preview.meta({
-  title: 'Molecules/Tooltip',
+  title: 'Design System/Molecules/Tooltip',
   tags: ['molecule'],
   component: DemoTooltip,
   parameters: {

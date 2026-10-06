@@ -59,7 +59,7 @@ export function relationshipsOf(title: string): { builtWith: string[]; usedIn: s
   return { builtWith: [...new Set(children)].sort(byName), usedIn: [...new Set(parents)].sort(byName) }
 }
 
-/** Storybook's docs id for a title: `Agent Builder/Citation Drawer` → `agent-builder-citation-drawer--docs`. */
+/** Storybook's docs id for a title: `Agent Builder/Sources/Citation Drawer` → `agent-builder-sources-citation-drawer--docs`. */
 export const docsIdOf = (title: string) =>
   `${title
     .toLowerCase()

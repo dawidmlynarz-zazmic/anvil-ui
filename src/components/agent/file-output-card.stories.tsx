@@ -8,7 +8,7 @@ const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=1072
 const KINDS = ['document', 'presentation', 'spreadsheet', 'pdf'] as const
 
 const meta = preview.meta({
-  title: 'Agent Builder/File Output Card',
+  title: 'Agent Builder/Widgets & artifacts/File Output Card',
   tags: ['agent-builder', 'widgets'],
   component: FileOutputCard,
   parameters: {

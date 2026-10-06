@@ -85,7 +85,7 @@ function DemoCarousel({
 }
 
 const meta = preview.meta({
-  title: 'Organisms/Carousel',
+  title: 'Design System/Organisms/Carousel',
   tags: ['organism'],
   component: DemoCarousel,
   parameters: {

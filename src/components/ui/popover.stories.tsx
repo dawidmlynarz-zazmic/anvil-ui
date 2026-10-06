@@ -67,7 +67,7 @@ function DemoPopover({
 }
 
 const meta = preview.meta({
-  title: 'Molecules/Popover',
+  title: 'Design System/Molecules/Popover',
   tags: ['molecule'],
   component: DemoPopover,
   parameters: {

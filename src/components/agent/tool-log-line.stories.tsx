@@ -46,7 +46,7 @@ function Demo({
 }
 
 const meta = preview.meta({
-  title: 'Molecules/Tool Log Line',
+  title: 'Design System/Molecules/Tool Log Line',
   tags: ['molecule', 'agent-status'],
   component: Demo,
   parameters: {

@@ -48,7 +48,7 @@ function DemoCalendar({
 }
 
 const meta = preview.meta({
-  title: 'Molecules/Calendar',
+  title: 'Design System/Molecules/Calendar',
   tags: ['molecule'],
   component: DemoCalendar,
   parameters: {

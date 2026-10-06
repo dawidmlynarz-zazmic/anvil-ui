@@ -78,11 +78,14 @@ function DocsLink({ title }: { title: string }) {
     event.preventDefault()
     addons.getChannel().emit(NAVIGATE_URL, `?path=${path}`)
   }
-  const [level, ...name] = title.split('/')
+  const parts = title.split('/')
   return (
     <a href={`/?path=${path}`} target="_top" onClick={onClick}>
-      {name.join(' / ')}
-      <span className="sb-unstyled type-text-xs-normal text-muted-foreground"> · {level}</span>
+      {parts.at(-1)}
+      <span className="sb-unstyled type-text-xs-normal text-muted-foreground">
+        {' '}
+        · {parts[0] === 'Design System' ? parts[1] : parts[0]}
+      </span>
     </a>
   )
 }

@@ -58,7 +58,7 @@ function DemoCard({
 }
 
 const meta = preview.meta({
-  title: 'Molecules/Card',
+  title: 'Design System/Molecules/Card',
   tags: ['molecule'],
   component: DemoCard,
   parameters: {

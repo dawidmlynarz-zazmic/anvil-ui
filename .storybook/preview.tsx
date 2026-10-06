@@ -128,17 +128,39 @@ export default definePreview({
     docs: { page: AnvilDocsPage },
     controls: { matchers: { color: /(background|color)$/i, date: /Date$/i }, sort: 'requiredFirst' },
     options: {
-      // Levels in a fixed order (Welcome, Foundations, Atoms, Molecules, Organisms, Agent Builder);
-      // components A–Z inside a level, stories in file order.
-      // Plain JS, no outside references: Storybook evaluates this function's source on its own.
+      // Sections in a fixed order (Welcome, Foundations, Design System, Agent Builder); their folders
+      // in a fixed order too (Design System: Atoms, Molecules, Organisms; Agent Builder:
+      // AGENT_BUILDER_GROUPS in .storybook/taxonomy.ts); components A–Z inside a folder, stories in
+      // file order.
       storySort: (a, b) => {
-        const groups = ['Welcome', 'Foundations', 'Atoms', 'Molecules', 'Organisms', 'Agent Builder']
+        const sections = ['Welcome', 'Foundations', 'Design System', 'Agent Builder']
+        const folders = [
+          'Atoms',
+          'Molecules',
+          'Organisms',
+          'Surfaces',
+          'In-page assist',
+          'Shell',
+          'Input',
+          'Messages',
+          'Agent status',
+          'Sources',
+          'Memory',
+          'Actions',
+          'Widgets & artifacts',
+          'Feedback',
+          'Tasks',
+          'Evidence & decisions',
+          'Catalog & scheduling',
+          'Checkout & orders',
+          'Trust & handoff',
+        ]
+        // indexOf + 1, so an unknown name (0) sorts last: (n || 99).
         const pa = a.title.split('/')
         const pb = b.title.split('/')
-        const ga = groups.indexOf(pa[0])
-        const gb = groups.indexOf(pb[0])
-        if (ga !== gb) return (ga === -1 ? 99 : ga) - (gb === -1 ? 99 : gb)
+        if (pa[0] !== pb[0]) return (sections.indexOf(pa[0]) + 1 || 99) - (sections.indexOf(pb[0]) + 1 || 99)
         if (pa[0] === 'Welcome' || pa[0] === 'Foundations' || a.title === b.title) return 0
+        if (pa[1] !== pb[1]) return (folders.indexOf(pa[1]) + 1 || 99) - (folders.indexOf(pb[1]) + 1 || 99)
         return a.title.localeCompare(b.title)
       },
     },

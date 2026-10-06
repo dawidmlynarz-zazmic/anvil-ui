@@ -25,7 +25,7 @@ const MESSAGE: Record<ActionStatusValue, string> = {
 }
 
 const meta = preview.meta({
-  title: 'Molecules/Action Status',
+  title: 'Design System/Molecules/Action Status',
   tags: ['molecule', 'actions'],
   component: ActionStatus,
   parameters: {

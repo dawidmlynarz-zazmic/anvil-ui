@@ -21,7 +21,7 @@ const TONES = [
 const SIZES = ['xs', 'sm', 'default', 'lg'] as const
 
 const meta = preview.meta({
-  title: 'Atoms/Icon Tile',
+  title: 'Design System/Atoms/Icon Tile',
   tags: ['atom'],
   component: IconTile,
   parameters: {

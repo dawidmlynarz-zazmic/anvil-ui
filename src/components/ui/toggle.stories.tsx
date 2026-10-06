@@ -9,7 +9,7 @@ const variants = ['default', 'outline'] as const
 const sizes = ['sm', 'default', 'lg'] as const
 
 const meta = preview.meta({
-  title: 'Atoms/Toggle',
+  title: 'Design System/Atoms/Toggle',
   tags: ['atom'],
   component: Toggle,
   parameters: {

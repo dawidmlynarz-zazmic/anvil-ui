@@ -76,7 +76,7 @@ function DemoDatePicker({ mode = 'single', open, onOpenChange, withValue = false
 }
 
 const meta = preview.meta({
-  title: 'Molecules/Date Picker',
+  title: 'Design System/Molecules/Date Picker',
   tags: ['molecule'],
   component: DemoDatePicker,
   parameters: {

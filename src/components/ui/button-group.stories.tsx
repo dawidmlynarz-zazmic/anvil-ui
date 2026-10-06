@@ -33,7 +33,7 @@ function DemoButtonGroup({ orientation = 'horizontal', variant = 'outline', size
 }
 
 const meta = preview.meta({
-  title: 'Molecules/Button Group',
+  title: 'Design System/Molecules/Button Group',
   tags: ['molecule'],
   component: DemoButtonGroup,
   parameters: {

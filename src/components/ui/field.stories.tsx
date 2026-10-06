@@ -136,7 +136,7 @@ function DemoField({
 }
 
 const meta = preview.meta({
-  title: 'Molecules/Field',
+  title: 'Design System/Molecules/Field',
   tags: ['molecule'],
   component: DemoField,
   parameters: {

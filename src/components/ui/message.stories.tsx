@@ -44,7 +44,7 @@ function Actions() {
 }
 
 const meta = preview.meta({
-  title: 'Molecules/Message',
+  title: 'Design System/Molecules/Message',
   tags: ['molecule', 'messages'],
   component: Message,
   parameters: {

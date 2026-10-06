@@ -30,7 +30,7 @@ const SOURCES = [
 ]
 
 const meta = preview.meta({
-  title: 'Molecules/Citation Source Item',
+  title: 'Design System/Molecules/Citation Source Item',
   tags: ['molecule', 'sources'],
   component: CitationSourceItem,
   parameters: {

@@ -76,7 +76,7 @@ function DemoDialog({
 }
 
 const meta = preview.meta({
-  title: 'Organisms/Dialog',
+  title: 'Design System/Organisms/Dialog',
   tags: ['organism'],
   component: DemoDialog,
   parameters: {

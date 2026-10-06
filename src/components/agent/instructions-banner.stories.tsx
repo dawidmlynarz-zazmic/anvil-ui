@@ -12,7 +12,7 @@ const PROJECT_INSTRUCTIONS =
   'Refer to the product as Northwind Sync. Use Pacific Time for dates. Keep answers under 200 words, use bullet points, and end with next steps and owners.'
 
 const meta = preview.meta({
-  title: 'Agent Builder/Instructions Banner',
+  title: 'Agent Builder/Memory/Instructions Banner',
   tags: ['agent-builder', 'memory'],
   component: InstructionsBanner,
   parameters: {

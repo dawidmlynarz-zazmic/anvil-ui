@@ -117,7 +117,7 @@ function Row({
 }
 
 const meta = preview.meta({
-  title: 'Agent Builder/Message Row',
+  title: 'Agent Builder/Messages/Message Row',
   tags: ['agent-builder', 'messages'],
   component: Row,
   parameters: {

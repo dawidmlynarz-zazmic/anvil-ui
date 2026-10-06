@@ -90,7 +90,7 @@ function DemoAlert({
 }
 
 const meta = preview.meta({
-  title: 'Molecules/Alert',
+  title: 'Design System/Molecules/Alert',
   tags: ['molecule'],
   component: DemoAlert,
   parameters: {

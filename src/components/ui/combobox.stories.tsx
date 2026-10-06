@@ -98,7 +98,7 @@ function DemoCombobox({
 }
 
 const meta = preview.meta({
-  title: 'Molecules/Combobox',
+  title: 'Design System/Molecules/Combobox',
   tags: ['molecule'],
   component: DemoCombobox,
   parameters: {

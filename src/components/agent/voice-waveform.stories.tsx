@@ -8,7 +8,7 @@ import { VoiceWaveform } from './voice-waveform'
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10664-12496'
 
 const meta = preview.meta({
-  title: 'Atoms/Voice Waveform',
+  title: 'Design System/Atoms/Voice Waveform',
   tags: ['atom', 'input'],
   component: VoiceWaveform,
   parameters: {

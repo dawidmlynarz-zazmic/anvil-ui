@@ -13,7 +13,7 @@ const OPTIONS = [
 ]
 
 const meta = preview.meta({
-  title: 'Atoms/Radio Group',
+  title: 'Design System/Atoms/Radio Group',
   tags: ['atom'],
   component: RadioGroup,
   parameters: {

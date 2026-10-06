@@ -133,7 +133,7 @@ function DemoTable({
 }
 
 const meta = preview.meta({
-  title: 'Organisms/Table',
+  title: 'Design System/Organisms/Table',
   tags: ['organism'],
   component: DemoTable,
   parameters: {

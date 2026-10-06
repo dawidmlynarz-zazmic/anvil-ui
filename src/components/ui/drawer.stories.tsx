@@ -73,7 +73,7 @@ function DemoDrawer({
 }
 
 const meta = preview.meta({
-  title: 'Organisms/Drawer',
+  title: 'Design System/Organisms/Drawer',
   tags: ['organism'],
   component: DemoDrawer,
   parameters: {

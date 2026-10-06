@@ -19,7 +19,7 @@ import {
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10843-4460'
 
 const meta = preview.meta({
-  title: 'Molecules/Item',
+  title: 'Design System/Molecules/Item',
   tags: ['molecule'],
   component: Item,
   parameters: {

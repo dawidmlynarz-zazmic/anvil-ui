@@ -90,7 +90,7 @@ function Demo({ status = 'ready', prompt = PROMPT, onCancel, onUse }: DemoProps)
 }
 
 const meta = preview.meta({
-  title: 'Agent Builder/Image Generation Card',
+  title: 'Agent Builder/Widgets & artifacts/Image Generation Card',
   tags: ['agent-builder', 'widgets'],
   component: Demo,
   parameters: {

@@ -22,7 +22,7 @@ function ToggleChip({ pressed: initial = false, ...props }: ToggleChipProps) {
 }
 
 const meta = preview.meta({
-  title: 'Atoms/Chip',
+  title: 'Design System/Atoms/Chip',
   tags: ['atom'],
   component: ToggleChip,
   parameters: {

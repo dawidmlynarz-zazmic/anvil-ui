@@ -53,7 +53,7 @@ function DemoEmpty({ media = 'default', link = false, bordered = false }: DemoPr
 }
 
 const meta = preview.meta({
-  title: 'Molecules/Empty State',
+  title: 'Design System/Molecules/Empty State',
   tags: ['molecule'],
   component: DemoEmpty,
   parameters: {

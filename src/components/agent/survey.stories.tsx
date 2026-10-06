@@ -28,7 +28,7 @@ const QUESTIONS: SurveyQuestion[] = [
 ]
 
 const meta = preview.meta({
-  title: 'Agent Builder/Survey',
+  title: 'Agent Builder/Feedback/Survey',
   tags: ['agent-builder', 'feedback'],
   component: Survey,
   parameters: {

@@ -16,7 +16,7 @@ function Row({ children }: { children: ReactNode }) {
 }
 
 const meta = preview.meta({
-  title: 'Atoms/Badge',
+  title: 'Design System/Atoms/Badge',
   tags: ['atom'],
   component: Badge,
   parameters: {

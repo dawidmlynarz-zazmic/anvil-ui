@@ -71,7 +71,7 @@ function DemoPagination({ type = 'full', page: initial = 5, total = 12 }: DemoPr
 }
 
 const meta = preview.meta({
-  title: 'Molecules/Pagination',
+  title: 'Design System/Molecules/Pagination',
   tags: ['molecule'],
   component: DemoPagination,
   parameters: {

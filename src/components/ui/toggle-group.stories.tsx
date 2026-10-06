@@ -55,7 +55,7 @@ function DemoToggleGroup({
 }
 
 const meta = preview.meta({
-  title: 'Molecules/Toggle Group',
+  title: 'Design System/Molecules/Toggle Group',
   tags: ['molecule'],
   component: DemoToggleGroup,
   parameters: {

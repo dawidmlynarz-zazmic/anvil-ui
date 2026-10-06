@@ -390,7 +390,7 @@ function DemoSidebar({
 }
 
 const meta = preview.meta({
-  title: 'Organisms/Sidebar',
+  title: 'Design System/Organisms/Sidebar',
   tags: ['organism'],
   component: DemoSidebar,
   parameters: {
