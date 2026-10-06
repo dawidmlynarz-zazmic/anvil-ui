@@ -194,9 +194,7 @@ export const Statuses = meta.story({
 })
 
 Statuses.test('the lifecycle strip is a live status', async ({ canvasElement }) => {
-  await expect(canvasElement.querySelectorAll('[data-slot=action-status][role=status]')).toHaveLength(
-    3,
-  )
+  await expect(canvasElement.querySelectorAll('[data-slot=action-status][role=status]')).toHaveLength(3)
 })
 
 const LONG =
