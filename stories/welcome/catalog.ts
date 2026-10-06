@@ -198,13 +198,11 @@ export const catalog: CatalogArea[] = [
     id: 'primitives-system',
     name: 'System & context',
     description: 'Notices and memory markers.',
-    items: prim('System & Context', [
-      'System Banner',
-      'Instructions Banner',
-      'Memory Chip',
-      'Memory In Use',
-      'Action Status',
-    ]),
+    items: [
+      // Figma system banner = Alert, size sm (audit M2).
+      { name: 'System Banner', title: 'UI Components/Alert' },
+      ...prim('System & Context', ['Instructions Banner', 'Memory Chip', 'Memory In Use', 'Action Status']),
+    ],
   },
   {
     section: 'Agent Primitives',

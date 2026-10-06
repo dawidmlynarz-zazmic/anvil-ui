@@ -2,6 +2,7 @@ import * as React from 'react'
 
 import { cn } from '@/lib/utils'
 import { ShellDescription, ShellHeader, ShellTitle } from '@/components/anvil/shell'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
 import {
   Icon,
@@ -17,7 +18,7 @@ import { IconTile } from '@/components/anvil/icon-tile'
 // side effects. --card, border, radius xl, shadow-sm, max 640px. Header (16px, divider): 32px
 // radius-lg tile + title text/sm/semibold + subtitle text/xs muted + a Badge (semantic, xs,
 // indicator). Details (16px, 10px
-// gap): ApprovalCardField rows (96px label column) and an optional warning `note`. Then either
+// gap): ApprovalCardField rows (96px label column) and an optional warning `note` (Alert, size xs). Then either
 // ShellFooter variant card (--muted bar, `note`) or ActionStatus (Figma action status:
 // executing --agent-subtle with pulse + progress · failed --danger-subtle · expired --muted).
 // Figma `state` → `status` (domain status, never an interaction state). Denied and expired dim
@@ -98,13 +99,10 @@ function ApprovalCard({
         <div className="flex flex-col gap-2.5 p-4">
           {children}
           {note && status === 'pending' && (
-            <p
-              data-slot="approval-card-note"
-              className="flex items-start gap-2 rounded-md bg-warning-subtle px-3 py-2.5 type-text-xs-normal text-warning-strong [&>svg]:mt-0.5 [&>svg]:text-warning"
-            >
-              <Icon icon={TriangleAlertIcon} size="xs" />
-              <span className="min-w-0 flex-1">{note}</span>
-            </p>
+            <Alert data-slot="approval-card-note" role="note" tone="warning" size="xs">
+              <Icon icon={TriangleAlertIcon} />
+              <AlertDescription>{note}</AlertDescription>
+            </Alert>
           )}
         </div>
       )}
