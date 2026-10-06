@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import preview from '#.storybook/preview'
-import { expect, fn, userEvent } from 'storybook/test'
+import { expect, fn, userEvent, waitFor, within } from 'storybook/test'
 
 import {
   Attachment,
@@ -13,10 +13,20 @@ import {
 } from '@/components/ui/attachment'
 import { Button } from '@/components/ui/button'
 import {
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+} from '@/components/ui/dropdown-menu'
+import {
   FileTextIcon,
   Icon,
+  CameraIcon,
+  HardDriveIcon,
+  HistoryIcon,
   ImageIcon,
-  PaperclipIcon,
+  UploadIcon,
   SlidersHorizontalIcon,
   XIcon,
 } from '@/components/ui/icon'
@@ -25,18 +35,45 @@ import { PromptInput } from './prompt-input'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10663-2292'
 
-function Attach() {
+/** The attach menu's items: standard Dropdown Menu items (Figma attachment menu). */
+function AttachItems() {
   return (
-    <Button
-      type="button"
-      variant="ghost"
-      intent="neutral"
-      size="icon-sm"
-      shape="circle"
-      aria-label="Attach files"
-    >
-      <Icon icon={PaperclipIcon} />
-    </Button>
+    <>
+      <DropdownMenuItem>
+        <Icon icon={UploadIcon} />
+        Upload files
+      </DropdownMenuItem>
+      <DropdownMenuItem>
+        <Icon icon={ImageIcon} />
+        Photos and images
+      </DropdownMenuItem>
+      <DropdownMenuItem>
+        <Icon icon={CameraIcon} />
+        Take a photo
+      </DropdownMenuItem>
+      <DropdownMenuSub>
+        <DropdownMenuSubTrigger>
+          <Icon icon={HardDriveIcon} />
+          Label
+        </DropdownMenuSubTrigger>
+        <DropdownMenuSubContent className="rounded-xl p-1.5">
+          <DropdownMenuItem>Label 1</DropdownMenuItem>
+          <DropdownMenuItem>Label 2</DropdownMenuItem>
+        </DropdownMenuSubContent>
+      </DropdownMenuSub>
+      <DropdownMenuSub>
+        <DropdownMenuSubTrigger>
+          <Icon icon={HistoryIcon} />
+          Recent files
+        </DropdownMenuSubTrigger>
+        <DropdownMenuSubContent className="rounded-xl p-1.5">
+          <DropdownMenuItem>Label 1</DropdownMenuItem>
+          <DropdownMenuItem>Label 2</DropdownMenuItem>
+        </DropdownMenuSubContent>
+      </DropdownMenuSub>
+      <DropdownMenuSeparator />
+      <p className="px-2.5 py-1.5 type-text-xs-normal text-muted-foreground">Subtitle</p>
+    </>
   )
 }
 
@@ -105,7 +142,8 @@ function Demo({ size, status, listening, withFiles, defaultValue, onSubmit, onSt
       onSubmit={onSubmit}
       onStop={onStop}
       onVoice={() => setVoice((v) => !v)}
-      leading={<Attach />}
+      attachMenu={<AttachItems />}
+      attachMenuProps={{ modal: false }}
       tools={<Tools />}
       tokenCount="1,204 / 200k"
       attachments={withFiles ? <Files /> : undefined}
@@ -134,7 +172,7 @@ const meta = preview.meta({
       {
         property: 'show attach button · leading action',
         values: 'boolean · instance',
-        code: 'pass `leading` or not (attach button or Attachment Menu)',
+        code: '`attachMenu` (Dropdown Menu items behind the attach button; Figma attachment menu) or `onAttach`; `leading` replaces it (instance swap)',
       },
       { property: 'show voice button', values: 'boolean', code: 'pass `onVoice` or not' },
       { property: 'show tools menu', values: 'boolean', code: 'pass `tools` or not' },
@@ -142,7 +180,7 @@ const meta = preview.meta({
     docs: {
       description: {
         component:
-          'The composer (`@/components/agent/prompt-input`, on Input Group): `size` default · compact (one row growing to 4 lines); `value` / `defaultValue` / `onValueChange`, `onSubmit(value)` (Enter sends, Shift+Enter adds a line; send is disabled while empty); `status` streaming (input off, send becomes Stop, `onStop`); `listening` shows the waveform in place of the text; slots `attachments`, `leading` (attach / Attachment Menu), `tools`, `tokenCount`; `onVoice` adds the voice button.',
+          'The composer (`@/components/agent/prompt-input`, on Input Group): `size` default · compact (one row growing to 4 lines); `value` / `defaultValue` / `onValueChange`, `onSubmit(value)` (Enter sends, Shift+Enter adds a line; send is disabled while empty); `status` streaming (input off, send becomes Stop, `onStop`); `listening` shows the waveform in place of the text; slots `attachments`, `attachMenu` (Dropdown Menu items behind the attach button) or `onAttach`, `leading` (any control in its place), `tools`, `tokenCount`; `onVoice` adds the voice button.',
       },
     },
   },
@@ -201,3 +239,18 @@ Streaming.test('Stop replaces Send', async ({ canvas, args }) => {
 
 /** Compact: one row (popover and mobile shells). */
 export const Compact = meta.story({ args: { size: 'compact' } })
+
+/**
+ * Figma show attach button: the attach button opens a Dropdown Menu of the items you pass
+ * (`attachMenu`). The Figma attachment menu is composed here, not a component of its own.
+ */
+export const AttachMenu = meta.story({
+  parameters: { docs: { story: { inline: false, height: '420px' } } },
+})
+
+AttachMenu.test('the attach button opens the attach menu', async ({ canvas, canvasElement }) => {
+  await userEvent.click(canvas.getByRole('button', { name: 'Attach files' }))
+  const body = within(canvasElement.ownerDocument.body)
+  await waitFor(() => expect(body.getByRole('menuitem', { name: 'Upload files' })).toBeVisible())
+  await expect(body.getByRole('menuitem', { name: 'Recent files' })).toBeInTheDocument()
+})
