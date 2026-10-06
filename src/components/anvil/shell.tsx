@@ -136,7 +136,8 @@ function ShellBody({ className, ...props }: React.ComponentProps<'div'>) {
 }
 
 // ── Footer ────────────────────────────────────────────────────────────────────────────────
-// variant bar: padded with a top shadow over scrolling content; inline: no padding; card: Figma
+// variant bar: padded, --background with a 1px --border-alpha-8 divider above (Figma updated
+// 2026-10-06; was a top shadow), 20px between groups; inline: no padding; card: Figma
 // part / card footer (10843:4522), the --muted action bar of agent cards (16 / 12px, wraps).
 // align end (default) · between (secondary left) · stretch (full-width buttons, mobile Drawer).
 // `note` puts a text/xs muted line first (Figma card footer note); it takes the free space.
@@ -144,7 +145,7 @@ function ShellBody({ className, ...props }: React.ComponentProps<'div'>) {
 const shellFooterVariants = cva('flex items-center gap-2', {
   variants: {
     variant: {
-      bar: 'shrink-0 px-4 py-3 shadow-top',
+      bar: 'shrink-0 gap-5 border-t border-border-alpha-8 bg-background px-4 py-3',
       inline: '',
       card: 'flex-wrap border-t bg-muted px-4 py-3',
     },

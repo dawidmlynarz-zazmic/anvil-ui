@@ -228,6 +228,21 @@ Lucide    → Icon (@/components/ui/icon) → every component and story
 
 ## Per-component workflow
 
+0. **Reuse first, at every stage (no duplicates).** Before building, and again before calling it
+   done, check what already exists: the Welcome catalog (`stories/welcome/catalog.ts`),
+   `src/components/{ui,anvil,agent}`, and the instances the Figma component nests
+   (`docs/composition-audit.md`).
+   - If an existing component does the job, use it; extend it with a variant or prop rather than
+     adding a near-copy.
+   - Compose features from composites and composites from elements: Button, Badge, Icon Tile,
+     Alert, Item, Chip, Dropdown Menu, Toolbar, Textarea, the shell header / footer, Action
+     Status, Step Status Icon, …
+   - Never re-draw an element (raw `<button>`, `<textarea>`, hand-built badge or tile) or wrap a
+     UI composite in a preset-only component (e.g. a menu with fixed items: pass the items to the
+     feature instead).
+   - If Figma draws a duplicate, say so and align Figma (or flag it) instead of copying it into
+     code.
+   - Record what the component is built from in its header comment and status row.
 1. Read the Figma page (`get_metadata`), then the component set (`get_design_context`,
    `get_screenshot`). Read its description and its rows in `docs/api-contract.md`.
 2. `pnpm dlx shadcn@latest add <primitive>` when a shadcn primitive exists.
@@ -280,7 +295,8 @@ Lucide    → Icon (@/components/ui/icon) → every component and story
    playground (roadmap Step 5).
 5. Compare against the Figma screenshot in light and dark; fix differences or note them.
 6. Run `pnpm typecheck && pnpm lint && pnpm test-storybook`.
-7. Update `docs/component-status.md` (component · Figma node · status · notes).
+7. Update `docs/component-status.md` (component · Figma node · status · notes), and recheck step 0:
+   nothing in the new code duplicates an existing component.
 
 ## Known Figma gaps (don't invent around them; follow the rule, note it in status)
 
