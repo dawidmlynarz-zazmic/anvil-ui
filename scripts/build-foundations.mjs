@@ -1,6 +1,6 @@
 // pnpm tokens:build (step 2) — writes the Storybook Foundations pages from tokens/anvil.tokens.json:
 //   stories/foundations/foundations.generated.ts   data (resolved values, contrast ratios)
-//   stories/foundations/{Colors,Typography,Spacing,Radius,Elevation}.mdx
+//   stories/foundations/{Colors,Typography,Spacing,Radius,Elevation,Motion}.mdx
 // Generated files; rendered by the hand-written blocks in stories/foundations/blocks.tsx.
 import fs from 'node:fs'
 import path from 'node:path'
@@ -164,6 +164,13 @@ const radii = dims
     description: t.$description ?? '',
   }))
   .sort((a, b) => a.value - b.value)
+const motion = dims
+  .filter((t) => t.path[1] === 'motion')
+  .map((t) => ({
+    figma: figmaName(t),
+    code: figmaExt(t).codeSyntax,
+    value: resolve(model, t, 'desktop'),
+  }))
 const effects = all
   .filter((t) => collectionOf(t) === 'effects')
   .map((t) => {
@@ -192,6 +199,7 @@ const data = {
   spacing,
   radii,
   effects,
+  motion,
   shell,
 }
 const ts = `// ${banner}\n${Object.entries(data)
@@ -247,6 +255,12 @@ const pages = {
     '8369:2258',
     'Shadow, elevation and focus effect styles from Figma. Floating surfaces use `shadow-elevation-raised`, modal surfaces `shadow-elevation-modal`; Card stays flat (border only). Shadow colors are mode-aware.',
     `<Blocks.Effects effects={data.effects} />`,
+  ),
+  Motion: page(
+    'Motion',
+    '8272:456',
+    'Three durations and two curves from the Figma \`dimensions\` collection. Things enter with \`ease-out\` and leave one duration step faster with \`ease-in-out\`. Components take their timing from the helpers in \`@/lib/motion\`, so new overlays and panels move the same way. Full rules: \`docs/motion-foundations.md\`.',
+    `## Durations\n\n<Blocks.MotionDurations tokens={data.motion} />\n\n## Easing\n\n<Blocks.MotionEasings tokens={data.motion} />\n\n## Transitions\n\nEach kind of movement has one helper. Open the examples to compare them.\n\n<Blocks.MotionArchetypes />\n\n## Reduced motion\n\n\`prefers-reduced-motion: reduce\` is handled once, in \`globals.css\`, so every component follows it without extra classes:\n\n- Movement becomes a short fade: enter and exit animations keep their opacity, drop translation, scale and blur, and run at \`--duration-fast\`.\n- Height animations (Accordion, Collapsible) are skipped.\n- Moving transitions stop (switch thumb, sidebar width, Sheet and Drawer slides).\n- Loops stop on their first frame (shimmer, pulse dot, typing dots, caret, waveform, Skeleton). Spinners keep spinning: they say “working”.\n- Colour transitions stay: they are not motion.\n\nThe **Motion** toolbar (off) goes further and makes everything instant, for screenshots. To check real reduced-motion behaviour, turn it on in the operating system.`,
   ),
 }
 for (const [name, mdx] of Object.entries(pages)) fs.writeFileSync(path.join(OUT, `${name}.mdx`), mdx)
