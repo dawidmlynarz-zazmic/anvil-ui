@@ -20,3 +20,19 @@ export const panelMotion =
 
 /** Tooltip: fast both ways (it opens with delayed-open / instant-open, not open). */
 export const tooltipMotion = 'duration-(--duration-fast) ease-out data-[state=closed]:ease-in-out'
+
+/**
+ * Expand / collapse (Collapsible content): height to content · base + ease-out; to 0 · fast +
+ * ease-in-out. Clips with a 6px margin (the focus ring's gap + width) so focus rings inside still
+ * show; a literal, as Chromium drops calc(var()) here. Put padding on a child, not on the animated
+ * element (it would show at height 0).
+ */
+export const expandMotion =
+  'overflow-clip [overflow-clip-margin:0.375rem] data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up data-[state=open]:duration-(--duration-base) data-[state=open]:ease-out data-[state=closed]:duration-(--duration-fast) data-[state=closed]:ease-in-out'
+
+/** Accordion content: the same timing on Radix Accordion's keyframes. */
+export const accordionMotion =
+  'overflow-hidden data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up data-[state=open]:duration-(--duration-base) data-[state=open]:ease-out data-[state=closed]:duration-(--duration-fast) data-[state=closed]:ease-in-out'
+
+/** Disclosure chevrons: rotate · fast · ease-out. */
+export const chevronMotion = 'transition-transform duration-(--duration-fast) ease-out'

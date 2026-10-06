@@ -33,7 +33,7 @@ Rules:
 | **Tooltip** | fade + scale from 95% · fast · ease-out | fade · fast | `tooltipMotion` + `overlayNudge` |
 | **Modal** (Dialog, Alert Dialog, Command) | overlay fade · panel fade + scale from 95% · base · ease-out | reverse · fast · ease-in-out | `modalMotion` (same timing as small overlays; also every scrim) |
 | **Edge panel** (Sheet, Drawer) | slide from its edge + overlay fade · slow · ease-out | slide back · base · ease-in-out | Sheet: `panelMotion` + `slide-in-from-{side}` / `slide-out-to-{side}`; Drawer (Vaul): its keyframes with our duration and curve (`!` overrides) |
-| **Expand / collapse** (Accordion, Collapsible: Thinking Panel, Tool Call Item / Accordion, Instructions Banner, Rating comment) | height to content · base · ease-out; chevron rotates · fast · ease-out | height to 0 · fast · ease-in-out | `data-[state=open]:animate-accordion-down` / `animate-collapsible-down` (and `-up`) + durations |
+| **Expand / collapse** (Accordion, Collapsible: Thinking Panel, Tool Call Item / Accordion, Instructions Banner, Rating comment) | height to content · base · ease-out; chevron rotates · fast · ease-out | height to 0 · fast · ease-in-out | `accordionMotion` (Accordion) / `expandMotion` (Collapsible; padding goes on a child, focus rings show through a 6px clip margin) + `chevronMotion` |
 | **Toast** | slide from its edge + fade · base · ease-out | fade · fast | Sonner's transitions with our duration and curve; reduced motion keeps only opacity |
 | **Floating control** (Message Scroller jump button) | rise + fade · base · ease-out | fade + scale · fast · ease-in-out | `transition-[translate,scale,opacity]` |
 

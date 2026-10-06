@@ -2,6 +2,7 @@ import * as React from 'react'
 import { cva } from 'class-variance-authority'
 
 import { cn } from '@/lib/utils'
+import { chevronMotion, expandMotion } from '@/lib/motion'
 import { StepStatusIcon, type StepStatus } from '@/components/agent/step-status'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { CheckIcon, ChevronRightIcon, Icon, type LucideIcon } from '@/components/ui/icon'
@@ -76,7 +77,10 @@ function ThinkingPanelTrigger({
       {duration !== undefined && <ThinkingPanelDuration>{duration}</ThinkingPanelDuration>}
       <Icon
         icon={ChevronRightIcon}
-        className="ms-auto text-muted-foreground transition-transform group-data-[state=open]/thinking:rotate-90"
+        className={cn(
+          'ms-auto text-muted-foreground group-data-[state=open]/thinking:rotate-90',
+          chevronMotion,
+        )}
       />
     </CollapsibleTrigger>
   )
@@ -105,16 +109,23 @@ function ThinkingPanelDuration({ className, ...props }: React.ComponentProps<'sp
   )
 }
 
-function ThinkingPanelContent({ className, ...props }: React.ComponentProps<typeof CollapsibleContent>) {
+/** Animates its height; `className` styles the scrolling body inside. */
+function ThinkingPanelContent({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<typeof CollapsibleContent>) {
   return (
-    <CollapsibleContent
-      data-slot="thinking-panel-content"
-      className={cn(
-        'flex max-h-80 flex-col gap-2 overflow-y-auto type-text-xs-normal text-foreground',
-        className,
-      )}
-      {...props}
-    />
+    <CollapsibleContent data-slot="thinking-panel-content" className={expandMotion} {...props}>
+      <div
+        className={cn(
+          'flex max-h-80 flex-col gap-2 overflow-y-auto type-text-xs-normal text-foreground',
+          className,
+        )}
+      >
+        {children}
+      </div>
+    </CollapsibleContent>
   )
 }
 

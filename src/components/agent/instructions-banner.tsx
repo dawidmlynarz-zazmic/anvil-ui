@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'
+import { chevronMotion, expandMotion } from '@/lib/motion'
 import { Item, ItemActions, ItemContent, ItemDescription, ItemMedia, ItemTitle } from '@/components/ui/item'
 import { Button } from '@/components/ui/button'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
@@ -81,7 +82,7 @@ function InstructionsBanner({
               <Button variant="ghost" intent="neutral" size="icon-xs" aria-label="Show instructions">
                 <Icon
                   icon={ChevronDownIcon}
-                  className="transition-transform group-data-[state=open]/instructions:rotate-180"
+                  className={cn('group-data-[state=open]/instructions:rotate-180', chevronMotion)}
                 />
               </Button>
             </CollapsibleTrigger>
@@ -101,8 +102,8 @@ function InstructionsBanner({
         </ItemActions>
       </Item>
       {children && (
-        <CollapsibleContent className="border-t px-3 py-2.5 type-text-sm-normal text-muted-foreground">
-          {children}
+        <CollapsibleContent className={expandMotion}>
+          <div className="border-t px-3 py-2.5 type-text-sm-normal text-muted-foreground">{children}</div>
         </CollapsibleContent>
       )}
     </Collapsible>

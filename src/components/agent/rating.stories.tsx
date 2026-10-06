@@ -105,7 +105,7 @@ Default.test('rate, comment, submit', async ({ canvas, args }) => {
   await userEvent.click(canvas.getByRole('button', { name: 'Submit' }))
   await expect(args.onCommentSubmit).toHaveBeenCalledWith('The timeline section was too long.')
   await expect(canvas.getByRole('status')).toHaveTextContent('Thanks for the comment.')
-  await expect(canvas.queryByRole('textbox')).toBeNull()
+  await waitFor(() => expect(canvas.queryByRole('textbox')).toBeNull())
   await expect(canvas.queryByRole('button', { name: 'Add a comment' })).toBeNull()
 })
 
@@ -113,7 +113,7 @@ Default.test('Cancel collapses it and returns focus', async ({ canvas, args }) =
   await userEvent.click(canvas.getByRole('radio', { name: '5 of 5' }))
   await userEvent.click(canvas.getByRole('button', { name: 'Add a comment' }))
   await userEvent.click(canvas.getByRole('button', { name: 'Cancel' }))
-  await expect(canvas.queryByRole('textbox')).toBeNull()
+  await waitFor(() => expect(canvas.queryByRole('textbox')).toBeNull())
   await waitFor(() => expect(canvas.getByRole('button', { name: 'Add a comment' })).toHaveFocus())
   await expect(args.onCommentSubmit).not.toHaveBeenCalled()
 })
