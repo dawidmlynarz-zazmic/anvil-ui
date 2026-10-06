@@ -29,12 +29,12 @@ Rules:
 
 | Archetype | Enter | Exit | Classes |
 | --- | --- | --- | --- |
-| **Small overlay** (Popover, Dropdown / Context Menu, Menubar, Select, Combobox, Hover Card, Date Picker) | fade + 4px nudge from the side it opens on · base · ease-out | fade + scale 95% · fast · ease-in-out | `data-[state=open]:animate-in fade-in-0 slide-in-from-*-1 duration-(--duration-base) ease-out` · `data-[state=closed]:animate-out fade-out-0 zoom-out-95 data-[state=closed]:duration-(--duration-fast) data-[state=closed]:ease-in-out` |
-| **Tooltip** | fade + scale from 95% · fast · ease-out | fade · fast | as above with `duration-(--duration-fast)` both ways |
-| **Modal** (Dialog, Alert Dialog, Command) | overlay fade · panel fade + scale from 95% · base · ease-out | reverse · fast · ease-in-out | `zoom-in-95` / `zoom-out-95` + the durations above |
-| **Edge panel** (Sheet, Drawer) | slide from its edge + overlay fade · slow · ease-out | slide back · base · ease-in-out | Sheet: `slide-in-from-{side}` / `slide-out-to-{side}`; Drawer (Vaul): its keyframes with our duration and curve |
+| **Small overlay** (Popover, Dropdown / Context Menu, Menubar, Select, Combobox, Hover Card, Date Picker) | fade + scale from 95% (shadcn) + 4px nudge from the side it opens on · base · ease-out | fade + scale to 95% · fast · ease-in-out | `overlayMotion` + `overlayNudge` from `@/lib/motion` with shadcn's `animate-in fade-in-0 zoom-in-95` / `animate-out fade-out-0 zoom-out-95` |
+| **Tooltip** | fade + scale from 95% · fast · ease-out | fade · fast | `tooltipMotion` + `overlayNudge` |
+| **Modal** (Dialog, Alert Dialog, Command) | overlay fade · panel fade + scale from 95% · base · ease-out | reverse · fast · ease-in-out | `modalMotion` (same timing as small overlays; also every scrim) |
+| **Edge panel** (Sheet, Drawer) | slide from its edge + overlay fade · slow · ease-out | slide back · base · ease-in-out | Sheet: `panelMotion` + `slide-in-from-{side}` / `slide-out-to-{side}`; Drawer (Vaul): its keyframes with our duration and curve (`!` overrides) |
 | **Expand / collapse** (Accordion, Collapsible: Thinking Panel, Tool Call Item / Accordion, Instructions Banner, Rating comment) | height to content · base · ease-out; chevron rotates · fast · ease-out | height to 0 · fast · ease-in-out | `data-[state=open]:animate-accordion-down` / `animate-collapsible-down` (and `-up`) + durations |
-| **Toast** | slide from its edge + fade · base · ease-out | fade · fast | Sonner, with our duration and curve |
+| **Toast** | slide from its edge + fade · base · ease-out | fade · fast | Sonner's transitions with our duration and curve; reduced motion keeps only opacity |
 | **Floating control** (Message Scroller jump button) | rise + fade · base · ease-out | fade + scale · fast · ease-in-out | `transition-[translate,scale,opacity]` |
 
 ### Micro-interactions

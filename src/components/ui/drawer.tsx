@@ -12,6 +12,7 @@ import {
   type ShellHeaderProps,
 } from '@/components/anvil/shell'
 import { cn } from '@/lib/utils'
+import { modalMotion } from '@/lib/motion'
 
 // Figma: Dialog · Sheet · Drawer page → `drawer` (10935:40687). Bottom panel for the mobile shell,
 // dragged or swiped to dismiss (vaul); use it instead of Dialog or Sheet below 768px. Handle (48×4
@@ -41,6 +42,7 @@ function DrawerOverlay({ className, ...props }: React.ComponentProps<typeof Draw
       data-slot="drawer-overlay"
       className={cn(
         'fixed inset-0 z-(--z-overlay) bg-overlay',
+        modalMotion,
         'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0',
         className,
       )}
@@ -68,6 +70,9 @@ function DrawerContent({ className, children, showCloseButton = true, ...props }
           // A real border (Figma inside stroke): an inset ring is painted under the header and footer
           // bars' backgrounds, which left the outline around the body only.
           'border border-overlay-16 shadow-elevation-modal',
+          // Vaul animates with its own keyframes (500ms, its own curve): use the edge-panel timing
+          // (docs/motion-foundations.md) — slow + ease-out in, base + ease-in-out out.
+          '[animation-duration:var(--duration-slow)]! [animation-timing-function:var(--ease-out)]! data-[state=closed]:[animation-duration:var(--duration-base)]! data-[state=closed]:[animation-timing-function:var(--ease-in-out)]!',
           'data-[vaul-drawer-direction=top]:inset-x-0 data-[vaul-drawer-direction=top]:top-0 data-[vaul-drawer-direction=top]:mb-24 data-[vaul-drawer-direction=top]:max-h-[80dvh] data-[vaul-drawer-direction=top]:rounded-b-2xl',
           'data-[vaul-drawer-direction=bottom]:inset-x-0 data-[vaul-drawer-direction=bottom]:bottom-0 data-[vaul-drawer-direction=bottom]:mt-24 data-[vaul-drawer-direction=bottom]:max-h-[80dvh] data-[vaul-drawer-direction=bottom]:rounded-t-2xl',
           'data-[vaul-drawer-direction=right]:inset-y-0 data-[vaul-drawer-direction=right]:right-0 data-[vaul-drawer-direction=right]:w-3/4 data-[vaul-drawer-direction=right]:sm:max-w-sm',
