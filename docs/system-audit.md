@@ -235,9 +235,57 @@ context live in each story's tags and title, and the relationships come from the
 6. Figma alignment.
 7. Final consistency pass.
 
-## 8. Open findings (from the content pass)
+## 8. Findings from the content pass (resolved)
 
-- **Memory Manager**: each row's Edit and Delete icon buttons share one accessible name; name
-  them after the memory (e.g. "Edit “Prefers concise answers…”"). Fix in the final pass.
-- **Message Edit**: the editor doesn't move focus into the textarea when editing starts.
+- **Memory Manager**: each row's Edit and Delete are now named after the memory
+  (`aria-labelledby`: “Edit Prefers concise answers…”).
+- **Message Edit**: the editor focuses its field when it opens (`autoFocus`, cursor at the end).
 - No **Chart** or **Code Block** component yet: guides that need one say so instead of linking.
+
+## 9. Figma alignment (Phase 10)
+
+Figma keeps its page structure (by flow); it mirrors components, variants, states and
+relationships, not Storybook's levels. Changed on 2026-10-06:
+
+- **Removed:** live voice session and mic button (component sets and their documentation
+  frames; no instances anywhere). The Input section was closed up.
+- **Badge (status badge set):** `variant` solid · subtle · outline for every tone, plus the
+  **brand** tone (7 × 3 × 3 sizes × 2 shapes = 126 variants). Existing variants became
+  `variant=subtle`, so every placed instance keeps its look. Figma's solid success stays on
+  `--success`; code darkens it for contrast (noted in the description).
+- **Alert Dialog:** Dialog's surface (radius 12, `--background`, `--overlay-16` stroke).
+- **Date Picker:** `mode` single · range (the range trigger shows “12 Oct – 16 Oct 2026”, the
+  calendar in mode=range).
+- **Progress:** `value` 0 · 25 · 33 · 50 · 66 · 75 · 100 (Figma can't resize a layer inside an
+  instance, so the value is a variant; existing variants are value=50).
+- **Rating:** state `commenting` (Textarea + Cancel / Submit) and `commented` (“Thanks for the
+  comment.”) for stars, faces and CSAT; the set is laid out state × type.
+- **Clarifying Question:** state step 1 · step 2 · step 3 · submitted (progress, Back, Skip,
+  Submit; the summary with Edit answers) and an **in chat** example from Message Row instances
+  (the card as the assistant's widget, the answers as the user's message).
+- **Carousel:** `.carousel slide` is a Card (card static, sm) with real project content.
+- **Descriptions:** “Code:” lines updated for the merged and reworked components (typing
+  indicator, memory chip, memory in use, streaming placeholder, drop overlay, source card,
+  prompt input, citation drawer, thinking panel, tool call item / accordion, badge sets,
+  progress, rating, clarifying question, date picker, carousel, alert dialog).
+
+## 10. Definition of done
+
+| # | Item | Where |
+| --- | --- | --- |
+| 1 | Inventory audited | §2 |
+| 2 | Redundant components and subcomponents simplified | §3–4; PRs: removals, merges, subcomponents |
+| 3 | Atomic taxonomy established | §1, `.storybook/taxonomy.ts` |
+| 4 | Agent Builder established | §1–2, sidebar |
+| 5 | Storybook reorganised | Foundations · Atoms · Molecules · Organisms · Agent Builder |
+| 6 | Relationships documented and linked | docs page Built with / Used in (from imports) |
+| 7 | Anvil-only badge removed | taxonomy, docs page, Welcome |
+| 8 | shadcn counterparts identified and linked | `parameters.shadcn` on 56 components |
+| 9 | Context badges where relevant | context tags |
+| 10 | Copy contextualised | `docs/content-guide.md`; atoms generic, the rest realistic |
+| 11 | Docs: UX + implementation | Usage section (`parameters.guide`) on every component |
+| 12 | Specified component changes | Badge, Date Picker, Carousel, overlays, Empty State, Label, Live Voice Session, Mic Button, Quick Reply, Message Bubble, Rating, Clarifying Question |
+| 13 | Dead infrastructure removed | mic-ring CSS, BubbleReactions, Typing Indicator / Memory Chip / Memory In Use files, span subcomponents' exports |
+| 14 | Figma updated | §9 |
+| 15 | Final global search clean | no stale names, imports, stories or tags (retired tags are only listed so lint can reject them) |
+| 16 | Simpler than before | 4 components removed or merged (Live Voice Session, Mic Button, Typing Indicator, Memory Chip + Memory In Use → 1); 9 span-only subcomponents and 2 state subcomponents became props; 2 recomposed on UI parts; one taxonomy instead of sections × categories |

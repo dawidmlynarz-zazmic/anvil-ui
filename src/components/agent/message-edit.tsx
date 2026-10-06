@@ -24,10 +24,13 @@ function MessageEditor({
   hint = 'Editing creates a new branch; the original is kept.',
   onCancel,
   onSend,
+  autoFocus = true,
   className,
   ...props
 }: Omit<React.ComponentProps<'form'>, 'onSubmit'> & {
   defaultValue?: string
+  /** Focus the field (cursor at the end) when the editor opens; on by default. */
+  autoFocus?: boolean
   /** Shown under the editor; pass null to hide it. */
   hint?: React.ReactNode
   onCancel?: () => void
@@ -47,6 +50,11 @@ function MessageEditor({
     >
       <Textarea
         aria-label="Edit message"
+        autoFocus={autoFocus}
+        onFocus={(event) => {
+          const end = event.currentTarget.value.length
+          event.currentTarget.setSelectionRange(end, end)
+        }}
         hint={hint ?? undefined}
         value={value}
         onChange={(event) => setValue(event.target.value)}
