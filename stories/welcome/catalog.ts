@@ -143,15 +143,15 @@ export const catalog: CatalogArea[] = [
       { name: 'Prompt Attachment', title: 'Agent Primitives/Input/Attachment' },
       ...prim('Input', [
         'Quick Reply',
-        'Follow-up Suggestions',
         'Mic Button',
         'Voice Waveform',
         'Drop Overlay',
         'Attachment Menu',
         'Response Controls',
       ]),
-      // Quick reply group lives in the Quick Reply story.
+      // Quick reply group and follow up suggestions live in the Quick Reply stories (audit M1).
       { name: 'Quick Reply Group', title: 'Agent Primitives/Input/Quick Reply' },
+      { name: 'Follow-up Suggestions', title: 'Agent Primitives/Input/Quick Reply' },
     ],
   },
   {
