@@ -1,9 +1,37 @@
 // Rendering blocks for the generated Foundations pages (stories/foundations/*.mdx).
 // Data comes from foundations.generated.ts (`pnpm tokens:build`); swatches and samples use the
 // generated CSS variables and utilities, so the pages show what code actually gets.
-import type { ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 
 import { cn } from '@/lib/utils'
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
+import { Button } from '@/components/ui/button'
+import {
+  Dialog,
+  DialogBody,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import {
+  Popover,
+  PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 
 type ModeValue = { hex: string; ref: string | null }
 type ColorToken = { figma: string; cssVar: string; description: string; light: ModeValue; dark: ModeValue }
@@ -429,5 +457,248 @@ export function Effects({
         ))}
       </Table>
     </div>
+  )
+}
+
+// ── Motion ────────────────────────────────────────────────────────────────────────────────
+
+type MotionToken = { figma: string; code: string; value: number | string }
+
+const MOTION_USE: Record<string, string> = {
+  'motion/duration-fast':
+    'Hover, pressed and colour changes; chevrons; switch thumbs; tooltips; exits of small overlays and of expand / collapse',
+  'motion/duration-base':
+    'Small overlays and dialogs opening; expand / collapse opening; Sheet and Drawer closing',
+  'motion/duration-slow': 'Large surfaces opening (Sheet, Drawer); the Sidebar width',
+  'motion/ease-out': 'Everything that enters or responds to the user: fast start, soft landing',
+  'motion/ease-in-out': 'Exits and state changes: things leave without a jolt',
+}
+
+const cssVarOf = (code: string) => code.replace(/^var\((--[\w-]+)\)$/, '$1')
+const isDuration = (t: MotionToken) => t.figma.startsWith('motion/duration')
+
+/** A dot that travels a 160px track, in one direction per toggle. */
+function MotionTrack({ on, duration, easing }: { on: boolean; duration: string; easing: string }) {
+  return (
+    <div className="relative h-8 w-48 shrink-0 rounded-full bg-muted" aria-hidden>
+      <div
+        className={cn(
+          'absolute top-1 left-1 size-6 rounded-full bg-primary transition-[translate]',
+          on && 'translate-x-40',
+        )}
+        style={{ transitionDuration: `var(${duration})`, transitionTimingFunction: `var(${easing})` }}
+      />
+    </div>
+  )
+}
+
+function PlayButton({ on, onToggle }: { on: boolean; onToggle: () => void }) {
+  return (
+    <div className="mb-3">
+      <Button size="sm" variant="outline" intent="neutral" onClick={onToggle}>
+        {on ? 'Play back' : 'Play'}
+      </Button>
+    </div>
+  )
+}
+
+export function MotionDurations({ tokens }: { tokens: readonly MotionToken[] }) {
+  const [on, setOn] = useState(false)
+  const durations = [...tokens.filter(isDuration)].sort((a, b) => Number(a.value) - Number(b.value))
+  return (
+    <>
+      <PlayButton on={on} onToggle={() => setOn(!on)} />
+      <Table head={['Token', 'Value', 'Code', 'Preview (ease-out)', 'Use']}>
+        {durations.map((t) => (
+          <tr key={t.figma}>
+            <Td className="type-text-sm-medium whitespace-nowrap">{t.figma.replace('motion/', '')}</Td>
+            <Td className="whitespace-nowrap">{t.value}ms</Td>
+            <Td className="whitespace-nowrap">
+              <Code>{`duration-(${cssVarOf(t.code)})`}</Code>
+            </Td>
+            <Td>
+              <MotionTrack on={on} duration={cssVarOf(t.code)} easing="--ease-out" />
+            </Td>
+            <Td className="text-muted-foreground">{MOTION_USE[t.figma] ?? ''}</Td>
+          </tr>
+        ))}
+      </Table>
+    </>
+  )
+}
+
+/** The cubic-bezier as a curve: time across, progress up. */
+function EasingCurve({ value }: { value: string }) {
+  const [x1, y1, x2, y2] = (value.match(/-?[\d.]+/g) ?? []).map(Number)
+  const p = (x: number, y: number) => `${x * 56 + 4} ${60 - y * 56}`
+  return (
+    <svg viewBox="0 0 64 64" className="size-16 shrink-0 rounded-md bg-muted" aria-hidden>
+      <path d={`M${p(0, 0)} L${p(1, 1)}`} className="stroke-border" strokeDasharray="2 2" fill="none" />
+      <path
+        d={`M${p(0, 0)} C${p(x1, y1)} ${p(x2, y2)} ${p(1, 1)}`}
+        className="stroke-primary"
+        strokeWidth={2}
+        fill="none"
+      />
+    </svg>
+  )
+}
+
+export function MotionEasings({ tokens }: { tokens: readonly MotionToken[] }) {
+  const [on, setOn] = useState(false)
+  return (
+    <>
+      <PlayButton on={on} onToggle={() => setOn(!on)} />
+      <Table head={['Token', 'Curve', 'Code', 'Preview (slow)', 'Use']}>
+        {tokens
+          .filter((t) => !isDuration(t))
+          // ease-out (enter) before ease-in-out (exit)
+          .sort((a, b) => Number(b.figma.endsWith('ease-out')) - Number(a.figma.endsWith('ease-out')))
+          .map((t) => (
+            <tr key={t.figma}>
+              <Td className="type-text-sm-medium whitespace-nowrap">{t.figma.replace('motion/', '')}</Td>
+              <Td>
+                <EasingCurve value={String(t.value)} />
+              </Td>
+              <Td>
+                <div className="flex flex-col items-start gap-1">
+                  <span className="whitespace-nowrap">
+                    <Code>{cssVarOf(t.code).slice(2)}</Code>
+                  </span>
+                  <span className="type-code-xs text-muted-foreground">{t.value}</span>
+                </div>
+              </Td>
+              <Td>
+                <MotionTrack on={on} duration="--duration-slow" easing={cssVarOf(t.code)} />
+              </Td>
+              <Td className="text-muted-foreground">{MOTION_USE[t.figma] ?? ''}</Td>
+            </tr>
+          ))}
+      </Table>
+    </>
+  )
+}
+
+const demoTrigger = (label: string) => (
+  <Button size="sm" variant="outline" intent="neutral">
+    {label}
+  </Button>
+)
+
+const ARCHETYPES: {
+  name: string
+  usedBy: string
+  enter: string
+  exit: string
+  helper: string
+  demo: ReactNode
+}[] = [
+  {
+    name: 'Small overlay',
+    usedBy: 'Popover, menus, Select, Combobox, Hover Card, Date Picker',
+    enter: 'Fade, scale from 95% and a 4px nudge from its side · base · ease-out',
+    exit: 'Fade and scale to 95% · fast · ease-in-out',
+    helper: 'overlayMotion + overlayNudge',
+    demo: (
+      <Popover>
+        <PopoverTrigger asChild>{demoTrigger('Open popover')}</PopoverTrigger>
+        <PopoverContent>
+          <PopoverHeader>
+            <PopoverTitle>Title</PopoverTitle>
+            <PopoverDescription>Description</PopoverDescription>
+          </PopoverHeader>
+        </PopoverContent>
+      </Popover>
+    ),
+  },
+  {
+    name: 'Tooltip',
+    usedBy: 'Tooltip',
+    enter: 'Fade and scale from 95% · fast · ease-out',
+    exit: 'Fade · fast · ease-in-out',
+    helper: 'tooltipMotion + overlayNudge',
+    demo: (
+      <Tooltip>
+        <TooltipTrigger asChild>{demoTrigger('Hover or focus')}</TooltipTrigger>
+        <TooltipContent>Label</TooltipContent>
+      </Tooltip>
+    ),
+  },
+  {
+    name: 'Modal',
+    usedBy: 'Dialog, Alert Dialog, Command; every scrim',
+    enter: 'Scrim fades; panel fades and scales from 95% · base · ease-out',
+    exit: 'Reverse · fast · ease-in-out',
+    helper: 'modalMotion',
+    demo: (
+      <Dialog>
+        <DialogTrigger asChild>{demoTrigger('Open dialog')}</DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Title</DialogTitle>
+            <DialogDescription>Description</DialogDescription>
+          </DialogHeader>
+          <DialogBody className="type-text-sm-normal text-muted-foreground">Content</DialogBody>
+        </DialogContent>
+      </Dialog>
+    ),
+  },
+  {
+    name: 'Edge panel',
+    usedBy: 'Sheet, Drawer',
+    enter: 'Slides from its edge, scrim fades · slow · ease-out',
+    exit: 'Slides back · base · ease-in-out',
+    helper: 'panelMotion',
+    demo: (
+      <Sheet>
+        <SheetTrigger asChild>{demoTrigger('Open sheet')}</SheetTrigger>
+        <SheetContent>
+          <SheetHeader>
+            <SheetTitle>Title</SheetTitle>
+            <SheetDescription>Description</SheetDescription>
+          </SheetHeader>
+        </SheetContent>
+      </Sheet>
+    ),
+  },
+  {
+    name: 'Expand / collapse',
+    usedBy: 'Accordion; Collapsible in Thinking Panel, Tool Calls, Instructions Banner, Rating',
+    enter: 'Height to content · base · ease-out; chevron turns · fast',
+    exit: 'Height to 0 · fast · ease-in-out',
+    helper: 'accordionMotion / expandMotion + chevronMotion',
+    demo: (
+      <Accordion type="single" collapsible className="w-56">
+        <AccordionItem value="demo">
+          <AccordionTrigger>Title</AccordionTrigger>
+          <AccordionContent>Content that opens and closes.</AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    ),
+  },
+]
+
+/** One row per kind of movement, each with a live example built from the real component. */
+export function MotionArchetypes() {
+  return (
+    // MDX pages skip the preview decorators, so the Tooltip example brings its own provider.
+    <TooltipProvider>
+      <Table head={['Kind', 'Enter', 'Exit', 'Helper', 'Example']}>
+        {ARCHETYPES.map((a) => (
+          <tr key={a.name}>
+            <Td>
+              <div className="type-text-sm-medium">{a.name}</div>
+              <div className="type-text-xs-normal text-muted-foreground">{a.usedBy}</div>
+            </Td>
+            <Td className="text-muted-foreground">{a.enter}</Td>
+            <Td className="text-muted-foreground">{a.exit}</Td>
+            <Td>
+              <Code>{a.helper}</Code>
+            </Td>
+            <Td>{a.demo}</Td>
+          </tr>
+        ))}
+      </Table>
+    </TooltipProvider>
   )
 }

@@ -2968,6 +2968,34 @@ export const effects = [
   }
 ] as const
 
+export const motion = [
+  {
+    "figma": "motion/duration-base",
+    "code": "var(--duration-base)",
+    "value": 200
+  },
+  {
+    "figma": "motion/duration-fast",
+    "code": "var(--duration-fast)",
+    "value": 120
+  },
+  {
+    "figma": "motion/duration-slow",
+    "code": "var(--duration-slow)",
+    "value": 320
+  },
+  {
+    "figma": "motion/ease-in-out",
+    "code": "var(--ease-in-out)",
+    "value": "cubic-bezier(0.65, 0, 0.35, 1)"
+  },
+  {
+    "figma": "motion/ease-out",
+    "code": "var(--ease-out)",
+    "value": "cubic-bezier(0.16, 1, 0.3, 1)"
+  }
+] as const
+
 export const shell = [
   {
     "figma": "shell/container-height",

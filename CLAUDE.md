@@ -51,7 +51,7 @@ src/components/
 src/hooks/             shadcn hooks (use-mobile for Sidebar)
 src/lib/utils.ts       cn()
 stories/               Welcome (landing page; welcome/catalog.ts lists every area and component)
-stories/foundations/   Colors, Typography, Spacing, Radius, Elevation (MDX, generated from tokens)
+stories/foundations/   Colors, Typography, Spacing, Radius, Elevation, Motion (MDX, generated from tokens)
 docs/                  api-contract.md, roadmap.md, component-status.md
 ```
 

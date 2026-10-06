@@ -3,6 +3,7 @@
 How Anvil moves. Motion is built from Tailwind transitions and `tw-animate-css` enter / exit
 animations on Radix `data-state`, the same primitives shadcn/ui uses (no Framer Motion). The
 values come from Figma (`dimensions` collection), so code never invents a duration or a curve.
+Storybook's **Foundations → Motion** page shows the tokens and each kind of transition live.
 
 ## 1. Durations and easings
 
