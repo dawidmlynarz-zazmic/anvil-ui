@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'
+import type { Confidence } from '@/components/agent/citation-chip'
 import { Badge } from '@/components/ui/badge'
 import { IconTile } from '@/components/anvil/icon-tile'
 import { Button } from '@/components/ui/button'
@@ -13,22 +14,21 @@ import {
   type LucideIcon,
 } from '@/components/ui/icon'
 
-// Figma Agent Builder › Core Kit › source card (10713:887): a source with its credibility and usage
+// Figma Agent Builder › Core Kit › source card (10713:887): a source with its confidence and usage
+// (Figma credibility → `confidence`, the same name and scale as citation chips; audit M9)
 // (deep research, ticketing). --card, --border, radius xl, shadow-sm, 16px padding, 12px gap, up to
 // --shell-widget-max. Header: 24px --muted icon tile (14px icon), publisher text/xs/medium + meta
 // text/xs --muted-foreground, optional tag (outline badge, e.g. "Report"). Title text/sm/semibold.
-// Excerpt text/xs --muted-foreground behind a 2px --border-strong bar. Footer: credibility legend
+// Excerpt text/xs --muted-foreground behind a 2px --border-strong bar. Footer: confidence legend
 // (10px dot --success · --warning · --danger + text/xs), usage badge (subtle xs), then Open and
 // Exclude (or Restore) ghost icon buttons. Figma state excluded = `excluded`: "Excluded" status badge
 // and Restore. Figma dims the whole body to 55%; that drops every text below 4.5:1, so code dims
 // only the icon tile and dot and turns the text --muted-foreground.
 
-type Credibility = 'high' | 'medium' | 'low'
-
-const CREDIBILITY: Record<Credibility, { dot: string; label: string }> = {
-  high: { dot: 'bg-success', label: 'High credibility' },
-  medium: { dot: 'bg-warning', label: 'Medium credibility' },
-  low: { dot: 'bg-danger', label: 'Low credibility' },
+const CONFIDENCE: Record<Confidence, { dot: string; label: string }> = {
+  high: { dot: 'bg-success', label: 'High confidence' },
+  medium: { dot: 'bg-warning', label: 'Medium confidence' },
+  low: { dot: 'bg-danger', label: 'Low confidence' },
 }
 
 function SourceCard({
@@ -38,7 +38,7 @@ function SourceCard({
   tag,
   title,
   excerpt,
-  credibility,
+  confidence,
   usage,
   excluded = false,
   href,
@@ -55,7 +55,8 @@ function SourceCard({
   tag?: React.ReactNode
   title: React.ReactNode
   excerpt?: React.ReactNode
-  credibility?: Credibility
+  /** How much to trust the source (same scale as citation confidence). */
+  confidence?: Confidence
   /** Usage, e.g. "Cited in 3 findings". Hidden while excluded. */
   usage?: React.ReactNode
   /** Figma state excluded: left out of the answer. */
@@ -98,15 +99,15 @@ function SourceCard({
         </blockquote>
       )}
       <footer className="flex items-center gap-2">
-        {credibility && (
+        {confidence && (
           <span className="flex items-center gap-1.5 type-text-xs-normal text-foreground group-data-[excluded]/source:text-muted-foreground">
             <span
               className={cn(
                 'size-2.5 shrink-0 rounded-full group-data-[excluded]/source:opacity-55',
-                CREDIBILITY[credibility].dot,
+                CONFIDENCE[confidence].dot,
               )}
             />
-            {CREDIBILITY[credibility].label}
+            {CONFIDENCE[confidence].label}
           </span>
         )}
         {excluded ? (
@@ -157,4 +158,4 @@ function SourceCard({
   )
 }
 
-export { SourceCard, type Credibility }
+export { SourceCard }

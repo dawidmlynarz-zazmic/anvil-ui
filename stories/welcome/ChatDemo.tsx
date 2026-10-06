@@ -202,7 +202,7 @@ function AgentTurn({ turn }: { turn: Extract<Turn, { kind: 'agent' }> }) {
       <MessageContent>
         {turn.typing && <TypingIndicator />}
         {turn.thinking && (
-          <ThinkingPanel status={turn.thinking === 'active' ? 'active' : 'completed'}>
+          <ThinkingPanel status={turn.thinking === 'active' ? 'running' : 'done'}>
             <ThinkingPanelTrigger>
               <ThinkingPanelTitle>
                 {turn.thinking === 'active' ? 'Planning the search' : 'Planned the search'}

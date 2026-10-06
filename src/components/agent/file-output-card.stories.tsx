@@ -18,7 +18,11 @@ const meta = preview.meta({
       { property: 'file name', values: 'text', code: '`name` prop' },
       { property: 'file meta', values: 'text', code: '`meta` prop' },
       { property: 'type', values: 'document · presentation · spreadsheet · pdf', code: '`kind` prop' },
-      { property: 'state', values: 'generating · ready', code: '`status` prop' },
+      {
+        property: 'state',
+        values: 'generating · ready',
+        code: '`status` prop (adds failed); built on Attachment size lg',
+      },
     ],
     docs: {
       description: {
@@ -40,7 +44,8 @@ const meta = preview.meta({
   },
   argTypes: {
     kind: { control: 'inline-radio', options: KINDS },
-    status: { control: 'inline-radio', options: ['generating', 'ready'] },
+    status: { control: 'inline-radio', options: ['generating', 'ready', 'failed'] },
+    onRetry: { control: false, table: { category: 'Events' } },
     progress: { control: { type: 'range', min: 0, max: 100 } },
     name: { control: 'text' },
     meta: { control: 'text' },
@@ -82,6 +87,17 @@ export const Variants = meta.story({
 
 /** Generating: status, progress and Cancel. */
 export const Generating = meta.story({ args: { status: 'generating' } })
+
+/**
+ * Generation failed: Attachment's error look and Retry. Figma draws no failed file output card;
+ * the look is the prompt attachment's invalid state (audit M8).
+ */
+export const Failed = meta.story({ args: { status: 'failed', meta: 'Subtitle', onRetry: fn() } })
+
+Failed.test('offers Retry', async ({ canvas, args }) => {
+  await userEvent.click(canvas.getByRole('button', { name: 'Retry' }))
+  await expect(args.onRetry).toHaveBeenCalledOnce()
+})
 
 Generating.test('shows progress and can be cancelled', async ({ canvas, args }) => {
   await expect(canvas.getByRole('progressbar', { name: 'Generating' })).toBeInTheDocument()

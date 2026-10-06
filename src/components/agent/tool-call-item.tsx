@@ -1,9 +1,9 @@
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'
-import { PulseDot } from '@/components/agent/pulse-dot'
+import { StepStatusIcon, type StepStatus } from '@/components/agent/step-status'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
-import { ChevronRightIcon, CircleCheckIcon, CircleXIcon, Icon } from '@/components/ui/icon'
+import { ChevronRightIcon, Icon } from '@/components/ui/icon'
 
 // Figma Agent Builder › Core Kit › tool call item (10734:2925), built on Collapsible: one tool call.
 // `status` running · done · failed; Figma state collapsed · expanded = open state (open: --muted
@@ -14,7 +14,7 @@ import { ChevronRightIcon, CircleCheckIcon, CircleXIcon, Icon } from '@/componen
 // then actions (failed: Retry / Skip). Figma's duration is --foreground-subtle; code uses
 // --muted-foreground (4.5:1 on the open --muted card).
 
-type ToolCallStatus = 'running' | 'done' | 'failed'
+type ToolCallStatus = StepStatus
 
 const ToolCallItemContext = React.createContext<ToolCallStatus>('running')
 
@@ -55,9 +55,7 @@ function ToolCallItemTrigger({
       {...props}
     >
       <span className="flex size-4 shrink-0 items-center justify-center">
-        {status === 'running' && <PulseDot />}
-        {status === 'done' && <Icon icon={CircleCheckIcon} tone="success" />}
-        {status === 'failed' && <Icon icon={CircleXIcon} tone="destructive" />}
+        <StepStatusIcon status={status} />
       </span>
       {children}
       <Icon

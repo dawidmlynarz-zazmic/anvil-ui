@@ -2,44 +2,43 @@ import * as React from 'react'
 import { cva } from 'class-variance-authority'
 
 import { cn } from '@/lib/utils'
-import { PulseDot } from '@/components/agent/pulse-dot'
+import { StepStatusIcon, type StepStatus } from '@/components/agent/step-status'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
-import { CheckIcon, ChevronRightIcon, CircleAlertIcon, Icon, type LucideIcon } from '@/components/ui/icon'
+import { CheckIcon, ChevronRightIcon, Icon, type LucideIcon } from '@/components/ui/icon'
 
 // Figma Agent Builder › Core Kit › thinking panel (10667:13166): the agent's reasoning, collapsed to
-// a one-line header. `status` active · completed · failed (Figma status); open / closed (Figma state
+// a one-line header. `status` running · done · failed (the shared step vocabulary, audit M7; Figma
+// status active · completed · failed); open / closed (Figma state
 // collapsed · expanded) is the Collapsible's. Card: radius md, 12/8px padding, 8px gap, up to
-// --shell-widget-max wide. active = --agent-subtle on --agent-soft, pulse dot, agent title;
-// completed = --border outline, check, --muted-foreground title; failed = --danger-subtle on
+// --shell-widget-max wide. running = --agent-subtle on --agent-soft, pulse dot, agent title;
+// done = --border outline, check, --muted-foreground title; failed = --danger-subtle on
 // --danger-muted, alert icon, danger title. Header: 24px min, title text/sm/semibold, duration
 // text/xs/normal --muted-foreground, chevron at the end (right → down when open). Body: text/xs
 // --foreground, scrolls past 320px; steps are 12px icon + text/xs rows 4px apart.
 // Agent / danger title text uses the -medium tone in dark (Figma --agent / --danger fall below
 // 4.5:1 there).
 
-type ThinkingStatus = 'active' | 'completed' | 'failed'
-
-const ThinkingPanelContext = React.createContext<ThinkingStatus>('active')
+const ThinkingPanelContext = React.createContext<StepStatus>('running')
 
 const thinkingPanelVariants = cva(
   'group/thinking flex w-full max-w-(--shell-widget-max) flex-col gap-2 rounded-md border px-3 py-2',
   {
     variants: {
       status: {
-        active: 'border-agent-soft bg-agent-subtle',
-        completed: 'border-border',
+        running: 'border-agent-soft bg-agent-subtle',
+        done: 'border-border',
         failed: 'border-danger-muted bg-danger-subtle',
       },
     },
-    defaultVariants: { status: 'active' },
+    defaultVariants: { status: 'running' },
   },
 )
 
 function ThinkingPanel({
-  status = 'active',
+  status = 'running',
   className,
   ...props
-}: React.ComponentProps<typeof Collapsible> & { status?: ThinkingStatus }) {
+}: React.ComponentProps<typeof Collapsible> & { status?: StepStatus }) {
   return (
     <ThinkingPanelContext.Provider value={status}>
       <Collapsible
@@ -50,11 +49,6 @@ function ThinkingPanel({
       />
     </ThinkingPanelContext.Provider>
   )
-}
-
-const STATUS_ICON: Record<Exclude<ThinkingStatus, 'active'>, LucideIcon> = {
-  completed: CheckIcon,
-  failed: CircleAlertIcon,
 }
 
 /** The header row: status indicator, children (title, duration), chevron. Toggles the panel. */
@@ -73,14 +67,7 @@ function ThinkingPanelTrigger({
       )}
       {...props}
     >
-      {status === 'active' ? (
-        <PulseDot />
-      ) : (
-        <Icon
-          icon={STATUS_ICON[status]}
-          className={status === 'failed' ? 'text-danger' : 'text-muted-foreground'}
-        />
-      )}
+      <StepStatusIcon status={status} appearance="subtle" />
       {children}
       <Icon
         icon={ChevronRightIcon}
@@ -95,7 +82,7 @@ function ThinkingPanelTitle({ className, ...props }: React.ComponentProps<'span'
     <span
       data-slot="thinking-panel-title"
       className={cn(
-        'type-text-sm-semibold group-data-[status=active]/thinking:text-agent group-data-[status=completed]/thinking:text-muted-foreground group-data-[status=failed]/thinking:text-danger dark:group-data-[status=active]/thinking:text-agent-medium dark:group-data-[status=failed]/thinking:text-danger-medium',
+        'type-text-sm-semibold group-data-[status=running]/thinking:text-agent group-data-[status=done]/thinking:text-muted-foreground group-data-[status=failed]/thinking:text-danger dark:group-data-[status=running]/thinking:text-agent-medium dark:group-data-[status=failed]/thinking:text-danger-medium',
         className,
       )}
       {...props}

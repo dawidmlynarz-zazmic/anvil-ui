@@ -6,7 +6,7 @@ import { SourceCard } from './source-card'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10713-887'
 
-const CREDIBILITY = ['high', 'medium', 'low'] as const
+const CONFIDENCE = ['high', 'medium', 'low'] as const
 
 const meta = preview.meta({
   title: 'Agent Primitives/Sources/Source Card',
@@ -20,13 +20,17 @@ const meta = preview.meta({
       { property: 'domain', values: 'text', code: '`meta` prop (domain · date)' },
       { property: 'title', values: 'text', code: '`title` prop' },
       { property: 'excerpt', values: 'text', code: '`excerpt` prop' },
-      { property: 'credibility', values: 'high · medium · low', code: '`credibility` prop' },
+      {
+        property: 'credibility',
+        values: 'high · medium · low',
+        code: '`confidence` prop (one name for one concept, audit M9)',
+      },
       { property: 'state', values: 'default · excluded', code: '`excluded` prop' },
     ],
     docs: {
       description: {
         component:
-          'A source with its credibility and usage, for research and review flows (`@/components/agent/source-card`): `publisher`, `meta`, `icon`, `tag`, `title`, `excerpt`, `credibility` (high · medium · low), `usage`. Actions: Open (`href`) and Exclude (`onExclude`); `excluded` (Figma state excluded) shows the Excluded badge and Restore (`onRestore`).',
+          'A source with its confidence and usage, for research and review flows (`@/components/agent/source-card`): `publisher`, `meta`, `icon`, `tag`, `title`, `excerpt`, `credibility` (high · medium · low), `usage`. Actions: Open (`href`) and Exclude (`onExclude`); `excluded` (Figma state excluded) shows the Excluded badge and Restore (`onRestore`).',
       },
     },
   },
@@ -36,13 +40,13 @@ const meta = preview.meta({
     tag: 'Label',
     title: 'Title',
     excerpt: 'Subtitle',
-    credibility: 'high' as const,
+    confidence: 'high' as const,
     usage: 'Label',
     excluded: false,
     href: '#source',
   },
   argTypes: {
-    credibility: { control: 'inline-radio', options: CREDIBILITY },
+    confidence: { control: 'inline-radio', options: CONFIDENCE },
     publisher: { control: 'text' },
     meta: { control: 'text' },
     tag: { control: 'text' },
@@ -62,25 +66,25 @@ const meta = preview.meta({
   ),
 })
 
-/** Every field, credibility and excluded are in Controls. */
+/** Every field, confidence and excluded are in Controls. */
 export const Default = meta.story()
 
-Default.test('names its credibility and offers Open and Exclude', async ({ canvas }) => {
-  await expect(canvas.getByText('High credibility')).toBeVisible()
+Default.test('names its confidence and offers Open and Exclude', async ({ canvas }) => {
+  await expect(canvas.getByText('High confidence')).toBeVisible()
   await expect(canvas.getByRole('link', { name: 'Open source' })).toHaveAttribute('href', '#source')
   await expect(canvas.getByRole('button', { name: 'Exclude source' })).toBeEnabled()
 })
 
-/** Figma credibility × state (default, excluded). */
+/** Figma credibility (`confidence`) × state (default, excluded). */
 export const Variants = meta.story({
   render: (args) => (
     <div className="flex flex-wrap gap-4">
-      {CREDIBILITY.map((credibility) =>
+      {CONFIDENCE.map((confidence) =>
         [false, true].map((excluded) => (
-          <div key={`${credibility}-${excluded}`} className="w-130">
+          <div key={`${confidence}-${excluded}`} className="w-130">
             <SourceCard
               {...args}
-              credibility={credibility}
+              confidence={confidence}
               excluded={excluded}
               onExclude={() => {}}
               onRestore={() => {}}

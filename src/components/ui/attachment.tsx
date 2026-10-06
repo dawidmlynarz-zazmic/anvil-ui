@@ -9,7 +9,8 @@ import { Button } from '@/components/ui/button'
 // shadow-sm, radius md, 8px padding and gap; 32px --accent tile with a 16px icon; name
 // text/xs/medium, meta text/xs/normal --muted-foreground. Figma state uploading · ready · invalid
 // = shadcn `state` uploading · done · error (--danger-muted stroke, --danger-medium meta). `default`
-// is the Figma size; sm and xs step down.
+// is the Figma size; sm and xs step down; lg is Figma file output card (a file the agent made:
+// --card, radius xl, 12px padding and gap, 40px media, title text/sm/semibold; audit M8).
 const attachmentVariants = cva(
   'group/attachment relative flex w-fit max-w-full min-w-0 shrink-0 flex-wrap rounded-md border border-border bg-background text-foreground shadow-sm transition-colors has-[>a,>button]:hover:bg-muted has-[[data-slot=attachment-trigger]:focus-visible]:focus-ring data-[state=error]:border-danger-muted data-[state=idle]:border-dashed',
   {
@@ -19,6 +20,7 @@ const attachmentVariants = cva(
           'gap-2 type-text-xs-normal has-data-[slot=attachment-content]:p-2 has-data-[slot=attachment-media]:p-2',
         sm: 'gap-2 type-text-xs-normal has-data-[slot=attachment-content]:p-1.5 has-data-[slot=attachment-media]:p-1.5',
         xs: 'gap-1.5 rounded-sm type-text-xs-normal has-data-[slot=attachment-content]:p-1 has-data-[slot=attachment-media]:p-1',
+        lg: 'gap-3 rounded-xl bg-card text-card-foreground type-text-xs-normal has-data-[slot=attachment-content]:p-3 has-data-[slot=attachment-media]:p-3',
       },
       orientation: {
         horizontal: 'min-w-40 items-center',
@@ -51,7 +53,7 @@ function Attachment({
 }
 
 const attachmentMediaVariants = cva(
-  "relative flex aspect-square w-8 shrink-0 items-center justify-center overflow-hidden rounded-md bg-accent text-foreground group-data-[orientation=vertical]/attachment:w-full group-data-[size=sm]/attachment:w-7 group-data-[size=xs]/attachment:w-6 group-data-[size=xs]/attachment:rounded-sm group-data-[state=error]/attachment:bg-danger-subtle group-data-[state=error]/attachment:text-danger-medium group-data-[orientation=vertical]/attachment:*:data-[slot=spinner]:size-6! [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 group-data-[orientation=vertical]/attachment:[&_svg:not([class*='size-'])]:size-6 group-data-[size=xs]/attachment:[&_svg:not([class*='size-'])]:size-3",
+  "relative flex aspect-square w-8 shrink-0 items-center justify-center overflow-hidden rounded-md bg-accent text-foreground group-data-[orientation=vertical]/attachment:w-full group-data-[size=sm]/attachment:w-7 group-data-[size=xs]/attachment:w-6 group-data-[size=xs]/attachment:rounded-sm group-data-[size=lg]/attachment:w-10 group-data-[size=lg]/attachment:rounded-lg group-data-[state=error]/attachment:bg-danger-subtle group-data-[state=error]/attachment:text-danger-medium group-data-[orientation=vertical]/attachment:*:data-[slot=spinner]:size-6! [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 group-data-[orientation=vertical]/attachment:[&_svg:not([class*='size-'])]:size-6 group-data-[size=xs]/attachment:[&_svg:not([class*='size-'])]:size-3",
   {
     variants: {
       variant: {
@@ -86,7 +88,7 @@ function AttachmentContent({ className, ...props }: React.ComponentProps<'div'>)
     <div
       data-slot="attachment-content"
       className={cn(
-        'flex max-w-full min-w-0 flex-1 flex-col gap-0.5 group-data-[orientation=vertical]/attachment:px-1',
+        'flex max-w-full min-w-0 flex-1 flex-col gap-0.5 group-data-[size=lg]/attachment:gap-1 group-data-[orientation=vertical]/attachment:px-1',
         className,
       )}
       {...props}
@@ -99,7 +101,7 @@ function AttachmentTitle({ className, ...props }: React.ComponentProps<'span'>) 
     <span
       data-slot="attachment-title"
       className={cn(
-        'block max-w-full min-w-0 truncate type-text-xs-medium text-foreground group-data-[state=processing]/attachment:shimmer group-data-[state=uploading]/attachment:shimmer',
+        'block max-w-full min-w-0 truncate type-text-xs-medium text-foreground group-data-[size=lg]/attachment:type-text-sm-semibold group-data-[state=processing]/attachment:shimmer group-data-[state=uploading]/attachment:shimmer',
         className,
       )}
       {...props}
