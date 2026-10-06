@@ -9,6 +9,19 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from './carousel'
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from './card'
+import { Badge } from './badge'
+import { Button } from './button'
+
+/** Recent projects: the Card content each slide shows. */
+const PROJECTS = [
+  { name: 'Q3 launch plan', meta: '14 chats · 6 files', status: 'Active' },
+  { name: 'Competitor pricing research', meta: '5 chats · 3 sources', status: 'Active' },
+  { name: 'Onboarding email draft', meta: '3 chats · 1 file', status: 'In review' },
+  { name: 'Weekly metrics review', meta: '8 chats · 4 charts', status: 'Active' },
+  { name: 'Northwind Sync beta', meta: '11 chats · 24 partners', status: 'Archived' },
+  { name: 'Launch deck', meta: '2 chats · launch-deck.pptx', status: 'In review' },
+]
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10945-121'
 
@@ -33,19 +46,30 @@ function DemoCarousel({
     <Carousel
       orientation={orientation}
       opts={{ align: 'start', loop }}
-      aria-label="Label"
-      className={vertical ? 'w-60' : 'w-130'}
+      aria-label="Recent projects"
+      className={vertical ? 'w-72' : 'w-150'}
     >
       <CarouselContent className={vertical ? 'h-100' : undefined}>
-        {Array.from({ length: slides }, (_, i) => (
+        {PROJECTS.slice(0, slides).map((project, i) => (
           <CarouselItem
-            key={i}
-            className={vertical ? 'basis-1/2' : 'basis-60'}
+            key={project.name}
+            className={vertical ? 'basis-1/2' : 'basis-64'}
             aria-label={`${i + 1} of ${slides}`}
           >
-            <div className="flex h-45 items-center justify-center rounded-lg bg-muted type-heading-3xl text-foreground">
-              {i + 1}
-            </div>
+            <Card className="h-full min-w-0 justify-between">
+              <CardHeader>
+                <CardTitle>{project.name}</CardTitle>
+                <CardDescription>{project.meta}</CardDescription>
+              </CardHeader>
+              <CardFooter className="justify-between">
+                <Badge variant="subtle" tone={project.status === 'Archived' ? 'neutral' : 'brand'} size="sm">
+                  {project.status}
+                </Badge>
+                <Button variant="ghost" intent="neutral" size="xs" aria-label={`Open ${project.name}`}>
+                  Open
+                </Button>
+              </CardFooter>
+            </Card>
           </CarouselItem>
         ))}
       </CarouselContent>
@@ -104,7 +128,7 @@ const meta = preview.meta({
     docs: {
       description: {
         component:
-          'A scrollable row of slides (shadcn/ui Carousel on Embla): `CarouselContent` › `CarouselItem`s (size them with `basis-*`), `CarouselPrevious` / `CarouselNext` (disabled at the ends) and `CarouselDots`. Drag, swipe, the arrow keys or the controls move it; `opts` and `plugins` go to Embla (`loop`, `align`, autoplay…).',
+          'A scrollable row of slides (shadcn/ui Carousel on Embla): `CarouselContent` › `CarouselItem`s (size them with `basis-*`), `CarouselPrevious` / `CarouselNext` (disabled at the ends) and `CarouselDots`. Drag, swipe, the arrow keys or the controls move it; `opts` and `plugins` go to Embla (`loop`, `align`, autoplay…). The stories compose Card slides (recent projects): put real components in the items, sized with `basis-*`.',
       },
     },
   },
@@ -114,7 +138,7 @@ const meta = preview.meta({
     controls: { control: 'boolean' },
     dots: { control: 'boolean' },
     loop: { control: 'boolean' },
-    slides: { control: 'number' },
+    slides: { control: { type: 'range', min: 2, max: 6, step: 1 } },
   },
 })
 
