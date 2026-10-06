@@ -173,6 +173,10 @@ Customer Support) are consumers of the library. Use them as real-world usage ref
   Date Picker, hover card) and `elevation/modal` → `shadow-elevation-modal` (Dialog, Alert
   Dialog, Sheet, Drawer). Card is flat (border only).
 - Dark mode: `@custom-variant dark (&:is(.dark *));` with `.dark` on `<html>`.
+- Motion (`docs/motion-foundations.md`): durations `--duration-fast` (120) · `-base` (200) · `-slow`
+  (320), curves `ease-out` (enter) · `ease-in-out` (exit, one duration step shorter). Every
+  `animate-in` / `animate-out` sets both a duration and an `ease-*` (the library default is 150ms
+  `ease`). Reduced motion is global (movement → short fade); add `motion-reduce:` only for one-offs.
 
 ## API rules (full list in `docs/api-contract.md`)
 
