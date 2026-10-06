@@ -62,7 +62,7 @@ function DemoCarousel({
 
 const meta = preview.meta({
   title: 'UI Components/Carousel',
-  tags: ['ui-component'],
+  tags: ['composite'],
   component: DemoCarousel,
   parameters: {
     layout: 'centered',

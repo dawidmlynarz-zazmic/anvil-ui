@@ -70,7 +70,7 @@ function DemoSheet({
 
 const meta = preview.meta({
   title: 'UI Components/Sheet',
-  tags: ['ui-component'],
+  tags: ['feature'],
   component: DemoSheet,
   parameters: {
     layout: 'centered',

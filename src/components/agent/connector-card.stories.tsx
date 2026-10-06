@@ -92,7 +92,7 @@ function Example({ onConnect, ...props }: ExampleProps) {
 
 const meta = preview.meta({
   title: 'Agent Blocks/System & Context/Connector Card',
-  tags: ['agent-block'],
+  tags: ['feature'],
   component: Example,
   parameters: {
     layout: 'padded',

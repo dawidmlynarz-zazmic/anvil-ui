@@ -7,7 +7,7 @@ const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=1066
 
 const meta = preview.meta({
   title: 'Agent Primitives/Agent States/Pulse Dot',
-  tags: ['agent-primitive'],
+  tags: ['element'],
   component: PulseDot,
   parameters: {
     layout: 'centered',

@@ -77,7 +77,7 @@ function Sheet({ toasts, theme }: { toasts: DemoProps[]; theme?: 'light' | 'dark
 
 const meta = preview.meta({
   title: 'UI Components/Toast',
-  tags: ['ui-component'],
+  tags: ['composite'],
   component: DemoToast,
   parameters: {
     layout: 'centered',

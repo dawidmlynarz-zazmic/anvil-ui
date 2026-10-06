@@ -10,7 +10,7 @@ const TONES = ['neutral', 'brand', 'info', 'success', 'warning', 'destructive', 
 
 const meta = preview.meta({
   title: 'UI Components/Spinner',
-  tags: ['ui-component'],
+  tags: ['element'],
   component: Spinner,
   parameters: {
     layout: 'centered',

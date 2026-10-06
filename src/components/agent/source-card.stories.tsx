@@ -10,7 +10,7 @@ const CREDIBILITY = ['high', 'medium', 'low'] as const
 
 const meta = preview.meta({
   title: 'Agent Primitives/Sources/Source Card',
-  tags: ['agent-primitive'],
+  tags: ['composite'],
   component: SourceCard,
   parameters: {
     layout: 'centered',

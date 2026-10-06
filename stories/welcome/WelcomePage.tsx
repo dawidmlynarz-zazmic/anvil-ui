@@ -31,7 +31,7 @@ import {
 import { Kbd } from '@/components/ui/kbd'
 import { cn } from '@/lib/utils'
 
-import { CUSTOM_TAG, TIERS } from '../../.storybook/tiers'
+import { CUSTOM_TAG, SECTIONS } from '../../.storybook/taxonomy'
 
 import { catalog, type CatalogItem } from './catalog'
 import { ChatDemo } from './ChatDemo'
@@ -378,10 +378,14 @@ function CatalogRow({ item, path, custom }: { item: CatalogItem; path?: string; 
   )
 }
 
-// Explore groups: Foundations, then the four tiers (the sidebar's main sections).
+// Explore groups: the sidebar's sections, Foundations first.
 const exploreGroups = [
-  { key: 'foundations', label: 'Foundations', description: 'Tokens pulled from Figma.' },
-  ...TIERS.map((tier) => ({ key: tier.tag, label: `${tier.label}s`, description: tier.description })),
+  { key: 'Foundations', label: 'Foundations', description: 'Tokens pulled from Figma.' },
+  ...SECTIONS.map((section) => ({
+    key: section.title,
+    label: section.title,
+    description: section.description,
+  })),
 ]
 
 function Explore({
@@ -400,7 +404,7 @@ function Explore({
       id="explore"
       eyebrow="Explore"
       title="Everything we're building"
-      description="Every area of the system, grouped like the sidebar: Foundations, then the four tiers. Ready items open their docs. Planned items follow the roadmap."
+      description="Every area of the system, grouped like the sidebar. Ready items open their docs. Planned items follow the roadmap."
     >
       <dl className="flex flex-wrap gap-x-(--space-2xl) gap-y-3">
         {[
@@ -416,11 +420,18 @@ function Explore({
         ))}
       </dl>
       {exploreGroups.map((group) => {
-        const areas = catalog.filter((area) => area.tier === group.key)
+        const areas = catalog.filter((area) => area.section === group.key)
         return (
-          <section key={group.key} aria-labelledby={`explore-${group.key}`} className="flex flex-col gap-4">
+          <section
+            key={group.key}
+            aria-labelledby={`explore-${group.key.replace(/\W+/g, '-')}`}
+            className="flex flex-col gap-4"
+          >
             <div className="flex flex-col gap-1">
-              <h3 id={`explore-${group.key}`} className="type-heading-xl text-foreground">
+              <h3
+                id={`explore-${group.key.replace(/\W+/g, '-')}`}
+                className="type-heading-xl text-foreground"
+              >
                 {group.label}
               </h3>
               <p className="type-text-sm-normal text-muted-foreground">{group.description}</p>
@@ -477,13 +488,14 @@ const tips: { icon: LucideIcon; title: string; body: ReactNode }[] = [
     title: 'Sidebar',
     body: (
       <>
-        <strong className="text-foreground">Foundations</strong> (tokens), then the four tiers:{' '}
+        <strong className="text-foreground">Foundations</strong> (tokens), then{' '}
         <strong className="text-foreground">UI Components</strong> (shadcn/ui and Anvil-only controls, A–Z),{' '}
-        <strong className="text-foreground">Agent Primitives</strong>,{' '}
-        <strong className="text-foreground">Agent Blocks</strong> and{' '}
-        <strong className="text-foreground">Agent Templates</strong>. Agent tiers keep the Figma section a
-        component comes from (Input, Messages, Sources…). Anvil-only components carry an Anvil badge and an{' '}
-        <code>anvil-custom</code> tag in the sidebar&apos;s tag filter.
+        <strong className="text-foreground">Agent Primitives</strong> (elements and composites),{' '}
+        <strong className="text-foreground">Agent Blocks</strong> (features) and{' '}
+        <strong className="text-foreground">Agent Templates</strong>. Agent sections keep the Figma section a
+        component comes from (Input, Messages, Sources…). Every docs page shows how the component is built
+        (Element, Composite, Feature or Template); filter by it, or by <code>anvil-custom</code>, with the
+        sidebar&apos;s tag filter.
       </>
     ),
   },

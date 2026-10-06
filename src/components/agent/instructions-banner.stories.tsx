@@ -10,7 +10,7 @@ const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=1073
 
 const meta = preview.meta({
   title: 'Agent Primitives/System & Context/Instructions Banner',
-  tags: ['agent-primitive'],
+  tags: ['composite'],
   component: InstructionsBanner,
   parameters: {
     layout: 'padded',

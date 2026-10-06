@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react'
 import { Controls, Description, Primary, Stories, Subtitle, Title, useOf } from '@storybook/addon-docs/blocks'
 
-import { CUSTOM_TAG, tierOf, type FigmaProp } from './tiers'
+import { categoryOf, CUSTOM_TAG, type FigmaProp } from './taxonomy'
 
-// Docs page for every component (autodocs): title, tier badge and Figma link, the description,
+// Docs page for every component (autodocs): title, category badge and Figma link, the description,
 // the primary story with its controls, the Figma → code table, then every story.
 
 /** Renders `code` spans from backticks. */
@@ -20,18 +20,18 @@ function usePreparedMeta() {
 function Meta() {
   const preparedMeta = usePreparedMeta()
   if (!preparedMeta) return null
-  const tier = tierOf(preparedMeta.tags)
+  const category = categoryOf(preparedMeta.tags)
   const custom = preparedMeta.tags.includes(CUSTOM_TAG)
   const figmaUrl = (preparedMeta.parameters.design as { url?: string } | undefined)?.url
-  if (!tier && !figmaUrl) return null
+  if (!category && !figmaUrl) return null
   return (
     <div className="sb-unstyled not-prose mb-6 flex flex-wrap items-center gap-2 type-text-xs-medium">
-      {tier && (
+      {category && (
         <span
-          title={tier.description}
+          title={category.description}
           className="inline-flex items-center gap-1 rounded-full bg-agent-subtle px-2 py-0.5 text-agent-strong"
         >
-          Tier {tier.tier} · {tier.label}
+          {category.label}
         </span>
       )}
       {custom && (

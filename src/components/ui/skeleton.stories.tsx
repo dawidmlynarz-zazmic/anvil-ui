@@ -7,7 +7,7 @@ const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=1067
 
 const meta = preview.meta({
   title: 'UI Components/Skeleton',
-  tags: ['ui-component'],
+  tags: ['element'],
   component: Skeleton,
   parameters: {
     layout: 'centered',

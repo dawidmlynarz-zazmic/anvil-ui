@@ -67,8 +67,8 @@ function Demo({ copy = true, retry = true, edit = false, feedback = true, share 
 }
 
 const meta = preview.meta({
-  title: 'Agent Blocks/Messages/Message Actions',
-  tags: ['agent-block'],
+  title: 'Agent Primitives/Messages/Message Actions',
+  tags: ['composite'],
   component: Demo,
   parameters: {
     layout: 'centered',

@@ -135,7 +135,7 @@ function DemoField({
 
 const meta = preview.meta({
   title: 'UI Components/Field',
-  tags: ['ui-component'],
+  tags: ['composite'],
   component: DemoField,
   parameters: {
     layout: 'padded',

@@ -67,7 +67,7 @@ const withAnvilProviders: Decorator = (Story, context) => (
 // control (sync-open.tsx); stories that open on load prevent Radix's initial focus.
 export default definePreview({
   addons: [addonDocs(), addonA11y(), addonThemes(), addonPseudoStates()],
-  // Every component gets a docs page (AnvilDocsPage: tier, Figma link, Figma → code table).
+  // Every component gets a docs page (AnvilDocsPage: category, Figma link, Figma → code table).
   tags: ['autodocs'],
   decorators: [
     withSyncedOpen,
@@ -128,7 +128,7 @@ export default definePreview({
     docs: { page: AnvilDocsPage },
     controls: { matchers: { color: /(background|color)$/i, date: /Date$/i }, sort: 'requiredFirst' },
     options: {
-      // Tiers in a fixed order (Welcome, Foundations, then the four tiers); inside an agent tier, the
+      // Sections in a fixed order (Welcome, Foundations, then the taxonomy sections); inside an agent section, the
       // sections follow the Figma Core Kit; components A–Z inside a section, stories in file order.
       // Plain JS, no outside references: Storybook evaluates this function's source on its own.
       storySort: (a, b) => {

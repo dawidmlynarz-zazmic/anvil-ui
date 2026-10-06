@@ -53,8 +53,8 @@ function Demo({ open, onOpenChange, onTryAgain, onModify, modal = false }: DemoP
 }
 
 const meta = preview.meta({
-  title: 'Agent Blocks/Messages/Regenerate Menu',
-  tags: ['agent-block'],
+  title: 'Agent Primitives/Messages/Regenerate Menu',
+  tags: ['composite'],
   component: Demo,
   parameters: {
     layout: 'centered',

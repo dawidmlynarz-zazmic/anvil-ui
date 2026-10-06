@@ -58,7 +58,7 @@ function Blocks() {
 
 const meta = preview.meta({
   title: 'Agent Primitives/Messages/Content Block',
-  tags: ['agent-primitive'],
+  tags: ['element'],
   component: ContentBlocks,
   parameters: {
     layout: 'padded',

@@ -74,7 +74,7 @@ function DemoDrawer({
 
 const meta = preview.meta({
   title: 'UI Components/Drawer',
-  tags: ['ui-component'],
+  tags: ['feature'],
   component: DemoDrawer,
   parameters: {
     layout: 'centered',

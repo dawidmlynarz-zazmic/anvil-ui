@@ -41,7 +41,7 @@ function Actions() {
 
 const meta = preview.meta({
   title: 'Agent Primitives/Messages/Message',
-  tags: ['agent-primitive'],
+  tags: ['composite'],
   component: Message,
   parameters: {
     layout: 'padded',

@@ -7,7 +7,7 @@ const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=1073
 
 const meta = preview.meta({
   title: 'Agent Primitives/Messages/Streaming Placeholder',
-  tags: ['agent-primitive'],
+  tags: ['composite'],
   component: StreamingPlaceholder,
   parameters: {
     layout: 'padded',

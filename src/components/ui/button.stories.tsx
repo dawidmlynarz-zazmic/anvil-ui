@@ -42,7 +42,7 @@ const Label = ({ children }: { children: ReactNode }) => (
 
 const meta = preview.meta({
   title: 'UI Components/Button',
-  tags: ['ui-component'],
+  tags: ['element'],
   component: Button,
   parameters: {
     layout: 'padded',

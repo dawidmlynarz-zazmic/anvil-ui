@@ -54,7 +54,7 @@ function Call(props: React.ComponentProps<typeof ToolCallItem>) {
 
 const meta = preview.meta({
   title: 'Agent Primitives/Agent States/Tool Call Item',
-  tags: ['agent-primitive'],
+  tags: ['composite'],
   component: Call,
   parameters: {
     layout: 'padded',

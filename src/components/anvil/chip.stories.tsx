@@ -23,7 +23,7 @@ function ToggleChip({ pressed: initial = false, ...props }: ToggleChipProps) {
 
 const meta = preview.meta({
   title: 'UI Components/Chip',
-  tags: ['ui-component', 'anvil-custom'],
+  tags: ['element', 'anvil-custom'],
   component: ToggleChip,
   parameters: {
     layout: 'centered',
