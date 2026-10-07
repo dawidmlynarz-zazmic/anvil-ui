@@ -7,22 +7,22 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/compon
 import { ArrowUpIcon, Icon, MicIcon, PaperclipIcon, RotateCcwIcon } from '@/components/ui/icon'
 
 // Figma Agent Builder › Core Kit › prompt input (10663:2292), built on Input Group: the composer.
-// --background, --input stroke (1.5px --border-action while focused), radius 2xl, 12px padding,
-// 8px gap. `size` default: attachment tray, a growing textarea (text/base, --foreground-subtle
-// placeholder) and a toolbar (leading action + tools | token count text/xs, voice, send) · compact:
-// one row that grows to 4 lines (leading | textarea | voice, send). Figma state → props: empty /
-// typing = the value (send is disabled while empty) · file-attached = `attachments` · voice-active
-// = `listening` (the waveform replaces the text, voice pressed) · streaming-disabled = `status`
-// streaming (textarea off, "Waiting for response", send becomes Stop). Enter sends, Shift+Enter
-// adds a line. Figma show attach button = `attachMenu` (a ghost icon button that opens a Dropdown
-// Menu of the items you pass: upload, photos, camera, drive and recent submenus, a note; Figma
-// attachment menu, 280px, radius xl) or `onAttach` (the button alone); leading action (instance
-// swap) = `leading`, any control in that place. Show tools / voice / token count = `tools`,
-// `onVoice`, `tokenCount`. The attach menu is composed here from Button + Dropdown Menu, not a
-// component of its own (audit follow-up). `response` stopped · incomplete shows Figma's response
-// controls above the composer as a status line + Buttons in a --popover pill (Regenerate ghost +
-// Continue outline · Continue generating primary); while streaming the send button is already
-// Stop, so no pill. The status line is a polite live region.
+// --background, --input stroke (1.5px --border-action while focused), radius 2xl, 12px padding, 8px
+// gap. `size` default: attachment tray, a growing textarea (text/sm like Input and Textarea,
+// --foreground-subtle placeholder) and a toolbar (leading action + tools | token count text/xs,
+// voice, send) · compact: one row that grows to 4 lines (leading | textarea | voice, send). Figma
+// state → props: empty / typing = the value (send is disabled while empty) · file-attached =
+// `attachments` · voice-active = `listening` (the waveform replaces the text, voice pressed) ·
+// streaming-disabled = `status` streaming (textarea off, "Waiting for response", send becomes
+// Stop). Enter sends, Shift+Enter adds a line. Figma show attach button = `attachMenu` (a ghost
+// icon button that opens a Dropdown Menu of the items you pass: upload, photos, camera, drive and
+// recent submenus, a note; Figma attachment menu, 280px, radius xl) or `onAttach` (the button
+// alone); leading action (instance swap) = `leading`, any control in that place. Show tools / voice
+// / token count = `tools`, `onVoice`, `tokenCount`. The attach menu is composed here from Button +
+// Dropdown Menu, not a component of its own (audit follow-up). `response` stopped · incomplete
+// shows Figma's response controls above the composer as a status line + Buttons in a --popover pill
+// (Regenerate ghost + Continue outline · Continue generating primary); while streaming the send
+// button is already Stop, so no pill. The status line is a polite live region.
 
 type PromptInputProps = Omit<React.ComponentProps<'form'>, 'onSubmit' | 'onChange'> & {
   size?: 'default' | 'compact'
@@ -157,7 +157,7 @@ function PromptInput({
         }
       }}
       className={cn(
-        'min-h-6 w-full min-w-0 flex-1 resize-none bg-transparent px-1 py-1 type-text-base-normal text-foreground outline-none [field-sizing:content] placeholder:text-foreground-subtle disabled:placeholder:text-foreground-disabled',
+        'min-h-5 w-full min-w-0 flex-1 resize-none bg-transparent px-1 py-1 type-text-sm-normal text-foreground outline-none [field-sizing:content] placeholder:text-foreground-subtle disabled:placeholder:text-foreground-disabled',
         compact ? 'max-h-26' : 'max-h-60',
       )}
     />
