@@ -2,6 +2,7 @@ import * as React from 'react'
 
 import { cn } from '@/lib/utils'
 import { VoiceWaveform } from '@/components/agent/voice-waveform'
+import { AttachmentGroup } from '@/components/ui/attachment'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { ArrowUpIcon, Icon, MicIcon, PaperclipIcon, RotateCcwIcon } from '@/components/ui/icon'
@@ -24,7 +25,9 @@ import { ArrowUpIcon, Icon, MicIcon, PaperclipIcon, RotateCcwIcon } from '@/comp
 // (Regenerate ghost + Continue outline · Continue generating primary); while streaming the send
 // button is already Stop, so no pill. The status line is a polite live region.
 // Icon buttons (attach, voice, send / Stop) are circles only in compact; default uses the default
-// shape. In compact the one-line textarea is as tall as the 32px buttons, so its text is centred.
+// shape. In compact the one-line textarea is as tall as the 32px buttons, so its text is centred,
+// and the text (or the waveform) starts 6px after the attach button. `attachments` sit in an
+// Attachment Group: one row that scrolls sideways, in both sizes.
 
 type PromptInputProps = Omit<React.ComponentProps<'form'>, 'onSubmit' | 'onChange'> & {
   size?: 'default' | 'compact'
@@ -159,8 +162,8 @@ function PromptInput({
         }
       }}
       className={cn(
-        'min-h-5 w-full min-w-0 flex-1 resize-none bg-transparent px-1 py-1 type-text-sm-normal text-foreground outline-none [field-sizing:content] placeholder:text-foreground-subtle disabled:placeholder:text-foreground-disabled',
-        compact ? 'max-h-26 py-1.5' : 'max-h-60',
+        'min-h-5 w-full min-w-0 flex-1 resize-none bg-transparent py-1 type-text-sm-normal text-foreground outline-none [field-sizing:content] placeholder:text-foreground-subtle disabled:placeholder:text-foreground-disabled',
+        compact ? 'max-h-26 py-1.5' : 'max-h-60 px-1',
       )}
     />
   )
@@ -272,12 +275,17 @@ function PromptInput({
         </div>
       )}
       {attachments && (
-        <div className={cn('flex flex-wrap gap-2', compact && 'flex-col items-start p-1.5')}>
+        <AttachmentGroup
+          data-slot="prompt-input-attachments"
+          // Bleeds into the composer's padding so the 16px edge fade falls on empty space and the
+          // cards line up with the text (16px from the edge).
+          className={cn('-mx-3 scroll-px-4 px-4', compact && '-mx-1.5')}
+        >
           {attachments}
-        </div>
+        </AttachmentGroup>
       )}
       {compact ? (
-        <div className="flex items-end gap-2">
+        <div className="flex items-end gap-1.5">
           <div className="flex shrink-0 items-center">{leading}</div>
           {field}
           {right}
