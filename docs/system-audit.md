@@ -150,6 +150,9 @@ deprecated feature) are the verdict and its note.
 | NPS | Blocks · feature | Agent Builder (Feedback) | ready-to-use | — | ✓ | keep |
 | Survey | Blocks · feature | Agent Builder (Feedback) | ready-to-use | — | ✓ | keep |
 | Poll | Blocks · feature | Agent Builder (Feedback) | ready-to-use | — | ✓ | keep |
+| Starter Prompt Card | Shell · composite | Agent Builder (Shell) | ready-to-use | Welcome State | ✓ | new 2026-10-06; on the interactive Card |
+| Welcome State | Shell · feature | Agent Builder (Shell) | ready-to-use | — | ✓ | new 2026-10-06; on Empty State + Prompt Input |
+| Project Header | Shell · composite | Agent Builder (Shell) | ready-to-use | — | ✓ | new 2026-10-06; on Item |
 
 Internal helpers (no story, not public): Citation Confidence (Citation Chip, Hovercard, Source
 Item), menu styles (Dropdown Menu, Context Menu, Menubar).
