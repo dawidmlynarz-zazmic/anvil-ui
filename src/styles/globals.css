@@ -135,13 +135,14 @@
   }
 }
 
-/* Fades the start and end of a horizontal scroller (attachment group). */
+/* Fades the start and end of a horizontal scroller (attachment group). The fade is 16px; set
+   --scroll-fade to match the scroller's inline padding, so it only covers items scrolled under it. */
 @utility scroll-fade-x {
   mask-image: linear-gradient(
     to right,
     transparent,
-    black calc(var(--spacing) * 4),
-    black calc(100% - var(--spacing) * 4),
+    black var(--scroll-fade, calc(var(--spacing) * 4)),
+    black calc(100% - var(--scroll-fade, calc(var(--spacing) * 4))),
     transparent
   );
 }
