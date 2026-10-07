@@ -7,7 +7,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/compon
 import { ArrowUpIcon, Icon, MicIcon, PaperclipIcon, RotateCcwIcon } from '@/components/ui/icon'
 
 // Figma Agent Builder › Core Kit › prompt input (10663:2292), built on Input Group: the composer.
-// --background, --input stroke (1.5px --border-action while focused), radius 2xl, 12px padding, 8px
+// --background, --input stroke (1.5px --border-action while focused), radius xl, 12px padding, 8px
 // gap. `size` default: attachment tray, a growing textarea (text/sm like Input and Textarea,
 // --foreground-subtle placeholder) and a toolbar (leading action + tools | token count text/xs,
 // voice, send) · compact: one row that grows to 4 lines (leading | textarea | voice, send). Figma
@@ -23,6 +23,8 @@ import { ArrowUpIcon, Icon, MicIcon, PaperclipIcon, RotateCcwIcon } from '@/comp
 // shows Figma's response controls above the composer as a status line + Buttons in a --popover pill
 // (Regenerate ghost + Continue outline · Continue generating primary); while streaming the send
 // button is already Stop, so no pill. The status line is a polite live region.
+// Icon buttons (attach, voice, send / Stop) are circles only in compact; default uses the default
+// shape. In compact the one-line textarea is as tall as the 32px buttons, so its text is centred.
 
 type PromptInputProps = Omit<React.ComponentProps<'form'>, 'onSubmit' | 'onChange'> & {
   size?: 'default' | 'compact'
@@ -139,7 +141,7 @@ function PromptInput({
   }
 
   const field = listening ? (
-    <div className="flex min-h-6 flex-1 items-center py-1">
+    <div className={cn('flex min-h-7 flex-1 items-center py-1', compact && 'min-h-8')}>
       <VoiceWaveform label="Listening" />
     </div>
   ) : (
@@ -158,7 +160,7 @@ function PromptInput({
       }}
       className={cn(
         'min-h-5 w-full min-w-0 flex-1 resize-none bg-transparent px-1 py-1 type-text-sm-normal text-foreground outline-none [field-sizing:content] placeholder:text-foreground-subtle disabled:placeholder:text-foreground-disabled',
-        compact ? 'max-h-26' : 'max-h-60',
+        compact ? 'max-h-26 py-1.5' : 'max-h-60',
       )}
     />
   )
@@ -174,7 +176,7 @@ function PromptInput({
           variant={listening ? 'default' : 'outline'}
           intent={listening ? 'destructive' : 'neutral'}
           size="icon-sm"
-          shape="circle"
+          shape={compact ? 'circle' : 'default'}
           aria-label="Voice input"
           aria-pressed={listening}
           disabled={streaming}
@@ -219,7 +221,7 @@ function PromptInput({
         submit()
       }}
       className={cn(
-        'relative flex w-full max-w-(--shell-thread-max) flex-col gap-2 rounded-2xl bg-background p-3 text-foreground inset-ring inset-ring-input',
+        'relative flex w-full max-w-(--shell-thread-max) flex-col gap-2 rounded-xl bg-background p-3 text-foreground inset-ring inset-ring-input',
         'transition-shadow duration-(--duration-fast) focus-within:inset-ring-[1.5px] focus-within:inset-ring-border-action',
         streaming && 'inset-ring-[1.5px] inset-ring-border-action',
         compact && 'p-1.5',
