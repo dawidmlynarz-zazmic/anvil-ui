@@ -158,6 +158,8 @@ deprecated feature) are the verdict and its note.
 | Project Setup | Shell · feature | Agent Builder (Shell) | ready-to-use | — | ✓ | new 2026-10-06; on Card + shell header / footer, Input, Textarea, Attachment |
 | Widget Skeleton | States · composite | Molecule (widgets) | composite | — | ✓ | new 2026-10-07; on Card + Text Shimmer + Skeleton |
 | Widget Error | States · composite | Molecule (widgets) | composite | — | ✓ | new 2026-10-07; on Card + Empty State + Icon Tile |
+| Chat Shell | Surfaces · feature | Agent Builder (Surfaces) | ready-to-use | — | ✓ | new 2026-10-07; on Shell Header + Message Scroller + Prompt Input; containers composed around it |
+| Launcher | Surfaces · composite | Agent Builder (Surfaces) | ready-to-use | — | ✓ | new 2026-10-07; on Popover + Button + Badge + Card |
 
 Internal helpers (no story, not public): Citation Confidence (Citation Chip, Hovercard, Source
 Item), menu styles (Dropdown Menu, Context Menu, Menubar).
