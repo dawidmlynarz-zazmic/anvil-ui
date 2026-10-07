@@ -146,7 +146,7 @@ export const catalog: CatalogArea[] = [
     section: 'Molecules',
     id: 'molecules-agent',
     name: 'Agent molecules',
-    description: 'Reusable agent parts: message pieces, replies, scales and status strips.',
+    description: 'Reusable agent parts: message pieces, replies, scales, status strips and widget states.',
     items: [
       ...molecule(
         'Message',
@@ -158,6 +158,8 @@ export const catalog: CatalogArea[] = [
         'Action Status',
         'Citation Source Item',
         'Tool Log Line',
+        'Widget Skeleton',
+        'Widget Error',
       ),
       alias('Prompt Attachment', 'Design System/Molecules/Attachment'),
       alias('Quick Reply Group', 'Design System/Molecules/Quick Reply'),
