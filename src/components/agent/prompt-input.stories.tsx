@@ -20,6 +20,7 @@ import {
   DropdownMenuSubTrigger,
 } from '@/components/ui/dropdown-menu'
 import {
+  FileSpreadsheetIcon,
   FileTextIcon,
   Icon,
   CameraIcon,
@@ -85,39 +86,31 @@ function Tools() {
   )
 }
 
+// Four files, so the tray overflows and scrolls in both sizes.
+const FILES = [
+  { name: 'hero-image.png', meta: 'PNG · 1.2 MB', icon: ImageIcon, state: 'done' as const },
+  { name: 'q3-launch-plan.pdf', meta: 'Uploading · 2.4 MB', icon: FileTextIcon, state: 'uploading' as const },
+  { name: 'launch-metrics.xlsx', meta: 'XLSX · 96 KB', icon: FileSpreadsheetIcon, state: 'done' as const },
+  { name: 'partner-brief.docx', meta: 'DOCX · 64 KB', icon: FileTextIcon, state: 'done' as const },
+]
+
 function Files() {
-  return (
-    <>
-      <Attachment size="default">
-        <AttachmentMedia>
-          <Icon icon={ImageIcon} />
-        </AttachmentMedia>
-        <AttachmentContent>
-          <AttachmentTitle>hero-image.png</AttachmentTitle>
-          <AttachmentDescription>PNG · 1.2 MB</AttachmentDescription>
-        </AttachmentContent>
-        <AttachmentActions>
-          <AttachmentAction aria-label="Remove file">
-            <Icon icon={XIcon} />
-          </AttachmentAction>
-        </AttachmentActions>
-      </Attachment>
-      <Attachment state="uploading">
-        <AttachmentMedia>
-          <Icon icon={FileTextIcon} />
-        </AttachmentMedia>
-        <AttachmentContent>
-          <AttachmentTitle>q3-launch-plan.pdf</AttachmentTitle>
-          <AttachmentDescription>Uploading · 2.4 MB</AttachmentDescription>
-        </AttachmentContent>
-        <AttachmentActions>
-          <AttachmentAction aria-label="Remove file">
-            <Icon icon={XIcon} />
-          </AttachmentAction>
-        </AttachmentActions>
-      </Attachment>
-    </>
-  )
+  return FILES.map((file) => (
+    <Attachment key={file.name} state={file.state}>
+      <AttachmentMedia>
+        <Icon icon={file.icon} />
+      </AttachmentMedia>
+      <AttachmentContent>
+        <AttachmentTitle>{file.name}</AttachmentTitle>
+        <AttachmentDescription>{file.meta}</AttachmentDescription>
+      </AttachmentContent>
+      <AttachmentActions>
+        <AttachmentAction aria-label={`Remove ${file.name}`}>
+          <Icon icon={XIcon} />
+        </AttachmentAction>
+      </AttachmentActions>
+    </Attachment>
+  ))
 }
 
 type DemoProps = {

@@ -277,9 +277,13 @@ function PromptInput({
       {attachments && (
         <AttachmentGroup
           data-slot="prompt-input-attachments"
-          // Bleeds into the composer's padding so the 16px edge fade falls on empty space and the
-          // cards line up with the text (16px from the edge).
-          className={cn('-mx-3 scroll-px-4 px-4', compact && '-mx-1.5')}
+          // Bleeds into the composer's padding; its inline padding (and edge fade, the same width)
+          // matches the space above the cards: 16px in default (lined up with the text), 10px in
+          // compact. The fade only covers cards scrolled under it.
+          className={cn(
+            '-mx-3 scroll-px-4 px-4 [--scroll-fade:--spacing(4)]',
+            compact && '-mx-1.5 scroll-px-2.5 px-2.5 [--scroll-fade:--spacing(2.5)]',
+          )}
         >
           {attachments}
         </AttachmentGroup>
