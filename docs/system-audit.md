@@ -153,6 +153,9 @@ deprecated feature) are the verdict and its note.
 | Starter Prompt Card | Shell · composite | Agent Builder (Shell) | ready-to-use | Welcome State | ✓ | new 2026-10-06; on the interactive Card |
 | Welcome State | Shell · feature | Agent Builder (Shell) | ready-to-use | — | ✓ | new 2026-10-06; on Empty State + Prompt Input |
 | Project Header | Shell · composite | Agent Builder (Shell) | ready-to-use | — | ✓ | new 2026-10-06; on Item |
+| Model and Tools Picker | Shell · feature | Agent Builder (Shell) | ready-to-use | — | ✓ | new 2026-10-06; on Popover + Command, Combobox, Field + Switch |
+| Share Dialog | Shell · feature | Agent Builder (Shell) | ready-to-use | — | ✓ | new 2026-10-06; on Dialog |
+| Project Setup | Shell · feature | Agent Builder (Shell) | ready-to-use | — | ✓ | new 2026-10-06; on Card + shell header / footer, Input, Textarea, Attachment |
 
 Internal helpers (no story, not public): Citation Confidence (Citation Chip, Hovercard, Source
 Item), menu styles (Dropdown Menu, Context Menu, Menubar).
