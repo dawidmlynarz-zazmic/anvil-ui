@@ -150,7 +150,7 @@ function ArtifactPanel({
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
-                <span className="type-text-xs-semibold text-foreground">{version}</span>
+                <span className="type-text-xs-semibold whitespace-nowrap text-foreground">{version}</span>
               ))}
             {sync}
           </div>
