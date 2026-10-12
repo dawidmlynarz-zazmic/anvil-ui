@@ -160,6 +160,10 @@ deprecated feature) are the verdict and its note.
 | Widget Error | States · composite | Molecule (widgets) | composite | — | ✓ | new 2026-10-07; on Card + Empty State + Icon Tile |
 | Chat Shell | Surfaces · feature | Agent Builder (Surfaces) | ready-to-use | — | ✓ | new 2026-10-07; on Shell Header + Message Scroller + Prompt Input; containers composed around it |
 | Launcher | Surfaces · composite | Agent Builder (Surfaces) | ready-to-use | — | ✓ | new 2026-10-07; on Popover + Button + Badge + Card |
+| Sync Indicator | Split canvas · composite | Agent Builder (Widgets & artifacts) | ready-to-use | Artifact Panel (`sync`) | ✓ | new 2026-10-12; on Badge + Pulse Dot |
+| Artifact Chip | Split canvas · composite | Agent Builder (Widgets & artifacts) | ready-to-use | — | ✓ | new 2026-10-12; on Item + Icon Tile + Text Shimmer |
+| Version History | Split canvas · feature | Agent Builder (Widgets & artifacts) | ready-to-use | — | ✓ | new 2026-10-12; on Card + Shell Header / Footer + Icon Tile + Badge |
+| Document Canvas | Split canvas · feature | Agent Builder (Widgets & artifacts) | ready-to-use | — | ✓ | new 2026-10-12; content for Artifact Panel; review bar = Alert |
 
 Internal helpers (no story, not public): Citation Confidence (Citation Chip, Hovercard, Source
 Item), menu styles (Dropdown Menu, Context Menu, Menubar).

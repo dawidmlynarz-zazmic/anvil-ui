@@ -24,6 +24,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 // Actions (MessageAction icon-xs: history, copy, download), Publish (brand xs) and Close → the body:
 // preview (--background, 20px padding, 16px gap) or `code` (--muted, edge to edge) → Shell Footer
 // (8 / 12px) with the `status` note ("Last edited 2 min ago · 3 versions").
+// A Document Canvas as the preview fills it edge to edge (its own --muted reading area). `sync` takes
+// a Sync Indicator.
 // Figma state → preview · code = `view`; editing = your content in the preview (a selection ring and
 // the inline assist prompt from Surfaces) with `status` "Editing selection · chart".
 
@@ -155,7 +157,7 @@ function ArtifactPanel({
         </ShellHeader>
         <TabsContent
           value="preview"
-          className="flex min-h-0 flex-col gap-4 overflow-auto rounded-none bg-background p-5"
+          className="flex min-h-0 flex-col gap-4 overflow-auto rounded-none bg-background p-5 has-[>[data-slot=document-canvas]]:p-0"
         >
           {children}
         </TabsContent>
