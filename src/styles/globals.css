@@ -207,6 +207,56 @@
     cursor: pointer;
   }
 
+  /*
+   * Labels that toggle a control show the pointer too: a label wrapping, before or after an enabled
+   * checkbox, radio or switch (or after a wrapper holding one, e.g. a story's pseudo-state span), and
+   * any label in a Field that holds one (FieldLabel next to a Switch).
+   * Labels of text fields keep the default cursor (clicking them only moves focus).
+   */
+  :where(
+    label:has(
+      :is(
+        [role='checkbox'],
+        [role='radio'],
+        [role='switch'],
+        input:is([type='checkbox'], [type='radio'])
+      ):not(:disabled, [data-disabled], [aria-disabled='true'])
+    ),
+    :is([role='checkbox'], [role='radio'], [role='switch'], input:is([type='checkbox'], [type='radio'])):not(
+        :disabled,
+        [data-disabled],
+        [aria-disabled='true']
+      )
+      ~ label,
+    label:has(
+      ~ :is(
+          [role='checkbox'],
+          [role='radio'],
+          [role='switch'],
+          input:is([type='checkbox'], [type='radio'])
+        ):not(:disabled, [data-disabled], [aria-disabled='true'])
+    ),
+    :has(
+        > :is(
+            [role='checkbox'],
+            [role='radio'],
+            [role='switch'],
+            input:is([type='checkbox'], [type='radio'])
+          ):not(:disabled, [data-disabled], [aria-disabled='true'])
+      )
+      ~ label,
+    [data-slot='field']:has(
+        > :is([role='checkbox'], [role='radio'], [role='switch']):not(
+            :disabled,
+            [data-disabled],
+            [aria-disabled='true']
+          )
+      )
+      label
+  ) {
+    cursor: pointer;
+  }
+
   /* Reduced motion (docs/motion-foundations.md §3): enter / exit animations keep their fade but
      drop translation, scale, rotation and blur, and run at --duration-fast; height animations are
      skipped. Loops stop in their own utilities; spinners keep spinning; colour transitions stay. */
