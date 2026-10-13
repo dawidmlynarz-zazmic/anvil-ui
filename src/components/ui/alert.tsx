@@ -17,6 +17,7 @@ import { Icon, XIcon } from '@/components/ui/icon'
 // 12/10px, text/xs, 14px icon). `action` (e.g. an outline xs Button) and `onDismiss` (a ghost
 // icon-xs X) sit in a trailing column. role="alert" by default; pass role="status" for polite
 // notices (system banners).
+// `shape` (Figma inline note): inset (default) · full-bleed · rule — see `alertVariants`.
 const tinted = (tone: 'info' | 'success' | 'warning' | 'danger' | 'agent') =>
   ({
     info: 'border-info-muted bg-info-subtle text-info-strong [&>svg]:text-info-medium *:data-[slot=alert-description]:text-info-medium',
@@ -47,9 +48,25 @@ const alertVariants = cva(
         sm: 'items-center py-2.5 [&>svg]:translate-y-0',
         xs: 'rounded-md px-3 py-2.5 type-text-xs-normal has-[>svg]:grid-cols-[calc(var(--spacing)*3.5)_1fr_auto] has-[>svg]:gap-x-2 [&>svg]:size-3.5',
       },
+      // Figma inline note `shape`: inset (a rounded note inside body padding) · full-bleed (spans the
+      // card edge to edge: no radius, no side strokes) · rule (a 2px start rule in the tone, no fill stroke).
+      shape: {
+        inset: '',
+        'full-bleed': 'rounded-none border-x-0',
+        rule: 'rounded-none border-0 border-s-2',
+      },
     },
+    compoundVariants: [
+      { shape: 'rule', tone: 'neutral', className: 'border-s-border-strong' },
+      { shape: 'rule', tone: 'info', className: 'border-s-info' },
+      { shape: 'rule', tone: 'success', className: 'border-s-success' },
+      { shape: 'rule', tone: 'warning', className: 'border-s-warning' },
+      { shape: 'rule', tone: 'destructive', className: 'border-s-danger' },
+      { shape: 'rule', tone: 'agent', className: 'border-s-agent' },
+    ],
     defaultVariants: {
       tone: 'neutral',
+      shape: 'inset',
       size: 'default',
     },
   },
@@ -69,6 +86,7 @@ function Alert({
   className,
   tone,
   size = 'default',
+  shape = 'inset',
   variant,
   action,
   onDismiss,
@@ -81,8 +99,9 @@ function Alert({
       data-slot="alert"
       data-tone={resolved}
       data-size={size}
+      data-shape={shape}
       role="alert"
-      className={cn(alertVariants({ tone: resolved, size }), className)}
+      className={cn(alertVariants({ tone: resolved, size, shape }), className)}
       {...props}
     >
       {children}

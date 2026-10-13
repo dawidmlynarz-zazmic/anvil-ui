@@ -14,14 +14,25 @@ const markerVariants = cva(
         separator:
           'gap-2 before:h-px before:min-w-0 before:flex-1 before:bg-border after:h-px after:min-w-0 after:flex-1 after:bg-border',
         border: 'border-b border-border pb-2',
+        // Figma part / meta item: icon + short label that sits in a row of facts, not a full-width line.
+        inline: 'w-fit',
+      },
+      // Figma meta item size: xs (12px icon, text/xs muted: the thread marker) · sm (14px icon,
+      // text/xs/medium foreground) · default (14px icon, 8px gap, text/sm foreground).
+      size: {
+        xs: '',
+        sm: "type-text-xs-medium text-foreground [&_svg:not([class*='size-'])]:size-3.5",
+        default: "gap-2 type-text-sm-normal text-foreground [&_svg:not([class*='size-'])]:size-3.5",
       },
     },
+    defaultVariants: { variant: 'default', size: 'xs' },
   },
 )
 
 function Marker({
   className,
   variant = 'default',
+  size = 'xs',
   asChild = false,
   ...props
 }: React.ComponentProps<'div'> &
@@ -34,7 +45,8 @@ function Marker({
     <Comp
       data-slot="marker"
       data-variant={variant}
-      className={cn(markerVariants({ variant, className }))}
+      data-size={size}
+      className={cn(markerVariants({ variant, size, className }))}
       {...props}
     />
   )
@@ -46,7 +58,7 @@ function MarkerIcon({ className, ...props }: React.ComponentProps<'span'>) {
       data-slot="marker-icon"
       aria-hidden="true"
       className={cn(
-        "flex size-3 shrink-0 items-center justify-center [&_svg:not([class*='size-'])]:size-3",
+        "flex size-3 shrink-0 items-center justify-center group-data-[size=default]/marker:size-3.5 group-data-[size=sm]/marker:size-3.5 [&_svg:not([class*='size-'])]:size-3",
         className,
       )}
       {...props}

@@ -2,6 +2,7 @@ import preview from '#.storybook/preview'
 import { expect } from 'storybook/test'
 
 import { IconTile } from '@/components/anvil/icon-tile'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 
 import { Button } from './button'
 import { Icon, PencilIcon, SparklesIcon } from './icon'
@@ -57,7 +58,7 @@ const meta = preview.meta({
   args: { variant: 'outline' as const, size: 'default' as const },
   argTypes: {
     variant: { control: 'inline-radio', options: ['default', 'outline', 'muted'] },
-    size: { control: 'inline-radio', options: ['default', 'sm'] },
+    size: { control: 'inline-radio', options: ['default', 'sm', 'xs'] },
     asChild: { control: false },
   },
   render: (args) => (
@@ -127,5 +128,62 @@ export const Group = meta.story({
         </div>
       ))}
     </ItemGroup>
+  ),
+})
+
+/** Figma part / list item state selected (and disabled): pass `selected`; hover applies to links. */
+export const Selected = meta.story({
+  render: () => (
+    <div role="listbox" aria-label="Seats" className="flex max-w-120 flex-col gap-2">
+      {[
+        { title: 'Row F · seats 12–13', detail: 'Aisle · together', value: '$39 each', selected: false },
+        { title: 'Row G · seats 4–5', detail: 'Centre · together', value: '$46 each', selected: true },
+        { title: 'Row K · seats 20–21', detail: 'Sold out', value: '—', disabled: true },
+      ].map((row) => (
+        <Item
+          key={row.title}
+          role="option"
+          variant="outline"
+          size="sm"
+          selected={row.selected}
+          aria-selected={row.selected}
+          aria-disabled={row.disabled || undefined}
+        >
+          <ItemContent>
+            <ItemTitle>{row.title}</ItemTitle>
+            <ItemDescription>{row.detail}</ItemDescription>
+          </ItemContent>
+          <ItemActions className="type-text-sm-medium">{row.value}</ItemActions>
+        </Item>
+      ))}
+    </div>
+  ),
+})
+
+Selected.test('the selected row is marked, the disabled one is dimmed', async ({ canvas }) => {
+  const [first, second, third] = canvas.getAllByRole('option')
+  await expect(first).not.toHaveAttribute('data-selected')
+  await expect(second).toHaveAttribute('data-selected', 'true')
+  await expect(getComputedStyle(third).opacity).toBe('0.5')
+})
+
+/** Figma part / person: `size="xs"` is padding-free, so an avatar + name + role sits inline in other content. */
+export const Person = meta.story({
+  render: () => (
+    <div className="flex flex-col gap-4">
+      {(['sm', 'default'] as const).map((size) => (
+        <Item key={size} size="xs">
+          <ItemMedia>
+            <Avatar size={size === 'sm' ? 'sm' : 'default'}>
+              <AvatarFallback tone="warning">MC</AvatarFallback>
+            </Avatar>
+          </ItemMedia>
+          <ItemContent className="gap-0">
+            <ItemTitle>Maya Chen</ItemTitle>
+            <ItemDescription>Launch lead</ItemDescription>
+          </ItemContent>
+        </Item>
+      ))}
+    </div>
   ),
 })
