@@ -188,6 +188,10 @@ deprecated feature) are the verdict and its note.
 | Task Settings | Tasks · feature | Agent Builder (Tasks) | ready-to-use | — | ✓ | | new 2026-10-13; on Task Card + Tabs + Switch |
 | Run Limits | Tasks · feature | Agent Builder (Tasks) | ready-to-use | — | ✓ | | new 2026-10-13; on Task Card + Slider + Progress |
 | Change Review | Tasks · feature | Agent Builder (Tasks) | ready-to-use | — | ✓ | | new 2026-10-13; on Task Card + Alert + Value Stack |
+| Progress Timeline | Tasks · feature | Agent Builder (Tasks) | ready-to-use | — | ✓ | | new 2026-10-13; on Task Card + Timeline + Progress |
+| Activity Feed | Tasks · feature | Agent Builder (Tasks) | ready-to-use | — | ✓ | | new 2026-10-13; on Task Card + Chip + Collapsible |
+| Parallel Agents | Tasks · feature | Agent Builder (Tasks) | ready-to-use | — | ✓ | | new 2026-10-13; on Task Card + Progress |
+| Task Summary | Tasks · feature | Agent Builder (Tasks) | ready-to-use | — | ✓ | | new 2026-10-13; on Task Card + Value Stack + Quick Reply |
 
 Internal helpers (no story, not public): Citation Confidence (Citation Chip, Hovercard, Source
 Item), menu styles (Dropdown Menu, Context Menu, Menubar).
