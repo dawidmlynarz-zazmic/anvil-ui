@@ -27,10 +27,30 @@ const EXPORTS = (
   </>
 )
 
+type DemoProps = React.ComponentProps<typeof ShareDialog> & {
+  /** Story toggle for the optional part: pass `exports` or not. */
+  showExports?: boolean
+}
+
+function Demo({ showExports, ...props }: DemoProps) {
+  return (
+    <ShareDialog
+      {...props}
+      exports={showExports ? EXPORTS : undefined}
+      trigger={
+        <Button variant="outline" intent="neutral" size="sm">
+          <Icon icon={ShareIcon} />
+          Share
+        </Button>
+      }
+    />
+  )
+}
+
 const meta = preview.meta({
   title: 'Agent Builder/Shell/Share Dialog',
   tags: ['agent-builder'],
-  component: ShareDialog,
+  component: Demo,
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
@@ -73,10 +93,12 @@ const meta = preview.meta({
     onStopSharing: fn(),
     onCopyLink: fn(),
     onSettingsChange: fn(),
+    showExports: false,
   },
   argTypes: {
     open: { control: 'boolean' },
     shared: { control: 'boolean' },
+    showExports: { control: 'boolean', description: 'Story toggle: pass the `exports` slot or not' },
     link: { control: 'text' },
     title: { control: 'text' },
     trigger: { control: false },
@@ -90,22 +112,13 @@ const meta = preview.meta({
     onOpenChange: { control: false, table: { category: 'Events' } },
     onOpenAutoFocus: { control: false, table: { category: 'Events' } },
   },
-  render: (args) => (
-    <ShareDialog
-      {...args}
-      exports={EXPORTS}
-      trigger={
-        <Button variant="outline" intent="neutral" size="sm">
-          <Icon icon={ShareIcon} />
-          Share
-        </Button>
-      }
-    />
-  ),
 })
 
-/** Closed, behind the Share button. Shared and the link are in Controls. */
+/** Closed, behind the Share button: the link and the two options. Shared, the link and the export buttons are in Controls. */
 export const Default = meta.story()
+
+/** Every optional part on: the export buttons. The edge case, not the default. */
+export const Full = meta.story({ args: { showExports: true } })
 
 Default.test('creates a public link', async ({ canvas, canvasElement, args }) => {
   const body = within(canvasElement.ownerDocument.body)
@@ -117,11 +130,14 @@ Default.test('creates a public link', async ({ canvas, canvasElement, args }) =>
 })
 
 /** Figma state private. */
-export const Private = meta.story({ args: { open: true, onOpenAutoFocus: (e: Event) => e.preventDefault() } })
+export const Private = meta.story({
+  args: { showExports: true, open: true, onOpenAutoFocus: (e: Event) => e.preventDefault() },
+})
 
 /** Figma state public: the link, Copy link, Stop sharing. */
 export const Shared = meta.story({
   args: {
+    showExports: true,
     open: true,
     shared: true,
     defaultSettings: { includeFiles: true, allowContinue: false },
