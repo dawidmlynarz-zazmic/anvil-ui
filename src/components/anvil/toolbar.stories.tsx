@@ -40,7 +40,10 @@ const meta = preview.meta({
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
-    figmaProps: [{ property: 'variant', values: 'default', code: 'nothing (single value)' }],
+    figmaProps: [
+      { property: 'variant', values: 'default', code: 'nothing (single value)' },
+      { property: 'selection toolbar (Surfaces)', values: 'compact bar', code: '`size="compact"`' },
+    ],
     guide: {
       use: [
         'A floating bar of actions on the current selection: “3 selected” with Archive, Move, Delete over a list of conversations or files.',
@@ -64,13 +67,14 @@ const meta = preview.meta({
     docs: {
       description: {
         component:
-          'A floating bar of contextual actions (`@/components/anvil/toolbar`, on Radix Toolbar): one Tab stop, arrow keys move between controls. `Toolbar` (`aria-label`, `orientation`) › `ToolbarGroup`s of `ToolbarButton` (outline · neutral · sm by default), `ToolbarToggleGroup` › `ToolbarToggleItem`, `ToolbarSeparator`; a ButtonGroup joins ToolbarButtons. `ToolbarCount` + `ToolbarLabel` summarise a selection.',
+          'A floating bar of contextual actions (`@/components/anvil/toolbar`, on Radix Toolbar): one Tab stop, arrow keys move between controls. `Toolbar` (`aria-label`, `orientation`) › `ToolbarGroup`s of `ToolbarButton` (outline · neutral · sm by default), `ToolbarToggleGroup` › `ToolbarToggleItem`, `ToolbarSeparator`; a ButtonGroup joins ToolbarButtons. `ToolbarCount` + `ToolbarLabel` summarise a selection. `size="compact"` is the small popover-style bar for AI actions on a selection (ToolbarButtons default to ghost · xs); Selection Toolbar and Inline Suggestion are built on it.',
       },
     },
   },
-  args: { orientation: 'horizontal', 'aria-label': 'Selected conversations' },
+  args: { orientation: 'horizontal', size: 'default' as const, 'aria-label': 'Selected conversations' },
   argTypes: {
     orientation: { control: 'inline-radio', options: ['horizontal', 'vertical'] },
+    size: { control: 'inline-radio', options: ['default', 'compact'] },
     'aria-label': { control: 'text' },
     loop: { control: 'boolean' },
     asChild: { control: false },
@@ -185,3 +189,34 @@ export const WithButtonGroup = meta.story({
 
 /** `orientation="vertical"`: arrow up / down move between controls. */
 export const Vertical = meta.story({ args: { orientation: 'vertical' } })
+
+/** `size="compact"`: the small popover-style bar for AI actions on a selection (ghost · xs buttons). */
+export const Compact = meta.story({
+  args: { size: 'compact', 'aria-label': 'Actions on the selection' },
+  render: (args) => (
+    <Toolbar {...args}>
+      <ToolbarButton>
+        <Icon icon={ArchiveIcon} />
+        Archive
+      </ToolbarButton>
+      <ToolbarSeparator />
+      <ToolbarButton>
+        <Icon icon={FolderInputIcon} />
+        Move
+      </ToolbarButton>
+      <ToolbarButton intent="destructive">
+        <Icon icon={Trash2Icon} />
+        Delete
+      </ToolbarButton>
+      <ToolbarSeparator />
+      <ToolbarButton size="icon-xs" aria-label="More actions">
+        <Icon icon={EllipsisIcon} />
+      </ToolbarButton>
+    </Toolbar>
+  ),
+})
+
+Compact.test('is a compact bar with ghost xs buttons', async ({ canvas }) => {
+  await expect(canvas.getByRole('toolbar')).toHaveAttribute('data-size', 'compact')
+  await expect(canvas.getByRole('button', { name: 'Archive' })).toHaveAttribute('data-size', 'xs')
+})

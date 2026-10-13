@@ -165,6 +165,9 @@ deprecated feature) are the verdict and its note.
 | Version History | Split canvas · feature | Agent Builder (Widgets & artifacts) | ready-to-use | — | ✓ | new 2026-10-12; on Card + Shell Header / Footer + Icon Tile + Badge |
 | Document Canvas | Split canvas · feature | Agent Builder (Widgets & artifacts) | ready-to-use | — | ✓ | new 2026-10-12; content for Artifact Panel; review bar = Alert |
 | Split Canvas | Surfaces · feature | Agent Builder (Surfaces) | ready-to-use | — | ✓ | new 2026-10-12; on Resizable + Chat Shell (side-panel) + Tabs (mobile) |
+| Selection Toolbar | Inline assist · feature | Agent Builder (In-page assist) | ready-to-use | — | ✓ | new 2026-10-13; on Toolbar (compact) + Popover + Command (Figma: Dropdown Menu — a menu can't hold the prompt field) |
+| Inline Suggestion | Inline assist · feature | Agent Builder (In-page assist) | ready-to-use | — | ✓ | new 2026-10-13; on Toolbar (compact) + Button + Kbd |
+| Ghost Text | Inline assist · feature | Agent Builder (In-page assist) | ready-to-use | — | ✓ | new 2026-10-13; on Input Group (Textarea + hint addon) + Kbd |
 
 Internal helpers (no story, not public): Citation Confidence (Citation Chip, Hovercard, Source
 Item), menu styles (Dropdown Menu, Context Menu, Menubar).
