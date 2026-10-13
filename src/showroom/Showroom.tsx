@@ -252,7 +252,7 @@ export function Showroom({
             <p className="type-text-xs-normal text-muted-foreground">Anvil UI, with a scripted assistant</p>
           </div>
         </div>
-        <div className="ms-auto flex flex-wrap items-center gap-3">
+        <div className="ms-auto flex items-center gap-3 max-md:w-full max-md:overflow-x-auto max-md:pb-1 md:flex-wrap [&>*]:shrink-0">
           <ToggleGroup
             type="single"
             variant="outline"
@@ -342,9 +342,7 @@ export function Showroom({
             <div className="min-w-0 flex-1">
               <HostMock />
             </div>
-            <div className="h-full w-(--shell-container-width) max-w-[60%] shrink-0 border-s">
-              {panel('side-panel')}
-            </div>
+            <div className="h-full w-96 max-w-[60%] shrink-0 border-s">{panel('side-panel')}</div>
           </div>
         ) : (
           <div className="relative h-full w-full overflow-hidden rounded-2xl border bg-background shadow-elevation-raised">
