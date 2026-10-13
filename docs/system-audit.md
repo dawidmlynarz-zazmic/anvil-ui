@@ -185,6 +185,9 @@ deprecated feature) are the verdict and its note.
 | Task Brief | Tasks · feature | Agent Builder (Tasks) | ready-to-use | — | ✓ | | new 2026-10-13; on Task Card + Value Stack |
 | Question Set | Tasks · feature | Agent Builder (Tasks) | ready-to-use | — | ✓ | | new 2026-10-13; on Task Card + Chip |
 | Task Plan | Tasks · feature | Agent Builder (Tasks) | ready-to-use | — | ✓ | | new 2026-10-13; on Task Card |
+| Task Settings | Tasks · feature | Agent Builder (Tasks) | ready-to-use | — | ✓ | | new 2026-10-13; on Task Card + Tabs + Switch |
+| Run Limits | Tasks · feature | Agent Builder (Tasks) | ready-to-use | — | ✓ | | new 2026-10-13; on Task Card + Slider + Progress |
+| Change Review | Tasks · feature | Agent Builder (Tasks) | ready-to-use | — | ✓ | | new 2026-10-13; on Task Card + Alert + Value Stack |
 
 Internal helpers (no story, not public): Citation Confidence (Citation Chip, Hovercard, Source
 Item), menu styles (Dropdown Menu, Context Menu, Menubar).
