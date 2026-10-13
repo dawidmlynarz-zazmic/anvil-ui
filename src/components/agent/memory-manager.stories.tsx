@@ -14,10 +14,43 @@ const MEMORIES = [
   { text: 'Leads the Northwind Sync launch at Northwind Labs', tag: 'Work' },
 ]
 
+type DemoProps = Omit<React.ComponentProps<typeof MemoryManager>, 'search' | 'action' | 'children'> & {
+  /** Story toggles for the optional parts: each is a prop you pass or leave out. */
+  showSearch?: boolean
+  showNote?: boolean
+  showClearAll?: boolean
+}
+
+function Demo({ showSearch, showNote, showClearAll, ...props }: DemoProps) {
+  return (
+    <MemoryManager
+      {...props}
+      note={showNote ? props.note : undefined}
+      className="max-w-130"
+      search={showSearch ? <MemoryManagerSearch placeholder="Search memories" /> : undefined}
+      action={
+        showClearAll ? (
+          <Button variant="ghost" intent="destructive" size="sm">
+            Clear all
+          </Button>
+        ) : undefined
+      }
+    >
+      {MEMORIES.map((memory) => (
+        <MemoryManagerItem key={memory.text} tag={memory.tag} onEdit={() => {}} onDelete={() => {}}>
+          {memory.text}
+        </MemoryManagerItem>
+      ))}
+    </MemoryManager>
+  )
+}
+
+const ALL = { showSearch: true, showNote: true, showClearAll: true }
+
 const meta = preview.meta({
   title: 'Agent Builder/Memory/Memory Manager',
   tags: ['agent-builder', 'memory'],
-  component: MemoryManager,
+  component: Demo,
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
@@ -56,6 +89,9 @@ const meta = preview.meta({
     description: 'Assistant remembers details from your chats to make answers more useful.',
     note: '4 memories · Only you can see them',
     onEnabledChange: fn(),
+    showSearch: false,
+    showNote: false,
+    showClearAll: false,
   },
   argTypes: {
     title: { control: 'text' },
@@ -63,32 +99,18 @@ const meta = preview.meta({
     note: { control: 'text' },
     enabled: { control: 'boolean' },
     defaultEnabled: { control: 'boolean' },
-    search: { control: false },
-    action: { control: false },
+    showSearch: { control: 'boolean', description: 'Story toggle: pass `search` or not' },
+    showNote: { control: 'boolean', description: 'Story toggle: pass `note` or not' },
+    showClearAll: { control: 'boolean', description: 'Story toggle: pass `action` (Clear all) or not' },
     onEnabledChange: { control: false, table: { category: 'Events' } },
   },
-  render: (args) => (
-    <MemoryManager
-      {...args}
-      className="max-w-130"
-      search={<MemoryManagerSearch placeholder="Search memories" />}
-      action={
-        <Button variant="ghost" intent="destructive" size="sm">
-          Clear all
-        </Button>
-      }
-    >
-      {MEMORIES.map((memory) => (
-        <MemoryManagerItem key={memory.text} tag={memory.tag} onEdit={() => {}} onDelete={() => {}}>
-          {memory.text}
-        </MemoryManagerItem>
-      ))}
-    </MemoryManager>
-  ),
 })
 
-/** Title, description, note and `enabled` are in Controls. */
+/** The switch and the memories. Search, the note and Clear all are toggles in Controls. */
 export const Default = meta.story()
+
+/** Every optional part on: search, the footer note and Clear all. The edge case, not the default. */
+export const Full = meta.story({ args: ALL })
 
 Default.test('the switch turns memory off', async ({ args, canvas }) => {
   const toggle = canvas.getByRole('switch', { name: 'Memory' })
@@ -101,7 +123,12 @@ Default.test('the switch turns memory off', async ({ args, canvas }) => {
 Default.test('each memory has edit and delete', async ({ canvas }) => {
   await expect(canvas.getAllByRole('listitem')).toHaveLength(4)
   await expect(canvas.getAllByRole('button', { name: /^Delete / })).toHaveLength(4)
+})
+
+Full.test('has search, a note and Clear all', async ({ canvas }) => {
   await expect(canvas.getByRole('searchbox', { name: 'Search memories' })).toBeVisible()
+  await expect(canvas.getByText('4 memories · Only you can see them')).toBeVisible()
+  await expect(canvas.getByRole('button', { name: 'Clear all' })).toBeVisible()
 })
 
 /** Memory off: the list stays readable in a muted tone. */

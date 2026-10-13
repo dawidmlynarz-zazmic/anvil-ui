@@ -41,10 +41,32 @@ const FILE_LIST = FILES.map((file) => (
   </Attachment>
 ))
 
+type DemoProps = React.ComponentProps<typeof ProjectSetup> & {
+  /** Story toggles for the optional parts: each is a prop you pass or leave out. */
+  showDescription?: boolean
+  showUploadHint?: boolean
+  showFiles?: boolean
+}
+
+function Demo({ showDescription, showUploadHint, showFiles, ...props }: DemoProps) {
+  return (
+    <ProjectSetup
+      {...props}
+      description={showDescription ? props.description : null}
+      uploadHint={showUploadHint ? props.uploadHint : null}
+      className="w-140"
+    >
+      {showFiles ? FILE_LIST : undefined}
+    </ProjectSetup>
+  )
+}
+
+const ALL = { showDescription: true, showUploadHint: true, showFiles: true }
+
 const meta = preview.meta({
   title: 'Agent Builder/Shell/Project Setup',
   tags: ['agent-builder'],
-  component: ProjectSetup,
+  component: Demo,
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
@@ -106,10 +128,16 @@ const meta = preview.meta({
     onSubmit: fn(),
     onCancel: fn(),
     onBrowse: fn(),
+    showDescription: false,
+    showUploadHint: false,
+    showFiles: false,
   },
   argTypes: {
     title: { control: 'text' },
     description: { control: 'text' },
+    showDescription: { control: 'boolean', description: 'Story toggle: pass `description` or not' },
+    showUploadHint: { control: 'boolean', description: 'Story toggle: pass `uploadHint` or not' },
+    showFiles: { control: 'boolean', description: 'Story toggle: pass the file rows (`children`) or not' },
     submitLabel: { control: 'text' },
     uploadHint: { control: 'text' },
     defaultValues: { control: 'object' },
@@ -118,14 +146,9 @@ const meta = preview.meta({
     onCancel: { control: false, table: { category: 'Events' } },
     onBrowse: { control: false, table: { category: 'Events' } },
   },
-  render: (args) => (
-    <ProjectSetup {...args} className="w-140">
-      {FILE_LIST}
-    </ProjectSetup>
-  ),
 })
 
-/** Title, labels and the starting values are in Controls. */
+/** Name and instructions. The description, upload hint and file rows are toggles in Controls. */
 export const Default = meta.story()
 
 Default.test('submits the name and instructions', async ({ canvas, args }) => {
@@ -139,7 +162,10 @@ Default.test('submits the name and instructions', async ({ canvas, args }) => {
   })
 })
 
-Default.test('removes a file and opens the file picker', async ({ canvas, args }) => {
+/** Every optional part on: the description, the upload hint and the file rows. The edge case, not the default. */
+export const Full = meta.story({ args: ALL })
+
+Full.test('removes a file and opens the file picker', async ({ canvas, args }) => {
   await userEvent.click(canvas.getByRole('button', { name: 'Remove q3-kpis.xlsx' }))
   await expect(onRemove).toHaveBeenCalledWith('q3-kpis.xlsx')
   await userEvent.click(canvas.getByRole('button', { name: 'browse' }))
@@ -148,13 +174,13 @@ Default.test('removes a file and opens the file picker', async ({ canvas, args }
 
 /** A new, empty project: no files yet. */
 export const Empty = meta.story({
-  args: { defaultValues: { name: '', instructions: '' } },
-  render: (args) => <ProjectSetup {...args} className="w-140" />,
+  args: { ...ALL, showFiles: false, defaultValues: { name: '', instructions: '' } },
 })
 
 /** Editing an existing project. */
 export const Edit = meta.story({
   args: {
+    ...ALL,
     title: 'Project settings',
     description: 'Changes apply to every chat in Q3 launch plan',
     submitLabel: 'Save changes',
