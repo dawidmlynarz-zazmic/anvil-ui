@@ -24,6 +24,7 @@ import {
   NetworkIcon,
   PenToolIcon,
   RecycleIcon,
+  SparklesIcon,
   SquareIcon,
   SunMoonIcon,
   type LucideIcon,
@@ -184,12 +185,16 @@ function Hero({ firstComponent }: { firstComponent?: string }) {
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
+          <Button asChild size="lg">
+            <StoryLink path="/story/showroom--assistant">
+              <Icon icon={SparklesIcon} />
+              Open the Showroom
+              <Icon icon={ArrowRightIcon} />
+            </StoryLink>
+          </Button>
           {firstComponent && (
-            <Button asChild size="lg">
-              <StoryLink path={firstComponent}>
-                Browse components
-                <Icon icon={ArrowRightIcon} />
-              </StoryLink>
+            <Button asChild size="lg" variant="outline" intent="neutral">
+              <StoryLink path={firstComponent}>Browse components</StoryLink>
             </Button>
           )}
           <Button asChild size="lg" variant="outline" intent="neutral">

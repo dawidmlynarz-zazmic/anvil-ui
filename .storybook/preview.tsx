@@ -133,7 +133,7 @@ export default definePreview({
       // AGENT_BUILDER_GROUPS in .storybook/taxonomy.ts); components A–Z inside a folder, stories in
       // file order.
       storySort: (a, b) => {
-        const sections = ['Welcome', 'Foundations', 'Design System', 'Agent Builder']
+        const sections = ['Welcome', 'Showroom', 'Foundations', 'Design System', 'Agent Builder']
         const folders = [
           'Atoms',
           'Molecules',
@@ -159,7 +159,8 @@ export default definePreview({
         const pa = a.title.split('/')
         const pb = b.title.split('/')
         if (pa[0] !== pb[0]) return (sections.indexOf(pa[0]) + 1 || 99) - (sections.indexOf(pb[0]) + 1 || 99)
-        if (pa[0] === 'Welcome' || pa[0] === 'Foundations' || a.title === b.title) return 0
+        if (pa[0] === 'Welcome' || pa[0] === 'Showroom' || pa[0] === 'Foundations' || a.title === b.title)
+          return 0
         if (pa[1] !== pb[1]) return (folders.indexOf(pa[1]) + 1 || 99) - (folders.indexOf(pb[1]) + 1 || 99)
         return a.title.localeCompare(b.title)
       },

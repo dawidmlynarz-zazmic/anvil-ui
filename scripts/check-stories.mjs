@@ -7,7 +7,7 @@
 // Figma has no properties) and explicit argTypes, and no story may use `play` (interactions are
 // Story.test). A component may not import a component of a higher level (atom < molecule < organism;
 // Agent Builder may use any), except Input and Textarea, which embed the Field anatomy. A meta with `show…` toggle controls must export a `Full` story (the edge case with every
-// part on; docs/content-guide.md › Streamlined defaults). Welcome is exempt.
+// part on; docs/content-guide.md › Streamlined defaults). Welcome and Showroom are exempt.
 import { globSync, readFileSync } from 'node:fs'
 
 // Mirrors .storybook/taxonomy.ts.
@@ -47,7 +47,7 @@ for (const file of files) {
     problems.push(`${file}: no title in preview.meta`)
     continue
   }
-  if (title === 'Welcome') continue
+  if (title === 'Welcome' || title === 'Showroom') continue
   const tags = [...(source.match(/^ {2}tags: \[([^\]]*)\]/m)?.[1].matchAll(/'([^']+)'/g) ?? [])].map(
     (m) => m[1],
   )
