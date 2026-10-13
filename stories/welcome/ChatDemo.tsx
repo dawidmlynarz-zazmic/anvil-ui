@@ -6,10 +6,15 @@ import { ClarifyingQuestion } from '@/components/agent/clarifying-question'
 import { FileOutputCard } from '@/components/agent/file-output-card'
 import { ImageGenerationCard } from '@/components/agent/image-generation-card'
 import { MemoryNotice } from '@/components/agent/memory-notice'
+import { ChangeItem, ChangeReview } from '@/components/agent/change-review'
 import { PromptInput } from '@/components/agent/prompt-input'
+import { QuestionSet, type Answers } from '@/components/agent/question-set'
 import { QuickReply, QuickReplyGroup } from '@/components/agent/quick-reply'
 import { Rating } from '@/components/agent/rating'
+import { RunLimits } from '@/components/agent/run-limits'
 import { StreamingPlaceholder } from '@/components/agent/streaming-placeholder'
+import { TaskBrief } from '@/components/agent/task-brief'
+import { TaskPlan, TaskPlanStep } from '@/components/agent/task-plan'
 import { ThinkingPanel, ThinkingPanelContent, ThinkingPanelTrigger } from '@/components/agent/thinking-panel'
 import {
   ToolCallAccordion,
@@ -18,9 +23,25 @@ import {
 } from '@/components/agent/tool-call-accordion'
 import { ToolCallItem, ToolCallItemTrigger } from '@/components/agent/tool-call-item'
 import { WidgetMetricCard, WidgetMetricGroup } from '@/components/agent/widget-metric-card'
+import { CheckRow } from '@/components/anvil/check-row'
+import { IconTile } from '@/components/anvil/icon-tile'
+import { Price } from '@/components/anvil/price'
+import { ProgressStep, ProgressSteps } from '@/components/anvil/progress-steps'
+import { RatingDisplay } from '@/components/anvil/rating-display'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
-import { BotIcon, CheckIcon, Icon, type LucideIcon } from '@/components/ui/icon'
+import {
+  BackpackIcon,
+  BotIcon,
+  CheckIcon,
+  ClockIcon,
+  DollarSignIcon,
+  FileTextIcon,
+  Icon,
+  WrenchIcon,
+  type LucideIcon,
+} from '@/components/ui/icon'
+import { Item, ItemContent, ItemDescription, ItemMedia, ItemTitle } from '@/components/ui/item'
 import { Marker, MarkerContent, MarkerIcon } from '@/components/ui/marker'
 import { Message, MessageAvatar, MessageContent, MessageGroup } from '@/components/ui/message'
 import { MessageBubble, MessageBubbleContent } from '@/components/ui/message-bubble'
@@ -34,7 +55,7 @@ import {
 } from '@/components/ui/message-scroller'
 
 // The Welcome hero's chat window: short, slightly silly conversations with an assistant, drawn with
-// the real Agent Builder components and played in a loop. Each loop picks another of five
+// the real Agent Builder components and played in a loop. Each loop picks another of eight
 // scenarios at random. Under reduced motion (or the Motion toolbar off) it shows one finished
 // conversation instead. The window is decorative: inert and hidden from assistive tech, with a text
 // description next to it.
@@ -57,6 +78,13 @@ type WidgetSpec =
   | { kind: 'replies'; items: string[] }
   | { kind: 'rating'; value?: number }
   | { kind: 'sources'; domains: string[] }
+  | { kind: 'questions'; answers?: Answers }
+  | { kind: 'brief'; approved?: boolean }
+  | { kind: 'plan'; approved?: boolean }
+  | { kind: 'limits' }
+  | { kind: 'changes'; accepted?: boolean }
+  | { kind: 'offer' }
+  | { kind: 'tracker'; step: number }
 
 type AgentTurn = {
   id: string
@@ -85,7 +113,7 @@ type Step =
 
 type Scenario = { name: string; steps: Step[] }
 
-// ── Five scenarios ─────────────────────────────────────────────────────────────────────────
+// ── Eight scenarios ─────────────────────────────────────────────────────────────────────────
 
 const SCENARIOS: Scenario[] = [
   {
@@ -334,6 +362,129 @@ const SCENARIOS: Scenario[] = [
       { do: 'widget', id: 'a2', widget: { kind: 'rating', value: 5 } },
     ],
   },
+  {
+    name: 'Research brief',
+    steps: [
+      { do: 'say', text: 'Research how competitors price team plans for sync tools.' },
+      { do: 'agent', id: 'a1' },
+      {
+        do: 'think',
+        id: 'a1',
+        title: 'Scoping the research',
+        done: 'Thought for 3s',
+        body: 'Pricing is only half the story. A few answers now will save a lot of reading later.',
+      },
+      { do: 'stream', id: 'a1', text: 'Three quick questions first, so I read the right things.' },
+      { do: 'widget', id: 'a1', widget: { kind: 'questions' } },
+      { do: 'pause', ms: 1600 },
+      {
+        do: 'widget',
+        id: 'a1',
+        widget: {
+          kind: 'questions',
+          answers: { regions: ['EU'], plans: ['Yes'], sources: ['Pricing pages'] },
+        },
+      },
+      { do: 'agent', id: 'a2' },
+      {
+        do: 'stream',
+        id: 'a2',
+        text: 'Thanks. Here’s the brief I’ll work from, nothing runs until you approve it.',
+      },
+      { do: 'widget', id: 'a2', widget: { kind: 'brief' } },
+      { do: 'say', text: 'Looks right. Go ahead.' },
+      { do: 'widget', id: 'a2', widget: { kind: 'brief', approved: true } },
+      { do: 'agent', id: 'a3' },
+      { do: 'stream', id: 'a3', text: 'Here’s how I’ll do it. Edit any step before I start.' },
+      { do: 'widget', id: 'a3', widget: { kind: 'plan' } },
+      { do: 'pause', ms: 1600 },
+      { do: 'widget', id: 'a3', widget: { kind: 'plan', approved: true } },
+      { do: 'marker', text: 'Research started · about 15 min', icon: ClockIcon },
+    ],
+  },
+  {
+    name: 'Research check-in',
+    steps: [
+      { do: 'say', text: 'How’s the research going? Don’t let it eat the budget.' },
+      { do: 'agent', id: 'a1' },
+      {
+        do: 'tools',
+        id: 'a1',
+        list: [
+          { name: 'sources.read', summary: '43 of 60 sources', duration: '0.9s' },
+          { name: 'usage.check', summary: '$9.00 of $10.00', duration: '0.4s' },
+        ],
+      },
+      { do: 'stream', id: 'a1', text: 'Past halfway, and the budget is nearly gone. Here’s where I am.' },
+      { do: 'widget', id: 'a1', widget: { kind: 'limits' } },
+      { do: 'agent', id: 'a2' },
+      { do: 'stream', id: 'a2', text: 'Also, I found something that changes the plan. Your call.' },
+      { do: 'widget', id: 'a2', widget: { kind: 'changes' } },
+      { do: 'say', text: 'Accept it. And add a few dollars to the budget.' },
+      { do: 'widget', id: 'a2', widget: { kind: 'changes', accepted: true } },
+      { do: 'agent', id: 'a3' },
+      { do: 'stream', id: 'a3', text: 'Done. Cost cap is now $15.00 and step 3 starts next.' },
+      { do: 'marker', text: 'Budget extended · $15.00', icon: CheckIcon },
+    ],
+  },
+  {
+    name: 'Daypack hunt',
+    steps: [
+      { do: 'say', text: 'Find me a waterproof daypack under $150. I get rained on a lot.' },
+      { do: 'agent', id: 'a1' },
+      {
+        do: 'tools',
+        id: 'a1',
+        list: [
+          { name: 'catalog.search', summary: '12 packs under $150', duration: '1.3s' },
+          { name: 'reviews.summarise', summary: '1,204 reviews read', duration: '1.0s' },
+        ],
+      },
+      {
+        do: 'stream',
+        id: 'a1',
+        text: 'One stands out: fully taped seams, a rain cover and a decent sale on.',
+      },
+      { do: 'widget', id: 'a1', widget: { kind: 'offer' } },
+      { do: 'say', text: 'Order it. I need it by Friday.' },
+      { do: 'agent', id: 'a2' },
+      {
+        do: 'widget',
+        id: 'a2',
+        widget: {
+          kind: 'approval',
+          title: 'Place the order',
+          subtitle: 'Shop · place_order',
+          fields: [
+            ['Item', 'Trailhead 28L daypack'],
+            ['Total', '$119.00'],
+            ['Arrives', 'Thu 16th'],
+          ],
+        },
+      },
+      { do: 'pause', ms: 1400 },
+      {
+        do: 'widget',
+        id: 'a2',
+        widget: {
+          kind: 'approval',
+          title: 'Place the order',
+          subtitle: 'Shop · place_order',
+          fields: [
+            ['Item', 'Trailhead 28L daypack'],
+            ['Total', '$119.00'],
+            ['Arrives', 'Thu 16th'],
+          ],
+          approved: true,
+        },
+      },
+      { do: 'agent', id: 'a3' },
+      { do: 'stream', id: 'a3', text: 'Ordered. It lands a day before your deadline. Here’s the tracker.' },
+      { do: 'widget', id: 'a3', widget: { kind: 'tracker', step: 1 } },
+      { do: 'pause', ms: 1800 },
+      { do: 'widget', id: 'a3', widget: { kind: 'tracker', step: 2 } },
+    ],
+  },
 ]
 
 // ── Playing it ─────────────────────────────────────────────────────────────────────────────
@@ -419,6 +570,17 @@ function useReducedMotion() {
   return reduced
 }
 
+/** `?scenario=N` (0-based) pins one scenario: it plays on repeat, and the reduced-motion view shows it. */
+const pinned = (): number | null => {
+  const n = Number(new URLSearchParams(window.location.search).get('scenario'))
+  return Number.isInteger(n) &&
+    n >= 0 &&
+    n < SCENARIOS.length &&
+    new URLSearchParams(window.location.search).has('scenario')
+    ? n
+    : null
+}
+
 /** Picks the next scenario at random, never the same one twice in a row. */
 const nextScenario = (previous: number) => {
   const others = SCENARIOS.map((_, i) => i).filter((i) => i !== previous)
@@ -427,7 +589,7 @@ const nextScenario = (previous: number) => {
 
 function useScript(reduced: boolean) {
   const [state, setState] = useState<State>({ turns: [], draft: '' })
-  const [scenario, setScenario] = useState(() => Math.floor(Math.random() * SCENARIOS.length))
+  const [scenario, setScenario] = useState(() => pinned() ?? Math.floor(Math.random() * SCENARIOS.length))
 
   useEffect(() => {
     if (reduced) return
@@ -479,7 +641,7 @@ function useScript(reduced: boolean) {
           await wait(step.do === 'say' ? 500 : 650)
         }
         await wait(4200)
-        current = nextScenario(current)
+        current = pinned() ?? nextScenario(current)
       }
     }
     play().catch(() => {})
@@ -490,7 +652,8 @@ function useScript(reduced: boolean) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reduced])
 
-  return reduced ? { ...finished(SCENARIOS[0]), scenario: 0 } : { ...state, scenario }
+  const first = pinned() ?? 0
+  return reduced ? { ...finished(SCENARIOS[first]), scenario: first } : { ...state, scenario }
 }
 
 // ── Rendering ──────────────────────────────────────────────────────────────────────────────
@@ -501,6 +664,97 @@ const COSMIC =
   encodeURIComponent(
     '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9"><defs><radialGradient id="g" cx="0.3" cy="0.3" r="1"><stop offset="0" stop-color="#e9d5ff"/><stop offset="0.5" stop-color="#a5b4fc"/><stop offset="1" stop-color="#1e1b4b"/></radialGradient></defs><rect width="16" height="9" fill="url(#g)"/></svg>',
   )
+
+const RESEARCH_QUESTIONS = [
+  { id: 'regions', question: 'Which regions matter most?', options: ['US', 'EU', 'UK', 'All of them'] },
+  { id: 'plans', question: 'Include free and trial plans?', options: ['Yes', 'No'] },
+  {
+    id: 'sources',
+    question: 'Preferred source types?',
+    options: ['Pricing pages', 'Analyst reports', 'News'],
+    multiple: true,
+  },
+]
+
+const BRIEF_FIELDS = [
+  { label: 'Objective', value: 'Compare team-plan pricing and find where Northwind Sync can win' },
+  { label: 'Audience', value: 'Launch team' },
+  { label: 'Time range', value: 'Last 12 months' },
+  { label: 'Geography', value: 'EU' },
+  { label: 'Depth', value: 'Standard · 40–60 sources' },
+  { label: 'Out of scope', value: 'Enterprise contracts' },
+]
+
+const PLAN_STEPS = [
+  { title: 'Map the competitors', description: 'List the tools teams compare.', tags: ['Pricing pages'] },
+  {
+    title: 'Collect team-plan prices',
+    description: 'Per-seat prices and annual discounts.',
+    tags: ['Pricing pages'],
+  },
+  {
+    title: 'Compare feature limits',
+    description: 'Storage, history and admin controls.',
+    tags: ['Pricing pages'],
+  },
+  { title: 'Recommend positioning', description: 'Where Northwind Sync can win.', tags: ['Analyst reports'] },
+]
+
+const LIMITS = [
+  {
+    id: 'time',
+    icon: ClockIcon,
+    label: 'Time',
+    value: 15,
+    min: 0,
+    max: 15,
+    used: 11.7,
+    display: '15 min',
+    usedDisplay: '11m 40s / 15 min',
+  },
+  {
+    id: 'sources',
+    icon: FileTextIcon,
+    label: 'Sources',
+    value: 60,
+    min: 0,
+    max: 60,
+    used: 43,
+    display: '60 max',
+    usedDisplay: '43 / 60',
+  },
+  {
+    id: 'calls',
+    icon: WrenchIcon,
+    label: 'Tool calls',
+    value: 150,
+    min: 0,
+    max: 150,
+    used: 92,
+    display: '150 max',
+    usedDisplay: '92 / 150',
+  },
+  {
+    id: 'cost',
+    icon: DollarSignIcon,
+    label: 'Cost cap',
+    value: 10,
+    min: 0,
+    max: 10,
+    used: 9,
+    display: '$10.00',
+    usedDisplay: '$9.00 / $10.00',
+    near: true,
+    hint: 'You are close to the cost cap.',
+  },
+]
+
+const TRACKER = [
+  { label: 'Ordered', meta: 'Mon 13' },
+  { label: 'Packed', meta: 'Tue 14' },
+  { label: 'Shipped', meta: 'Wed 15' },
+  { label: 'Delivered', meta: 'Thu 16' },
+]
 
 function Widget({ widget }: { widget: WidgetSpec }) {
   switch (widget.kind) {
@@ -580,6 +834,119 @@ function Widget({ widget }: { widget: WidgetSpec }) {
       )
     case 'rating':
       return <Rating kind="stars" question="How did I do?" value={widget.value} />
+    case 'questions':
+      return (
+        <QuestionSet
+          title="Before I start"
+          subtitle="3 quick questions to sharpen the brief"
+          questions={RESEARCH_QUESTIONS}
+          value={widget.answers ?? {}}
+          answeredSubmitLabel="Update brief"
+        />
+      )
+    case 'brief':
+      return (
+        <TaskBrief
+          status={widget.approved ? 'approved' : 'review'}
+          title="Research brief"
+          subtitle={widget.approved ? 'Approved · running' : 'Review before I start · ~15 min'}
+          questionLabel="Research question"
+          question="How do team plans for sync tools compare on price, and where can Northwind Sync win?"
+          fields={BRIEF_FIELDS}
+          approvedNote="Approved · 14:02 · you can still edit while it runs"
+        />
+      )
+    case 'plan':
+      return (
+        <TaskPlan
+          status={widget.approved ? 'approved' : 'review'}
+          title="Research plan"
+          subtitle="4 steps · ~15 min · 40–60 sources"
+          note="Estimated 15 min · up to 60 sources"
+          approvedNote="Approved · research running"
+        >
+          {PLAN_STEPS.map((step, i) => (
+            <TaskPlanStep key={step.title} index={i + 1} {...step} />
+          ))}
+        </TaskPlan>
+      )
+    case 'limits':
+      return (
+        <RunLimits
+          status="near-limit"
+          title="Budget & limits"
+          subtitle="Running · 11m 40s"
+          badge="90% of cost cap"
+          limits={LIMITS}
+          warning="At this rate the run needs about $1.40 more to finish all steps."
+          extendLabel="Extend by $5"
+        />
+      )
+    case 'changes':
+      return (
+        <ChangeReview
+          status={widget.accepted ? 'accepted' : 'review'}
+          title="Plan update"
+          subtitle={
+            widget.accepted ? 'Plan updated · research continuing' : 'I found something that changes the plan'
+          }
+          reason="Two sources say annual plans drop the per-seat price by about 20%, so I suggest adding a step for it."
+          impact={[
+            { label: 'Time', value: '+4 min' },
+            { label: 'Sources', value: '+8' },
+            { label: 'Cost', value: '+$0.60' },
+          ]}
+          acceptedNote="Accepted · 14:07 · step 3 starts next"
+        >
+          <ChangeItem title="Map the competitors" detail="Done · 9 sources" />
+          <ChangeItem
+            change="added"
+            title="Compare annual discounts"
+            detail="Annual billing as a price lever."
+          />
+          <ChangeItem
+            change="removed"
+            title="Scan social media sentiment"
+            detail="Low value; saves about 3 minutes."
+          />
+        </ChangeReview>
+      )
+    case 'offer':
+      return (
+        <Item variant="outline" size="sm" className="flex-nowrap items-start">
+          <ItemMedia>
+            <IconTile icon={BackpackIcon} tone="info" size="default" />
+          </ItemMedia>
+          <ItemContent className="gap-2">
+            <ItemTitle>Trailhead 28L daypack</ItemTitle>
+            <ItemDescription className="line-clamp-none">
+              <RatingDisplay display="compact" value={4.6} label="4.6 · 1,204 reviews" />
+            </ItemDescription>
+            <div className="flex flex-col gap-1">
+              <CheckRow status="included">Waterproof, taped seams</CheckRow>
+              <CheckRow status="included">Rain cover</CheckRow>
+              <CheckRow status="fee">Gift wrap · $4</CheckRow>
+              <CheckRow status="excluded">Lifetime warranty</CheckRow>
+            </div>
+            <Price size="default" emphasis="sale" current="$119" was="$148" discount="−20%" />
+          </ItemContent>
+        </Item>
+      )
+    case 'tracker':
+      return (
+        <div className="rounded-xl border bg-card p-4">
+          <ProgressSteps aria-label="Delivery progress">
+            {TRACKER.map((step, i) => (
+              <ProgressStep
+                key={step.label}
+                label={step.label}
+                meta={step.meta}
+                status={i < widget.step ? 'done' : i === widget.step ? 'current' : 'upcoming'}
+              />
+            ))}
+          </ProgressSteps>
+        </div>
+      )
     case 'sources':
       return (
         <div className="flex flex-wrap gap-1">
@@ -675,8 +1042,10 @@ export function ChatDemo() {
     <figure className="m-0 flex flex-col gap-2">
       <figcaption className="sr-only">
         An example assistant built with Anvil UI, playing short conversations in a loop: planning a team
-        offsite, rescuing an office fern, summarising launch numbers, drafting a farewell email and making a
-        launch image. It shows reasoning, tool calls, questions, approvals, memory and generated files.
+        offsite, rescuing an office fern, summarising launch numbers, drafting a farewell email, making a
+        launch image, scoping and planning a research task, checking its budget mid-run, and ordering a
+        daypack from a shop. It shows reasoning, tool calls, questions, approvals, memory, generated files,
+        task plans, limits and order tracking.
       </figcaption>
       <div
         inert
