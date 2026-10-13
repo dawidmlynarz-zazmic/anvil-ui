@@ -181,6 +181,10 @@ deprecated feature) are the verdict and its note.
 | Proactive Drawer | Proactive · feature | Agent Builder (In-page assist) | ready-to-use | — | ✓ | new 2026-10-13; peek = Announcement Bar (bottom); expanded = non-modal Drawer + Shell Header / Footer + Icon Tile + Button |
 | Element Spotlight | Ambient overlay · feature | Agent Builder (In-page assist) | ready-to-use | — | ✓ | new 2026-10-13; on Badge (solid pill tag); border in the status colour |
 | Co-browse Bar | Ambient overlay · feature | Agent Builder (In-page assist) | ready-to-use | — | ✓ | new 2026-10-13; inverse pill on Button (inverse intent) + Pulse Dot |
+| Task Card | Tasks · feature | Agent Builder (Tasks) | composite | Task Brief, Question Set, Task Plan | ✓ | | new 2026-10-13; shared card for the Tasks patterns |
+| Task Brief | Tasks · feature | Agent Builder (Tasks) | ready-to-use | — | ✓ | | new 2026-10-13; on Task Card + Value Stack |
+| Question Set | Tasks · feature | Agent Builder (Tasks) | ready-to-use | — | ✓ | | new 2026-10-13; on Task Card + Chip |
+| Task Plan | Tasks · feature | Agent Builder (Tasks) | ready-to-use | — | ✓ | | new 2026-10-13; on Task Card |
 
 Internal helpers (no story, not public): Citation Confidence (Citation Chip, Hovercard, Source
 Item), menu styles (Dropdown Menu, Context Menu, Menubar).
