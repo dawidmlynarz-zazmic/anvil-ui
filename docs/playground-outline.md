@@ -1,96 +1,99 @@
-# Anvil Playground — outline for approval
+# Anvil Showroom — playground concept (v2, for approval)
 
-Status: **proposal, nothing built.** Scope stays as in `docs/roadmap.md`: local development only (no
-hosting). Written 2026-10-13, after the component library reached ~87% of the catalog.
+Status: **proposal, nothing built.** Replaces the first outline. This version is about **showing what the
+design system can do**, not checking it against Figma (that stays in Storybook and the quality pass).
+Scope as in `docs/roadmap.md`: local development, no hosting.
 
-## 1. Why a playground, when we have Storybook
+## The pitch in one line
 
-Storybook documents **one component at a time**. An agent product is **a conversation made of many
-components in a surface** (a chat shell in a popover, a plan being approved, a budget running out). Today
-the only place that is shown together is the Welcome page's chat demo. The playground answers questions
-Storybook cannot:
+*One design system, any agent, any surface, any brand — and you can watch it work.*
 
-- *Does it hold together?* A thread of ten components, in four shell sizes, light and dark.
-- *Can I show it to someone?* A guided, scripted conversation a designer or stakeholder can play and pause.
-- *Can I try my case?* Edit a conversation and see it, without writing React.
-- *Does it match Figma?* Every component × state × theme in one grid, next to the Figma image.
+Storybook shows 170 parts on a shelf. The Showroom shows what they become together: a conversation that
+books a trip, plans a research task, hands off to a human, acts on a web page — in four surfaces, light
+and dark, in anyone's brand colours.
 
-## 2. Who it is for
+## Audiences
 
-| Audience | What they do there |
-| --- | --- |
-| Designers / design lead | Play scenarios, compare with Figma, flag differences, try a conversation of their own |
-| Engineers | See components in context, copy the TSX, check a state or a long-text case |
-| Product / stakeholders | Watch a domain scenario (booking, research, support) in a real shell |
-| QA | Run the state matrix and the automated sweep (visual and axe) |
+Clients and stakeholders (a demo they can drive), designers (see the range), engineers (see how it is
+composed), and Zazmic sales (a 5-minute guided tour, in presentation mode).
 
-## 3. The shape: five rooms in one app
+## Six experiences
 
-A small Vite app (the repo already has `pnpm dev` for a playground), `src/playground/`, with a left
-rail and a top bar. State lives in the URL hash, so any view can be shared as a link.
+**1 · One agent, every surface** (the opener). A single scripted conversation rendered at once as a full
+screen app, a side panel beside a host product, a launcher popover on a web page and a mobile sheet,
+in device frames, in sync. Play it and all four move together. Switch light and dark, reduce motion.
+*Shows: the same components adapt through shell tokens, no per-surface code.*
 
-1. **Scenarios** (the main room). A gallery of scripted conversations rendered in a **Shell Frame**
-   (full screen · side panel · popover · mobile, switchable). A player bar: play · pause · step ·
-   speed · restart, and a scrubber over the script's steps. Reduced motion and the Motion toolbar are
-   respected. Scenarios come in two sets:
-   - *Domain scenarios* (from the Figma domain kits): Ticketing, Deep Research, Booking, Travel,
-     E-Commerce, Financial, Workspace, Customer Support.
-   - *Templates* (Figma Surfaces › Threads): ticketing, welcome, connecting, unavailable, human handoff.
-2. **Composer** (phase 2). A thread builder: add a message, then drop a component from a palette (the
-   Agent Builder catalog, grouped as in Storybook) into the assistant's turn. A controls panel edits its
-   props, generated from the same `argTypes` the stories use. Output: a shareable link, a JSON script,
-   and a copy-ready TSX snippet.
-3. **Script editor** (phase 2, with the Composer). The conversation as JSON in the language the Welcome
-   demo already uses (`say`, `agent`, `think`, `tools`, `stream`, `widget`, `marker`, `pause`), with
-   live preview and errors shown inline. This is also how scenarios are authored.
-4. **State matrix** (phase 1). For any component: a grid of variants × states × light/dark × the four
-   shell sizes, built from the stories, with the Figma screenshot beside each cell and the component's
-   open flags (from `docs/component-status.md`) listed. A **Sweep** button renders every component and
-   records pass or fail (axe, overflow, console errors) and a screenshot, for diffing between commits.
-5. **Lab** (phase 3). Toggles for the things that break layouts: long text, RTL, 200% zoom, forced
-   colors, reduced motion, loading / empty / error injected into widgets, a throttled “streaming” mode.
+**2 · The agent on your page** (the wow). A believable host app (a travel-booking site) with the agent
+living in it: select text and the Selection Toolbar appears; ⌘K opens the Command Palette and parses
+“book 2 tickets Saturday”; an Announcement Bar and a Proactive Drawer nudge you; Element Spotlight and
+the Co-browse Bar fill a form while you watch, with Pause, Take over and Stop that really work.
+*Shows: the whole In-page assist group, interactive, on a page that is not ours.*
 
-## 4. How it is built (no new dependencies)
+**3 · Industry stories** (the library). Eight scripted scenarios, each a few minutes: Travel and booking,
+E-commerce (offer, order, tracking), Customer support with a human handoff, Deep research (brief, plan,
+limits, change, summary), Financial review, Workspace and documents, Ticketing, HR onboarding. Each
+has a side panel “what is in play” listing the patterns used, with links to their Storybook pages, and
+a speed control. *Shows: the pattern groups composing into real products.*
 
-- **Extract the script engine.** The Welcome page's `ChatDemo` already has a script language, a player
-  loop and a widget vocabulary. Move the engine to `src/playground/engine` (types, `apply`, the
-  playing loop, reduced-motion hook) and make the Welcome demo a consumer. One engine, two users.
-- **Widgets stay data.** A scenario is data (`WidgetSpec`), rendered by one `Widget` switch that maps a
-  kind to a real component, so adding a component to the playground is one case plus one palette entry.
-  Every Tasks and Evidence pattern is already a self-contained component with props, so this is cheap.
-- **Shell Frame** reuses Chat Shell, Sheet, Launcher popover and Drawer exactly as the stories do, with
-  `data-shell` tokens, so the four sizes are real rather than faked.
-- **Controls panel** reads `argTypes` from the CSF stories (they are required by lint), so it never drifts.
-- **State matrix** reads `args` and story names the same way and uses the existing light and dark
-  decorators; screenshots use the browser already in the test setup (Vitest browser mode).
-- **Tests**: a smoke test per scenario (plays to the end, no axe violations, no console errors), run
-  with `pnpm test-storybook`'s runner so scenarios cannot rot.
-- **Where it lives in Storybook**: one “Examples” section links into the playground rooms. Storybook
-  stays the reference; the playground is the workbench.
+**4 · Make it yours** (brand and density lab). Pick an accent, a radius, a density and a type scale, or a
+preset (Zazmic, Finance, Playful, Mono), and every scenario re-themes live by overriding the CSS
+variables on the frame (client-side, nothing saved, tokens untouched). *Shows: white-label potential.*
 
-## 5. Phases
+**5 · X-ray** (how it is built). Toggle an overlay on any scenario: hover a card to see its name and level
+(atom · molecule · organism · pattern) and an expandable “built with” tree (Task Plan → Task Card →
+Shell Header → Icon Tile → Icon), from the relationship data the docs already generate.
+*Shows: composability and reuse, the thing that makes the system cheap to extend.*
 
-| Phase | Delivers | Size |
+**6 · Accessibility and resilience**. A keyboard-only mode that draws the focus path; a **live “what a
+screen reader hears” panel** beside the conversation (roles, names, live-region announcements); reduced
+motion; and injectors: streaming, offline, error, empty, very long text. *Shows: it is accessible and
+robust by construction, not by demo.*
+
+**Presentation mode** (across all six). Full-screen, chrome hidden, arrow keys step through scenarios,
+an auto-advance timer, a laser-pointer cursor. A guided **tour** strings experiences 1 → 2 → 3 → 5 → 4
+in about five minutes with short captions.
+
+## How it is built
+
+- A small Vite app (the repo already has `pnpm dev`), `src/showroom/`, hash-routed so every view is a link.
+- **One engine.** Extract the Welcome page's chat demo script language (`say`, `agent`, `think`, `tools`,
+  `stream`, `widget`, `marker`, `pause`) into `src/showroom/engine`; the Welcome demo and all scenarios
+  use it. A new widget kind is one case in one switch; every Tasks and Evidence pattern is already a
+  props-driven component, so scenarios are mostly data.
+- **Surfaces are real.** Chat Shell, Sheet, the Launcher popover and Drawer exactly as in Storybook, with
+  `data-shell` tokens: the four sizes are real, not mock-ups.
+- **The host app** for experience 2 is a few plain components in the repo (no external site), with the
+  In-page assist components wired to its elements.
+- **Theme lab** sets CSS variables on a wrapper element; **X-ray** reads the same relationship data as the
+  docs pages and wraps rendered parts in an inspectable boundary; the **screen-reader panel** reads the
+  accessibility tree of the frame (roles and names) and the live regions as they update.
+- No new dependencies. Smoke test per scenario in the existing runner (plays to the end, no axe
+  violations, no console errors).
+
+## Phases
+
+| Phase | Delivers | Needs |
 | --- | --- | --- |
-| **P0 Foundation** | Engine extracted, Welcome demo on it, app shell (rail, top bar, hash state), Shell Frame | 1 PR |
-| **P1 Scenarios + Matrix** | 8 domain scenarios + 5 templates; State matrix and Sweep (also the Figma-vs-code QA tool) | 3 PRs |
-| **P2 Composer + Script editor** | Palette, controls panel, JSON editor, share link, TSX export | 2 PRs |
-| **P3 Lab** | The toggles above | 1 PR |
+| **P0** | Engine extracted, app shell, surface frames, presentation mode | now |
+| **P1** | Experience 1 (every surface) + the first three industry stories (research, daypack/shop, support) | existing patterns |
+| **P2** | Experience 2 (the agent on your page) | In-page assist: done |
+| **P3** | X-ray, and the screen-reader panel | relationship data: done |
+| **P4** | Theme lab | P1 |
+| **P5** | Remaining industry stories and the guided tour | Catalog, Checkout, Trust groups |
 
-The scenarios need the last three pattern groups (Catalog, Checkout, Trust), so P0 and the State matrix
-can start now and the domain scenarios land as those groups do.
+The Catalog, Checkout and Trust groups can continue in parallel: P0–P4 do not need them.
 
-## 6. Out of scope (for now)
+## Out of scope
 
-Hosting or auth; real model calls (the agent is always scripted); editing tokens (Figma is the source of
-truth); a visual drag-and-drop page builder; saving scenarios to a server.
+Hosting or auth; real model calls (the agent is always scripted); saving or sharing to a server; editing
+the real tokens; a drag-and-drop page builder (a Composer could follow later, built on the same engine).
 
-## 7. Decisions needed
+## Decisions needed
 
-1. **Where it lives:** the existing Vite app (proposed) or only as Storybook stories?
-2. **Scope of v1:** Scenarios + State matrix first (proposed), with the Composer after, or Composer first?
-3. **Scenario list:** confirm the eight domain kits and five templates, and any you would add or drop.
-4. **Figma overlay** in the State matrix: use exported Figma screenshots checked into the repo
-   (proposed: stable, offline) or fetch them live through the Figma MCP (always current, needs the
-   connection)?
-5. **Sharing:** URL-hash links only (proposed), or also a downloadable scenario JSON file?
+1. **Audience first:** internal design review, or client demos? (It changes how polished P1 must be.)
+2. **The opener:** experience 1 (every surface) or experience 2 (the agent on your page)? I would open
+   with 2 once P0 is done, and use 1 as the establishing shot.
+3. **Theme lab ambition:** a live preview only (proposed), or also export the overrides as a token file?
+4. **Name:** “Showroom”, or keep “Playground”?
+5. **Where:** a separate Vite app inside the repo (proposed), or a section of Storybook?
