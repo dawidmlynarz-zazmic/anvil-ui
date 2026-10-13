@@ -306,3 +306,29 @@ export const InlineNote = meta.story({
     </div>
   ),
 })
+
+/** Figma part / inline note `shape`: inset (in body padding) · full-bleed (card edge to edge) · rule (a start rule). */
+export const Shapes = meta.story({
+  parameters: { design: { type: 'figma', url: FIGMA_INLINE_NOTE } },
+  render: () => (
+    <div className="grid max-w-180 gap-x-6 gap-y-3 md:grid-cols-3">
+      {(['inset', 'full-bleed', 'rule'] as const).map((shape) =>
+        TONES.map((tone) => (
+          <Alert key={`${shape}-${tone}`} tone={tone} size="xs" shape={shape}>
+            <Icon icon={toneIcon[tone]} />
+            <AlertDescription>{toneCopy[tone][1]}</AlertDescription>
+          </Alert>
+        )),
+      )}
+    </div>
+  ),
+})
+
+Shapes.test('the shapes draw their own edges', async ({ canvasElement }) => {
+  const rule = canvasElement.querySelector<HTMLElement>('[data-shape=rule]')!
+  await expect(getComputedStyle(rule).borderInlineStartWidth).toBe('2px')
+  await expect(getComputedStyle(rule).borderTopWidth).toBe('0px')
+  const bleed = canvasElement.querySelector<HTMLElement>('[data-shape=full-bleed]')!
+  await expect(getComputedStyle(bleed).borderRadius).toBe('0px')
+  await expect(getComputedStyle(bleed).borderLeftWidth).toBe('0px')
+})

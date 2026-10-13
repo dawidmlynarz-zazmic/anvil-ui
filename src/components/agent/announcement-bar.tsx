@@ -10,8 +10,8 @@ import { Icon, SparklesIcon, TagIcon, TriangleAlertIcon, XIcon, type LucideIcon 
 // agent shows on the host page without being asked. Built from existing parts, nothing re-drawn.
 // Figma `tone` info · alert · opportunity → `tone` agent · warning · success (the contract's tone
 // names); the default glyph is sparkles · alert triangle · tag.
-// - position top: an Alert (size sm, tinted, role="status") stretched across the top edge — no side
-//   or top stroke, a --space-lg start padding — with the message as its title, `action` (outline xs
+// - position top: an Alert (size sm, shape full-bleed, tinted, role="status") across the top edge — no side
+//   stroke, no top stroke, a --space-lg start padding — with the message as its title, `action` (outline xs
 //   Button) + Snooze (ghost xs) and the dismiss X.
 // - position bottom: a floating pill — --popover, --border, radius full, 8px padding, 12px gap,
 //   elevation/raised (Figma shadow/lg) — with a 32px circle Icon Tile, the message (text/sm/medium),
@@ -99,7 +99,8 @@ function AnnouncementBar({
             </>
           )
         }
-        className={cn('rounded-none border-x-0 border-t-0 ps-(--space-lg) pe-4', className)}
+        shape="full-bleed"
+        className={cn('border-t-0 ps-(--space-lg) pe-4', className)}
         {...props}
       >
         <Icon icon={glyph} />
