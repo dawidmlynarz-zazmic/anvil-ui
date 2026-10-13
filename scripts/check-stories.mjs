@@ -5,7 +5,8 @@
 // as `parameters.shadcn: '<slug>'`, parameters.layout, a Figma link
 // (parameters.design), the usage guide (parameters.guide, starting with `use`), the Figma → code table (parameters.figmaProps; `[]` with a comment when
 // Figma has no properties) and explicit argTypes, and no story may use `play` (interactions are
-// Story.test). Welcome is exempt.
+// Story.test). A meta with `show…` toggle controls must export a `Full` story (the edge case with every
+// part on; docs/content-guide.md › Streamlined defaults). Welcome is exempt.
 import { globSync, readFileSync } from 'node:fs'
 
 // Mirrors .storybook/taxonomy.ts.
@@ -78,6 +79,12 @@ for (const file of files) {
   if (!/^ {4}guide: \{\n {6}use: \[/m.test(source))
     problems.push(`${file}: no parameters.guide (Usage: use, avoid, content, a11y)`)
   if (/^\s+play:/m.test(source)) problems.push(`${file}: uses play (use Story.test instead)`)
+  if (
+    levels[0] === 'agent-builder' &&
+    /^ {4}show[A-Z]\w*: \{ control/m.test(source) &&
+    !/^export const Full = /m.test(source)
+  )
+    problems.push(`${file}: has show… toggles but no Full story (every optional part on)`)
 }
 
 if (problems.length) {

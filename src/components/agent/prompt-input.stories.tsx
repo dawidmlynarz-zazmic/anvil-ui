@@ -117,13 +117,30 @@ type DemoProps = {
   size?: 'default' | 'compact'
   status?: 'idle' | 'streaming'
   listening?: boolean
+  /** Story toggles for the optional parts: each is a prop you pass or leave out. */
+  showAttach?: boolean
+  showTools?: boolean
+  showVoice?: boolean
+  showTokenCount?: boolean
   withFiles?: boolean
   defaultValue?: string
   onSubmit?: (value: string) => void
   onStop?: () => void
 }
 
-function Demo({ size, status, listening, withFiles, defaultValue, onSubmit, onStop }: DemoProps) {
+function Demo({
+  size,
+  status,
+  listening,
+  showAttach,
+  showTools,
+  showVoice,
+  showTokenCount,
+  withFiles,
+  defaultValue,
+  onSubmit,
+  onStop,
+}: DemoProps) {
   const [voice, setVoice] = useState(listening ?? false)
   return (
     <PromptInput
@@ -134,11 +151,11 @@ function Demo({ size, status, listening, withFiles, defaultValue, onSubmit, onSt
       placeholder="Ask Assistant anything…"
       onSubmit={onSubmit}
       onStop={onStop}
-      onVoice={() => setVoice((v) => !v)}
-      attachMenu={<AttachItems />}
+      onVoice={showVoice ? () => setVoice((v) => !v) : undefined}
+      attachMenu={showAttach ? <AttachItems /> : undefined}
       attachMenuProps={{ modal: false }}
-      tools={<Tools />}
-      tokenCount="1,204 / 200k"
+      tools={showTools ? <Tools /> : undefined}
+      tokenCount={showTokenCount ? '1,204 / 200k' : undefined}
       attachments={withFiles ? <Files /> : undefined}
     />
   )
@@ -199,11 +216,26 @@ const meta = preview.meta({
       },
     },
   },
-  args: { size: 'default', status: 'idle', listening: false, withFiles: false, onSubmit: fn(), onStop: fn() },
+  args: {
+    size: 'default',
+    status: 'idle',
+    listening: false,
+    showAttach: false,
+    showTools: false,
+    showVoice: false,
+    showTokenCount: false,
+    withFiles: false,
+    onSubmit: fn(),
+    onStop: fn(),
+  },
   argTypes: {
     size: { control: 'inline-radio', options: ['default', 'compact'] },
     status: { control: 'inline-radio', options: ['idle', 'streaming'] },
     listening: { control: 'boolean' },
+    showAttach: { control: 'boolean', description: 'Story toggle: pass `attachMenu` or not' },
+    showTools: { control: 'boolean', description: 'Story toggle: pass `tools` or not' },
+    showVoice: { control: 'boolean', description: 'Story toggle: pass `onVoice` or not' },
+    showTokenCount: { control: 'boolean', description: 'Story toggle: pass `tokenCount` or not' },
     withFiles: { control: 'boolean' },
     defaultValue: { control: 'text' },
     onSubmit: { control: false, table: { category: 'Events' } },
@@ -211,7 +243,7 @@ const meta = preview.meta({
   },
 })
 
-/** Size, status, listening and files are in Controls. Type and press Enter. */
+/** The everyday composer: the field and Send. Attach, tools, voice, token count and files are toggles in Controls. Type and press Enter. */
 export const Default = meta.story()
 
 Default.test('send is off while empty; Enter sends the text', async ({ canvas, args }) => {
@@ -223,8 +255,14 @@ Default.test('send is off while empty; Enter sends the text', async ({ canvas, a
   await expect(field).toHaveValue('')
 })
 
+/** Every optional part on: attach, tools, voice, token count and files. The edge case, not the default. */
+export const Full = meta.story({
+  args: { showAttach: true, showTools: true, showVoice: true, showTokenCount: true, withFiles: true },
+})
+
 /** Figma state × size: empty, typing, file attached, voice active, streaming. */
 export const States = meta.story({
+  args: { showAttach: true, showTools: true, showVoice: true, showTokenCount: true },
   render: (args) => (
     <div className="flex flex-col gap-6">
       {(['default', 'compact'] as const).map((size) => (
@@ -260,6 +298,7 @@ export const Compact = meta.story({ args: { size: 'compact' } })
  * (`attachMenu`). The Figma attachment menu is composed here, not a component of its own.
  */
 export const AttachMenu = meta.story({
+  args: { showAttach: true },
   parameters: { docs: { story: { inline: false, height: '420px' } } },
 })
 
