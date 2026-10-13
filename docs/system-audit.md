@@ -168,6 +168,8 @@ deprecated feature) are the verdict and its note.
 | Selection Toolbar | Inline assist · feature | Agent Builder (In-page assist) | ready-to-use | — | ✓ | new 2026-10-13; on Toolbar (compact) + Popover + Command (Figma: Dropdown Menu — a menu can't hold the prompt field) |
 | Inline Suggestion | Inline assist · feature | Agent Builder (In-page assist) | ready-to-use | — | ✓ | new 2026-10-13; on Toolbar (compact) + Button + Kbd |
 | Ghost Text | Inline assist · feature | Agent Builder (In-page assist) | ready-to-use | — | ✓ | new 2026-10-13; on Input Group (Textarea + hint addon) + Kbd |
+| Announcement Bar | Proactive · feature | Agent Builder (In-page assist) | ready-to-use | — | ✓ | new 2026-10-13; top = Alert (size sm) + Button; bottom = pill with Icon Tile + Button |
+| Proactive Drawer | Proactive · feature | Agent Builder (In-page assist) | ready-to-use | — | ✓ | new 2026-10-13; peek = Announcement Bar (bottom); expanded = non-modal Drawer + Shell Header / Footer + Icon Tile + Button |
 
 Internal helpers (no story, not public): Citation Confidence (Citation Chip, Hovercard, Source
 Item), menu styles (Dropdown Menu, Context Menu, Menubar).
