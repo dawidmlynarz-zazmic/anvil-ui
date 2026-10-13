@@ -63,9 +63,13 @@ deprecated feature) are the verdict and its note.
 | Input | UI · element | Atom | base | Input Group, Sidebar | ✓ | | keep |
 | Input Group | UI · composite | Molecule | composite | Prompt Input, Citation Drawer, Memory Manager | ✓ | | keep |
 | Input OTP | UI · composite | Molecule | composite | — | ✓ | | keep |
+| Timeline | Patterns · part | Molecule | composite | — | ✓ | | new 2026-10-13 (parts audit); on Icon Tile |
 | Item | UI · composite | Molecule | composite | Feedback Reason, Instructions Banner, Memory Manager, Widget Media | ✓ | | keep; more rows build on it (Citation Source Item) |
 | Kbd | UI · element | Atom | base | — | ✓ | | keep |
 | Label | UI · element | Atom | base | Field, Survey | ✓ | | keep; Phase 9 aligns sizing and audits usage |
+| Progress Steps | Patterns · part | Atom | base | — | ✓ | | new 2026-10-13 (parts audit); Icon only |
+| Rating Display | Patterns · part | Atom | base | — | ✓ | | new 2026-10-13 (parts audit); Icon only |
+| Legend Item | Patterns · part | Atom | base | — | ✓ | | new 2026-10-13 (parts audit) |
 | Link | UI · element (Anvil) | Atom | base | — | | | keep |
 | Menubar | UI · feature | Organism | composite | — | ✓ | | keep |
 | Pagination | UI · composite | Molecule | composite | Widget Table | ✓ | | keep |
