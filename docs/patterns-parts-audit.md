@@ -24,13 +24,13 @@ molecule only when no existing component carries the meaning.
 | key value row (10847:4910) | key + value on one line: spread · aligned, emphasis default · strong | none (Table / Item are not the semantics) | **New molecule `KeyValueList` + `KeyValueRow`** (a real `<dl>`; `layout` spread · aligned, `emphasis`). |
 | check row (10847:5075) | included · excluded · fee · pending line | none (Step Status Icon is running · done · failed) | **New molecule `CheckRow`** (`status`; glyph + text, never colour alone). |
 | price (10855:5558) | price, optional was-price and discount, sm · default · lg, sale | `Badge` for the discount | **New molecule `Price`** (`value`, `was`, `discount`, `size`, `emphasis`) using Badge for the discount. |
-| rating (10855:5609) | stars: compact (1 star + score + count) · stars (5) | Core Kit `Rating` is a *satisfaction check* (different) | **New molecule `StarRating`** (not `Rating`: name taken). Flag to design: Figma has two things called rating. |
-| step (10851:5335) | dots with connectors or bars, label + date; done · current · warning · failed · upcoming | `Stepper` is listed (catalog, roadmap) but **not built** | **Build `Stepper` once** (`variant` dots · bars; `Step` with `status`, `date`), used by Progress Timeline, Status Tracker and the Forms stepper. Check the Forms stepper (10951:40504) is the same family; if not, flag. |
+| rating (10855:5609) | stars: compact (1 star + score + count) · stars (5) | Core Kit `Rating` is a *satisfaction check* (different) | **New atom `RatingDisplay`** (Figma calls it “rating display”; `Rating` is the satisfaction check). |
+| step (10851:5335) | dots with connectors or bars, label + date; done · current · warning · failed · upcoming | `Stepper` is listed (catalog, roadmap) but **not built** | **Build `ProgressSteps` + `ProgressStep`** (`variant` dots · bars; `status`, `label`, `meta`), used by Progress Timeline and Status Tracker. Figma's own description says it is *not* the numeric Forms stepper, which stays the separate `Stepper` (a quantity control, listed in the catalog, not built). |
 | timeline item (10851:5493) | time, marker (dot or tile), title, detail, actor, connector | `Marker` is an event line, not a timeline | **New molecule `Timeline` + `TimelineItem`** (`marker` dot · tile via IconTile, `tone`, `time`, `actor`). |
 | legend item (10855:5814) | swatch (bar · square · dot · custom) + label | none | **New molecule `LegendItem`** (`swatch`, `color`). Tiny, but it has no existing home and charts, maps and grids all need it. |
 
-Net result: **3 extensions** (Item, Alert, Marker) and **8 new molecules** (ValueStack, KeyValueRow,
-CheckRow, Price, StarRating, Stepper, TimelineItem, LegendItem). Four of the fifteen parts need
+Net result (updated 2026-10-13 as parts were built): **3 extensions** (Item, Alert, Marker) and **8 new parts** (ValueStack, KeyValueRow,
+CheckRow, Price, RatingDisplay, ProgressSteps, Timeline, LegendItem). Four of the fifteen parts need
 nothing new, because the system already carries them.
 
 ## Proposed PRs
@@ -38,7 +38,7 @@ nothing new, because the system already carries them.
 1. **Extensions** — Alert `shape`, Item `selected` + `variant="plain"`, Marker `inline` + `size`.
    (Design System stories updated; no new components.)
 2. **Parts A** — ValueStack (+ tile), KeyValueRow, CheckRow, Price.
-3. **Parts B** — Stepper, TimelineItem, StarRating, LegendItem.
+3. **Parts B** — ProgressSteps, Timeline, RatingDisplay, LegendItem.
 
 Each new part is a Design System molecule (`Design System/Molecules/<Name>`, tag `molecule`), with a
 Default, a Variants grid, tests and a docs page, like the existing molecules.
@@ -55,7 +55,7 @@ Default, a Variants grid, tests and a docs page, like the existing molecules.
 
 ## Flags for the design lead
 
-- **Rating**: Core Kit `rating` (satisfaction check) and Patterns `parts / rating` (stars) share a name. Code uses `Rating` and `StarRating`; rename in Figma.
+- **Rating**: Core Kit `rating` (satisfaction check) and Patterns `parts / rating` (a display; Figma's own description already calls it “rating display”). Code uses `Rating` and `RatingDisplay`; rename the Figma component frame to match.
 - **Duplicates in Figma**: `parts / card header` / `card footer` (= Shell Header / Footer card), `palette item` (= Command item), `media placeholder` (= Skeleton / a placeholder box). Align Figma instead of rebuilding.
 - **Date picker pattern** (availability available · limited · unavailable · none) is the Calendar with a per-day state, not a second date picker: implement as Calendar day variants.
-- **Stepper** appears twice (Forms `stepper`, Patterns `parts / step`): confirm they are one component.
+- **Stepper**: resolved. Patterns `parts / step` is a progress stepper (code `ProgressSteps`); the Forms `stepper` is the numeric control and is still to be built (it is the base of the quantity selector).
