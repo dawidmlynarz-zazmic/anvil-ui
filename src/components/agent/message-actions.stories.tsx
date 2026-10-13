@@ -27,12 +27,10 @@ import {
   PencilIcon,
   RotateCcwIcon,
   Share2Icon,
-  ThumbsDownIcon,
-  ThumbsUpIcon,
 } from '@/components/ui/icon'
 import { Message, MessageContent, MessageFooter } from '@/components/ui/message'
 
-import { MessageAction, MessageActions } from './message-actions'
+import { MessageAction, MessageActions, MessageFeedback } from './message-actions'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10672-2620'
 
@@ -88,7 +86,6 @@ function RegenerateItems() {
 type DemoProps = { copy?: boolean; retry?: boolean; edit?: boolean; feedback?: boolean; share?: boolean }
 
 function Demo({ copy = true, retry = true, edit = false, feedback = true, share = false }: DemoProps) {
-  const [vote, setVote] = useState<'good' | 'bad' | null>(null)
   return (
     <MessageActions>
       {copy && (
@@ -106,24 +103,7 @@ function Demo({ copy = true, retry = true, edit = false, feedback = true, share 
           <Icon icon={PencilIcon} />
         </MessageAction>
       )}
-      {feedback && (
-        <>
-          <MessageAction
-            label="Good response"
-            pressed={vote === 'good'}
-            onClick={() => setVote((v) => (v === 'good' ? null : 'good'))}
-          >
-            <Icon icon={ThumbsUpIcon} />
-          </MessageAction>
-          <MessageAction
-            label="Bad response"
-            pressed={vote === 'bad'}
-            onClick={() => setVote((v) => (v === 'bad' ? null : 'bad'))}
-          >
-            <Icon icon={ThumbsDownIcon} />
-          </MessageAction>
-        </>
-      )}
+      {feedback && <MessageFeedback />}
       {share && (
         <MessageAction label="Share">
           <Icon icon={Share2Icon} />
@@ -147,7 +127,7 @@ const meta = preview.meta({
       {
         property: 'show feedback',
         values: 'boolean',
-        code: 'render the feedback `MessageAction`s (with `pressed`) or not',
+        code: 'render `MessageFeedback` (Good / Bad response as one exclusive choice) or not',
       },
       { property: 'show share', values: 'boolean', code: 'render the Share `MessageAction` or not' },
     ],
@@ -155,7 +135,7 @@ const meta = preview.meta({
       use: [
         'The row under an assistant answer: Copy, Retry, Good response, Bad response, Share; Edit on the user’s own message.',
         '`menu` for actions with options: Retry opens Try again, Modify response (Shorter, More formal…) and Switch model.',
-        '`pressed` for toggles such as feedback; Good and Bad response are exclusive.',
+        '`MessageFeedback` for Good / Bad response: choosing one folds the other away and choosing it again brings it back; `pressed` and `collapsed` on `MessageAction` for your own toggles.',
       ],
       avoid: [
         'Bulk actions on a selection (“3 selected”): use Toolbar. Many commands on a conversation: use Dropdown Menu.',
@@ -192,14 +172,36 @@ const meta = preview.meta({
 /** Which actions show is in Controls (Figma show … booleans). */
 export const Default = meta.story()
 
-Default.test('feedback is a pair of exclusive toggles', async ({ canvas }) => {
+Default.test('choosing a vote folds the other away; choosing it again brings it back', async ({ canvas }) => {
   const good = canvas.getByRole('button', { name: 'Good response' })
   const bad = canvas.getByRole('button', { name: 'Bad response' })
+  const fold = (el: HTMLElement) => el.closest('[data-slot=message-action-fold]') as HTMLElement
   await userEvent.click(good)
   await expect(good).toHaveAttribute('aria-pressed', 'true')
+  await expect(fold(bad)).toHaveAttribute('data-collapsed', 'true')
+  await expect(bad).toBeDisabled()
+  await expect(fold(bad)).toHaveAttribute('inert')
+  await userEvent.click(good)
+  await expect(good).toHaveAttribute('aria-pressed', 'false')
+  await expect(fold(bad)).not.toHaveAttribute('data-collapsed')
+  await expect(bad).toBeEnabled()
   await userEvent.click(bad)
   await expect(bad).toHaveAttribute('aria-pressed', 'true')
-  await expect(good).toHaveAttribute('aria-pressed', 'false')
+  await expect(fold(good)).toHaveAttribute('data-collapsed', 'true')
+})
+
+/** Controlled: the vote comes from your data (for example, a saved rating); the other action is folded from the start. */
+export const Voted = meta.story({
+  render: () => (
+    <MessageActions>
+      <MessageFeedback defaultValue="good" />
+    </MessageActions>
+  ),
+})
+
+Voted.test('starts with the other action folded away', async ({ canvas }) => {
+  await expect(canvas.getByRole('button', { name: 'Good response' })).toHaveAttribute('aria-pressed', 'true')
+  await expect(canvas.getByRole('button', { name: 'Bad response' })).toBeDisabled()
 })
 
 /** Every action Figma draws. */
