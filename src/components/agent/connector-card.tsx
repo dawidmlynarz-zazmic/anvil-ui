@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'
-import { ShellDescription, ShellHeader, ShellTitle } from '@/components/anvil/shell'
+import { TaskCard } from '@/components/agent/task-card'
 import { Badge } from '@/components/ui/badge'
 import { CircleCheckIcon, FileTextIcon, HardDriveIcon, Icon, type LucideIcon } from '@/components/ui/icon'
 import { IconTile } from '@/components/anvil/icon-tile'
@@ -48,35 +48,26 @@ function ConnectorCard({
   /** ShellFooter variant="card", or ActionStatus (executing) while connecting. */
   footer?: React.ReactNode
 }) {
-  const titleId = React.useId()
   const tag = BADGE[status]
   return (
-    <article
+    <TaskCard
       data-slot="connector-card"
       data-status={status}
-      aria-labelledby={titleId}
-      className={cn(
-        'flex w-full max-w-160 flex-col overflow-hidden rounded-xl border bg-card text-card-foreground shadow-sm wrap-break-word',
-        className,
-      )}
+      media={<IconTile icon={icon} />}
+      headerClassName="items-start border-b-0"
+      title={title}
+      subtitle={description}
+      badge={
+        <Badge data-slot="connector-card-badge" variant="subtle" tone={tag.tone} size="xs" indicator>
+          {badge ?? tag.label}
+        </Badge>
+      }
+      footer={footer}
+      className={className}
       {...props}
     >
-      <ShellHeader
-        variant="card"
-        className="items-start border-b-0"
-        media={<IconTile icon={icon} />}
-        trailing={
-          <Badge data-slot="connector-card-badge" variant="subtle" tone={tag.tone} size="xs" indicator>
-            {badge ?? tag.label}
-          </Badge>
-        }
-      >
-        <ShellTitle id={titleId}>{title}</ShellTitle>
-        {description && <ShellDescription>{description}</ShellDescription>}
-      </ShellHeader>
       {children && <div className="flex flex-col gap-1.5 px-4 pb-4">{children}</div>}
-      {footer}
-    </article>
+    </TaskCard>
   )
 }
 

@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'
-import { ShellDescription, ShellHeader, ShellTitle } from '@/components/anvil/shell'
+import { TaskCard } from '@/components/agent/task-card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
 import {
@@ -12,7 +12,6 @@ import {
   TriangleAlertIcon,
   type LucideIcon,
 } from '@/components/ui/icon'
-import { IconTile } from '@/components/anvil/icon-tile'
 
 // Figma Agent Builder › Core Kit › approval card (10728:2418): confirmation before an action with
 // side effects. --card, border, radius xl, shadow-sm, max 640px. Header (16px, divider): 32px
@@ -69,32 +68,25 @@ function ApprovalCard({
   /** ShellFooter variant="card" (pending · approved · denied) or ActionStatus (executing · failed · expired). */
   footer?: React.ReactNode
 }) {
-  const titleId = React.useId()
   const tile = TILE[status]
   const tag = BADGE[status]
   return (
-    <article
+    <TaskCard
       data-slot="approval-card"
       data-status={status}
-      aria-labelledby={titleId}
-      className={cn(
-        'group/approval flex w-full max-w-160 flex-col wrap-break-word overflow-hidden rounded-xl border bg-card text-card-foreground shadow-sm',
-        className,
-      )}
+      icon={tile.icon}
+      tone={tile.tone}
+      title={title}
+      subtitle={subtitle}
+      badge={
+        <Badge data-slot="approval-card-badge" variant="subtle" tone={tag.tone} size="xs" indicator>
+          {badge ?? tag.label}
+        </Badge>
+      }
+      footer={footer}
+      className={cn('group/approval', className)}
       {...props}
     >
-      <ShellHeader
-        variant="card"
-        media={<IconTile icon={tile.icon} tone={tile.tone} size="sm" />}
-        trailing={
-          <Badge data-slot="approval-card-badge" variant="subtle" tone={tag.tone} size="xs" indicator>
-            {badge ?? tag.label}
-          </Badge>
-        }
-      >
-        <ShellTitle id={titleId}>{title}</ShellTitle>
-        {subtitle && <ShellDescription>{subtitle}</ShellDescription>}
-      </ShellHeader>
       {(children || (note && status === 'pending')) && (
         <div className="flex flex-col gap-2.5 p-4">
           {children}
@@ -106,8 +98,7 @@ function ApprovalCard({
           )}
         </div>
       )}
-      {footer}
-    </article>
+    </TaskCard>
   )
 }
 

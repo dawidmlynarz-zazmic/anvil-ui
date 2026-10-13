@@ -13,7 +13,7 @@ import { CheckIcon, Icon, MinusIcon, PlusIcon, XIcon } from '@/components/ui/ico
 //   `review` bar (an Alert, agent tone, size sm, with Reject all / Accept all) and the page: --card,
 //   --border, radius md, shadow/sm, --space-2xl × --space-3xl padding, 14px gap, up to 720px.
 // - DocumentCanvasTitle (heading/2xl) and DocumentCanvasMeta (text/sm muted) head the page.
-// - DocumentCanvasLine (diff line): one paragraph, text/base. Figma `type` unchanged · added ·
+// - DocumentCanvasLine (diff line): one paragraph, text/base. Figma `type` → `kind` unchanged · added ·
 //   removed (content kind): a 16px marker column, then for changes a --success-subtle / --danger-subtle
 //   row (radius sm, 8 × 6px) in the tone's strong text with a plus / minus and Accept / Reject (ghost
 //   icon-xs Buttons, `onAccept` / `onReject`). Unchanged lines keep the marker column so text aligns.
@@ -66,37 +66,37 @@ function DocumentCanvasMeta({ className, ...props }: React.ComponentProps<'p'>) 
   )
 }
 
-type LineType = 'unchanged' | 'added' | 'removed'
+type LineKind = 'unchanged' | 'added' | 'removed'
 
 function DocumentCanvasLine({
-  type = 'unchanged',
+  kind = 'unchanged',
   onAccept,
   onReject,
   className,
   children,
   ...props
 }: React.ComponentProps<'div'> & {
-  /** Figma type: an unchanged paragraph, or a suggested addition / removal. */
-  type?: LineType
+  /** Figma type → kind: an unchanged paragraph, or a suggested addition / removal. */
+  kind?: LineKind
   onAccept?: () => void
   onReject?: () => void
 }) {
-  const changed = type !== 'unchanged'
-  const label = type === 'added' ? 'Added' : 'Removed'
+  const changed = kind !== 'unchanged'
+  const label = kind === 'added' ? 'Added' : 'Removed'
   return (
     <div
       data-slot="document-canvas-line"
-      data-type={type}
+      data-kind={kind}
       className={cn(
         'flex items-start gap-2 rounded-sm px-2 py-1.5 type-text-base-normal text-foreground',
-        'data-[type=added]:bg-success-subtle data-[type=added]:text-success-strong',
-        'data-[type=removed]:bg-danger-subtle data-[type=removed]:text-danger-strong',
+        'data-[kind=added]:bg-success-subtle data-[kind=added]:text-success-strong',
+        'data-[kind=removed]:bg-danger-subtle data-[kind=removed]:text-danger-strong',
         className,
       )}
       {...props}
     >
       <span aria-hidden={!changed} className="flex h-6 w-4 shrink-0 items-center justify-center">
-        {changed && <Icon icon={type === 'added' ? PlusIcon : MinusIcon} size="xs" label={label} />}
+        {changed && <Icon icon={kind === 'added' ? PlusIcon : MinusIcon} size="xs" label={label} />}
       </span>
       <p className="min-w-0 flex-1">{children}</p>
       {changed && (onAccept || onReject) && (

@@ -104,10 +104,10 @@ const DOCUMENT = (
         Q3 churn rose to 4.8%, up 0.6 points from Q2. Monthly plans were flat; the increase came almost
         entirely from annual renewals.
       </DocumentCanvasLine>
-      <DocumentCanvasLine type="removed" onAccept={() => {}} onReject={() => {}}>
+      <DocumentCanvasLine kind="removed" onAccept={() => {}} onReject={() => {}}>
         Churn increased slightly this quarter for reasons we are still investigating.
       </DocumentCanvasLine>
-      <DocumentCanvasLine type="added" onAccept={() => {}} onReject={() => {}}>
+      <DocumentCanvasLine kind="added" onAccept={() => {}} onReject={() => {}}>
         Most of the increase came from annual renewals in the two weeks after the 12 Aug price change.
       </DocumentCanvasLine>
     </DocumentCanvas>

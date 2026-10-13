@@ -5,6 +5,10 @@
 //   where the story lives (`path`): the sidebar has two component sections, each with folders.
 //   - Design System › the level: `Design System/Molecules/Field`.
 //   - Agent Builder › a GROUP by job: `Agent Builder/Sources/Citation Drawer`.
+//   Overlays: small layers anchored to a trigger (Popover, Hover Card, Tooltip, Dropdown and Context
+//   Menu) are molecules; modal and edge surfaces (Dialog, Alert Dialog, Sheet, Drawer), Command,
+//   Combobox and persistent navigation (Sidebar, Menubar) are organisms. A component may not be built on
+//   a higher level (scripts/check-stories.mjs checks it).
 // - The CONTEXT says where in an agent UI a component is used (Messages, Sources, …). It is an
 //   optional tag, set only where it helps; generic components have none.
 // - `parameters.shadcn` names the shadcn/ui counterpart (its docs slug), when there is one.
@@ -19,7 +23,8 @@ export const LEVELS = [
     /** Where its stories live: the title is `<path>/<Name>`. */
     path: 'Design System/Atoms',
     label: 'Atom',
-    description: 'One element, context-agnostic. Uses no other Anvil component except Icon.',
+    description:
+      'One element, context-agnostic. Uses no other Anvil component except Icon, other atoms and, for Input and Textarea, the Field anatomy built in.',
   },
   {
     tag: 'molecule',
@@ -27,7 +32,8 @@ export const LEVELS = [
     /** Where its stories live: the title is `<path>/<Name>`. */
     path: 'Design System/Molecules',
     label: 'Molecule',
-    description: 'A few atoms with one job: a field, a scale, a menu, a status strip.',
+    description:
+      'A compound of parts with one job: a field, a scale, a small layer anchored to a trigger, a toolbar, a status strip.',
   },
   {
     tag: 'organism',
@@ -36,7 +42,7 @@ export const LEVELS = [
     path: 'Design System/Organisms',
     label: 'Organism',
     description:
-      'A complete, reusable section with its own structure or interaction: overlays, navigation, data.',
+      'A complete, reusable section with its own structure or interaction: modal and edge surfaces, searchable layers, persistent navigation, data.',
   },
   {
     tag: 'agent-builder',

@@ -98,8 +98,8 @@ function DemoCombobox({
 }
 
 const meta = preview.meta({
-  title: 'Design System/Molecules/Combobox',
-  tags: ['molecule'],
+  title: 'Design System/Organisms/Combobox',
+  tags: ['organism'],
   component: DemoCombobox,
   parameters: {
     shadcn: 'combobox',

@@ -5,7 +5,8 @@
 // as `parameters.shadcn: '<slug>'`, parameters.layout, a Figma link
 // (parameters.design), the usage guide (parameters.guide, starting with `use`), the Figma → code table (parameters.figmaProps; `[]` with a comment when
 // Figma has no properties) and explicit argTypes, and no story may use `play` (interactions are
-// Story.test). A meta with `show…` toggle controls must export a `Full` story (the edge case with every
+// Story.test). A component may not import a component of a higher level (atom < molecule < organism;
+// Agent Builder may use any), except Input and Textarea, which embed the Field anatomy. A meta with `show…` toggle controls must export a `Full` story (the edge case with every
 // part on; docs/content-guide.md › Streamlined defaults). Welcome is exempt.
 import { globSync, readFileSync } from 'node:fs'
 
@@ -85,6 +86,40 @@ for (const file of files) {
     !/^export const Full = /m.test(source)
   )
     problems.push(`${file}: has show… toggles but no Full story (every optional part on)`)
+}
+
+// Levels: a component may not be built on a higher level (atom < molecule < organism < agent-builder).
+const RANK = { atom: 0, molecule: 1, organism: 2, 'agent-builder': 3 }
+const ALLOWED = { 'ui/input': ['ui/field'], 'ui/textarea': ['ui/field'] }
+const levelOf = new Map()
+const sources = new Map()
+for (const file of globSync('src/components/*/*.stories.tsx')) {
+  const source = readFileSync(file, 'utf8')
+  const stem = file.replace('src/components/', '').replace('.stories.tsx', '')
+  const tag = (source
+    .match(/^ {2}tags: \[([^\]]*)\]/m)?.[1]
+    .match(/'(atom|molecule|organism|agent-builder)'/) ?? [])[1]
+  if (tag) levelOf.set(stem, tag)
+}
+for (const file of globSync('src/components/*/*.tsx').filter((f) => !f.includes('.stories.'))) {
+  sources.set(file.replace('src/components/', '').replace('.tsx', ''), readFileSync(file, 'utf8'))
+}
+for (const [stem, source] of sources) {
+  const own = levelOf.get(stem)
+  if (!own) continue
+  const folder = stem.split('/')[0]
+  const deps = [
+    ...[...source.matchAll(/from '@\/components\/([\w-]+\/[\w-]+)'/g)].map((m) => m[1]),
+    ...[...source.matchAll(/from '\.\/([\w-]+)'/g)].map((m) => `${folder}/${m[1]}`),
+  ]
+  for (const dep of new Set(deps)) {
+    const theirs = levelOf.get(dep)
+    if (!theirs || dep === stem || ALLOWED[stem]?.includes(dep)) continue
+    if (RANK[theirs] > RANK[own])
+      problems.push(
+        `src/components/${stem}.tsx: a ${own} is built on ${dep}, a ${theirs} (a component may not use a higher level)`,
+      )
+  }
 }
 
 if (problems.length) {

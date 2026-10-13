@@ -48,7 +48,7 @@ deprecated feature) are the verdict and its note.
 | Checkbox | UI · element | Atom | base | Survey | ✓ | | keep |
 | Chip | UI · element (Anvil) | Atom | base | Quick Reply, (Citation Chip) | | | keep |
 | Collapsible | — (no story) | — | behavior | Thinking Panel, Tool Call Item / Accordion, Instructions Banner | ✓ | | keep as an internal behavior part; no story (nothing to see) |
-| Combobox | UI · composite | Molecule | composite | — | ✓ | | keep |
+| Combobox | UI · composite | Organism | composite | — | ✓ | | promoted 2026-10-13 (builds on Command, an organism) |
 | Command | UI · feature | Organism | composite | Combobox | ✓ | | keep |
 | Context Menu | UI · composite | Molecule | composite | — | ✓ | | keep (reuses Dropdown Menu items) |
 | Date Picker | UI · composite | Molecule | composite | — | ✓ | | keep; Phase 9 adds range |
@@ -97,7 +97,7 @@ deprecated feature) are the verdict and its note.
 | Toast | UI · composite | Molecule | composite | — | ✓ (Sonner) | | keep |
 | Toggle | UI · element | Atom | base | Toggle Group, Toolbar | ✓ | | keep |
 | Toggle Group | UI · composite | Molecule | composite | Rating Scale, Image Generation Card | ✓ | | keep |
-| Toolbar | UI · composite (Anvil) | Organism | composite | Message Actions | | | keep |
+| Toolbar | UI · composite (Anvil) | Molecule | composite | Message Actions | | | demoted 2026-10-13 (a row of controls) |
 | Tooltip | UI · composite | Molecule | composite | Message Actions, Sidebar | ✓ | | keep |
 
 ### Chat parts (shadcn chat set)
@@ -132,7 +132,7 @@ deprecated feature) are the verdict and its note.
 | Memory In Use | Primitives · composite | Agent Builder (Memory) | ready-to-use | — | ✓ | **merged → Memory Notice** (`status` used · not used · saved · updated · forgotten) |
 | Drop Overlay | Primitives · composite | Agent Builder (Input) | ready-to-use | — | ✓ | simplify: build on Empty State |
 | Streaming Placeholder | Primitives · composite | Agent Builder (Agent Status) | ready-to-use | — | ✓ | keep; absorbs Typing Indicator |
-| Content Blocks | Primitives · element | Organism (Messages) | composite | — | ✓ | keep (styles rendered markdown) |
+| Content Blocks | Primitives · element | Molecule (Messages) | composite | — | ✓ | demoted 2026-10-13 (styles rendered markdown) |
 | Thinking Panel | Primitives · composite | Agent Builder (Agent Status) | ready-to-use | — | ✓ | simplify API: `title` / `duration` props instead of span subcomponents |
 | Tool Call Item | Primitives · composite | Agent Builder (Agent Status) | ready-to-use | (Tool Call Accordion content) | ✓ | simplify API: `name` / `summary` / `duration` props |
 | Tool Call Accordion | Blocks · feature | Agent Builder (Agent Status) | ready-to-use | — | ✓ | simplify API: `title` / `summary` / `duration` props |

@@ -42,23 +42,23 @@ import { chevronMotion, expandMotion } from '@/lib/motion'
 // - Header: the title, a subtitle (“Live · 64 actions · 11m 40s”) and a `badge` (info, “Live”).
 // - Filters: outline pill toggle Chips; the chosen one is filled with a ×, and pressing it again goes
 //   back to All. `filters` says which entry types each one shows.
-// - Entries (`entries`): a 24px Icon Tile by type (search · read · extract · discard · decision), the title
+// - Entries (`entries`): a 24px Icon Tile by kind (search · read · extract · discard · decision), the title
 //   (text/sm), the `meta` line (result · time, text/xs muted) and, when it has a `detail`, a chevron that
 //   expands it (a mono line, muted tile). Entries without a detail are plain rows.
 // - loading: Skeleton rows; empty: an Empty State with a dismiss button; invalid: a Widget Error with Try
 //   again and Get help. Footer: Show more (ghost + chevron) and Export log (ghost + download).
 
-type EntryType = 'search' | 'read' | 'extract' | 'discard' | 'decision'
+type EntryKind = 'search' | 'read' | 'extract' | 'discard' | 'decision'
 type ActivityEntry = {
   id: string
-  type: EntryType
+  kind: EntryKind
   title: React.ReactNode
   meta?: React.ReactNode
   detail?: React.ReactNode
 }
-type ActivityFilter = { value: string; label: string; types?: EntryType[] }
+type ActivityFilter = { value: string; label: string; kinds?: EntryKind[] }
 
-const TYPE: Record<EntryType, { icon: LucideIcon; tone: React.ComponentProps<typeof IconTile>['tone'] }> = {
+const KIND: Record<EntryKind, { icon: LucideIcon; tone: React.ComponentProps<typeof IconTile>['tone'] }> = {
   search: { icon: SearchIcon, tone: 'neutral' },
   read: { icon: FileTextIcon, tone: 'neutral' },
   extract: { icon: TableIcon, tone: 'info' },
@@ -68,15 +68,15 @@ const TYPE: Record<EntryType, { icon: LucideIcon; tone: React.ComponentProps<typ
 
 const DEFAULT_FILTERS: ActivityFilter[] = [
   { value: 'all', label: 'All' },
-  { value: 'searches', label: 'Searches', types: ['search'] },
-  { value: 'reads', label: 'Reads', types: ['read'] },
-  { value: 'extractions', label: 'Extractions', types: ['extract'] },
-  { value: 'decisions', label: 'Decisions', types: ['decision'] },
-  { value: 'discarded', label: 'Discarded', types: ['discard'] },
+  { value: 'searches', label: 'Searches', kinds: ['search'] },
+  { value: 'reads', label: 'Reads', kinds: ['read'] },
+  { value: 'extractions', label: 'Extractions', kinds: ['extract'] },
+  { value: 'decisions', label: 'Decisions', kinds: ['decision'] },
+  { value: 'discarded', label: 'Discarded', kinds: ['discard'] },
 ]
 
 function Entry({ entry }: { entry: ActivityEntry }) {
-  const { icon, tone } = TYPE[entry.type]
+  const { icon, tone } = KIND[entry.kind]
   const row = (
     <>
       <IconTile icon={icon} tone={tone} size="xs" />
@@ -153,8 +153,8 @@ function ActivityFeed({
 }) {
   const [inner, setInner] = React.useState(defaultFilter)
   const current = filter ?? inner
-  const types = filters.find((f) => f.value === current)?.types
-  const shown = types ? entries.filter((e) => types.includes(e.type)) : entries
+  const kinds = filters.find((f) => f.value === current)?.kinds
+  const shown = kinds ? entries.filter((e) => kinds.includes(e.kind)) : entries
   const choose = (value: string) => {
     const next = value === current ? (filters[0]?.value ?? 'all') : value
     setInner(next)
@@ -257,7 +257,7 @@ function ActivityFeed({
       {status === 'error' && (
         <div className="p-3">
           <WidgetError
-            type="failed"
+            kind="failed"
             title="Couldn’t load activity"
             description="The activity log didn’t load. The task is still running."
             className="max-w-none border-0 shadow-none"
@@ -279,4 +279,4 @@ function ActivityFeed({
   )
 }
 
-export { ActivityFeed, type ActivityEntry, type ActivityFilter, type EntryType }
+export { ActivityFeed, type ActivityEntry, type ActivityFilter, type EntryKind }

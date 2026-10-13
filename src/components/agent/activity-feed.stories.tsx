@@ -9,34 +9,34 @@ const FIGMA_ENTRY = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-i
 const ENTRIES: ActivityEntry[] = [
   {
     id: '1',
-    type: 'decision',
+    kind: 'decision',
     title: 'Decided to weight pricing pages over analyst reports',
     meta: 'Fresher data · 14:07:31',
   },
   {
     id: '2',
-    type: 'discard',
+    kind: 'discard',
     title: 'Discarded 2 sources from a content farm',
     meta: 'Low credibility · 14:07:15',
   },
   {
     id: '3',
-    type: 'extract',
+    kind: 'extract',
     title: 'Extracted team-plan prices for 6 tools',
     meta: '1 table · 18 values · 14:07:02',
   },
-  { id: '4', type: 'read', title: 'Read the Northwind Sync pricing page', meta: '3 pages · 14:06:40' },
+  { id: '4', kind: 'read', title: 'Read the Northwind Sync pricing page', meta: '3 pages · 14:06:40' },
   {
     id: '5',
-    type: 'search',
+    kind: 'search',
     title: 'Searched “team plan pricing sync tools 2026”',
     meta: '12 results · 14:06:12',
     detail: 'pricing.example · plans.example · compare.example',
   },
-  { id: '6', type: 'read', title: 'Read the Meridian plan comparison', meta: '8 pages · 14:05:48' },
+  { id: '6', kind: 'read', title: 'Read the Meridian plan comparison', meta: '8 pages · 14:05:48' },
   {
     id: '7',
-    type: 'decision',
+    kind: 'decision',
     title: 'Decided to skip paywalled analyst reports',
     meta: 'Two free sources cover the same data · 14:04:10',
   },
@@ -63,7 +63,7 @@ const meta = preview.meta({
       {
         property: 'type (entry)',
         values: 'search · read · extract · discard · decision',
-        code: '`entries[].type`',
+        code: '`entries[].kind`',
       },
       {
         property: 'footer',
@@ -177,8 +177,8 @@ Error.test('offers Try again', async ({ canvas, args }) => {
   await expect(args.onRetry).toHaveBeenCalledOnce()
 })
 
-/** Figma type: search, read, extract, discard, decision. */
-export const Types = meta.story({
+/** Figma kind: search, read, extract, discard, decision. */
+export const Kinds = meta.story({
   parameters: { design: { type: 'figma', url: FIGMA_ENTRY } },
   args: {
     entries: [ENTRIES[4], ENTRIES[3], ENTRIES[2], ENTRIES[1], ENTRIES[0]],
