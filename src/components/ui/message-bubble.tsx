@@ -77,7 +77,7 @@ function MessageBubbleContent({
     <Comp
       data-slot="message-bubble-content"
       className={cn(
-        'w-fit max-w-full min-w-0 overflow-hidden rounded-2xl border border-transparent px-4 py-2 type-text-sm-normal wrap-break-word group-data-[align=end]/bubble:self-end aria-invalid:border-danger [button]:text-left [button,a]:transition-colors [button,a]:outline-none [button,a]:focus-visible:focus-ring',
+        'w-fit max-w-full min-w-0 overflow-hidden rounded-2xl border border-transparent px-4 py-2 type-text-sm-normal wrap-break-word group-data-[align=end]/bubble:self-end aria-invalid:border-danger [button]:text-left [button,a]:transition-colors [button,a]:duration-(--duration-fast) [button,a]:ease-out [button,a]:outline-none [button,a]:focus-visible:focus-ring',
         className,
       )}
       {...props}

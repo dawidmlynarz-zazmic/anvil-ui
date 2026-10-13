@@ -99,7 +99,7 @@ function Launcher({
               size="icon-lg"
               aria-label={isOpen ? 'Close the assistant' : offline ? `${label} (offline)` : label}
               className={cn(
-                'relative size-14 shadow-lg transition-shadow hover:shadow-xl [&_svg]:size-6',
+                'relative size-14 shadow-lg transition-shadow duration-(--duration-fast) ease-out hover:shadow-xl [&_svg]:size-6',
                 offline && 'bg-muted shadow-sm hover:shadow-sm',
               )}
             >

@@ -46,7 +46,7 @@ function CitationChip({
       type="button"
       className={cn(
         'inline-flex h-4.5 w-fit shrink-0 items-center gap-1 rounded-md bg-muted px-1 align-middle whitespace-nowrap outline-none',
-        'transition-colors duration-(--duration-fast) hover:bg-agent-subtle focus-visible:focus-ring',
+        'transition-colors duration-(--duration-fast) ease-out hover:bg-agent-subtle focus-visible:focus-ring',
         'data-[active=true]:bg-agent-subtle data-[active=true]:inset-ring data-[active=true]:inset-ring-agent-muted',
         'data-[state=open]:bg-agent-subtle data-[state=open]:inset-ring data-[state=open]:inset-ring-agent-muted',
         "[&_img]:size-3 [&_img]:rounded-2xs [&_svg:not([class*='size-'])]:size-3",

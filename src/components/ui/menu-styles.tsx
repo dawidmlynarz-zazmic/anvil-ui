@@ -42,7 +42,7 @@ export function MenuCheckboxSwitch({ slot }: { slot: string }) {
       data-slot={slot}
       className="ml-auto flex h-4 w-6 shrink-0 items-center rounded-full bg-background-medium p-0.5 inset-shadow-xs group-data-[state=checked]/item:bg-primary"
     >
-      <span className="size-3 rounded-full bg-primary-foreground shadow-sm transition-[translate] duration-(--duration-fast) group-data-[state=checked]/item:translate-x-2" />
+      <span className="size-3 rounded-full bg-primary-foreground shadow-sm transition-[translate] duration-(--duration-fast) ease-out group-data-[state=checked]/item:translate-x-2" />
     </span>
   )
 }

@@ -96,7 +96,7 @@ function SelectTrigger({
           <Icon
             icon={ChevronDownIcon}
             data-slot="select-chevron"
-            className="transition-transform duration-(--duration-fast)"
+            className="transition-transform duration-(--duration-fast) ease-out"
           />
         </SelectPrimitive.Icon>
       </SelectPrimitive.Trigger>

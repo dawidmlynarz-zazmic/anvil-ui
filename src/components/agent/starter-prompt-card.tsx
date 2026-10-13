@@ -33,7 +33,7 @@ function StarterPromptCard({
       className={cn(
         'max-w-160 min-w-0 items-start gap-2 bg-card px-4 text-left',
         '[&:is(a,button,[role=button])]:border-border [&:is(a,button,[role=button])]:shadow-none',
-        '[&:is(a,button,[role=button])]:transition-[background-color,border-color,box-shadow]',
+        '[&:is(a,button,[role=button])]:transition-[background-color,border-color,box-shadow] [&:is(a,button,[role=button])]:duration-(--duration-fast) [&:is(a,button,[role=button])]:ease-out',
         '[&:is(a,button,[role=button])]:hover:border-border-strong [&:is(a,button,[role=button])]:hover:bg-muted [&:is(a,button,[role=button])]:hover:shadow-sm',
         className,
       )}

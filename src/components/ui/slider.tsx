@@ -64,7 +64,7 @@ function Slider({
           className={cn(
             'block size-4 shrink-0 rounded-full border bg-background',
             tone === 'agent' ? 'border-agent' : 'border-primary',
-            ' transition-[box-shadow] duration-(--duration-fast) focus-visible:focus-ring focus-visible:outline-hidden disabled:pointer-events-none',
+            ' transition-[box-shadow] duration-(--duration-fast) ease-out focus-visible:focus-ring focus-visible:outline-hidden disabled:pointer-events-none',
           )}
         />
       ))}
