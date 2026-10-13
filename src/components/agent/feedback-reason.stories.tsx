@@ -15,10 +15,30 @@ const REASONS = [
   'Other',
 ]
 
+type DemoProps = React.ComponentProps<typeof FeedbackReason> & {
+  /** Story toggles for the optional parts: each is a prop you pass or leave out. */
+  showNote?: boolean
+  showCancel?: boolean
+  showClose?: boolean
+}
+
+function Demo({ showNote, showCancel, showClose, ...props }: DemoProps) {
+  return (
+    <FeedbackReason
+      {...props}
+      note={showNote ? props.note : undefined}
+      onCancel={showCancel ? props.onCancel : undefined}
+      onClose={showClose ? props.onClose : undefined}
+    />
+  )
+}
+
+const ALL = { showNote: true, showCancel: true, showClose: true }
+
 const meta = preview.meta({
   title: 'Agent Builder/Feedback/Feedback Reason',
   tags: ['agent-builder', 'feedback'],
-  component: FeedbackReason,
+  component: Demo,
   parameters: {
     layout: 'padded',
     design: { type: 'figma', url: FIGMA },
@@ -89,11 +109,20 @@ const meta = preview.meta({
     onCancel: fn(),
     onClose: fn(),
     onUndo: fn(),
+    showNote: false,
+    showCancel: false,
+    showClose: false,
   },
   argTypes: {
     status: { control: 'inline-radio', options: ['open', 'submitted'] },
     title: { control: 'text' },
     note: { control: 'text' },
+    showNote: { control: 'boolean', description: 'Story toggle: pass `note` or not' },
+    showCancel: { control: 'boolean', description: 'Story toggle: pass `onCancel` or not' },
+    showClose: {
+      control: 'boolean',
+      description: 'Story toggle: pass `onClose` (the header close button) or not',
+    },
     placeholder: { control: 'text' },
     submittedTitle: { control: 'text' },
     submittedDescription: { control: 'text' },
@@ -109,11 +138,21 @@ const meta = preview.meta({
   },
 })
 
-/** Status and text are in Controls. Pick reasons, type, Send feedback. */
+/** Reasons, a comment and Send feedback. The note, Cancel and the close button are toggles in Controls. Pick reasons, type, send. */
 export const Default = meta.story({
   render: (args) => (
     <div className="w-120">
-      <FeedbackReason {...args} />
+      <Demo {...args} />
+    </div>
+  ),
+})
+
+/** Every optional part on: the note, Cancel and the close button. The edge case, not the default. */
+export const Full = meta.story({
+  args: ALL,
+  render: (args) => (
+    <div className="w-120">
+      <Demo {...args} />
     </div>
   ),
 })
@@ -131,10 +170,11 @@ Default.test('sends the picked reasons and the comment', async ({ canvas, args }
 
 /** Figma state: open and submitted. */
 export const Statuses = meta.story({
+  args: ALL,
   render: (args) => (
     <div className="flex w-120 flex-col gap-4">
-      <FeedbackReason {...args} />
-      <FeedbackReason {...args} status="submitted" />
+      <Demo {...args} />
+      <Demo {...args} status="submitted" />
     </div>
   ),
 })
