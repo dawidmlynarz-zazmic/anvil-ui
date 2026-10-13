@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button'
 // is the Figma size; sm and xs step down; lg is Figma file output card (a file the agent made:
 // --card, radius xl, 12px padding and gap, 40px media, title text/sm/semibold; audit M8).
 const attachmentVariants = cva(
-  'group/attachment relative flex w-fit max-w-full min-w-0 shrink-0 flex-wrap rounded-md border border-border bg-background text-foreground shadow-sm transition-colors has-[>a,>button]:hover:bg-muted has-[[data-slot=attachment-trigger]:focus-visible]:focus-ring data-[state=error]:border-danger-muted data-[state=idle]:border-dashed',
+  'group/attachment relative flex w-fit max-w-full min-w-0 shrink-0 flex-wrap rounded-md border border-border bg-background text-foreground shadow-sm transition-colors duration-(--duration-fast) ease-out has-[>a,>button]:hover:bg-muted has-[[data-slot=attachment-trigger]:focus-visible]:focus-ring data-[state=error]:border-danger-muted data-[state=idle]:border-dashed',
   {
     variants: {
       size: {

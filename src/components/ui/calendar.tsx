@@ -165,7 +165,7 @@ function CalendarDayButton({ className, day, modifiers, ...props }: React.Compon
       data-range-end={modifiers.range_end}
       data-range-middle={modifiers.range_middle}
       className={cn(
-        'flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 rounded-md type-text-sm-normal leading-none text-inherit hover:bg-muted',
+        'flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 rounded-md type-text-sm-normal leading-none text-inherit transition-colors duration-(--duration-fast) ease-out hover:bg-muted',
         'group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:focus-ring',
         'data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground',
         'data-[range-start=true]:rounded-md data-[range-start=true]:rounded-r-none data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground',

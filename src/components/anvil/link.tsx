@@ -16,7 +16,7 @@ import { cn } from '@/lib/utils'
 const linkVariants = cva(
   [
     'inline-flex w-fit items-center rounded-sm underline-offset-4 outline-none',
-    'transition-colors duration-(--duration-fast) hover:underline focus-visible:focus-ring',
+    'transition-colors duration-(--duration-fast) ease-out hover:underline focus-visible:focus-ring',
     'aria-disabled:pointer-events-none aria-disabled:opacity-30',
     '[&_svg]:pointer-events-none [&_svg]:shrink-0',
   ],

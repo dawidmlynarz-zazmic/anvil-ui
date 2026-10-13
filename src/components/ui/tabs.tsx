@@ -83,7 +83,7 @@ function TabsTrigger({ className, ...props }: React.ComponentProps<typeof TabsPr
         'focus-visible:focus-ring disabled:pointer-events-none disabled:opacity-50',
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         // Underline: 2px, over the contained rule.
-        'after:absolute after:bg-foreground after:opacity-0 after:transition-opacity data-[state=active]:after:opacity-100 data-[state=active]:hover:after:bg-foreground-subtle',
+        'after:absolute after:bg-foreground after:opacity-0 after:transition-[opacity,background-color] after:duration-(--duration-fast) after:ease-out data-[state=active]:after:opacity-100 data-[state=active]:hover:after:bg-foreground-subtle',
         'group-data-[orientation=horizontal]/tabs:after:inset-x-0 group-data-[orientation=horizontal]/tabs:after:-bottom-px group-data-[orientation=horizontal]/tabs:after:h-0.5',
         'group-data-[orientation=vertical]/tabs:after:inset-y-0 group-data-[orientation=vertical]/tabs:after:-right-px group-data-[orientation=vertical]/tabs:after:w-0.5',
         className,

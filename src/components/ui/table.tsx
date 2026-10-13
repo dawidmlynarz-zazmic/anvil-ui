@@ -80,7 +80,7 @@ function TableRow({ className, ...props }: React.ComponentProps<'tr'>) {
 
 // Cells carry the row look (separate borders let the ghost hover round its ends).
 const cellClassName = cn(
-  'h-14 px-2 py-4 align-middle whitespace-nowrap first:pl-4 last:pr-4 transition-colors duration-(--duration-fast)',
+  'h-14 px-2 py-4 align-middle whitespace-nowrap first:pl-4 last:pr-4 transition-colors duration-(--duration-fast) ease-out',
   'group-data-[density=compact]/table:h-10 group-data-[density=compact]/table:px-3 group-data-[density=compact]/table:py-2 group-data-[density=compact]/table:first:pl-3 group-data-[density=compact]/table:last:pr-3',
   // contained and flush: dividers between rows, --background, hover --muted.
   'group-data-dividers/table:border-b group-data-dividers/table:border-overlay-8 group-data-dividers/table:bg-background',

@@ -78,7 +78,10 @@ function MemoryNotice({
         {title || description || actions ? (
           <Popover open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange}>
             <PopoverTrigger
-              className={cn(usedPill, 'outline-none hover:bg-agent-soft focus-visible:focus-ring')}
+              className={cn(
+                usedPill,
+                'transition-colors duration-(--duration-fast) ease-out outline-none hover:bg-agent-soft focus-visible:focus-ring',
+              )}
             >
               <Icon icon={BrainIcon} />
               {children}

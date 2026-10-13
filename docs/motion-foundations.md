@@ -25,6 +25,17 @@ Rules:
 - `tw-animate-css` enter / exit animations read Tailwind's `duration-*` and `ease-*`; without
   them they fall back to 150ms and the browser's `ease`, so always set both.
 - Focus rings appear instantly: focus must never lag.
+- **Opacity-only fades** (overlay and scrim fades) use the same `ease-out` as the movement that
+  goes with them; `linear` is for continuous loops and for a fade that stands alone with nothing
+  moving. Mixing curves on one overlay makes it feel detached (decided 2026-10-13).
+- **Exit curve**: `ease-in-out` stays. A dedicated, accelerating exit token is not needed yet;
+  if it is, add it in Figma first (decided 2026-10-13).
+- **Never `transition-all`**: list the properties (`transition-[color,background-color]`). It
+  animates layout and every future property, and hides what really moves.
+- **Never a bare `transition`, `duration-150` or `ease-[…]`**: Tailwind's defaults (150ms and the
+  browser's `ease`) are different from every token. `pnpm lint` runs `scripts/check-motion.mjs`,
+  which fails a `transition-*` class list without a `duration-(--duration-*)` token and an `ease-*`,
+  a `transition-all`, a numeric duration or a bracket ease, and `active:scale-*`.
 
 ## 2. Transition archetypes
 
@@ -45,11 +56,21 @@ Rules:
 | Button, Toggle, Chip, Link, menu item, Item, table row | colour / background · fast · ease-out | colour (Figma's pressed fill), no scale | focus ring, instant |
 | Input, Textarea, Select / Combobox trigger, Prompt Input | stroke colour · fast · ease-out | — | stroke + focus ring, instant |
 | Checkbox, Radio, Switch | background · fast · ease-out | — | focus ring, instant; switch thumb slides · fast · ease-out |
-| Tabs | text colour · fast | — | focus ring; underline fades · fast |
+| Tabs | text colour · fast · ease-out | — | focus ring; underline fades · fast · ease-out |
+| Link (and links inside Marker and Content blocks) | colour · fast · ease-out; underline appears at once | — | focus ring, instant |
+| Calendar day, Memory Notice pill, Citation chip, Quick Reply | background · fast · ease-out | colour | focus ring, instant |
 | Card (interactive) | shadow · fast · ease-out | — | focus ring |
 
 No scale on press: Figma draws pressed as a colour, and scaling text-heavy controls reads as
-jitter.
+jitter (`active:scale-*` is rejected by the motion check).
+
+**Instant by design** (no transition on purpose):
+
+- Menu, Command and Select item highlights (`data-[highlighted]`, `data-[selected]`): they follow
+  the pointer or the arrow keys, so a fade would smear behind the cursor as it sweeps a list.
+- The underline on a link (`hover:underline`): `text-decoration` is not animatable. The link's
+  colour does transition.
+- Focus rings, as above.
 
 ## 3. Reduced motion
 
@@ -60,9 +81,13 @@ component, including new ones, gets it without extra classes:
   translation, scale, rotation and blur, and run at `--duration-fast`.
 - **Height animations are skipped** (Accordion, Collapsible): content appears at once.
 - **Movement transitions stop** where a component moves something (switch thumb, sidebar width,
-  jump button, Sheet / Drawer slides): `motion-reduce:transition-none` or the global rule.
+  jump button, Sheet / Drawer slides, a folding Message Action): the global rule does not reach a
+  plain `transition-*` class, so add `motion-reduce:transition-none` (or
+  `motion-reduce:transition-opacity` to keep a fade, plus the end state of any scale).
+  Anything that transitions `translate`, `scale`, `width`, `height` or `margin` needs one.
 - **Loops stop** on their first frame (shimmer, pulse dot, typing dots, caret, waveform,
-  Skeleton) — each utility carries its own `@media (prefers-reduced-motion: reduce)`.
+  Skeleton, the Input OTP caret) — each utility carries its own `@media (prefers-reduced-motion:
+  reduce)` or `motion-reduce:animate-none`.
 - **Spinners keep spinning**: they say “working”, and stopping one hides that.
 - **Colour transitions stay**: they are not motion.
 

@@ -37,7 +37,7 @@ function ContentBlocks({ className, ...props }: React.ComponentProps<'div'>) {
         '[&_:not(pre)>code]:rounded-sm [&_:not(pre)>code]:bg-muted [&_:not(pre)>code]:px-1 [&_:not(pre)>code]:type-code-xs',
         // divider and links
         '[&_hr]:my-2 [&_hr]:h-px [&_hr]:border-0 [&_hr]:bg-overlay-8',
-        '[&_a]:rounded-sm [&_a]:type-text-base-medium [&_a]:text-foreground-link [&_a]:underline-offset-4 [&_a]:outline-none [&_a]:hover:text-info-medium [&_a]:hover:underline [&_a]:focus-visible:focus-ring',
+        '[&_a]:rounded-sm [&_a]:type-text-base-medium [&_a]:text-foreground-link [&_a]:underline-offset-4 [&_a]:transition-colors [&_a]:duration-(--duration-fast) [&_a]:ease-out [&_a]:outline-none [&_a]:hover:text-info-medium [&_a]:hover:underline [&_a]:focus-visible:focus-ring',
         className,
       )}
       {...props}

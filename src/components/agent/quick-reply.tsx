@@ -47,7 +47,7 @@ function QuickReply({
           data-slot="quick-reply"
           className={cn(
             'flex w-full items-center gap-2 px-3 py-2 text-left type-text-sm-normal text-foreground outline-none',
-            'transition-colors duration-(--duration-fast) hover:bg-muted focus-visible:focus-ring focus-visible:ring-offset-0',
+            'transition-colors duration-(--duration-fast) ease-out hover:bg-muted focus-visible:focus-ring focus-visible:ring-offset-0',
             'disabled:pointer-events-none disabled:opacity-50',
             className,
           )}

@@ -262,7 +262,7 @@ function CarouselDots({ className, ...props }: React.ComponentProps<'div'>) {
           onClick={() => scrollTo(i)}
           className="group/dot flex size-3 items-center justify-center rounded-full outline-none focus-visible:focus-ring"
         >
-          <span className="size-1.5 rounded-full bg-border-strong transition-[width,height,background-color] duration-(--duration-fast) group-aria-[current=true]/dot:size-2 group-aria-[current=true]/dot:bg-foreground" />
+          <span className="size-1.5 rounded-full bg-border-strong transition-[width,height,background-color] duration-(--duration-fast) ease-out group-aria-[current=true]/dot:size-2 group-aria-[current=true]/dot:bg-foreground" />
         </button>
       ))}
     </div>
