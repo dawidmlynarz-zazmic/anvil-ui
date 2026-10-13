@@ -3,10 +3,10 @@ import * as React from 'react'
 import { cn } from '@/lib/utils'
 import { CheckIcon, Icon } from '@/components/ui/icon'
 import { InputGroup, InputGroupAddon, InputGroupTextarea } from '@/components/ui/input-group'
-import { Kbd } from '@/components/ui/kbd'
+import { ShortcutHint } from '@/components/anvil/shortcut-hint'
 
 // Figma Agent Builder › Surfaces › Inline assist · ghost text (10748:5716): inline autocomplete in a
-// text field. Built on Input Group (a Textarea, with the hint as a block-end addon) + Kbd, nothing
+// text field. Built on Input Group (a Textarea, with the hint as a block-end addon) + Shortcut Hint, nothing
 // re-drawn. The typed text is real; the `suggestion` is drawn after it in --foreground-subtle by a
 // mirror layer (same box, type and wrapping, hidden from assistive tech) behind the transparent
 // textarea. Tab at the end of the text accepts it (`onAccept`), Escape dismisses it (`onDismiss`).
@@ -108,10 +108,7 @@ function GhostText({
               <span role="status">{acceptedLabel}</span>
             </>
           ) : (
-            <>
-              <Kbd aria-hidden>Tab</Kbd>
-              <span>to accept</span>
-            </>
+            <ShortcutHint keys={['Tab']}>to accept</ShortcutHint>
           )}
         </InputGroupAddon>
       )}
