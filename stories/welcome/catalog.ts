@@ -138,6 +138,7 @@ export const catalog: CatalogArea[] = [
         'Breadcrumb',
         'Pagination',
         'Resizable',
+        'Shortcut Hint',
       ),
       alias('System Banner', 'Design System/Molecules/Alert'),
     ],

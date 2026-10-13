@@ -31,12 +31,21 @@ function CommandDialog({
   children,
   className,
   showCloseButton = true,
+  commandProps,
+  contentProps,
   ...props
 }: React.ComponentProps<typeof Dialog> & {
   title?: string
   description?: string
   className?: string
   showCloseButton?: boolean
+  /** Props for the inner Command, e.g. `shouldFilter={false}` when the results come from the app. */
+  commandProps?: React.ComponentProps<typeof CommandPrimitive>
+  /** Props for the DialogContent, e.g. `onOpenAutoFocus`. */
+  contentProps?: Omit<
+    React.ComponentProps<typeof DialogContent>,
+    'className' | 'children' | 'showCloseButton'
+  >
 }) {
   return (
     <Dialog {...props}>
@@ -44,9 +53,13 @@ function CommandDialog({
         <DialogTitle>{title}</DialogTitle>
         <DialogDescription>{description}</DialogDescription>
       </DialogHeader>
-      <DialogContent className={cn('overflow-hidden p-0', className)} showCloseButton={showCloseButton}>
+      <DialogContent
+        {...contentProps}
+        className={cn('overflow-hidden p-0', className)}
+        showCloseButton={showCloseButton}
+      >
         {/* Same items as the standalone Command (Figma); shadcn enlarges them in the palette. */}
-        <Command>{children}</Command>
+        <Command {...commandProps}>{children}</Command>
       </DialogContent>
     </Dialog>
   )
