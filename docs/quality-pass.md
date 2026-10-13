@@ -1,5 +1,8 @@
 # Quality pass — consistency and levels (2026-10-13)
 
+> **Status 2026-10-13: decisions 1, 2 and 3 approved and done** (levels, `kind`, Task Card). Decision 4 (focus-stroke
+> token, shadow mapping) and the smaller items in sections 2–4 are still open.
+
 A code-level audit of all 157 component files and 149 story files, run by scripts (the levels scan and
 the consistency scan are described at the end so they can be rerun). Nothing here has been changed yet:
 each section ends with a recommendation and what it needs from the design lead. Motion was audited
