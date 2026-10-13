@@ -8,10 +8,35 @@ const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=1071
 
 const CONFIDENCE = ['high', 'medium', 'low'] as const
 
+type DemoProps = React.ComponentProps<typeof SourceCard> & {
+  /** Story toggles for the optional parts: each is a prop you pass or leave out. */
+  showTag?: boolean
+  showExcerpt?: boolean
+  showUsage?: boolean
+  showExclude?: boolean
+}
+
+function Demo({ showTag, showExcerpt, showUsage, showExclude, ...props }: DemoProps) {
+  return (
+    <div className="w-130 max-w-full">
+      <SourceCard
+        {...props}
+        tag={showTag ? props.tag : undefined}
+        excerpt={showExcerpt ? props.excerpt : undefined}
+        usage={showUsage ? props.usage : undefined}
+        onExclude={showExclude ? (props.onExclude ?? (() => {})) : undefined}
+        onRestore={showExclude ? (props.onRestore ?? (() => {})) : undefined}
+      />
+    </div>
+  )
+}
+
+const ALL = { showTag: true, showExcerpt: true, showUsage: true, showExclude: true }
+
 const meta = preview.meta({
   title: 'Agent Builder/Sources/Source Card',
   tags: ['agent-builder', 'sources'],
-  component: SourceCard,
+  component: Demo,
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
@@ -66,6 +91,10 @@ const meta = preview.meta({
     usage: 'Cited 3 times',
     excluded: false,
     href: '#source',
+    showTag: false,
+    showExcerpt: false,
+    showUsage: false,
+    showExclude: false,
   },
   argTypes: {
     confidence: { control: 'inline-radio', options: CONFIDENCE },
@@ -76,42 +105,42 @@ const meta = preview.meta({
     excerpt: { control: 'text' },
     usage: { control: 'text' },
     excluded: { control: 'boolean' },
+    showTag: { control: 'boolean', description: 'Story toggle: pass `tag` or not' },
+    showExcerpt: { control: 'boolean', description: 'Story toggle: pass `excerpt` or not' },
+    showUsage: { control: 'boolean', description: 'Story toggle: pass `usage` or not' },
+    showExclude: { control: 'boolean', description: 'Story toggle: pass `onExclude` / `onRestore` or not' },
     href: { control: 'text' },
     icon: { control: false },
     onExclude: { control: false, table: { category: 'Events' } },
     onRestore: { control: false, table: { category: 'Events' } },
   },
-  render: (args) => (
-    <div className="w-130">
-      <SourceCard {...args} onExclude={() => {}} onRestore={() => {}} />
-    </div>
-  ),
 })
 
-/** Every field, confidence and excluded are in Controls. */
+/** Publisher, title and confidence. The tag, excerpt, usage and Exclude are toggles in Controls. */
 export const Default = meta.story()
 
-Default.test('names its confidence and offers Open and Exclude', async ({ canvas }) => {
+Default.test('names its confidence and links to the source', async ({ canvas }) => {
   await expect(canvas.getByText('High confidence')).toBeVisible()
   await expect(canvas.getByRole('link', { name: 'Open source' })).toHaveAttribute('href', '#source')
+  await expect(canvas.queryByRole('button', { name: 'Exclude source' })).not.toBeInTheDocument()
+})
+
+/** Every part on: tag, excerpt, usage and Exclude. The edge case, not the default. */
+export const Full = meta.story({ args: ALL })
+
+Full.test('offers Open and Exclude', async ({ canvas }) => {
+  await expect(canvas.getByText('Cited 3 times')).toBeVisible()
   await expect(canvas.getByRole('button', { name: 'Exclude source' })).toBeEnabled()
 })
 
 /** Figma credibility (`confidence`) × state (default, excluded). */
 export const Variants = meta.story({
+  args: ALL,
   render: (args) => (
     <div className="flex flex-wrap gap-4">
       {CONFIDENCE.map((confidence) =>
         [false, true].map((excluded) => (
-          <div key={`${confidence}-${excluded}`} className="w-130">
-            <SourceCard
-              {...args}
-              confidence={confidence}
-              excluded={excluded}
-              onExclude={() => {}}
-              onRestore={() => {}}
-            />
-          </div>
+          <Demo key={`${confidence}-${excluded}`} {...args} confidence={confidence} excluded={excluded} />
         )),
       )}
     </div>
@@ -120,17 +149,16 @@ export const Variants = meta.story({
 
 /** Exclude and Restore switch the card. */
 export const Interactive = meta.story({
+  args: ALL,
   render: function Render(args) {
     const [excluded, setExcluded] = useState(false)
     return (
-      <div className="w-130">
-        <SourceCard
-          {...args}
-          excluded={excluded}
-          onExclude={() => setExcluded(true)}
-          onRestore={() => setExcluded(false)}
-        />
-      </div>
+      <Demo
+        {...args}
+        excluded={excluded}
+        onExclude={() => setExcluded(true)}
+        onRestore={() => setExcluded(false)}
+      />
     )
   },
 })
@@ -148,7 +176,7 @@ const UNBROKEN = 'https://example.com/a/very/long/path/without/any/spaces/that/m
 
 /** Stress test: long text and an unbroken URL in a narrow column wrap or truncate, never overflow. */
 export const LongContent = meta.story({
-  args: { publisher: LONG, meta: UNBROKEN, title: LONG, excerpt: `${LONG} ${UNBROKEN}` },
+  args: { ...ALL, publisher: LONG, meta: UNBROKEN, title: LONG, excerpt: `${LONG} ${UNBROKEN}` },
   decorators: [(Story) => <div className="w-80">{Story()}</div>],
 })
 

@@ -54,10 +54,17 @@ function Row({
   role = 'assistant',
   status = 'complete',
   onRetry,
+  showThinking = true,
+  showCitations = true,
+  showActions = true,
 }: {
   role?: (typeof ROLES)[number]
   status?: (typeof STATUSES)[number]
   onRetry?: () => void
+  /** Story toggles for the assistant's optional slots: each is a prop you pass or leave out. */
+  showThinking?: boolean
+  showCitations?: boolean
+  showActions?: boolean
 }) {
   if (role === 'system')
     return (
@@ -91,9 +98,12 @@ function Row({
       author="Assistant"
       timestamp="14:02"
       thinking={
-        <Thinking status={status === 'queued' ? 'running' : status === 'failed' ? 'failed' : 'done'} />
+        showThinking && (
+          <Thinking status={status === 'queued' ? 'running' : status === 'failed' ? 'failed' : 'done'} />
+        )
       }
       citations={
+        showCitations &&
         status === 'complete' && (
           <>
             <CitationChip index={1} domain="northwind.example/blog" confidence="high" />
@@ -101,7 +111,7 @@ function Row({
           </>
         )
       }
-      actions={status === 'complete' && <Actions />}
+      actions={showActions && status === 'complete' && <Actions />}
       error={
         <Alert tone="destructive">
           <AlertTitle>Couldn’t finish the summary</AlertTitle>
@@ -174,16 +184,29 @@ const meta = preview.meta({
       },
     },
   },
-  args: { role: 'assistant', status: 'complete', onRetry: fn() },
+  args: {
+    role: 'assistant',
+    status: 'complete',
+    onRetry: fn(),
+    showThinking: false,
+    showCitations: false,
+    showActions: true,
+  },
   argTypes: {
     role: { control: 'inline-radio', options: ROLES },
     status: { control: 'inline-radio', options: STATUSES },
+    showThinking: { control: 'boolean', description: 'Story toggle (assistant): pass `thinking` or not' },
+    showCitations: { control: 'boolean', description: 'Story toggle (assistant): pass `citations` or not' },
+    showActions: { control: 'boolean', description: 'Story toggle (assistant): pass `actions` or not' },
     onRetry: { control: false, table: { category: 'Events' } },
   },
 })
 
-/** Role and status are in Controls. */
+/** An answer with its actions. Role and status are in Controls; thinking and citations are toggles. */
 export const Default = meta.story()
+
+/** Every assistant slot on: thinking, citations and actions. The edge case, not the default. */
+export const Full = meta.story({ args: { showThinking: true, showCitations: true } })
 
 /** Figma role × state. */
 export const Matrix = meta.story({

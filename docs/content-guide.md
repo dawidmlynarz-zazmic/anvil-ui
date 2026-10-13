@@ -58,3 +58,18 @@ Typical prompts: "Summarize the Q3 launch plan", "Compare competitor pricing for
 - Tests query the new copy; when copy changes, change the test with it.
 - Docs (`parameters.guide`) say **when to use**, **when not to** (and what to use instead),
   **content** guidance and **accessibility** notes, in short bullets.
+
+## Streamlined defaults
+
+Storybook's Default story shows the everyday use of a component, not the maximum.
+
+- **Default = the common case**: the minimum a user needs to do the job (a composer is the field and
+  Send; a source card is publisher, title and confidence; an assistant message is the text and its
+  actions).
+- **Optional parts are toggles.** A component with optional slots gets a boolean control per part
+  (up to five: `showAttach`, `showTokenCount`, …; more than five: one `parts` multi-select) in the
+  story's `Demo`/`Row` helper. A toggle only decides whether the story passes the prop; the component
+  has no `show…` prop of its own (omit the slot or callback to hide the part).
+- **`Full` is the edge case**: one story named `Full` with every part on. States, Matrix and
+  Composition stories keep showing what they need to show.
+- `pnpm lint` fails a story file that has `show…` toggle controls and no `Full` story.
