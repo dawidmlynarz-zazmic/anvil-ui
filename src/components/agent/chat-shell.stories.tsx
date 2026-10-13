@@ -51,7 +51,7 @@ const iconButton = (label: string, glyph: typeof XIcon) => (
 )
 
 /** The example thread (Figma swaps a thread into the shell; these are its contents). */
-function Thread() {
+function Thread({ showQuickReplies = true }: { showQuickReplies?: boolean }) {
   return (
     <>
       <MessageRow role="user" timestamp="14:02">
@@ -61,10 +61,12 @@ function Thread() {
         Here’s the Q3 launch plan for Northwind Sync: beta closes 12 Sep, pricing goes live 1 Oct, the launch
         webinar is 8 Oct, partner enablement runs through October, and Maya Chen owns the readiness review.
       </MessageRow>
-      <QuickReplyGroup aria-label="Suggested follow-ups">
-        <QuickReply>Draft the launch email</QuickReply>
-        <QuickReply>List the open risks</QuickReply>
-      </QuickReplyGroup>
+      {showQuickReplies && (
+        <QuickReplyGroup aria-label="Suggested follow-ups">
+          <QuickReply>Draft the launch email</QuickReply>
+          <QuickReply>List the open risks</QuickReply>
+        </QuickReplyGroup>
+      )}
     </>
   )
 }
@@ -127,14 +129,25 @@ function Header({ surface }: { surface: ChatSurface }) {
   )
 }
 
-function Shell({ surface, className }: { surface: ChatSurface; className?: string }) {
+function Shell({
+  surface,
+  className,
+  showQuickReplies = true,
+  showDisclaimer = true,
+}: {
+  surface: ChatSurface
+  className?: string
+  /** Story toggles for the optional parts: each is a prop you pass or leave out. */
+  showQuickReplies?: boolean
+  showDisclaimer?: boolean
+}) {
   return (
     <ChatShell surface={surface} className={className}>
       <Header surface={surface} />
       <ChatShellThread>
-        <Thread />
+        <Thread showQuickReplies={showQuickReplies} />
       </ChatShellThread>
-      <ChatShellComposer disclaimer={DISCLAIMER}>
+      <ChatShellComposer disclaimer={showDisclaimer ? DISCLAIMER : undefined}>
         <PromptInput
           aria-label="Message the assistant"
           size={surface === 'popover' || surface === 'mobile' ? 'compact' : 'default'}
@@ -144,10 +157,30 @@ function Shell({ surface, className }: { surface: ChatSurface; className?: strin
   )
 }
 
+/** The shell at its surface size, framed. */
+function Framed({
+  surface = 'side-panel',
+  showQuickReplies,
+  showDisclaimer,
+}: {
+  surface?: ChatSurface
+  showQuickReplies?: boolean
+  showDisclaimer?: boolean
+}) {
+  return (
+    <div
+      data-shell={surface}
+      className="h-(--shell-container-height) max-h-[90vh] w-(--shell-container-width) max-w-[95vw] overflow-hidden rounded-xl border border-border shadow-elevation-raised"
+    >
+      <Shell surface={surface} showQuickReplies={showQuickReplies} showDisclaimer={showDisclaimer} />
+    </div>
+  )
+}
+
 const meta = preview.meta({
   title: 'Agent Builder/Surfaces/Chat Shell',
   tags: ['agent-builder'],
-  component: ChatShell,
+  component: Framed,
   parameters: {
     layout: 'centered',
     design: { type: 'figma', url: FIGMA },
@@ -196,22 +229,22 @@ const meta = preview.meta({
       ],
     },
   },
-  args: { surface: 'side-panel' as ChatSurface },
+  args: { surface: 'side-panel' as ChatSurface, showQuickReplies: false, showDisclaimer: true },
   argTypes: {
     surface: { control: 'inline-radio', options: ['full-screen', 'side-panel', 'popover', 'mobile'] },
+    showQuickReplies: {
+      control: 'boolean',
+      description: 'Story toggle: follow-up Quick Replies under the answer',
+    },
+    showDisclaimer: { control: 'boolean', description: 'Story toggle: pass `disclaimer` or not' },
   },
-  render: ({ surface }) => (
-    <div
-      data-shell={surface}
-      className="h-(--shell-container-height) max-h-[90vh] w-(--shell-container-width) max-w-[95vw] overflow-hidden rounded-xl border border-border shadow-elevation-raised"
-    >
-      <Shell surface={surface ?? 'side-panel'} />
-    </div>
-  ),
 })
 
-/** Each surface at its shell size, framed. Switch it in Controls. */
+/** Each surface at its shell size, framed: header, a short thread and the composer. Switch the surface in Controls; Quick Replies and the disclaimer are toggles. */
 export const Default = meta.story()
+
+/** Every optional part on: Quick Replies under the answer and the disclaimer. The edge case, not the default. */
+export const Full = meta.story({ args: { showQuickReplies: true, showDisclaimer: true } })
 
 Default.test('has a header, the thread and the composer', async ({ canvas }) => {
   await expect(canvas.getByText('Launch assistant · online')).toBeVisible()
