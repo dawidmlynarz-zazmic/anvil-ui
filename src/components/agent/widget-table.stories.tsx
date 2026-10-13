@@ -60,10 +60,16 @@ function Pages() {
   )
 }
 
-type DemoProps = { loading?: boolean; empty?: boolean; striped?: boolean }
+type DemoProps = {
+  loading?: boolean
+  empty?: boolean
+  striped?: boolean
+  /** Story toggle for the optional part: pass `pagination` or not. */
+  showPagination?: boolean
+}
 
 /** A sortable table: Signups sorts descending, then ascending, then off. */
-function Demo({ loading, empty, striped }: DemoProps) {
+function Demo({ loading, empty, striped, showPagination }: DemoProps) {
   const [sort, setSort] = useState<'none' | 'asc' | 'desc'>('desc')
   const rows = [...ROWS].sort((a, b) =>
     sort === 'none' ? 0 : sort === 'asc' ? a.signups - b.signups : b.signups - a.signups,
@@ -75,7 +81,7 @@ function Demo({ loading, empty, striped }: DemoProps) {
       loading={loading}
       empty={empty ? 'No trial signups in the last 4 weeks.' : undefined}
       striped={striped}
-      pagination={<Pages />}
+      pagination={showPagination ? <Pages /> : undefined}
       header={
         <TableHeader>
           <TableRow>
@@ -167,17 +173,21 @@ const meta = preview.meta({
       },
     },
   },
-  args: { loading: false, empty: false, striped: true },
+  args: { loading: false, empty: false, striped: false, showPagination: false },
   argTypes: {
     loading: { control: 'boolean' },
     empty: { control: 'boolean' },
     striped: { control: 'boolean' },
+    showPagination: { control: 'boolean', description: 'Story toggle: pass `pagination` or not' },
   },
   decorators: [(Story) => <div className="max-w-160">{Story()}</div>],
 })
 
-/** Loading, empty and stripes are in Controls; Signups sorts. */
+/** Plain rows under the headings; Signups sorts. Stripes, pagination, loading and empty are in Controls. */
 export const Default = meta.story()
+
+/** Stripes and pagination on. The edge case, not the default. */
+export const Full = meta.story({ args: { striped: true, showPagination: true } })
 
 Default.test('the Signups column sorts', async ({ canvas }) => {
   const head = canvas.getByRole('columnheader', { name: /Signups/ })

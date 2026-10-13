@@ -137,6 +137,11 @@ type DemoProps = {
   editing?: boolean
   onPublish?: () => void
   onClose?: () => void
+  /** Story toggles for the optional parts: each is a prop you pass or leave out. */
+  showVersions?: boolean
+  showSync?: boolean
+  showActions?: boolean
+  showPublish?: boolean
 }
 
 function Demo({
@@ -146,6 +151,10 @@ function Demo({
   editing,
   onPublish,
   onClose,
+  showVersions,
+  showSync,
+  showActions,
+  showPublish,
 }: DemoProps) {
   const [version, setVersion] = useState('v3')
   const [current, setCurrent] = useState<ArtifactView>(view)
@@ -153,13 +162,13 @@ function Demo({
     <ArtifactPanel
       title={title}
       version={version}
-      versions={VERSIONS}
-      onVersionChange={setVersion}
-      sync={synced}
+      versions={showVersions ? VERSIONS : undefined}
+      onVersionChange={showVersions ? setVersion : undefined}
+      sync={showSync ? synced : undefined}
       view={current}
       onViewChange={setCurrent}
-      actions={actions}
-      onPublish={onPublish}
+      actions={showActions ? actions : undefined}
+      onPublish={showPublish ? onPublish : undefined}
       onClose={onClose}
       code={code}
       status={status}
@@ -228,6 +237,10 @@ const meta = preview.meta({
     title: 'Q3 launch dashboard',
     status: 'Last edited 2 min ago · 3 versions',
     editing: false,
+    showVersions: false,
+    showSync: false,
+    showActions: false,
+    showPublish: false,
     onPublish: fn(),
     onClose: fn(),
   },
@@ -236,25 +249,37 @@ const meta = preview.meta({
     title: { control: 'text' },
     status: { control: 'text' },
     editing: { control: 'boolean' },
+    showVersions: { control: 'boolean', description: 'Story toggle: pass `versions` or not' },
+    showSync: { control: 'boolean', description: 'Story toggle: pass `sync` or not' },
+    showActions: { control: 'boolean', description: 'Story toggle: pass `actions` or not' },
+    showPublish: { control: 'boolean', description: 'Story toggle: pass `onPublish` or not' },
     onPublish: { control: false, table: { category: 'Events' } },
     onClose: { control: false, table: { category: 'Events' } },
   },
 })
 
-/** View, title, status and editing are in Controls. */
+/** The title, the preview/code tabs and Close. Versions, sync, actions and Publish are toggles in Controls. */
 export const Default = meta.story()
 
-Default.test('switches to code, publishes and closes', async ({ canvas, args }) => {
+/** Every optional part on: versions, sync, actions and Publish. The edge case, not the default. */
+export const Full = meta.story({
+  args: { showVersions: true, showSync: true, showActions: true, showPublish: true },
+})
+
+Default.test('switches to code and closes', async ({ canvas, args }) => {
   await userEvent.click(canvas.getByRole('tab', { name: 'Code' }))
   await expect(canvas.getByRole('tab', { name: 'Code' })).toHaveAttribute('aria-selected', 'true')
   await expect(canvas.getByText(/export default function LaunchDashboard/)).toBeVisible()
-  await userEvent.click(canvas.getByRole('button', { name: 'Publish' }))
-  await expect(args.onPublish).toHaveBeenCalledOnce()
   await userEvent.click(canvas.getByRole('button', { name: 'Close' }))
   await expect(args.onClose).toHaveBeenCalledOnce()
 })
 
-Default.test('picks a version', async ({ canvas, canvasElement }) => {
+Full.test('publishes', async ({ canvas, args }) => {
+  await userEvent.click(canvas.getByRole('button', { name: 'Publish' }))
+  await expect(args.onPublish).toHaveBeenCalledOnce()
+})
+
+Full.test('picks a version', async ({ canvas, canvasElement }) => {
   await userEvent.click(canvas.getByRole('button', { name: 'Version v3' }))
   const body = within(canvasElement.ownerDocument.body)
   await waitFor(() => expect(body.getByRole('menuitemradio', { name: 'v2' })).toBeVisible())
