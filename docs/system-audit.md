@@ -192,6 +192,11 @@ deprecated feature) are the verdict and its note.
 | Activity Feed | Tasks · feature | Agent Builder (Tasks) | ready-to-use | — | ✓ | | new 2026-10-13; on Task Card + Chip + Collapsible |
 | Parallel Agents | Tasks · feature | Agent Builder (Tasks) | ready-to-use | — | ✓ | | new 2026-10-13; on Task Card + Progress |
 | Task Summary | Tasks · feature | Agent Builder (Tasks) | ready-to-use | — | ✓ | | new 2026-10-13; on Task Card + Value Stack + Quick Reply |
+| Insight Card | Evidence & decisions · feature | Agent Builder (Evidence & decisions) | ready-to-use | — | ✓ | | new 2026-10-13; on Citation Chip + Alert |
+| Open Items | Evidence & decisions · feature | Agent Builder (Evidence & decisions) | ready-to-use | — | ✓ | | new 2026-10-13; on Task Card |
+| Conflict Resolver | Evidence & decisions · feature | Agent Builder (Evidence & decisions) | ready-to-use | — | ✓ | | new 2026-10-13; on Task Card + Field choice card |
+| Criteria Matrix | Evidence & decisions · feature | Agent Builder (Evidence & decisions) | ready-to-use | — | ✓ | | new 2026-10-13; on Task Card + Table |
+| Deliverable Outline | Evidence & decisions · feature | Agent Builder (Evidence & decisions) | ready-to-use | — | ✓ | | new 2026-10-13; on Task Card + Task Plan step |
 
 Internal helpers (no story, not public): Citation Confidence (Citation Chip, Hovercard, Source
 Item), menu styles (Dropdown Menu, Context Menu, Menubar).
