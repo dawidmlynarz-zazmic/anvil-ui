@@ -1,12 +1,21 @@
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'
+import { PulseDot } from '@/components/agent/pulse-dot'
+import { TextShimmer } from '@/components/agent/text-shimmer'
 import { IconTile } from '@/components/anvil/icon-tile'
 import { ShortcutHint } from '@/components/anvil/shortcut-hint'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { CommandDialog, CommandInput, CommandItem, CommandList } from '@/components/ui/command'
-import { CopyIcon, Icon, MessageSquareIcon, SparklesIcon, type LucideIcon } from '@/components/ui/icon'
+import {
+  CircleHelpIcon,
+  CopyIcon,
+  Icon,
+  MessageSquareIcon,
+  SparklesIcon,
+  type LucideIcon,
+} from '@/components/ui/icon'
 import { Kbd, KbdGroup } from '@/components/ui/kbd'
 
 // Figma Agent Builder › Surfaces › In-page assist · command palette (10750:6219): ⌘K search that
@@ -15,20 +24,21 @@ import { Kbd, KbdGroup } from '@/components/ui/kbd'
 // Figma state → content, not a prop: idle / results are the groups you pass (`children`); ai answer
 // is `answer`; executing is `progress`; the parsed request is `understood`.
 // - CommandPalette: the dialog (640px, radius xl, no close button: Esc is in the input), a prompt row
-//   (search glyph, or sparkles when `ai`), the "Understood:" status row when `understood` is set, the
+//   (search glyph, or sparkles when `ai`), the parse status row (Figma parse status: `parseStatus` parsing · understood · unclear, with the
+//   `understood` tokens), the
 //   answer or progress panel, the list, and the legend row (--muted, `legend` = ShortcutHint list).
 //   The list is not filtered by the text (the host decides what matches; `commandProps` can turn it
 //   on). `children` are CommandGroups of CommandPaletteItems.
 // - CommandPaletteItem: a Command item with a 32px Icon Tile, `label` (text/sm/medium), `meta`
 //   (text/xs --muted-foreground) and an optional `shortcut` (Kbd group). `kind` ask (surface tile) ·
-//   action (info tile) · page (neutral tile) is the Figma `type`.
+//   action (info tile) · page and person (neutral tile) is the Figma `type`.
 // - CommandPaletteAnswer: the AI answer card (--agent-subtle): the assistant's name, the text,
 //   Sources (Citation Chips) and the actions (`Continue in chat`, `Copy`).
 // - CommandPaletteProgress: the executing panel: Tool Log Lines for the steps, then the actions.
 
-type PaletteItemKind = 'ask' | 'action' | 'page'
+type PaletteItemKind = 'ask' | 'action' | 'page' | 'person'
 
-const KIND_TILE = { ask: 'surface', action: 'info', page: 'neutral' } as const
+const KIND_TILE = { ask: 'surface', action: 'info', page: 'neutral', person: 'neutral' } as const
 
 function CommandPaletteItem({
   kind = 'action',
@@ -39,7 +49,7 @@ function CommandPaletteItem({
   className,
   ...props
 }: Omit<React.ComponentProps<typeof CommandItem>, 'children'> & {
-  /** Figma type: ask the assistant · an action · a page or article. */
+  /** Figma type: ask the assistant · an action · a page or article · a person. */
   kind?: PaletteItemKind
   icon: LucideIcon
   label: React.ReactNode
@@ -160,6 +170,8 @@ function CommandPalette({
   onQueryChange,
   placeholder = 'Search or ask anything…',
   ai = false,
+  parseStatus = 'understood',
+  parsingLabel = 'Understanding your request…',
   understood,
   understoodLabel = 'Understood:',
   answer,
@@ -179,8 +191,12 @@ function CommandPalette({
   placeholder?: string
   /** The text is a request for the assistant: the prompt row shows sparkles instead of search. */
   ai?: boolean
-  /** What the assistant parsed from the request, e.g. `['Book', '2 tickets']`: shown as tokens. */
+  /** Figma parse status: parsing (a shimmering line) · understood · unclear (a question and the options as tokens). */
+  parseStatus?: 'parsing' | 'understood' | 'unclear'
+  parsingLabel?: React.ReactNode
+  /** What the assistant parsed from the request, e.g. `['Book', '2 tickets']`: shown as tokens (the options when unclear). */
   understood?: string[]
+  /** The row's lead text: “Understood:”, or the question when unclear (“Which performance?”). */
   understoodLabel?: React.ReactNode
   /** A CommandPaletteAnswer, above the list. */
   answer?: React.ReactNode
@@ -216,21 +232,52 @@ function CommandPalette({
         wrapperClassName="px-4 py-3"
         end={<Kbd aria-hidden>esc</Kbd>}
       />
-      {understood && (
+      {(parseStatus === 'parsing' || understood) && (
         <div
           data-slot="command-palette-parse"
+          data-status={parseStatus}
           role="status"
-          className="mx-2 mt-2 flex flex-wrap items-center gap-1.5 rounded-md bg-agent-subtle px-2.5 py-1.5"
+          className={cn(
+            'mx-2 mt-2 flex flex-wrap items-center gap-1.5 rounded-md px-2.5 py-1.5',
+            parseStatus === 'unclear' ? 'bg-warning-subtle' : 'bg-agent-subtle',
+          )}
         >
-          <Icon icon={SparklesIcon} size="xs" tone="agent" className="size-3.5" />
-          <span className="type-text-xs-medium text-agent-strong dark:text-foreground">
-            {understoodLabel}
-          </span>
-          {understood.map((token) => (
-            <Badge key={token} variant="outline" tone="agent" size="sm" className="text-foreground">
-              {token}
-            </Badge>
-          ))}
+          {parseStatus === 'parsing' ? (
+            <>
+              <PulseDot />
+              <TextShimmer className="type-text-xs-medium">{parsingLabel}</TextShimmer>
+            </>
+          ) : (
+            <>
+              <Icon
+                icon={parseStatus === 'unclear' ? CircleHelpIcon : SparklesIcon}
+                size="xs"
+                tone={parseStatus === 'unclear' ? 'warning' : 'agent'}
+                className="size-3.5"
+              />
+              <span
+                className={cn(
+                  'type-text-xs-medium',
+                  parseStatus === 'unclear'
+                    ? 'text-warning-strong dark:text-foreground'
+                    : 'text-agent-strong dark:text-foreground',
+                )}
+              >
+                {understoodLabel}
+              </span>
+              {understood?.map((token) => (
+                <Badge
+                  key={token}
+                  variant="outline"
+                  tone={parseStatus === 'unclear' ? 'warning' : 'agent'}
+                  size="sm"
+                  className="text-foreground"
+                >
+                  {token}
+                </Badge>
+              ))}
+            </>
+          )}
         </div>
       )}
       {answer && <div className="px-2 pt-2">{answer}</div>}

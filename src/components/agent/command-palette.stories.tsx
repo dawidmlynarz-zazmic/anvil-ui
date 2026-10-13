@@ -139,8 +139,16 @@ const meta = preview.meta({
         values: 'idle · results · ai answer · executing',
         code: 'content: the groups you pass (idle, results) · `answer` · `progress`; not a prop',
       },
-      { property: 'palette item (type)', values: 'ask · action · page', code: '`CommandPaletteItem` `kind`' },
-      { property: 'parse status', values: 'understood', code: '`understood` (the parsed tokens)' },
+      {
+        property: 'palette item (type)',
+        values: 'ai · action · page · person',
+        code: '`CommandPaletteItem` `kind`',
+      },
+      {
+        property: 'parse status',
+        values: 'parsing · understood · unclear',
+        code: '`parseStatus` + `understood` (the tokens; the options when unclear) + `understoodLabel` (the question)',
+      },
       { property: 'legend item', values: 'instance', code: '`legend` (Shortcut Hints)' },
     ],
     guide: {
@@ -308,6 +316,38 @@ Executing.test('shows the steps and a way to stop', async ({ canvasElement }) =>
   await waitFor(() => expect(body.getByText('Found 2 performances on Sat 17 Oct')).toBeVisible())
   await expect(body.getByRole('button', { name: 'Cancel' })).toBeVisible()
   await expect(body.queryByRole('option')).toBeNull()
+})
+
+/** Figma parse status parsing: the request is being read; the list waits. */
+export const Parsing = meta.story({
+  args: { query: REQUEST, ai: true, parseStatus: 'parsing' },
+})
+
+Parsing.test('announces that it is reading the request', async ({ canvasElement }) => {
+  const body = within(canvasElement.ownerDocument.body)
+  await waitFor(() => expect(body.getByText('Understanding your request…')).toBeVisible())
+})
+
+/** Figma parse status unclear: a question, with the options as tokens. */
+export const Unclear = meta.story({
+  args: {
+    query: 'book 2 tickets for paper kingdoms saturday',
+    ai: true,
+    parseStatus: 'unclear',
+    understoodLabel: 'Which performance?',
+    understood: ['14:30 matinee', '19:30 evening'],
+  },
+  render: (args) => (
+    <CommandPalette {...args}>
+      <Results />
+    </CommandPalette>
+  ),
+})
+
+Unclear.test('asks which one', async ({ canvasElement }) => {
+  const body = within(canvasElement.ownerDocument.body)
+  await waitFor(() => expect(body.getByText('Which performance?')).toBeVisible())
+  await expect(body.getByText('19:30 evening')).toBeVisible()
 })
 
 /** Opens from a button and closes with Escape; the open control is live. */
