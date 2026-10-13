@@ -60,16 +60,20 @@ deprecated feature) are the verdict and its note.
 | Hover Card | UI · composite | Molecule | composite | Citation Hovercard | ✓ | | keep |
 | Icon | Foundations | Foundation | base | everything | | | keep (Foundations) |
 | Icon Tile | UI · element (Anvil) | Atom | base | 11 agent components | | | keep |
+| Check Row | Patterns · part | Atom | base | — | ✓ | | new 2026-10-13 (parts audit); Icon only |
 | Input | UI · element | Atom | base | Input Group, Sidebar | ✓ | | keep |
 | Input Group | UI · composite | Molecule | composite | Prompt Input, Citation Drawer, Memory Manager | ✓ | | keep |
 | Input OTP | UI · composite | Molecule | composite | — | ✓ | | keep |
 | Timeline | Patterns · part | Molecule | composite | — | ✓ | | new 2026-10-13 (parts audit); on Icon Tile |
+| Price | Patterns · part | Molecule | composite | — | ✓ | | new 2026-10-13 (parts audit); on Badge |
 | Item | UI · composite | Molecule | composite | Feedback Reason, Instructions Banner, Memory Manager, Widget Media | ✓ | | keep; more rows build on it (Citation Source Item) |
 | Kbd | UI · element | Atom | base | — | ✓ | | keep |
+| Key Value Row | Patterns · part | Atom | base | — | ✓ | | new 2026-10-13 (parts audit); text only |
 | Label | UI · element | Atom | base | Field, Survey | ✓ | | keep; Phase 9 aligns sizing and audits usage |
 | Progress Steps | Patterns · part | Atom | base | — | ✓ | | new 2026-10-13 (parts audit); Icon only |
 | Rating Display | Patterns · part | Atom | base | — | ✓ | | new 2026-10-13 (parts audit); Icon only |
 | Legend Item | Patterns · part | Atom | base | — | ✓ | | new 2026-10-13 (parts audit) |
+| Value Stack | Patterns · part | Atom | base | — | ✓ | | new 2026-10-13 (parts audit); includes Figma stat tile (`variant="tile"`) |
 | Link | UI · element (Anvil) | Atom | base | — | | | keep |
 | Menubar | UI · feature | Organism | composite | — | ✓ | | keep |
 | Pagination | UI · composite | Molecule | composite | Widget Table | ✓ | | keep |

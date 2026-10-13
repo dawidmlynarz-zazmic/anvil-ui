@@ -35,7 +35,7 @@ function ItemSeparator({ className, ...props }: React.ComponentProps<typeof Sepa
 }
 
 const itemVariants = cva(
-  'group/item flex flex-wrap items-center rounded-md border border-transparent type-text-sm-normal transition-colors duration-(--duration-fast) outline-none focus-visible:focus-ring [a]:hover:bg-muted',
+  'group/item flex flex-wrap items-center rounded-md border border-transparent type-text-sm-normal transition-colors duration-(--duration-fast) outline-none focus-visible:focus-ring [a]:hover:bg-muted data-[selected=true]:border-border-action data-[selected=true]:bg-info-subtle aria-disabled:pointer-events-none aria-disabled:opacity-50',
   {
     variants: {
       variant: {
@@ -46,6 +46,8 @@ const itemVariants = cva(
       size: {
         default: 'gap-4 p-4',
         sm: 'gap-3 px-3 py-2.5',
+        // Padding-free, for an Item inline in other content (Figma part / person: avatar + name + role).
+        xs: 'gap-2 p-0',
       },
     },
     defaultVariants: {
@@ -60,14 +62,21 @@ function Item({
   variant = 'default',
   size = 'default',
   asChild = false,
+  selected,
   ...props
-}: React.ComponentProps<'div'> & VariantProps<typeof itemVariants> & { asChild?: boolean }) {
+}: React.ComponentProps<'div'> &
+  VariantProps<typeof itemVariants> & {
+    asChild?: boolean
+    /** Figma list item state selected: --info-subtle fill and --border-action stroke. Say it to assistive tech too (`aria-selected` in a listbox, `aria-current` in navigation). */
+    selected?: boolean
+  }) {
   const Comp = asChild ? Slot.Root : 'div'
   return (
     <Comp
       data-slot="item"
       data-variant={variant}
       data-size={size}
+      data-selected={selected || undefined}
       className={cn(itemVariants({ variant, size, className }))}
       {...props}
     />

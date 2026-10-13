@@ -2,7 +2,7 @@ import preview from '#.storybook/preview'
 import { expect } from 'storybook/test'
 
 import { MessageBubble, MessageBubbleContent } from './message-bubble'
-import { CircleAlertIcon, Icon, PaperclipIcon } from './icon'
+import { CircleAlertIcon, ClockIcon, Icon, PaperclipIcon } from './icon'
 import { Marker, MarkerContent, MarkerIcon } from './marker'
 import { Message, MessageContent, MessageGroup } from './message'
 
@@ -44,7 +44,10 @@ const meta = preview.meta({
     },
   },
   args: { variant: 'default' },
-  argTypes: { variant: { control: 'inline-radio', options: ['default', 'separator', 'border'] } },
+  argTypes: {
+    variant: { control: 'inline-radio', options: ['default', 'separator', 'border', 'inline'] },
+    size: { control: 'inline-radio', options: ['xs', 'sm', 'default'] },
+  },
   render: (args) => (
     <div className="max-w-(--shell-thread-max)">
       <Marker {...args}>
@@ -137,4 +140,34 @@ export const InThread = meta.story({
       </Message>
     </MessageGroup>
   ),
+})
+
+/** Figma part / meta item: `variant="inline"` sits in a row of facts; `size` xs · sm · default. */
+export const MetaItems = meta.story({
+  render: () => (
+    <div className="flex flex-col gap-4">
+      {(['xs', 'sm', 'default'] as const).map((size) => (
+        <div key={size} className="flex items-center gap-6">
+          <Marker variant="inline" size={size}>
+            <MarkerIcon>
+              <Icon icon={ClockIcon} />
+            </MarkerIcon>
+            <MarkerContent>2 h 15 min</MarkerContent>
+          </Marker>
+          <Marker variant="inline" size={size}>
+            <MarkerIcon>
+              <Icon icon={PaperclipIcon} />
+            </MarkerIcon>
+            <MarkerContent>1 checked bag</MarkerContent>
+          </Marker>
+        </div>
+      ))}
+    </div>
+  ),
+})
+
+MetaItems.test('the sizes change the text and the icon', async ({ canvasElement }) => {
+  const [xs, , , , def] = [...canvasElement.querySelectorAll<HTMLElement>('[data-slot=marker]')]
+  await expect(getComputedStyle(xs).fontSize).toBe('12px')
+  await expect(getComputedStyle(def).fontSize).toBe('14px')
 })
