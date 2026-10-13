@@ -76,6 +76,9 @@ export const catalog: CatalogArea[] = [
       'Skeleton',
       'Separator',
       'Scroll Area',
+      'Value Stack',
+      'Key Value Row',
+      'Check Row',
     ),
   },
   {
@@ -139,6 +142,7 @@ export const catalog: CatalogArea[] = [
         'Pagination',
         'Resizable',
         'Shortcut Hint',
+        'Price',
       ),
       alias('System Banner', 'Design System/Molecules/Alert'),
     ],
