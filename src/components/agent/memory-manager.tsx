@@ -2,13 +2,13 @@ import * as React from 'react'
 
 import { cn } from '@/lib/utils'
 import { Item, ItemActions, ItemContent } from '@/components/ui/item'
-import { ShellDescription, ShellFooter, ShellHeader, ShellTitle } from '@/components/anvil/shell'
+import { TaskCard } from '@/components/agent/task-card'
+import { ShellFooter } from '@/components/anvil/shell'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
 import { Switch } from '@/components/ui/switch'
 import { BrainIcon, Icon, PencilIcon, SearchIcon, Trash2Icon } from '@/components/ui/icon'
-import { IconTile } from '@/components/anvil/icon-tile'
 
 // Figma Agent Builder › Core Kit › memory manager (10730:2779): review and manage what the
 // assistant remembers. --card, border, radius xl, shadow-sm, max 640px. Header (part / card header,
@@ -49,45 +49,40 @@ function MemoryManager({
   const [uncontrolled, setUncontrolled] = React.useState(defaultEnabled)
   const on = enabled ?? uncontrolled
   return (
-    <article
+    <TaskCard
       data-slot="memory-manager"
       data-enabled={on}
-      aria-labelledby={titleId}
-      className={cn(
-        'group/memory flex w-full max-w-160 flex-col overflow-hidden rounded-xl border bg-card text-card-foreground shadow-sm',
-        className,
-      )}
+      icon={BrainIcon}
+      title={title}
+      subtitle={description}
+      titleId={titleId}
+      badge={
+        <Switch
+          aria-labelledby={titleId}
+          checked={on}
+          onCheckedChange={(next) => {
+            setUncontrolled(next)
+            onEnabledChange?.(next)
+          }}
+        />
+      }
+      footer={
+        (note || action) && (
+          <ShellFooter variant="card" note={note}>
+            {action}
+          </ShellFooter>
+        )
+      }
+      className={cn('group/memory', className)}
       {...props}
     >
-      <ShellHeader
-        variant="card"
-        media={<IconTile icon={BrainIcon} tone="agent" size="sm" />}
-        trailing={
-          <Switch
-            aria-labelledby={titleId}
-            checked={on}
-            onCheckedChange={(next) => {
-              setUncontrolled(next)
-              onEnabledChange?.(next)
-            }}
-          />
-        }
-      >
-        <ShellTitle id={titleId}>{title}</ShellTitle>
-        {description && <ShellDescription>{description}</ShellDescription>}
-      </ShellHeader>
       {(search || children) && (
         <div className="flex flex-col gap-2 p-4">
           {search}
           {children && <ul className="flex flex-col gap-2">{children}</ul>}
         </div>
       )}
-      {(note || action) && (
-        <ShellFooter variant="card" note={note}>
-          {action}
-        </ShellFooter>
-      )}
-    </article>
+    </TaskCard>
   )
 }
 

@@ -185,7 +185,8 @@ Customer Support) are consumers of the library. Use them as real-world usage ref
   `size` (xs · sm · default · lg · icon · icon-xs · icon-sm · icon-lg), `shape`, `side`, `align`,
   `orientation`, `checked`, `pressed`, `open`, `disabled`, `loading`, `mode`.
 - `type` in Figma means *which sub-component or content kind* (e.g. dropdown item type radio →
-  `DropdownMenuRadioItem`). It is not a prop unless the contract says so.
+  `DropdownMenuRadioItem`). It is not a prop; when the choice must be a prop it is named `kind`
+  (never `type`: it clashes with the HTML attribute).
 - **The Figma `state` property is never a prop.** Map each value to one selector:
   hover → `hover:` · focus → `focus-visible:` · pressed → `active:` · highlighted →
   `data-[highlighted]:` · disabled → `disabled:` / `data-[disabled]:` · invalid →

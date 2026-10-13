@@ -1,7 +1,7 @@
 import * as React from 'react'
 
-import { cn } from '@/lib/utils'
 import { CitationChip, type Confidence } from '@/components/agent/citation-chip'
+import { TaskCard } from '@/components/agent/task-card'
 import { ShellFooter } from '@/components/anvil/shell'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
@@ -38,7 +38,7 @@ function InsightCard({
   onCompare,
   className,
   ...props
-}: Omit<React.ComponentProps<'article'>, 'children'> & {
+}: Omit<React.ComponentProps<typeof TaskCard>, 'children' | 'footer' | 'title' | 'icon' | 'badge'> & {
   /** Where it comes from: “Insight · context”, “Spending · March”. */
   context: React.ReactNode
   confidence?: Confidence
@@ -57,14 +57,33 @@ function InsightCard({
   const chips = (items: Evidence[]) =>
     items.map((e, i) => <CitationChip key={i} index={e.index} confidence={e.confidence} domain={e.domain} />)
   return (
-    <article
+    <TaskCard
       data-slot="insight-card"
       data-conflicting={conflicting || undefined}
-      className={cn(
-        'flex w-full max-w-160 flex-col overflow-hidden rounded-xl border bg-card text-card-foreground shadow-sm wrap-break-word',
-        className,
-      )}
+      className={className}
       {...props}
+      footer={
+        <ShellFooter variant="card" align="between">
+          <div className="flex items-center gap-2">
+            <Button variant="outline" intent="neutral" size="sm" onClick={onDigDeeper}>
+              <Icon icon={SearchIcon} />
+              Dig deeper
+            </Button>
+            {conflicting ? (
+              <Button variant="ghost" intent="neutral" size="sm" onClick={onCompare}>
+                <Icon icon={GitCompareIcon} />
+                Compare sources
+              </Button>
+            ) : (
+              <Button variant="ghost" intent="neutral" size="sm" onClick={onExclude}>
+                <Icon icon={XIcon} />
+                Exclude
+              </Button>
+            )}
+          </div>
+          {count && <span className="type-text-xs-normal text-muted-foreground">{count}</span>}
+        </ShellFooter>
+      }
     >
       <div className="flex flex-col gap-3 p-4">
         <div className="flex items-center justify-between gap-3">
@@ -91,27 +110,7 @@ function InsightCard({
           </Alert>
         )}
       </div>
-      <ShellFooter variant="card" align="between">
-        <div className="flex items-center gap-2">
-          <Button variant="outline" intent="neutral" size="sm" onClick={onDigDeeper}>
-            <Icon icon={SearchIcon} />
-            Dig deeper
-          </Button>
-          {conflicting ? (
-            <Button variant="ghost" intent="neutral" size="sm" onClick={onCompare}>
-              <Icon icon={GitCompareIcon} />
-              Compare sources
-            </Button>
-          ) : (
-            <Button variant="ghost" intent="neutral" size="sm" onClick={onExclude}>
-              <Icon icon={XIcon} />
-              Exclude
-            </Button>
-          )}
-        </div>
-        {count && <span className="type-text-xs-normal text-muted-foreground">{count}</span>}
-      </ShellFooter>
-    </article>
+    </TaskCard>
   )
 }
 

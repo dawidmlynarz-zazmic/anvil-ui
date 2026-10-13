@@ -38,6 +38,13 @@ Pending addition (from the re-audit): `type` = *which sub-component or content k
 breadcrumbs, pagination, table, table cells, dropdown item, sidebar header and footer). In code it
 selects a sub-component or rendering branch, e.g. dropdown item type radio → `DropdownMenuRadioItem`.
 
+**`kind` (approved 2026-10-13, docs/quality-pass.md):** when that choice has to be a prop, it is named
+`kind`, never `type` (which clashes with the HTML attribute and means something else on a Button or an
+input). Examples: Rating, Survey, File Output Card, Widget Media (`kind` of content), Command Palette item,
+Widget Error (`kind` failed · offline · permission · timeout), Document Canvas line (`kind` unchanged ·
+added · removed) and Activity Feed entries (`kind` search · read · …). A Figma property named `type` that
+selects content maps to `kind`; one that only picks a sub-component stays a sub-component.
+
 ## 2 · State values
 
 The Figma property named state shows how a component looks under each condition. It is never a code prop: each value maps to exactly one CSS or Radix selector, which developers write in the component classes.

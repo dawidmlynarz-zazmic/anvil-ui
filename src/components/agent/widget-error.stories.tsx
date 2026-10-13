@@ -33,7 +33,7 @@ const meta = preview.meta({
       {
         property: 'type',
         values: 'failed · offline · permission · timeout',
-        code: '`type` prop (sets the glyph, tile tone and default copy)',
+        code: '`kind` prop (sets the glyph, tile tone and default copy)',
       },
       { property: 'title', values: 'text', code: '`title` prop' },
       { property: 'description', values: 'text', code: '`description` prop' },
@@ -42,7 +42,7 @@ const meta = preview.meta({
     guide: {
       use: [
         'In place of a widget that couldn’t load: say what happened and offer the way out (Try again, Request access, Keep waiting).',
-        'Pick the `type` that matches the cause; override `title` and `description` with specifics when you have them.',
+        'Pick the `kind` that matches the cause; override `title` and `description` with specifics when you have them.',
       ],
       avoid: [
         'A problem with the whole conversation: use Alert.',
@@ -62,17 +62,17 @@ const meta = preview.meta({
     docs: {
       description: {
         component:
-          'A widget that couldn’t load (`@/components/agent/widget-error`), built on Card, Empty State and a circle Icon Tile: `type` failed · offline · permission · timeout (glyph, tone and default copy), `title`, `description`, `icon` and the `actions` slot.',
+          'A widget that couldn’t load (`@/components/agent/widget-error`), built on Card, Empty State and a circle Icon Tile: `kind` failed · offline · permission · timeout (glyph, tone and default copy), `title`, `description`, `icon` and the `actions` slot.',
       },
     },
   },
   args: {
-    type: 'failed' as const,
+    kind: 'failed' as const,
     title: 'Couldn’t load flights',
     description: 'Something went wrong. Nothing was changed.',
   },
   argTypes: {
-    type: { control: 'inline-radio', options: ['failed', 'offline', 'permission', 'timeout'] },
+    kind: { control: 'inline-radio', options: ['failed', 'offline', 'permission', 'timeout'] },
     title: { control: 'text' },
     description: { control: 'text' },
     icon: { control: false },
@@ -81,7 +81,7 @@ const meta = preview.meta({
   render: (args) => <WidgetError {...args} actions={RETRY} />,
 })
 
-/** Type, title and description are in Controls. */
+/** Kind, title and description are in Controls. */
 export const Default = meta.story()
 
 Default.test('offers to try again', async ({ canvas }) => {
@@ -91,12 +91,12 @@ Default.test('offers to try again', async ({ canvas }) => {
 })
 
 /** Figma types with their default glyph, tone and copy. */
-export const Types = meta.story({
+export const Kinds = meta.story({
   render: () => (
     <div className="flex flex-wrap items-start gap-4">
-      <WidgetError type="failed" actions={RETRY} />
+      <WidgetError kind="failed" actions={RETRY} />
       <WidgetError
-        type="offline"
+        kind="offline"
         description="Showing what was saved at 09:14. Changes will sync when you reconnect."
         actions={
           <Button variant="outline" intent="neutral" size="sm">
@@ -106,7 +106,7 @@ export const Types = meta.story({
         }
       />
       <WidgetError
-        type="permission"
+        kind="permission"
         title="No access to Northwind Sync"
         description="The assistant needs read access to show the launch metrics."
         actions={
@@ -117,7 +117,7 @@ export const Types = meta.story({
         }
       />
       <WidgetError
-        type="timeout"
+        kind="timeout"
         description="The signups query is still running after 30 s."
         actions={
           <>

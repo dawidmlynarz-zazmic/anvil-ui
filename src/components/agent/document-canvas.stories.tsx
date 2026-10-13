@@ -31,19 +31,19 @@ const FIRST =
 const LAST =
   'The May cohort is the outlier, retaining 84.1% against an 88% baseline, and needs a closer look before the launch review.'
 
-type Change = { id: string; type: 'added' | 'removed'; text: string }
+type Change = { id: string; kind: 'added' | 'removed'; text: string }
 const CHANGES: Change[] = [
   {
     id: 'a',
-    type: 'removed',
+    kind: 'removed',
     text: 'Churn increased slightly this quarter for reasons we are still investigating.',
   },
   {
     id: 'b',
-    type: 'added',
+    kind: 'added',
     text: 'Most of the increase came from annual renewals in the two weeks after the 12 Aug price change,',
   },
-  { id: 'c', type: 'added', text: 'when 1,140 customers declined to renew — 71% of all Q3 cancellations.' },
+  { id: 'c', kind: 'added', text: 'when 1,140 customers declined to renew — 71% of all Q3 cancellations.' },
 ]
 
 const onDecide = fn()
@@ -115,7 +115,7 @@ function Pending() {
         {pending.map((c) => (
           <DocumentCanvasLine
             key={c.id}
-            type={c.type}
+            kind={c.kind}
             onAccept={() => decide(c.id, true)}
             onReject={() => decide(c.id, false)}
           >
@@ -149,7 +149,7 @@ const meta = preview.meta({
       {
         property: 'diff line · type',
         values: 'unchanged · added · removed',
-        code: '`type` prop on DocumentCanvasLine (`onAccept` / `onReject` on changes)',
+        code: '`kind` prop on DocumentCanvasLine (`onAccept` / `onReject` on changes)',
       },
     ],
     guide: {

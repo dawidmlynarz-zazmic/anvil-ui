@@ -69,8 +69,8 @@ function Blocks() {
 }
 
 const meta = preview.meta({
-  title: 'Design System/Organisms/Content Block',
-  tags: ['organism', 'messages'],
+  title: 'Design System/Molecules/Content Block',
+  tags: ['molecule', 'messages'],
   component: ContentBlocks,
   parameters: {
     layout: 'padded',

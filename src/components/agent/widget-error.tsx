@@ -17,15 +17,15 @@ import { ClockIcon, CircleXIcon, LockIcon, WifiOffIcon, type LucideIcon } from '
 // load, in place of its content. Built on Card (--card, --border, radius xl, shadow/sm, ≤420px) and
 // Empty State (24px padding, 10px apart, centred): a 48px circle Icon Tile, `title`
 // text/base/semibold, `description` text/sm muted, then `actions` (Buttons sm: the recovery outline
-// with an icon, a second one ghost). Figma `type` (which kind of failure) sets the glyph, the tile
+// with an icon, a second one ghost). Figma `type` → `kind` (which kind of failure) sets the glyph, the tile
 // tone and the default copy:
 // failed → circle-x, destructive · offline → wifi-off, neutral · permission → lock, warning ·
 // timeout → clock, warning. `role="status"`, so it is announced without interrupting.
 
-type WidgetErrorType = 'failed' | 'offline' | 'permission' | 'timeout'
+type WidgetErrorKind = 'failed' | 'offline' | 'permission' | 'timeout'
 
-const TYPES: Record<
-  WidgetErrorType,
+const KINDS: Record<
+  WidgetErrorKind,
   { icon: LucideIcon; tone: 'destructive' | 'neutral' | 'warning'; title: string; description: string }
 > = {
   failed: {
@@ -55,7 +55,7 @@ const TYPES: Record<
 }
 
 function WidgetError({
-  type = 'failed',
+  kind = 'failed',
   title,
   description,
   icon,
@@ -64,19 +64,19 @@ function WidgetError({
   ...props
 }: Omit<React.ComponentProps<'div'>, 'title'> & {
   /** Which kind of failure: sets the glyph, tone and default copy. */
-  type?: WidgetErrorType
+  kind?: WidgetErrorKind
   title?: React.ReactNode
   description?: React.ReactNode
-  /** Replaces the type's glyph. */
+  /** Replaces the kind's glyph. */
   icon?: LucideIcon
   /** Buttons (sm): the recovery (outline, with an icon), then a ghost one. */
   actions?: React.ReactNode
 }) {
-  const preset = TYPES[type]
+  const preset = KINDS[kind]
   return (
     <Card
       data-slot="widget-error"
-      data-type={type}
+      data-kind={kind}
       role="status"
       className={cn('w-full max-w-105 min-w-0 rounded-xl border-border bg-card py-0 shadow-sm', className)}
       {...props}
@@ -99,4 +99,4 @@ function WidgetError({
   )
 }
 
-export { WidgetError, type WidgetErrorType }
+export { WidgetError, type WidgetErrorKind }
