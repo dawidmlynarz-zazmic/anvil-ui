@@ -4,7 +4,7 @@ import * as React from 'react'
 import { Command as CommandPrimitive, useCommandState } from 'cmdk'
 
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Icon, SearchIcon } from '@/components/ui/icon'
+import { Icon, SearchIcon, type LucideIcon } from '@/components/ui/icon'
 import { cn } from '@/lib/utils'
 
 // Figma: Command page → `command` (10942:147). Search input + grouped items + empty state (cmdk).
@@ -52,10 +52,25 @@ function CommandDialog({
   )
 }
 
-function CommandInput({ className, ...props }: React.ComponentProps<typeof CommandPrimitive.Input>) {
+function CommandInput({
+  className,
+  icon = SearchIcon,
+  end,
+  wrapperClassName,
+  ...props
+}: React.ComponentProps<typeof CommandPrimitive.Input> & {
+  /** The glyph before the field (null hides it): search by default, e.g. sparkles for a prompt. */
+  icon?: LucideIcon | null
+  /** After the field, e.g. a Kbd with the key that sends. */
+  end?: React.ReactNode
+  wrapperClassName?: string
+}) {
   return (
-    <div data-slot="command-input-wrapper" className="flex items-center gap-2 border-b border-border p-3">
-      <Icon icon={SearchIcon} className="text-foreground-subtle" />
+    <div
+      data-slot="command-input-wrapper"
+      className={cn('flex items-center gap-2 border-b border-border p-3', wrapperClassName)}
+    >
+      {icon && <Icon icon={icon} className="text-foreground-subtle" />}
       <CommandPrimitive.Input
         data-slot="command-input"
         className={cn(
@@ -64,6 +79,7 @@ function CommandInput({ className, ...props }: React.ComponentProps<typeof Comma
         )}
         {...props}
       />
+      {end}
     </div>
   )
 }
