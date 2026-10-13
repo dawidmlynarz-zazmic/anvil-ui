@@ -16,8 +16,12 @@ function Slider({
   max = 100,
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledby,
+  tone = 'brand',
   ...props
-}: React.ComponentProps<typeof SliderPrimitive.Root>) {
+}: React.ComponentProps<typeof SliderPrimitive.Root> & {
+  /** The range colour: brand (--primary, as Figma) · agent (the agent's own limits, e.g. Run Limits). */
+  tone?: 'brand' | 'agent'
+}) {
   const _values = React.useMemo(
     () => (Array.isArray(value) ? value : Array.isArray(defaultValue) ? defaultValue : [min, max]),
     [value, defaultValue, min, max],
@@ -45,7 +49,8 @@ function Slider({
         <SliderPrimitive.Range
           data-slot="slider-range"
           className={cn(
-            'absolute bg-primary data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full',
+            'absolute data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full',
+            tone === 'agent' ? 'bg-agent' : 'bg-primary',
           )}
         />
       </SliderPrimitive.Track>
@@ -56,7 +61,11 @@ function Slider({
           // Radix puts role="slider" on each thumb; give it the name set on the Slider.
           aria-label={ariaLabel}
           aria-labelledby={ariaLabelledby}
-          className="block size-4 shrink-0 rounded-full border border-primary bg-background transition-[box-shadow] duration-(--duration-fast) focus-visible:focus-ring focus-visible:outline-hidden disabled:pointer-events-none"
+          className={cn(
+            'block size-4 shrink-0 rounded-full border bg-background',
+            tone === 'agent' ? 'border-agent' : 'border-primary',
+            ' transition-[box-shadow] duration-(--duration-fast) focus-visible:focus-ring focus-visible:outline-hidden disabled:pointer-events-none',
+          )}
         />
       ))}
     </SliderPrimitive.Root>
