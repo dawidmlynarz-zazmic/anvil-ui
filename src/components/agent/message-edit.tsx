@@ -50,6 +50,7 @@ function MessageEditor({
     >
       <Textarea
         aria-label="Edit message"
+        // eslint-disable-next-line jsx-a11y/no-autofocus -- the editor opens on the user's own action; focus moves into it deliberately (usage guide)
         autoFocus={autoFocus}
         onFocus={(event) => {
           const end = event.currentTarget.value.length

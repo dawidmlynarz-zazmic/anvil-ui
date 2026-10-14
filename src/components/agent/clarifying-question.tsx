@@ -167,6 +167,7 @@ function ClarifyingQuestion({
   }
 
   return (
+    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- number keys are a shortcut on top of the option buttons, which stay fully operable
     <section
       data-slot="clarifying-question"
       data-state={question.id in answers ? 'answered' : 'unanswered'}

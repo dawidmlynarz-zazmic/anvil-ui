@@ -166,6 +166,7 @@ export const LongContent = meta.story({
         <li>{LONG}</li>
         <li>{UNBROKEN}</li>
       </ul>
+      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a scrollable code block must be focusable */}
       <pre tabIndex={0}>
         <code>{`const value = "${UNBROKEN}"`}</code>
       </pre>

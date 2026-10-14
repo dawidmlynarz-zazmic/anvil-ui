@@ -85,6 +85,7 @@ function InputGroupAddon({
   ...props
 }: React.ComponentProps<'div'> & VariantProps<typeof inputGroupAddonVariants>) {
   return (
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions -- a pointer convenience (click the padding to focus the input); the input and buttons are keyboard operable
     <div
       role="group"
       data-slot="input-group-addon"

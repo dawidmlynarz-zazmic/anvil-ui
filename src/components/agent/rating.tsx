@@ -117,6 +117,7 @@ function Rating({
           )}
           {onCommentSubmit && (
             <CollapsibleContent asChild className={expandMotion}>
+              {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- Escape collapses the comment box; the buttons stay operable */}
               <form
                 data-slot="rating-comment"
                 className="flex w-full flex-col gap-2"
@@ -136,6 +137,7 @@ function Rating({
                   placeholder={commentPlaceholder}
                   value={comment}
                   onChange={(event) => setComment(event.target.value)}
+                  // eslint-disable-next-line jsx-a11y/no-autofocus -- the box opens on the user's own action, so focus moves into it
                   autoFocus
                   className="min-h-18"
                 />

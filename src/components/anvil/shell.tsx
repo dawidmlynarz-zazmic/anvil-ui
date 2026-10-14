@@ -125,6 +125,7 @@ function ShellBody({ className, ...props }: React.ComponentProps<'div'>) {
       ref={ref}
       data-slot="shell-body"
       data-shell-body=""
+      // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- focusable only while it overflows, so keyboard users can scroll it
       tabIndex={scrollable ? 0 : undefined}
       className={cn(
         'flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto p-4 outline-none focus-visible:inset-ring-2 focus-visible:inset-ring-ring',
