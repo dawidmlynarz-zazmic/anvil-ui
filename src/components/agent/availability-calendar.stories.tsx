@@ -91,6 +91,8 @@ const meta = preview.meta({
   argTypes: {
     subtitle: { control: 'text' },
     status: { control: 'inline-radio', options: ['loaded', 'loading', 'empty', 'error'] },
+    prices: { control: 'boolean' },
+    indicators: { control: 'boolean' },
     legend: { control: 'boolean' },
     legendNote: { control: 'text' },
     emptyTitle: { control: 'text' },
@@ -144,6 +146,33 @@ function Picking() {
     />
   )
 }
+
+/** Simplified: no legend (the bars stay), no prices, or neither prices nor availability marks. */
+export const Simplified = meta.story({
+  decorators: [],
+  render: (args) => (
+    <div className="flex w-145 max-w-full flex-col gap-6">
+      <AvailabilityCalendar {...args} title="No legend" legend={false} />
+      <AvailabilityCalendar {...args} title="No prices" prices={false} />
+      <AvailabilityCalendar {...args} title="Dates only" prices={false} indicators={false} />
+    </div>
+  ),
+})
+
+Simplified.test('the simplified variants drop what they say they drop', async ({ canvasElement }) => {
+  const [noLegend, noPrices, datesOnly] = [
+    ...canvasElement.querySelectorAll('[data-slot=availability-calendar]'),
+  ]
+  await expect(noLegend.querySelector('[data-slot=legend-item]')).toBeNull()
+  await expect(noLegend.textContent).toContain('$29')
+  await expect(noPrices.querySelector('[data-slot=legend-item]')).not.toBeNull()
+  await expect(noPrices.textContent).not.toContain('$29')
+  await expect(datesOnly.querySelector('[data-slot=legend-item]')).toBeNull()
+  await expect(datesOnly.textContent).not.toContain('$29')
+  await expect(datesOnly.textContent).not.toContain('Sold out')
+  // Sold-out days (10th and 24th) can't be chosen when availability isn't shown.
+  await expect(datesOnly.querySelector('[data-day="2026-10-10"] button')).toBeDisabled()
+})
 
 /** A selected day (Figma availability day selected). */
 export const Selected = meta.story({

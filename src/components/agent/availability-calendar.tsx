@@ -22,6 +22,9 @@ import { Skeleton } from '@/components/ui/skeleton'
 //   (text/sm/medium), the price (text/2xs/medium muted) and a 16 × 3 bar (--success · --warning);
 //   unavailable = the day, “Sold out” and a --input bar on no tile; selected = --primary fill with white
 //   text and bar; today = a 1.5px --info stroke; hover --border-strong; focus = focus ring.
+// - Simplified: `prices={false}` drops the from-prices, `indicators={false}` drops the bars, “Sold out” marks
+//   and the legend (sold-out days then just can't be selected), `legend={false}` keeps the bars without the
+//   legend. Combine them down to a plain date choice that still respects availability.
 // - Header: the month as the title, `subtitle` (“Item · location”) under it, Previous / Next month (outline
 //   icon-sm; `month` / `onMonthChange` control the month). Footer legend: Good availability · Limited · Sold
 //   out and `legendNote` (“Prices from, per ticket”).
@@ -31,10 +34,12 @@ import { Skeleton } from '@/components/ui/skeleton'
 type DayAvailability = { level: 'available' | 'limited' | 'unavailable'; price?: string }
 type AvailabilityMap = Record<string, DayAvailability>
 
-const AvailabilityContext = React.createContext<{ map: AvailabilityMap; soldOutLabel: string }>({
-  map: {},
-  soldOutLabel: 'Sold out',
-})
+const AvailabilityContext = React.createContext<{
+  map: AvailabilityMap
+  soldOutLabel: string
+  prices: boolean
+  indicators: boolean
+}>({ map: {}, soldOutLabel: 'Sold out', prices: true, indicators: true })
 
 const BAR = {
   available: 'bg-success',
@@ -48,7 +53,7 @@ function AvailabilityDayButton({
   modifiers,
   ...props
 }: React.ComponentProps<typeof DayButton>) {
-  const { map, soldOutLabel } = React.useContext(AvailabilityContext)
+  const { map, soldOutLabel, prices, indicators } = React.useContext(AvailabilityContext)
   const ref = React.useRef<HTMLButtonElement>(null)
   React.useEffect(() => {
     if (modifiers.focused) ref.current?.focus()
@@ -68,7 +73,13 @@ function AvailabilityDayButton({
       data-today={modifiers.today || undefined}
       aria-label={
         entry
-          ? `${format(day.date, 'EEEE d MMMM')}, ${entry.level === 'unavailable' ? soldOutLabel : [entry.level, entry.price].filter(Boolean).join(', ')}`
+          ? [
+              format(day.date, 'EEEE d MMMM'),
+              indicators && (entry.level === 'unavailable' ? soldOutLabel : entry.level),
+              prices && entry.level !== 'unavailable' && entry.price,
+            ]
+              .filter(Boolean)
+              .join(', ')
           : undefined
       }
       className={cn(
@@ -90,7 +101,7 @@ function AvailabilityDayButton({
       >
         {day.date.getDate()}
       </span>
-      {entry?.level === 'unavailable' ? (
+      {indicators && entry?.level === 'unavailable' ? (
         <span
           className={cn(
             'type-text-2xs-medium',
@@ -100,6 +111,7 @@ function AvailabilityDayButton({
           {soldOutLabel}
         </span>
       ) : (
+        prices &&
         entry?.price && (
           <span
             className={cn(
@@ -111,7 +123,7 @@ function AvailabilityDayButton({
           </span>
         )
       )}
-      {entry && (
+      {indicators && entry && (
         <span
           aria-hidden
           className={cn('h-0.75 w-4 rounded-2xs', selected ? 'bg-primary-foreground' : BAR[entry.level])}
@@ -134,6 +146,8 @@ function AvailabilityCalendar({
   title,
   subtitle,
   status = 'loaded',
+  prices = true,
+  indicators = true,
   legend = true,
   legendNote,
   goodLabel = 'Good availability',
@@ -164,6 +178,10 @@ function AvailabilityCalendar({
   /** “Item · location”. */
   subtitle?: React.ReactNode
   status?: AvailabilityCalendarStatus
+  /** Show each day's from-price. Off for a plain date choice. */
+  prices?: boolean
+  /** Show the availability bars and “Sold out” marks (and the legend). Off: sold-out days are simply not selectable. */
+  indicators?: boolean
   legend?: boolean
   /** “Prices from, per ticket”. */
   legendNote?: React.ReactNode
@@ -188,7 +206,10 @@ function AvailabilityCalendar({
     onMonthChange?.(next)
   }
   const titleId = React.useId()
-  const context = React.useMemo(() => ({ map: availability, soldOutLabel }), [availability, soldOutLabel])
+  const context = React.useMemo(
+    () => ({ map: availability, soldOutLabel, prices, indicators }),
+    [availability, soldOutLabel, prices, indicators],
+  )
   return (
     <Card
       asChild
@@ -226,7 +247,7 @@ function AvailabilityCalendar({
             </Button>
           </div>
         </header>
-        {legend && (
+        {legend && indicators && (
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
             <LegendItem swatch="bar" color="var(--success)">
               {goodLabel}
@@ -237,7 +258,9 @@ function AvailabilityCalendar({
             <LegendItem swatch="bar" color="var(--input)">
               {soldOutLabel}
             </LegendItem>
-            {legendNote && <span className="type-text-xs-normal text-muted-foreground">{legendNote}</span>}
+            {legendNote && prices && (
+              <span className="type-text-xs-normal text-muted-foreground">{legendNote}</span>
+            )}
           </div>
         )}
         {status === 'loaded' && (
@@ -264,7 +287,10 @@ function AvailabilityCalendar({
                 weekday: 'flex-1 pb-1 text-center type-text-xs-medium text-muted-foreground select-none',
               }}
               components={{ DayButton: AvailabilityDayButton }}
-              disabled={(date) => !availability[format(date, 'yyyy-MM-dd')]}
+              disabled={(date) => {
+                const entry = availability[format(date, 'yyyy-MM-dd')]
+                return !entry || (!indicators && entry.level === 'unavailable')
+              }}
             />
           </AvailabilityContext.Provider>
         )}
