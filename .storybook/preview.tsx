@@ -4,6 +4,7 @@ import addonA11y from '@storybook/addon-a11y'
 import addonDocs from '@storybook/addon-docs'
 import addonThemes, { withThemeByClassName } from '@storybook/addon-themes'
 import addonPseudoStates from 'storybook-addon-pseudo-states'
+import { configure } from 'storybook/test'
 
 import { Toaster } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
@@ -12,6 +13,10 @@ import '@/styles/globals.css'
 import { AnvilDocsPage } from './docs-page'
 import { STATE_ARG, withInteractionState } from './interaction-state'
 import { withSyncedOpen } from './sync-open'
+
+// findBy* / waitFor wait up to 5s (default 1s): CI runners are slower than a laptop and the Showroom's
+// scripted flows are async.
+configure({ asyncUtilTimeout: 5000 })
 
 // Set per Vitest project (vite.config.ts): storybook-light / storybook-dark.
 declare const __ANVIL_TEST_THEME__: 'light' | 'dark' | undefined
