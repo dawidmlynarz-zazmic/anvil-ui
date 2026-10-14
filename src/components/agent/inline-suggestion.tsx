@@ -46,11 +46,13 @@ function InlineSuggestion({
 }) {
   const accept = mode === 'insert' ? 'Insert' : 'Replace'
   return (
+    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- the group is a keyboard target for Tab / Enter / Escape shortcuts (see the usage guide)
     <div
       data-slot="inline-suggestion"
       data-mode={mode}
       role="group"
       aria-label="Suggested edit"
+      // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- the group is a keyboard target for the shortcuts
       tabIndex={0}
       className={cn(
         'flex w-full max-w-160 flex-col items-start gap-1.5 rounded-sm outline-none focus-visible:focus-ring',

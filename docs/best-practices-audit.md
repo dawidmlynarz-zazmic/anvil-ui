@@ -77,7 +77,7 @@ Top systems treat accessibility as a release gate, not a review comment (Carbon,
 | ❌ | Real screen reader testing (VoiceOver, NVDA, JAWS) | Only automated tooling. axe finds roughly a third of issues; live-region and focus-order problems need a human pass. |
 | ❌ | Forced-colors / high-contrast mode | No `forced-colors` styles or tests; inset-ring and shadow-based strokes can vanish in Windows High Contrast. |
 | 🟡 | Target size (WCAG 2.2: 24px minimum, 44px on touch) | Rating targets were raised to 24px; many controls are 24–32px. No touch-size audit. |
-| ❌ | ESLint accessibility rules (`jsx-a11y`) | Not installed; static mistakes (missing labels, click handlers on divs) are only caught at story time. |
+| ✅ | ESLint accessibility rules (`jsx-a11y`) | `eslint-plugin-jsx-a11y` recommended rules on `src`, `stories` and `.storybook` (2026-10-14); our components are mapped to the elements they render, `role` on our own components is not treated as ARIA, and every intentional exception carries a written reason. The plugin's peer range stops at ESLint 9; it runs on 10.11 without problems so far. |
 | ❌ | Right-to-left support | Two `rtl:` tweaks in Calendar; no RTL toolbar, stories or tests. Logical properties are used in places (`ps-`, `ms-`), not everywhere. |
 | 🟡 | Internationalisation (locale, text expansion, plurals) | Strings are props everywhere. `Intl.NumberFormat('en-US')` is hard-coded in Quantity Selector and dates use `date-fns` defaults. No pseudo-localisation story. |
 
@@ -184,7 +184,7 @@ only one that needs a decision.
    other guarantee in this table currently depends on someone remembering to run it.
 2. ~~**Contribution files.**~~ Done 2026-10-14. CONTRIBUTING.md (the human version of CLAUDE.md), a PR template with the
    per-component checklist, CODEOWNERS and an issue template.
-3. **`eslint-plugin-jsx-a11y`.** Catches static accessibility mistakes at the keyboard, before a story runs. Needs your
+3. ~~**`eslint-plugin-jsx-a11y`.**~~ Done 2026-10-14. Catches static accessibility mistakes at the keyboard, before a story runs. Needs your
    approval as a new dev dependency.
 4. ~~**Dependabot or Renovate**~~ Dependabot added 2026-10-14 (weekly, grouped minor and patch), grouped weekly, so pinned versions do not rot.
 5. ~~**Decide the source-of-truth rule in writing:**~~ Written into CLAUDE.md and CONTRIBUTING.md 2026-10-14: where code is ahead of Figma, code wins and Figma gets a flag.

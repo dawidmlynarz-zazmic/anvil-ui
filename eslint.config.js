@@ -1,4 +1,5 @@
 import js from '@eslint/js'
+import jsxA11y from 'eslint-plugin-jsx-a11y'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import storybook from 'eslint-plugin-storybook'
@@ -52,6 +53,39 @@ export default tseslint.config(
           ],
         },
       ],
+    },
+  },
+  {
+    // Static accessibility checks at the keyboard, before axe sees the rendered story. Our components are
+    // mapped to the elements they render so the rules understand them.
+    files: ['src/**/*.tsx', 'stories/**/*.tsx', '.storybook/**/*.tsx'],
+    ...jsxA11y.flatConfigs.recommended,
+    rules: {
+      ...jsxA11y.flatConfigs.recommended.rules,
+      // `role` on our own components (Message role="assistant") is a domain prop, not an ARIA role.
+      'jsx-a11y/aria-role': ['error', { ignoreNonDOM: true }],
+    },
+    settings: {
+      'jsx-a11y': {
+        components: {
+          Button: 'button',
+          Label: 'label',
+          FieldLabel: 'label',
+          Input: 'input',
+          Textarea: 'textarea',
+          Kbd: 'kbd',
+        },
+      },
+    },
+  },
+  {
+    // Wrappers and stories receive their content and label association from the caller (children, htmlFor),
+    // which the static rules cannot see; axe checks the rendered result.
+    files: ['src/components/**/*.tsx', 'stories/**/*.tsx'],
+    rules: {
+      'jsx-a11y/anchor-has-content': 'off',
+      'jsx-a11y/heading-has-content': 'off',
+      'jsx-a11y/label-has-associated-control': 'off',
     },
   },
   ...storybook.configs['flat/recommended'],

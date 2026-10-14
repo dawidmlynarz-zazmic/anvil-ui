@@ -100,6 +100,7 @@ function CodeBlock({
       {/* The block scrolls sideways; focusable so the keyboard can reach it. */}
       <pre
         data-slot="code-block-body"
+        // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a scrollable region must be focusable so keyboard users can scroll it
         tabIndex={0}
         className="overflow-x-auto p-3 type-code-xs outline-none focus-visible:focus-ring focus-visible:ring-inset focus-visible:ring-offset-0"
       >

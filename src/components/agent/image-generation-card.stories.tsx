@@ -84,7 +84,7 @@ function Demo({ status = 'ready', prompt = PROMPT, onCancel, onUse }: DemoProps)
       selected={selected}
       onSelectedChange={setSelected}
     >
-      <img src={IMAGES[0]} alt="Hero image for the Northwind Sync launch: soft blue and violet gradients" />
+      <img src={IMAGES[0]} alt="Northwind Sync launch hero: soft blue and violet gradients" />
     </ImageGenerationCard>
   )
 }

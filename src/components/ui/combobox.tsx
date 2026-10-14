@@ -80,6 +80,7 @@ function ComboboxTrigger({
     <PopoverTrigger asChild>
       <button
         type="button"
+        // eslint-disable-next-line jsx-a11y/role-has-required-aria-props -- aria-expanded and aria-controls are added by PopoverTrigger asChild
         role="combobox"
         id={triggerId}
         data-slot="combobox-trigger"
