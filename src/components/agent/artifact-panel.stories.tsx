@@ -5,6 +5,7 @@ import { expect, fn, userEvent, waitFor, within } from 'storybook/test'
 import { MessageAction } from '@/components/agent/message-actions'
 import { WidgetMetricCard, WidgetMetricGroup } from '@/components/agent/widget-metric-card'
 import { WidgetTable } from '@/components/agent/widget-table'
+import { CodeBlock } from '@/components/anvil/code-block'
 import { IconTile } from '@/components/anvil/icon-tile'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -68,10 +69,11 @@ const synced = (
   </Badge>
 )
 
-/** The code view until Code Block is built: a plain `<pre>`. */
+/** The code view: a compact Code Block with no border, filling the panel. */
 const code = (
-  <pre tabIndex={0} className="p-5 type-code-xs text-foreground outline-none focus-visible:focus-ring">
-    {`export default function LaunchDashboard() {
+  <CodeBlock
+    size="compact"
+    code={`export default function LaunchDashboard() {
   const metrics = useMetrics({ product: 'northwind-sync', range: 'q3' })
   return (
     <div className="grid gap-4 p-6">
@@ -80,7 +82,8 @@ const code = (
     </div>
   )
 }`}
-  </pre>
+    className="rounded-none border-0"
+  />
 )
 
 /** Preview content: Widget Metric Cards and a Widget Table — the consumer's artifact. */
