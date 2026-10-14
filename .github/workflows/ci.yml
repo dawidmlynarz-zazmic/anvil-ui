@@ -1,0 +1,82 @@
+# Runs the same checks as the working agreement in CLAUDE.md ("Run pnpm typecheck && pnpm lint && pnpm
+# test-storybook before saying a task is done"), on every pull request and on main. It builds and tests;
+# it does not publish or host anything (docs/roadmap.md: local development only for now).
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# A newer push to the same branch cancels the run it replaces.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  static:
+    name: Types, lint, tokens
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Lint (ESLint, Prettier, story standards, motion rules)
+        run: pnpm lint
+      # The generated token CSS and foundations pages must match tokens/anvil.tokens.json.
+      - name: Tokens are up to date
+        run: |
+          pnpm tokens:build
+          git diff --exit-code -- src/styles/tokens stories/foundations \
+            || (echo "::error::Run pnpm tokens:build and commit the result." && exit 1)
+
+  test:
+    name: Storybook tests (light and dark)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Cache Playwright browsers
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+      - name: Install Chromium
+        run: pnpm exec playwright install --with-deps chromium
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+      - name: Install Chromium system dependencies
+        run: pnpm exec playwright install-deps chromium
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+      - name: Interaction and accessibility tests
+        run: pnpm test-storybook
+
+  build:
+    name: Storybook builds
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build-storybook

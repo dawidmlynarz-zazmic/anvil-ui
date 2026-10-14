@@ -49,7 +49,10 @@ function DatePickerTrigger({ className, placeholder, children, id, ...props }: D
         data-empty={empty || undefined}
         variant="outline"
         intent="neutral"
-        className={cn('justify-start type-text-sm-medium data-[empty]:text-foreground-subtle', className)}
+        className={cn(
+          'justify-start type-text-sm-medium data-[empty]:text-foreground-subtle data-[empty]:hover:text-muted-foreground',
+          className,
+        )}
         {...props}
       >
         <Icon icon={CalendarIcon} className="text-muted-foreground" />
