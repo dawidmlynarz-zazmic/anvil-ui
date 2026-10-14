@@ -6,9 +6,9 @@ import { CornerDownRightIcon, Icon, PlusIcon, SparklesIcon, XIcon } from '@/comp
 
 // Figma Agent Builder › Core Kit › quick reply (10668:15632) and follow up suggestions (10668:15663),
 // one family in code (audit M1): one-tap replies and next questions under a message, built on Chip.
-// - `QuickReply`: a button that sends it, styled as an outline pill Chip (`chipVariants`) at the
+// - `QuickReply`: a button that sends it, styled as an outline Chip (radius md) (`chipVariants`) at the
 //   Figma quick reply size: 32px, 12px sides, text/sm/medium (14px), 14px icon, --border stroke over
-//   --background, hover --muted + --input stroke. Sparkles icon by default (`icon`; null hides it).
+//   --background, hover --muted + --input stroke. Corner-down-right icon by default (`icon`; null hides it).
 // - `QuickReplyFilter`: Figma type filter / applied, a toggle Chip: transparent with a plus;
 //   pressed (applied) = --agent-subtle, --agent-soft stroke, agent label, remove ×.
 // - `QuickReplyGroup` (Figma quick reply group + follow up suggestions): an optional `label` row
@@ -24,7 +24,7 @@ type Layout = 'chips' | 'list'
 const GroupContext = React.createContext<Layout | null>(null)
 
 const reply =
-  'h-auto min-h-8 py-1.5 type-text-sm-medium inset-ring-border bg-background hover:bg-muted hover:inset-ring-input'
+  'h-auto min-h-8 rounded-md px-3 py-1.5 type-text-sm-medium inset-ring-border bg-background hover:bg-muted hover:inset-ring-input'
 
 function Item({ children }: { children: React.ReactNode }) {
   const layout = React.useContext(GroupContext)
@@ -60,14 +60,14 @@ function QuickReply({
       </Item>
     )
   }
-  const glyph = icon === undefined ? SparklesIcon : icon
+  const glyph = icon === undefined ? CornerDownRightIcon : icon
   return (
     <Item>
       <button
         type="button"
         data-slot="quick-reply"
         className={cn(
-          chipVariants({ variant: 'outline', size: 'lg', shape: 'pill', interactive: false }),
+          chipVariants({ variant: 'outline', size: 'lg', interactive: false }),
           reply,
           "max-w-full justify-start text-left whitespace-normal [&_svg:not([class*='size-'])]:size-3.5",
           className,
@@ -95,9 +95,8 @@ function QuickReplyFilter({
         data-slot="quick-reply-filter"
         variant="outline"
         size="lg"
-        shape="pill"
         className={cn(
-          'group/filter h-auto min-h-8 max-w-full justify-start bg-transparent py-1.5 text-left type-text-sm-medium whitespace-normal inset-ring-border hover:bg-muted hover:inset-ring-input',
+          'group/filter h-auto min-h-8 rounded-md px-3 max-w-full justify-start bg-transparent py-1.5 text-left type-text-sm-medium whitespace-normal inset-ring-border hover:bg-muted hover:inset-ring-input',
           "[&_svg:not([class*='size-'])]:size-3.5",
           'data-[state=on]:bg-agent-subtle data-[state=on]:text-agent data-[state=on]:inset-ring-1 data-[state=on]:inset-ring-agent-soft data-[state=on]:hover:bg-agent-soft dark:data-[state=on]:text-agent-medium',
           className,

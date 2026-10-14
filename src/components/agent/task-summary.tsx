@@ -98,14 +98,14 @@ function TaskSummary({
               {takeaways.map((takeaway, index) => {
                 const confidence = CONFIDENCE[takeaway.confidence]
                 return (
-                  <li key={index} className="flex items-start gap-2.5">
+                  <li key={index} className="flex flex-wrap items-start gap-x-2.5 gap-y-1">
                     <span
                       aria-hidden
                       className="flex size-4.5 shrink-0 items-center justify-center rounded-full bg-agent-subtle type-text-2xs-medium text-agent-strong dark:text-foreground"
                     >
                       {index + 1}
                     </span>
-                    <p className="min-w-0 flex-1 type-text-sm-normal text-foreground">{takeaway.text}</p>
+                    <p className="min-w-40 flex-1 type-text-sm-normal text-foreground">{takeaway.text}</p>
                     <Badge variant="subtle" tone={confidence.tone} size="xs" indicator className="shrink-0">
                       {confidence.label}
                       <span className="sr-only"> confidence</span>
@@ -117,11 +117,11 @@ function TaskSummary({
           </section>
         )}
         {deliverable && (
-          <Item variant="outline" size="sm" className="flex-nowrap">
+          <Item variant="outline" size="sm">
             <ItemMedia>
               <IconTile icon={deliverable.icon ?? FileTextIcon} tone="neutral" size="sm" />
             </ItemMedia>
-            <ItemContent className="gap-0">
+            <ItemContent className="min-w-40 gap-0">
               <ItemTitle>{deliverable.title}</ItemTitle>
               {deliverable.meta && <ItemDescription>{deliverable.meta}</ItemDescription>}
             </ItemContent>
