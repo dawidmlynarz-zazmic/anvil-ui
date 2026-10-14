@@ -105,7 +105,7 @@ Top systems gate every change with automated checks.
 | --- | --- | --- |
 | ✅ | Interaction tests per component | `Story.test`, run by Vitest browser mode. |
 | ✅ | Custom lint for the system's own rules | Story standards, motion rules, levels, `show…`/Full stories. |
-| ❌ | Type, lint, test and build run on every change | There is no CI. Everything runs on a laptop, so it depends on remembering to run it. |
+| ✅ | Type, lint, test and build run on every change | `.github/workflows/ci.yml` (added 2026-10-14): typecheck, lint, tokens-up-to-date check, Storybook tests in light and dark, Storybook build. |
 | ❌ | Visual regression testing | None. Looks are compared by eye against Figma. Vitest browser mode can take screenshots without a new service. |
 | ❌ | Cross-browser coverage | Chromium only (Playwright). Firefox and WebKit matter for focus, `:has()`, container queries and Safari date inputs. |
 | ❌ | Unit tests for logic outside components | None; `lib/motion.ts`, the Showroom engine and Stepper maths are only covered through stories. |
@@ -179,7 +179,7 @@ Ordered by value for effort. None of these breaks the "local development only" r
 only one that needs a decision.
 
 **Do now (small, high value)**
-1. **CI for the checks that already exist.** A workflow running `pnpm typecheck`, `pnpm lint`, `pnpm test-storybook`
+1. ~~**CI for the checks that already exist.**~~ Done 2026-10-14. A workflow running `pnpm typecheck`, `pnpm lint`, `pnpm test-storybook`
    and `pnpm build-storybook` on every PR. It does not host anything. This is the single biggest gap: every
    other guarantee in this table currently depends on someone remembering to run it.
 2. ~~**Contribution files.**~~ Done 2026-10-14. CONTRIBUTING.md (the human version of CLAUDE.md), a PR template with the
