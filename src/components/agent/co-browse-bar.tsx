@@ -46,13 +46,13 @@ function CoBrowseBar({
       role="group"
       aria-label="Assistant controls"
       className={cn(
-        'flex w-fit items-center gap-2 rounded-full bg-background-inverse py-1.5 pr-1.5 pl-3 text-foreground-inverse shadow-elevation-raised',
+        'flex w-fit max-w-full flex-wrap items-center gap-x-2 gap-y-1.5 rounded-full bg-background-inverse py-1.5 pr-1.5 pl-3 text-foreground-inverse shadow-elevation-raised',
         className,
       )}
       {...props}
     >
       {status === 'working' ? <PulseDot /> : <Icon icon={status === 'done' ? CircleCheckIcon : PauseIcon} />}
-      <p role="status" className="type-text-sm-medium whitespace-nowrap">
+      <p role="status" className="min-w-0 type-text-sm-medium">
         {children}
       </p>
       {status === 'working' && (

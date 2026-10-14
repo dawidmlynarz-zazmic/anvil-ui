@@ -70,10 +70,10 @@ const meta = preview.meta({
   ),
 })
 
-/** Figma state editing. */
-export const Editing = meta.story()
+/** Figma state editing: the default view. */
+export const Default = meta.story()
 
-Editing.test('sends the edited text; Escape cancels', async ({ canvas, args }) => {
+Default.test('sends the edited text; Escape cancels', async ({ canvas, args }) => {
   const field = canvas.getByRole('textbox', { name: 'Edit message' })
   await userEvent.clear(field)
   await userEvent.type(field, 'Summarize the Q3 launch plan in 5 bullets')

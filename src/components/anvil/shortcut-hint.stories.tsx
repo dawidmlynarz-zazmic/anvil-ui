@@ -1,4 +1,5 @@
 import preview from '#.storybook/preview'
+import { expect } from 'storybook/test'
 
 import { ShortcutHint } from './shortcut-hint'
 
@@ -61,4 +62,19 @@ export const Legend = meta.story({
       <ShortcutHint keys={['esc']}>Close</ShortcutHint>
     </div>
   ),
+})
+
+Default.test(
+  'shows the keys to assistive tech as hidden and the label as text',
+  async ({ canvas, canvasElement }) => {
+    const hint = canvasElement.querySelector('[data-slot=shortcut-hint]')!
+    await expect(hint.querySelector('[data-slot=kbd-group]')).toHaveAttribute('aria-hidden', 'true')
+    await expect(canvas.getByText('to accept')).toBeVisible()
+  },
+)
+
+Legend.test('lists several hints, one key group each', async ({ canvasElement }) => {
+  const hints = canvasElement.querySelectorAll('[data-slot=shortcut-hint]')
+  await expect(hints.length).toBeGreaterThan(1)
+  for (const hint of hints) await expect(hint.querySelectorAll('kbd').length).toBeGreaterThan(0)
 })

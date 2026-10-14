@@ -2,6 +2,7 @@ import * as React from 'react'
 
 import { cn } from '@/lib/utils'
 import { PulseDot } from '@/components/agent/pulse-dot'
+import { Link } from '@/components/anvil/link'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { MessageBubble, MessageBubbleContent } from '@/components/ui/message-bubble'
 import { BotIcon, CheckIcon, CircleAlertIcon, ClockIcon, Icon } from '@/components/ui/icon'
@@ -128,13 +129,11 @@ function MessageRow({
             <MessageFooter className="gap-1 text-danger-medium">
               <Icon icon={CircleAlertIcon} size="xs" />
               Failed to send ·
-              <button
-                type="button"
-                onClick={onRetry}
-                className="rounded-sm type-text-xs-medium underline-offset-4 outline-none hover:underline focus-visible:focus-ring"
-              >
-                Retry
-              </button>
+              <Link asChild intent="destructive" size="sm">
+                <button type="button" onClick={onRetry}>
+                  Retry
+                </button>
+              </Link>
             </MessageFooter>
           )}
         </MessageContent>

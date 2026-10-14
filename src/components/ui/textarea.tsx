@@ -11,8 +11,8 @@ const textareaClassName = [
   'transition-[color,box-shadow] duration-(--duration-fast) ease-out',
   'placeholder:text-foreground-disabled selection:bg-primary selection:text-primary-foreground',
   'hover:inset-ring-overlay-24',
-  'focus-visible:inset-ring-[1.5px] focus-visible:inset-ring-border-action focus-visible:focus-ring',
-  'aria-invalid:inset-ring-[1.5px] aria-invalid:inset-ring-danger',
+  'focus-visible:inset-ring-(length:--stroke-focus) focus-visible:inset-ring-border-action focus-visible:focus-ring',
+  'aria-invalid:inset-ring-(length:--stroke-focus) aria-invalid:inset-ring-danger',
   'disabled:cursor-not-allowed disabled:bg-background-disabled disabled:text-foreground-disabled disabled:inset-ring-overlay-8',
 ]
 

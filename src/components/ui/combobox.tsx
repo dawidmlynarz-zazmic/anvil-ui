@@ -38,7 +38,7 @@ const comboboxTriggerVariants = cva(
     'data-[placeholder]:text-foreground-subtle',
     'hover:inset-ring-overlay-32',
     'focus-visible:inset-ring-border-action focus-visible:focus-ring',
-    'data-[state=open]:inset-ring-[1.5px] data-[state=open]:inset-ring-border-action data-[state=open]:focus-ring',
+    'data-[state=open]:inset-ring-(length:--stroke-focus) data-[state=open]:inset-ring-border-action data-[state=open]:focus-ring',
     'aria-invalid:inset-ring-destructive',
     'disabled:cursor-not-allowed disabled:bg-background-disabled disabled:text-foreground-disabled disabled:shadow-none disabled:hover:inset-ring-overlay-16',
   ],

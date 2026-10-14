@@ -1,4 +1,5 @@
 import preview from '#.storybook/preview'
+import { expect } from 'storybook/test'
 
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
@@ -211,4 +212,40 @@ export const Card = meta.story({
       </ShellFooter>
     </div>
   ),
+})
+
+Default.test(
+  'draws the title, description and a labelled close button',
+  async ({ canvas, canvasElement }) => {
+    await expect(canvas.getByRole('heading', { name: 'Share “Q3 launch plan”' })).toBeVisible()
+    await expect(canvas.getByText('People with the link can view this conversation.')).toBeVisible()
+    await expect(canvas.getByRole('button', { name: 'Close' })).toBeVisible()
+    await expect(canvasElement.querySelector('[data-slot=shell-header]')).toHaveAttribute(
+      'data-variant',
+      'bar',
+    )
+  },
+)
+
+Footer.test('every variant × align renders both actions in order', async ({ canvasElement }) => {
+  const footers = [...canvasElement.querySelectorAll('[data-slot=shell-footer]')]
+  await expect(footers).toHaveLength(6)
+  for (const footer of footers) {
+    const buttons = [...footer.querySelectorAll('button')].map((b) => b.textContent)
+    await expect(buttons).toEqual(['Cancel', 'Save'])
+  }
+  await expect(footers.map((f) => f.getAttribute('data-align'))).toEqual([
+    'end',
+    'between',
+    'stretch',
+    'end',
+    'between',
+    'stretch',
+  ])
+})
+
+Card.test('the card footer states its consequence beside its actions', async ({ canvas }) => {
+  await expect(canvas.getByText('It can’t be unsent.')).toBeVisible()
+  await expect(canvas.getByRole('button', { name: 'Deny' })).toBeEnabled()
+  await expect(canvas.getByRole('button', { name: 'Approve' })).toBeEnabled()
 })

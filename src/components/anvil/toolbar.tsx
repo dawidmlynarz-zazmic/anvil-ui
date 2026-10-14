@@ -20,7 +20,7 @@ import { toggleVariants } from '@/components/ui/toggle'
 // ghost · xs (24px) instead of outline · sm.
 
 const toolbarVariants = cva(
-  'flex w-fit items-center text-foreground shadow-elevation-raised inset-ring data-[orientation=vertical]:flex-col data-[orientation=vertical]:items-stretch',
+  'flex w-fit max-w-full flex-wrap items-center text-foreground shadow-elevation-raised inset-ring data-[orientation=vertical]:flex-col data-[orientation=vertical]:items-stretch',
   {
     variants: {
       size: {
