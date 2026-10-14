@@ -8,7 +8,6 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import {
-  ArrowRightIcon,
   BlocksIcon,
   BotIcon,
   BracesIcon,
@@ -161,7 +160,7 @@ function Tile({
 // ---------------------------------------------------------------------------------------------
 // Sections
 
-function Hero({ firstComponent }: { firstComponent?: string }) {
+function Hero() {
   return (
     <div className="grid gap-(--space-2xl) lg:grid-cols-[1fr_1.1fr] lg:items-center">
       <div className="flex flex-col gap-(--space-lg)">
@@ -189,14 +188,8 @@ function Hero({ firstComponent }: { firstComponent?: string }) {
             <StoryLink path="/story/showroom--assistant">
               <Icon icon={SparklesIcon} />
               Open the Showroom
-              <Icon icon={ArrowRightIcon} />
             </StoryLink>
           </Button>
-          {firstComponent && (
-            <Button asChild size="lg" variant="outline" intent="neutral">
-              <StoryLink path={firstComponent}>Browse components</StoryLink>
-            </Button>
-          )}
           <Button asChild size="lg" variant="outline" intent="neutral">
             <a href={FIGMA_URL} target="_blank" rel="noreferrer">
               <Icon icon={PenToolIcon} />
@@ -526,15 +519,11 @@ function Footer() {
 
 export function WelcomePage() {
   const { paths } = useStorybookPaths()
-  const items = catalog.flatMap((area) => area.items)
-  const firstComponent = items.find(
-    (item) => item.title.startsWith('Agent Builder/') && paths?.has(item.title),
-  )
 
   return (
     <main className="min-h-screen bg-background text-foreground">
       <div className="mx-auto flex max-w-7xl flex-col gap-(--space-4xl) px-(--space-lg) py-(--space-2xl) md:px-(--space-2xl)">
-        <Hero firstComponent={firstComponent ? paths?.get(firstComponent.title) : undefined} />
+        <Hero />
         <Levels paths={paths} />
         <WorthKnowing />
         <Architecture />

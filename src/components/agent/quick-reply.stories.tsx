@@ -75,7 +75,7 @@ const meta = preview.meta({
     docs: {
       description: {
         component:
-          'One-tap replies and follow-up questions under a message (`@/components/agent/quick-reply`, built on Chip; Figma quick reply and follow up suggestions are one family in code, audit M1). Figma type → sub-component: suggestion = `QuickReply` (sends it; an outline pill chip), filter / applied = `QuickReplyFilter` (a toggle Chip; pressed is applied, with an agent tint and a remove ×). `icon` swaps the leading icon (`null` hides it). `QuickReplyGroup` holds them: an optional `label` and `layout` chips · list. After one is sent, disable the set. Hover and focus come from the State control.',
+          'One-tap replies and follow-up questions under a message (`@/components/agent/quick-reply`, built on Chip; Figma quick reply and follow up suggestions are one family in code, audit M1). Figma type → sub-component: suggestion = `QuickReply` (sends it; an outline chip, radius md, with a corner-down-right icon), filter / applied = `QuickReplyFilter` (a toggle Chip; pressed is applied, with an agent tint and a remove ×). `icon` swaps the leading icon (`null` hides it). `QuickReplyGroup` holds them: an optional `label` and `layout` chips · list. After one is sent, disable the set. Hover and focus come from the State control.',
       },
     },
   },
