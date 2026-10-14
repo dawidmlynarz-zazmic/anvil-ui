@@ -1,5 +1,6 @@
 # Quality pass — consistency and levels (2026-10-13)
 
+> **Status 2026-10-14: decision 4 and the small items done; narrow-width sweep run (see the end of this file).**
 > **Status 2026-10-13: decisions 1, 2 and 3 approved and done** (levels, `kind`, Task Card). Decision 4 (focus-stroke
 > token, shadow mapping) and the smaller items in sections 2–4 are still open.
 
@@ -87,3 +88,27 @@ screenshot, so “looks the same” is checked by a machine and reviewed by a pe
   `[…px]` values, prop names `state` · `kind` · `type` · `mode`, file size; per story file, tests and a
   `Default`. Candidates to become permanent lint checks: the higher-level import, `data-slot`, and a
   test per story file.
+
+
+## Narrow-width sweep and leftovers (2026-10-14)
+
+`pnpm audit:narrow [title prefix] [width]` (script `scripts/audit-narrow.mjs`, Storybook running) opens every
+story at 390px and lists elements that spill past the viewport. It lets story wrappers shrink (`w-120` and the
+centered layout), so what remains is the component's own sizing. Progress-bar fills and ping rings are skipped.
+
+- **Agent Builder: 119 stories with overflow → 16.** Fixed in the components: Co-browse Bar (wraps, label can
+  shrink) and Toolbar (`max-w-full flex-wrap`, so Selection Toolbar and Inline Suggestion wrap). Fixed in
+  stories that pinned a desktop width on the component itself: Project Setup, Artifact Panel. Task Summary's
+  deliverable row and takeaways were fixed earlier. The 16 left are intended horizontal scrollers (tables, the
+  attachment strip) or story layouts (side-by-side grids, `w-300` rows).
+- **Design System: 51 stories listed**, all of them a story pinning a width (`w-120`) or laying out a grid wider
+  than a phone; no component-level overflow found beyond Toolbar. Left as they are: a wide story is a fine
+  desktop reference, and the Showroom mobile frame is the real narrow-width test.
+- **Decision 4:** the field focus stroke is `--stroke-focus` (1.5px, `globals.css`) used as
+  `inset-ring-(length:--stroke-focus)` in Input, Textarea, Select, Combobox, Input Group and Prompt Input. The
+  Launcher shadows are `shadow-elevation-raised` / `-modal` (same values as `shadow-lg` / `-xl`). `shadow-md`
+  stays on Card hover, Tooltip, the Launcher preview and Artifact Panel: it is a Figma effect style, not a leftover.
+- **Small items:** `data-slot` on Spinner (`spinner`) and Sonner (`toaster`); tests for Shell (header, footer
+  variants × align, card footer) and Shortcut Hint; Message Edit's `Editing` story is now `Default`; Message
+  Row's Retry is a `Link asChild` and Version History's row is an `Item asChild` (no raw buttons left that
+  should reuse).

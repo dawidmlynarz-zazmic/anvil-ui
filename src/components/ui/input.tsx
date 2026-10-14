@@ -18,8 +18,8 @@ const inputVariants = cva(
     'placeholder:text-foreground-disabled selection:bg-primary selection:text-primary-foreground',
     'file:inline-flex file:h-full file:border-0 file:bg-transparent file:type-text-sm-medium file:text-foreground',
     'hover:inset-ring-overlay-24',
-    'focus-visible:inset-ring-[1.5px] focus-visible:inset-ring-border-action focus-visible:focus-ring',
-    'aria-invalid:inset-ring-[1.5px] aria-invalid:inset-ring-danger',
+    'focus-visible:inset-ring-(length:--stroke-focus) focus-visible:inset-ring-border-action focus-visible:focus-ring',
+    'aria-invalid:inset-ring-(length:--stroke-focus) aria-invalid:inset-ring-danger',
     'disabled:cursor-not-allowed disabled:bg-background-disabled disabled:text-foreground-disabled disabled:inset-ring-overlay-8',
   ],
   {

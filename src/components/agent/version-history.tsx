@@ -5,6 +5,7 @@ import { IconTile } from '@/components/anvil/icon-tile'
 import { ShellCloseButton, ShellFooter, ShellHeader, ShellTitle } from '@/components/anvil/shell'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
+import { Item } from '@/components/ui/item'
 import { BotIcon, type LucideIcon } from '@/components/ui/icon'
 
 // Figma Agent Builder › Surfaces › Split canvas · version history (10744:4072) + version item
@@ -102,46 +103,47 @@ function VersionHistoryItem({
   icon?: LucideIcon
 }) {
   return (
-    <button
-      data-slot="version-history-item"
-      role="radio"
-      aria-checked={selected}
-      data-current={current || undefined}
-      type={type}
-      className={cn(
-        'flex w-full items-start gap-2.5 rounded-md border border-transparent p-2.5 text-left outline-none',
-        'transition-colors duration-(--duration-fast) ease-out hover:bg-muted focus-visible:focus-ring',
-        'data-current:bg-muted aria-checked:border-border-action aria-checked:bg-info-subtle',
-        'disabled:pointer-events-none disabled:opacity-50',
-        className,
-      )}
-      {...props}
+    <Item
+      asChild
+      size="sm"
+      selected={selected}
+      className="w-full flex-nowrap items-start gap-2.5 p-2.5 text-left hover:bg-muted data-current:bg-muted disabled:pointer-events-none disabled:opacity-50"
     >
-      <IconTile icon={icon} tone="agent" size="xs" shape="circle" />
-      <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-        <span className="flex items-center gap-1.5">
-          <span className="type-text-sm-semibold text-foreground">{version}</span>
-          {current && (
-            <Badge variant="outline" size="xs">
-              Current
-            </Badge>
-          )}
-          {time && (
-            <span className="ms-auto type-text-xs-normal whitespace-nowrap text-muted-foreground">
-              {time}
+      <button
+        data-slot="version-history-item"
+        role="radio"
+        aria-checked={selected}
+        data-current={current || undefined}
+        type={type}
+        className={className}
+        {...props}
+      >
+        <IconTile icon={icon} tone="agent" size="xs" shape="circle" />
+        <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+          <span className="flex items-center gap-1.5">
+            <span className="type-text-sm-semibold text-foreground">{version}</span>
+            {current && (
+              <Badge variant="outline" size="xs">
+                Current
+              </Badge>
+            )}
+            {time && (
+              <span className="ms-auto type-text-xs-normal whitespace-nowrap text-muted-foreground">
+                {time}
+              </span>
+            )}
+          </span>
+          {summary && <span className="type-text-sm-normal text-foreground">{summary}</span>}
+          {(author || added || removed) && (
+            <span className="flex items-center gap-2 type-text-xs-normal">
+              {author && <span className="text-muted-foreground">{author}</span>}
+              {added && <span className="type-text-xs-medium text-success-medium">{added}</span>}
+              {removed && <span className="type-text-xs-medium text-danger-medium">{removed}</span>}
             </span>
           )}
         </span>
-        {summary && <span className="type-text-sm-normal text-foreground">{summary}</span>}
-        {(author || added || removed) && (
-          <span className="flex items-center gap-2 type-text-xs-normal">
-            {author && <span className="text-muted-foreground">{author}</span>}
-            {added && <span className="type-text-xs-medium text-success-medium">{added}</span>}
-            {removed && <span className="type-text-xs-medium text-danger-medium">{removed}</span>}
-          </span>
-        )}
-      </span>
-    </button>
+      </button>
+    </Item>
   )
 }
 

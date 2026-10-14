@@ -11,6 +11,7 @@ function Spinner({ className, ...props }: Omit<IconProps, 'icon'>) {
       icon={LoaderCircleIcon}
       label="Loading"
       role="status"
+      data-slot="spinner"
       className={cn('animate-spin', className)}
       {...props}
     />

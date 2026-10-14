@@ -23,10 +23,10 @@ const inputGroupVariants = cva(
     'has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-end]]:items-stretch has-[>[data-align=block-end]]:[&>input]:pt-3',
 
     // Focus state.
-    'has-[[data-slot=input-group-control]:focus-visible]:inset-ring-[1.5px] has-[[data-slot=input-group-control]:focus-visible]:inset-ring-border-action has-[[data-slot=input-group-control]:focus-visible]:focus-ring',
+    'has-[[data-slot=input-group-control]:focus-visible]:inset-ring-(length:--stroke-focus) has-[[data-slot=input-group-control]:focus-visible]:inset-ring-border-action has-[[data-slot=input-group-control]:focus-visible]:focus-ring',
 
     // Error state.
-    'has-[[data-slot][aria-invalid=true]]:inset-ring-[1.5px] has-[[data-slot][aria-invalid=true]]:inset-ring-danger',
+    'has-[[data-slot][aria-invalid=true]]:inset-ring-(length:--stroke-focus) has-[[data-slot][aria-invalid=true]]:inset-ring-danger',
 
     // Disabled (Figma draws Input's disabled look).
     'data-[disabled=true]:bg-background-disabled data-[disabled=true]:inset-ring-overlay-8 data-[disabled=true]:hover:inset-shadow-none',

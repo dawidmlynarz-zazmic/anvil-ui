@@ -34,7 +34,7 @@ const selectTriggerVariants = cva(
     'data-[placeholder]:text-foreground-subtle',
     'hover:inset-ring-overlay-32',
     'focus-visible:inset-ring-border-action focus-visible:focus-ring',
-    'data-[state=open]:inset-ring-[1.5px] data-[state=open]:inset-ring-border-action data-[state=open]:focus-ring',
+    'data-[state=open]:inset-ring-(length:--stroke-focus) data-[state=open]:inset-ring-border-action data-[state=open]:focus-ring',
     'aria-invalid:inset-ring-destructive',
     'data-[disabled]:cursor-not-allowed data-[disabled]:bg-background-disabled data-[disabled]:text-foreground-disabled data-[disabled]:shadow-none data-[disabled]:hover:inset-ring-overlay-16',
     '*:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2',

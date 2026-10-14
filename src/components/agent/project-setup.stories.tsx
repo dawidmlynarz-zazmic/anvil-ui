@@ -54,7 +54,7 @@ function Demo({ showDescription, showUploadHint, showFiles, ...props }: DemoProp
       {...props}
       description={showDescription ? props.description : null}
       uploadHint={showUploadHint ? props.uploadHint : null}
-      className="w-140"
+      className="w-140 max-w-full"
     >
       {showFiles ? FILE_LIST : undefined}
     </ProjectSetup>

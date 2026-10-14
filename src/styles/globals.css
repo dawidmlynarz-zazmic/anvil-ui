@@ -27,6 +27,15 @@
 }
 
 /*
+ * Field stroke (Figma: text field, textarea, select, combobox, input group, prompt input): the 1.5px
+ * inner border a field draws when focused, open or invalid. One value, used as
+ * `inset-ring-(length:--stroke-focus)`, so it is not a literal in every field.
+ */
+:root {
+  --stroke-focus: 1.5px;
+}
+
+/*
  * Utilities shadcn's chat set expects (shadcn ships them in its own stylesheet).
  * shimmer: Figma Core Kit › text shimmer — --foreground-subtle text with a soft --foreground
  * highlight (Figma: 10px blur, ~30% of the label) sweeping across, looping. Static under reduced motion (and the Storybook motion toolbar).

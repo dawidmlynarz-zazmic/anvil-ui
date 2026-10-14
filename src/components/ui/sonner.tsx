@@ -88,6 +88,7 @@ const Toaster = ({
 }: ToasterProps) => {
   return (
     <Sonner
+      data-slot="toaster"
       theme={theme}
       closeButton={closeButton}
       className={cn('toaster group z-(--z-toast)!', className)}

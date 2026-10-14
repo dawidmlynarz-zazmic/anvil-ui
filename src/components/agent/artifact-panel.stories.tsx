@@ -172,7 +172,7 @@ function Demo({
       onClose={onClose}
       code={code}
       status={status}
-      className="h-150 w-180"
+      className="h-150 w-180 max-w-full"
     >
       <Dashboard editing={editing} />
     </ArtifactPanel>

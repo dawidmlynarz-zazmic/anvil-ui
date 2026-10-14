@@ -225,8 +225,8 @@ function PromptInput({
       }}
       className={cn(
         'relative flex w-full max-w-(--shell-thread-max) flex-col gap-2 rounded-xl bg-background p-3 text-foreground inset-ring inset-ring-input',
-        'transition-shadow duration-(--duration-fast) ease-out focus-within:inset-ring-[1.5px] focus-within:inset-ring-border-action',
-        streaming && 'inset-ring-[1.5px] inset-ring-border-action',
+        'transition-shadow duration-(--duration-fast) ease-out focus-within:inset-ring-(length:--stroke-focus) focus-within:inset-ring-border-action',
+        streaming && 'inset-ring-(length:--stroke-focus) inset-ring-border-action',
         compact && 'p-1.5',
         className,
       )}
