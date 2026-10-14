@@ -2,40 +2,45 @@ import preview from '#.storybook/preview'
 import { expect } from 'storybook/test'
 
 import { Button } from './button'
-import {
-  ArrowRightIcon,
-  BellIcon,
-  CheckIcon,
-  ChevronDownIcon,
-  CircleAlertIcon,
-  CopyIcon,
-  Icon,
-  InfoIcon,
-  type LucideIcon,
-  PlusIcon,
-  SearchIcon,
-  SettingsIcon,
-  SparklesIcon,
-  Trash2Icon,
-  XIcon,
-} from './icon'
+import * as library from './icon'
+import { CircleAlertIcon, Icon, type LucideIcon, PlusIcon, SettingsIcon, SparklesIcon } from './icon'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=6294-8671'
-const GLYPHS: [string, LucideIcon][] = [
-  ['check', CheckIcon],
-  ['x', XIcon],
-  ['plus', PlusIcon],
-  ['chevron-down', ChevronDownIcon],
-  ['arrow-right', ArrowRightIcon],
-  ['search', SearchIcon],
-  ['settings', SettingsIcon],
-  ['bell', BellIcon],
-  ['copy', CopyIcon],
-  ['trash-2', Trash2Icon],
-  ['info', InfoIcon],
-  ['circle-alert', CircleAlertIcon],
-  ['sparkles', SparklesIcon],
-]
+
+// Every glyph the components import from the Icon module, read from the source at build time (like the
+// docs Relationships), so this list always matches what is in use: add or drop an icon in a component
+// and it appears here or goes away.
+const sources = import.meta.glob<string>('/src/components/*/*.tsx', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+})
+const IMPORT = /import\s*\{([^}]*)\}\s*from\s*'(?:@\/components\/ui\/icon|\.\/icon)'/g
+const usage = new Map<string, number>()
+for (const [path, source] of Object.entries(sources)) {
+  if (path.endsWith('.stories.tsx') || path.endsWith('/ui/icon.tsx')) continue
+  const names = new Set<string>()
+  for (const block of source.matchAll(IMPORT)) {
+    for (const part of block[1].split(',')) {
+      const name = part.trim().split(/\s+/)[0]
+      if (name && name !== 'Icon' && name !== 'type' && name.endsWith('Icon')) names.add(name)
+    }
+  }
+  for (const name of names) usage.set(name, (usage.get(name) ?? 0) + 1)
+}
+const kebab = (name: string) =>
+  name
+    .replace(/Icon$/, '')
+    .replace(/([a-z])([A-Z0-9])/g, '$1-$2')
+    .replace(/([0-9])([A-Za-z])/g, '$1-$2')
+    .toLowerCase()
+const GLYPHS: [string, LucideIcon, number][] = [...usage]
+  .flatMap(([name, count]) => {
+    const glyph = (library as Record<string, unknown>)[name] as LucideIcon | undefined
+    return glyph ? [[kebab(name), glyph, count] as [string, LucideIcon, number]] : []
+  })
+  .sort((a, b) => a[0].localeCompare(b[0]))
+
 const tones = ['neutral', 'brand', 'info', 'success', 'warning', 'destructive', 'agent'] as const
 
 const meta = preview.meta({
@@ -93,17 +98,20 @@ Default.test('is decorative, 16px with a 1.33px stroke', async ({ canvasElement 
   await expect(svg.getAttribute('stroke-width')).toBe('1.33')
 })
 
-/** A few Lucide glyphs at the default 16px (the Figma library holds the full Lucide set). */
+/** Every glyph in use across the components at the default 16px, with how many components use it (the Figma library holds the full Lucide set). */
 export const Glyphs = meta.story({
   render: () => (
     <div className="grid grid-cols-[repeat(auto-fill,minmax(7rem,1fr))] gap-4">
-      {GLYPHS.map(([name, glyph]) => (
+      {GLYPHS.map(([name, glyph, count]) => (
         <div
           key={name}
           className="flex flex-col items-center gap-2 rounded-md p-3 inset-ring inset-ring-overlay-8"
         >
           <Icon icon={glyph} />
           <span className="type-code-xs text-muted-foreground">{name}</span>
+          <span className="type-text-xs-normal text-muted-foreground">
+            {count} {count === 1 ? 'file' : 'files'}
+          </span>
         </div>
       ))}
     </div>
@@ -167,4 +175,10 @@ InComponents.test('the container sizes the icon; the stroke stays constant', asy
   for (const svg of [xs, sm]) {
     await expect(getComputedStyle(svg.firstElementChild!).vectorEffect).toBe('non-scaling-stroke')
   }
+})
+
+Glyphs.test('lists the icons in use, one tile each', async ({ canvas }) => {
+  await expect(canvas.getByText('sparkles')).toBeInTheDocument()
+  await expect(canvas.getByText('trash-2')).toBeInTheDocument()
+  await expect(GLYPHS.length).toBeGreaterThan(40)
 })
