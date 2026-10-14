@@ -50,7 +50,7 @@ const meta = preview.meta({
         'Show dates or notes as `meta` when stages have them.',
       ],
       avoid: [
-        'A quantity control (the numeric stepper): use Input Group with Buttons.',
+        'A quantity control (the numeric stepper): use Stepper.',
         'A list of dated events: use Timeline.',
         'A single percentage: use Progress.',
       ],

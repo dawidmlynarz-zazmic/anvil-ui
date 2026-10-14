@@ -148,6 +148,7 @@ export const catalog: CatalogArea[] = [
         'Toolbar',
         'Task Card',
         'Timeline',
+        'Code Block',
       ),
       alias('System Banner', 'Design System/Molecules/Alert'),
     ],
@@ -191,7 +192,7 @@ export const catalog: CatalogArea[] = [
     id: 'organisms-layout',
     name: 'Layout & data',
     description: 'Navigation, tables and carousels.',
-    items: organism('Sidebar', 'Table', 'Carousel', 'Code Block'),
+    items: organism('Sidebar', 'Table', 'Carousel'),
   },
   {
     section: 'Organisms',

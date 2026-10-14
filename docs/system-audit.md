@@ -290,7 +290,7 @@ context live in each story's tags and title, and the relationships come from the
 - **Memory Manager**: each row's Edit and Delete are now named after the memory
   (`aria-labelledby`: “Edit Prefers concise answers…”).
 - **Message Edit**: the editor focuses its field when it opens (`autoFocus`, cursor at the end).
-- No **Chart** or **Code Block** component yet: guides that need one say so instead of linking.
+- No **Chart** component yet. **Code Block** (2026-10-14) is a molecule, so guides can link it.
 
 ## 9. Figma alignment (Phase 10)
 
