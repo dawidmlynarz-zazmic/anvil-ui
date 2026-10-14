@@ -54,6 +54,12 @@ pnpm storybook         # http://localhost:6006
 | `pnpm lint` | ESLint and Prettier check |
 | `pnpm tokens:build` | Regenerates the CSS tokens and foundation pages from `tokens/anvil.tokens.json` |
 
+## Continuous integration
+
+`.github/workflows/ci.yml` runs on every pull request and on `main`: typecheck, lint (ESLint, Prettier, story
+standards, motion rules), a check that the generated tokens are up to date, the Storybook tests in light and dark,
+and a Storybook build. It builds and tests only; nothing is published or hosted.
+
 ## Repository layout
 
 ```text
