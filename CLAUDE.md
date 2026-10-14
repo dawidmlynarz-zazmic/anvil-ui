@@ -325,5 +325,7 @@ Lucide    → Icon (@/components/ui/icon) → every component and story
 - One component (or one foundation) per branch and PR; small, reviewable diffs.
 - Never edit `tokens/` or `src/styles/tokens/` by hand.
 - If Figma and `docs/api-contract.md` disagree, the contract wins; flag the mismatch.
+- Where code is ahead of Figma (behaviour, motion, copy, the Showroom, a contrast fix), code wins and Figma gets a
+  flag: record it in `docs/component-status.md`. Tokens still come only from Figma.
 - Ask before: adding dependencies, changing the folder structure, renaming a public prop.
 - Write in plain, consistent names: "Anvil", never the old name "Obsidian".

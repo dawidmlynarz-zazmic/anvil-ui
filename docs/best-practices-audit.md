@@ -95,7 +95,7 @@ What makes people actually use a system (Polaris, Atlassian, GOV.UK).
 | 🟡 | Audit and decision trail | Audits and quality-pass decisions are written down; there are no numbered decision records (ADRs). |
 | ❌ | Consumer docs: install, upgrade, migration | Nothing for an outside consumer (not published yet). |
 | ❌ | Changelog and release notes | None; history lives in 490+ commits and PR descriptions. |
-| ❌ | Contribution guide for humans | `CLAUDE.md` is the working agreement for Claude Code; there is no CONTRIBUTING.md. |
+| ✅ | Contribution guide for humans | `CONTRIBUTING.md` (2026-10-14), linked from the README; `CLAUDE.md` stays the agent version. |
 
 ### 5. Quality and testing
 
@@ -109,7 +109,7 @@ Top systems gate every change with automated checks.
 | ❌ | Visual regression testing | None. Looks are compared by eye against Figma. Vitest browser mode can take screenshots without a new service. |
 | ❌ | Cross-browser coverage | Chromium only (Playwright). Firefox and WebKit matter for focus, `:has()`, container queries and Safari date inputs. |
 | ❌ | Unit tests for logic outside components | None; `lib/motion.ts`, the Showroom engine and Stepper maths are only covered through stories. |
-| 🟡 | Dependency audit and automated updates | `pnpm audit --prod` is clean. No Dependabot or Renovate; versions are pinned by hand. |
+| ✅ | Dependency audit and automated updates | `pnpm audit --prod` is clean; Dependabot (weekly, grouped) added 2026-10-14. |
 | ❌ | Performance and bundle budgets | No bundle-size or render checks; matters once components are consumed. |
 | ❌ | Test coverage reporting | No coverage numbers. |
 | ⏸ | Server rendering safety | Vite SPA; no SSR or hydration checks. Needed if consumers use Next.js. |
@@ -123,7 +123,7 @@ How the system stays consistent as people join (Atlassian, Shopify, GitHub).
 | ✅ | Small reviewable PRs, one component or group each | Followed throughout; stacked PRs have a documented merge order. |
 | ✅ | Definition of done | CLAUDE.md per-component workflow: reuse check, Figma compare, tests, status row. |
 | ⏸ | Semantic versioning and release automation (changesets) | Package is `private`; publishing is out of scope for now. |
-| ❌ | PR template, CODEOWNERS, issue templates | None. |
+| ✅ | PR template, CODEOWNERS, issue templates | `.github/pull_request_template.md`, `CODEOWNERS`, bug and component-request issue forms (2026-10-14). |
 | 🟡 | Design review and sign-off step | Design-lead flag review is pending; Figma flags are listed in the status doc. |
 | ❌ | Licence file | No LICENSE (internal repo). Needed before sharing. |
 | ⏸ | Adoption and usage metrics | No consumers yet. |
@@ -182,12 +182,12 @@ only one that needs a decision.
 1. **CI for the checks that already exist.** A workflow running `pnpm typecheck`, `pnpm lint`, `pnpm test-storybook`
    and `pnpm build-storybook` on every PR. It does not host anything. This is the single biggest gap: every
    other guarantee in this table currently depends on someone remembering to run it.
-2. **Contribution files.** CONTRIBUTING.md (the human version of CLAUDE.md), a PR template with the
+2. ~~**Contribution files.**~~ Done 2026-10-14. CONTRIBUTING.md (the human version of CLAUDE.md), a PR template with the
    per-component checklist, CODEOWNERS and an issue template.
 3. **`eslint-plugin-jsx-a11y`.** Catches static accessibility mistakes at the keyboard, before a story runs. Needs your
    approval as a new dev dependency.
-4. **Dependabot or Renovate**, grouped weekly, so pinned versions do not rot.
-5. **Decide the source-of-truth rule in writing:** where code is ahead of Figma, code wins and Figma gets a flag.
+4. ~~**Dependabot or Renovate**~~ Dependabot added 2026-10-14 (weekly, grouped minor and patch), grouped weekly, so pinned versions do not rot.
+5. ~~**Decide the source-of-truth rule in writing:**~~ Written into CLAUDE.md and CONTRIBUTING.md 2026-10-14: where code is ahead of Figma, code wins and Figma gets a flag.
 
 **Do next (medium)**
 6. **Forced-colors and RTL pass.** Add a `forced-colors` check for focus and strokes, an RTL toolbar toggle, and

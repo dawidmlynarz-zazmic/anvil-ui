@@ -1,0 +1,24 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    versioning-strategy: increase
+    groups:
+      # Patch and minor updates arrive as one pull request a week; majors come on their own to be read.
+      minor-and-patch:
+        update-types: [minor, patch]
+    ignore:
+      # TypeScript 7 waits until typescript-eslint supports it (CLAUDE.md).
+      - dependency-name: typescript
+        update-types: [version-update:semver-major]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ['*']
