@@ -1,0 +1,20 @@
+name: Component request
+description: A component or variant the system is missing
+labels: [enhancement]
+body:
+  - type: textarea
+    id: job
+    attributes:
+      label: The job it does
+      description: What the user is trying to do, and where this would appear.
+    validations:
+      required: true
+  - type: textarea
+    id: existing
+    attributes:
+      label: What exists today, and why it is not enough
+      description: Check the Welcome catalog first; a variant or prop on an existing component is often better.
+  - type: input
+    id: figma
+    attributes:
+      label: Figma node (if drawn)

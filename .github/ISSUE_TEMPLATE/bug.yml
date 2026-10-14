@@ -1,0 +1,26 @@
+name: Bug
+description: Something looks or behaves wrong in a component
+labels: [bug]
+body:
+  - type: input
+    id: story
+    attributes:
+      label: Story or component
+      description: The Storybook story id or title, for example "Agent Builder/Tasks/Task Plan".
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happens, and what you expected
+    validations:
+      required: true
+  - type: input
+    id: context
+    attributes:
+      label: Theme, width and browser
+      placeholder: Dark, 390px, Safari 18
+  - type: textarea
+    id: figma
+    attributes:
+      label: Figma frame or screenshot (if it differs from design)
