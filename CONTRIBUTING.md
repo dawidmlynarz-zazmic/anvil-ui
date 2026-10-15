@@ -42,7 +42,8 @@ Node 24 (`.nvmrc`) and pnpm. Pin exact versions when installing.
    pnpm typecheck && pnpm lint && pnpm test-unit && pnpm test-storybook
    ```
 
-5. Update `docs/component-status.md` (and the Welcome catalog for a new component), then open a pull request.
+5. If the change is meant to alter how a curated story looks, run the **Visual regression** workflow with `update` on your branch and review the new images in the pull request (see `visual/stories.json`).
+6. Update `docs/component-status.md` (and the Welcome catalog for a new component), then open a pull request.
    CI must be green. Stacked pull requests merge in order with merge commits; retarget the next one to `main`
    before deleting the merged branch.
 
