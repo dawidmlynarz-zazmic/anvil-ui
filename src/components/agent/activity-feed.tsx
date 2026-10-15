@@ -80,7 +80,7 @@ function Entry({ entry }: { entry: ActivityEntry }) {
   const row = (
     <>
       <IconTile icon={icon} tone={tone} size="xs" />
-      <span className="flex min-w-0 flex-1 flex-col text-left">
+      <span className="flex min-w-0 flex-1 flex-col text-start">
         <span className="type-text-sm-normal text-foreground">{entry.title}</span>
         {entry.meta && <span className="type-text-xs-normal text-muted-foreground">{entry.meta}</span>}
       </span>
@@ -90,7 +90,7 @@ function Entry({ entry }: { entry: ActivityEntry }) {
   return (
     <li>
       <Collapsible className="group/entry">
-        <CollapsibleTrigger className="flex w-full items-start gap-3 rounded-md px-3 py-2 text-left outline-none focus-visible:focus-ring">
+        <CollapsibleTrigger className="flex w-full items-start gap-3 rounded-md px-3 py-2 text-start outline-none focus-visible:focus-ring">
           {row}
           <Icon
             icon={ChevronDownIcon}

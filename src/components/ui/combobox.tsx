@@ -89,7 +89,7 @@ function ComboboxTrigger({
         className={cn(comboboxTriggerVariants({ size }), className)}
         {...props}
       >
-        <span data-slot="combobox-value" className="line-clamp-1 text-left">
+        <span data-slot="combobox-value" className="line-clamp-1 text-start">
           {empty ? placeholder : children}
         </span>
         <Icon icon={ChevronsUpDownIcon} className="size-3.5 text-foreground-subtle" />
@@ -114,7 +114,7 @@ function ComboboxContent({
         'w-(--radix-popover-trigger-width) gap-0 overflow-hidden rounded-md p-0 inset-ring-border',
         // Figma: search row 8 / 8 / 8 / 12 with a 14px icon, list padding 4, empty padding 20 / 4.
         '**:data-[slot=command]:rounded-none',
-        '**:data-[slot=command-input-wrapper]:py-2 **:data-[slot=command-input-wrapper]:pr-2 **:data-[slot=command-input-wrapper]:pl-3',
+        '**:data-[slot=command-input-wrapper]:py-2 **:data-[slot=command-input-wrapper]:pe-2 **:data-[slot=command-input-wrapper]:ps-3',
         '**:data-[slot=command-input-wrapper]:[&>svg]:size-3.5',
         '**:data-[slot=command-list]:p-1 **:data-[slot=command-empty]:px-1 **:data-[slot=command-empty]:py-5',
         className,
@@ -133,7 +133,7 @@ function ComboboxItem({
   return (
     <CommandItem data-slot="combobox-item" data-checked={selected} {...props}>
       {children}
-      <Icon icon={CheckIcon} className={cn('ml-auto', !selected && 'invisible')} />
+      <Icon icon={CheckIcon} className={cn('ms-auto', !selected && 'invisible')} />
     </CommandItem>
   )
 }

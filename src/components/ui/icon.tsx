@@ -2,6 +2,19 @@ import * as React from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import type { LucideIcon, LucideProps } from 'lucide-react'
 
+import {
+  ArrowLeft,
+  ArrowRight,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+  CornerDownLeft,
+  CornerDownRight,
+  PanelLeft,
+  PanelRight,
+} from 'lucide-react'
+
 import { cn } from '@/lib/utils'
 
 // Figma: Foundations → Icons (Lucide) page (6294:8671). Every glyph is Lucide, drawn at 16×16 with
@@ -35,6 +48,21 @@ const iconVariants = cva(
     },
   },
 )
+
+// Glyphs whose direction means "forward" / "start" or "end": they mirror in right-to-left text (chevrons,
+// arrows, the corner arrow of a reply, side panels). Symmetric or physical glyphs (a clock, a map pin) do not.
+const MIRRORED = new Set<unknown>([
+  ArrowLeft,
+  ArrowRight,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+  CornerDownLeft,
+  CornerDownRight,
+  PanelLeft,
+  PanelRight,
+])
 
 /** Figma Icons page: stroke 1.33px regardless of the rendered size. */
 const ICON_STROKE_WIDTH = 1.33
@@ -72,7 +100,7 @@ function Icon({
       strokeWidth={strokeWidth}
       focusable="false"
       {...(label ? { role: 'img', 'aria-label': label } : { 'aria-hidden': true })}
-      className={cn(iconVariants({ size, tone }), className)}
+      className={cn(iconVariants({ size, tone }), MIRRORED.has(Glyph) && 'rtl:-scale-x-100', className)}
       {...props}
     />
   )

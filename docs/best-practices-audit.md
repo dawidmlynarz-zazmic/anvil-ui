@@ -74,12 +74,12 @@ Top systems treat accessibility as a release gate, not a review comment (Carbon,
 | ✅ | Reflow and 320px width | `pnpm audit:narrow` checks every story at 390px; Agent Builder overflow went from 119 stories to 16 (intended scrollers). |
 | ✅ | Reduced motion respected | Global; movement becomes a short fade. |
 | ✅ | Accessibility guidance per component | Every story has `guide.a11y`; lint requires it. |
-| ❌ | Real screen reader testing (VoiceOver, NVDA, JAWS) | Only automated tooling. axe finds roughly a third of issues; live-region and focus-order problems need a human pass. |
-| ❌ | Forced-colors / high-contrast mode | No `forced-colors` styles or tests; inset-ring and shadow-based strokes can vanish in Windows High Contrast. |
+| 🟡 | Real screen reader testing (VoiceOver, NVDA, JAWS) | `docs/screen-reader-checklist.md` is ready (priority list, what to listen for, a results table); the pass itself needs a person with a screen reader and has not been run. |
+| ✅ | Forced-colors / high-contrast mode | A `forced-colors: active` block in `globals.css` restores field strokes, the focus ring, selected states, progress fills and availability bars with system colours; `pnpm audit:forced-colors` finds controls that lose their boundary or selected state (0 left on 2026-10-15). See `docs/accessibility.md`. |
 | 🟡 | Target size (WCAG 2.2: 24px minimum, 44px on touch) | Rating targets were raised to 24px; many controls are 24–32px. No touch-size audit. |
 | ✅ | ESLint accessibility rules (`jsx-a11y`) | `eslint-plugin-jsx-a11y` recommended rules on `src`, `stories` and `.storybook` (2026-10-14); our components are mapped to the elements they render, `role` on our own components is not treated as ARIA, and every intentional exception carries a written reason. The plugin's peer range stops at ESLint 9; it runs on 10.11 without problems so far. |
-| ❌ | Right-to-left support | Two `rtl:` tweaks in Calendar; no RTL toolbar, stories or tests. Logical properties are used in places (`ps-`, `ms-`), not everywhere. |
-| 🟡 | Internationalisation (locale, text expansion, plurals) | Strings are props everywhere. `Intl.NumberFormat('en-US')` is hard-coded in Quantity Selector and dates use `date-fns` defaults. No pseudo-localisation story. |
+| ✅ | Right-to-left support | Logical CSS properties everywhere (enforced by `scripts/check-logical.mjs` in `pnpm lint`), direction-aware icon mirroring, a Locale toolbar (Arabic, Hebrew), `pnpm audit:rtl`, an Arabic story with a test (2026-10-15). See `docs/i18n-rtl.md`. |
+| ✅ | Internationalisation (locale, text expansion, plurals) | `LocaleProvider` / `useLocale` and `Intl` formatting in Calendar, Availability Calendar and Quantity Selector (no hard-coded `en-US`); `summary` writes plurals for your language; German and Japanese in the toolbar. Not covered: pseudo-localisation and library-supplied picker labels (`docs/i18n-rtl.md`). |
 
 ### 4. Documentation
 
@@ -106,7 +106,7 @@ Top systems gate every change with automated checks.
 | ✅ | Interaction tests per component | `Story.test`, run by Vitest browser mode. |
 | ✅ | Custom lint for the system's own rules | Story standards, motion rules, levels, `show…`/Full stories. |
 | ✅ | Type, lint, test and build run on every change | `.github/workflows/ci.yml` (added 2026-10-14): typecheck, lint, tokens-up-to-date check, Storybook tests in light and dark, Storybook build. |
-| ❌ | Visual regression testing | None. Looks are compared by eye against Figma. Vitest browser mode can take screenshots without a new service. |
+| 🟡 | Visual regression testing | `scripts/visual.mjs` + `.github/workflows/visual.yml` (2026-10-15): 38 curated stories in light and dark, Linux baselines in `visual/baselines/`, pixel diff in the browser (no new dependency), diffs uploaded on failure, "update" workflow to re-render. Not a required check yet. Foundations pages and the rest of the stories are not covered. |
 | 🟡 | Cross-browser coverage | Vitest projects `storybook-firefox` and `storybook-webkit` (light theme; `pnpm test-browsers`) and a CI job per browser (2026-10-15). Firefox passes all 981 tests in CI (3 shards; it would not launch on this Mac). WebKit passes all 981 on macOS, but Playwright's Linux WebKit crashes at random under load (a different shard each run), so its jobs report without failing the workflow. Neither is a required check. |
 | ✅ | Unit tests for logic outside components | `pnpm test-unit` (2026-10-15): `src/**/*.test.ts[x]` in the same real browser; covers the shared motion classes and the Showroom engine (routing, abort, Reset, counts, widgets, chips). Runs in CI. |
 | ✅ | Dependency audit and automated updates | `pnpm audit --prod` is clean; Dependabot (weekly, grouped) added 2026-10-14. |
@@ -190,14 +190,14 @@ only one that needs a decision.
 5. ~~**Decide the source-of-truth rule in writing:**~~ Written into CLAUDE.md and CONTRIBUTING.md 2026-10-14: where code is ahead of Figma, code wins and Figma gets a flag.
 
 **Do next (medium)**
-6. **Forced-colors and RTL pass.** Add a `forced-colors` check for focus and strokes, an RTL toolbar toggle, and
+6. ~~**Forced-colors and RTL pass.**~~ Done 2026-10-15. Add a `forced-colors` check for focus and strokes, an RTL toolbar toggle, and
    fix physical properties (`left-*`, `pl-*`) to logical ones. Test the 10 most interactive components.
-7. **Visual regression.** Vitest browser mode can take screenshots; start with the foundations pages and the
+7. ~~**Visual regression.**~~ Started 2026-10-15 (38 stories); grow the list in `visual/stories.json`. Vitest browser mode can take screenshots; start with the foundations pages and the
    10 most-used components in light and dark. Pairs with the Figma parity measurement already planned.
 8. ~~**Firefox and WebKit** as extra Vitest browser projects.~~ Added 2026-10-15; make them required once stable.
 9. **A human screen-reader pass** (VoiceOver + one Windows reader) on Dialog, Command Palette, Combobox, Calendar,
    Chat Shell, Prompt Input, Message Actions and Approval Card; log findings in the status doc.
-10. **Locale pass:** a `locale` and `currency` prop (or a provider) instead of the hard-coded `en-US`, and a
+10. ~~**Locale pass:**~~ Done 2026-10-15. a `locale` and `currency` prop (or a provider) instead of the hard-coded `en-US`, and a
     pseudo-localisation story (long strings) to test text expansion.
 11. ~~**Unit tests** for `lib/motion.ts` and the Showroom engine.~~ Done 2026-10-15.
 

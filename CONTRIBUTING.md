@@ -17,6 +17,7 @@ agreement in [`CLAUDE.md`](CLAUDE.md) (which Claude Code follows); both say the 
 - **shadcn is the foundation.** Start from the unmodified `shadcn add` output (its own commit), then restyle.
   List any behaviour change under "Intentional deviations from shadcn" in the status doc.
 - **Ask before** adding a dependency, changing the folder structure or renaming a public prop.
+- Use logical CSS properties (`ms-`, `pe-`, `start-`, `text-start`…), not `ml-` / `pr-` / `left-`; format numbers and dates through `useLocale()`. See [`docs/i18n-rtl.md`](docs/i18n-rtl.md).
 - Never edit `tokens/` or `src/styles/tokens/` by hand: re-pull from Figma and run `pnpm tokens:build`.
 
 ## Setup
@@ -41,7 +42,8 @@ Node 24 (`.nvmrc`) and pnpm. Pin exact versions when installing.
    pnpm typecheck && pnpm lint && pnpm test-unit && pnpm test-storybook
    ```
 
-5. Update `docs/component-status.md` (and the Welcome catalog for a new component), then open a pull request.
+5. If the change is meant to alter how a curated story looks, run the **Visual regression** workflow with `update` on your branch and review the new images in the pull request (see `visual/stories.json`).
+6. Update `docs/component-status.md` (and the Welcome catalog for a new component), then open a pull request.
    CI must be green. Stacked pull requests merge in order with merge commits; retarget the next one to `main`
    before deleting the merged branch.
 

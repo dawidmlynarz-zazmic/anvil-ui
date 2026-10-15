@@ -72,7 +72,7 @@ function LocationItem({
       size="xs"
       selected={selected}
       className={cn(
-        'w-full flex-nowrap gap-3 rounded-lg p-2 text-left hover:bg-muted data-[selected=true]:hover:bg-info-subtle',
+        'w-full flex-nowrap gap-3 rounded-lg p-2 text-start hover:bg-muted data-[selected=true]:hover:bg-info-subtle',
         className,
       )}
     >

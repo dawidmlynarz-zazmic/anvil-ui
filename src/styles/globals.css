@@ -36,6 +36,85 @@
 }
 
 /*
+ * Forced colors (Windows High Contrast, `forced-colors: active`). The browser replaces our colours with system
+ * colours and drops box-shadows, so anything drawn only with a fill, a ring or a shadow disappears: field
+ * strokes, the focus ring, selected states, progress fills. These rules restore them with real outlines and
+ * system colours. Outlines are used (not borders) so nothing changes size. See docs/accessibility.md.
+ */
+@media (forced-colors: active) {
+  /* Controls drawn with an inset ring or a fill get an outline in the border colour. */
+  button,
+  input,
+  textarea,
+  select,
+  [role='button'],
+  [role='checkbox'],
+  [role='radio'],
+  [role='switch'],
+  [role='combobox'],
+  [role='tab'],
+  [role='slider'],
+  [data-slot='card'],
+  [data-slot='badge'],
+  [data-slot='alert'],
+  [data-slot='chip'],
+  [data-slot='progress'],
+  [data-slot='slider-track'],
+  [data-slot='input-otp-slot'],
+  [data-slot='skeleton'] {
+    outline: 1px solid ButtonBorder;
+    outline-offset: -1px;
+  }
+
+  /* The focus ring is a box-shadow: replace it with a system-colour outline. */
+  :focus-visible {
+    outline: 2px solid Highlight !important;
+    outline-offset: 2px !important;
+  }
+
+  /* Selected / on / checked / active: the fill that shows it is removed, so use the selection colours. */
+  [aria-pressed='true'],
+  [aria-checked='true'],
+  [aria-selected='true'],
+  [aria-current='true'],
+  [aria-current='page'],
+  [aria-current='step'],
+  [data-state='on'],
+  [data-state='checked'],
+  [role='tab'][data-state='active'],
+  [data-state='selected'],
+  [data-selected='true'],
+  [data-slot='progress-indicator'],
+  [data-slot='slider-range'],
+  [data-slot='slider-thumb'],
+  [data-slot='switch-thumb'] {
+    background-color: Highlight;
+    color: HighlightText;
+    forced-color-adjust: none;
+  }
+
+  /* Availability bars are a background colour: draw them as a line whose style says the level. */
+  [data-slot='availability-day'] > span[aria-hidden] {
+    background: none;
+    border-top: 3px solid currentColor;
+    height: 0;
+  }
+  [data-slot='availability-day'][data-level='limited'] > span[aria-hidden] {
+    border-top-style: dashed;
+  }
+  [data-slot='availability-day'][data-level='unavailable'] > span[aria-hidden] {
+    border-top-style: dotted;
+  }
+
+  /* Disabled controls read as disabled by colour as well as opacity. */
+  :disabled,
+  [aria-disabled='true'] {
+    color: GrayText;
+    outline-color: GrayText;
+  }
+}
+
+/*
  * Utilities shadcn's chat set expects (shadcn ships them in its own stylesheet).
  * shimmer: Figma Core Kit › text shimmer — --foreground-subtle text with a soft --foreground
  * highlight (Figma: 10px blur, ~30% of the label) sweeping across, looping. Static under reduced motion (and the Storybook motion toolbar).

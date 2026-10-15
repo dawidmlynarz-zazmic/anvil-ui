@@ -61,7 +61,7 @@ function WelcomeState({
         )}
       </EmptyStateHeader>
       {(composer || children) && (
-        <EmptyStateContent className="@container max-w-none items-stretch gap-(--space-lg) text-left">
+        <EmptyStateContent className="@container max-w-none items-stretch gap-(--space-lg) text-start">
           {composer}
           {children && (
             <div

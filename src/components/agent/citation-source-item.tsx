@@ -60,7 +60,7 @@ function CitationSourceItem({
     </>
   )
   const classes = cn(
-    'flex w-full max-w-(--shell-widget-max) items-start gap-3 border-s-2 border-transparent px-4 py-3 text-left wrap-break-word outline-none',
+    'flex w-full max-w-(--shell-widget-max) items-start gap-3 border-s-2 border-transparent px-4 py-3 text-start wrap-break-word outline-none',
     'transition-colors duration-(--duration-fast) ease-out hover:bg-muted focus-visible:focus-ring',
     'data-[active=true]:border-agent data-[active=true]:bg-agent-subtle',
     className,

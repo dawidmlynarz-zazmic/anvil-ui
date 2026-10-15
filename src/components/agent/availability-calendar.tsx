@@ -3,6 +3,7 @@ import { format } from 'date-fns'
 import { type DayButton } from 'react-day-picker'
 
 import { cn } from '@/lib/utils'
+import { useLocale } from '@/lib/locale'
 import { CatalogState } from '@/components/agent/catalog-state'
 import { LegendItem } from '@/components/anvil/legend-item'
 import { Button } from '@/components/ui/button'
@@ -54,6 +55,7 @@ function AvailabilityDayButton({
   ...props
 }: React.ComponentProps<typeof DayButton>) {
   const { map, soldOutLabel, prices, indicators } = React.useContext(AvailabilityContext)
+  const { locale } = useLocale()
   const ref = React.useRef<HTMLButtonElement>(null)
   React.useEffect(() => {
     if (modifiers.focused) ref.current?.focus()
@@ -74,7 +76,9 @@ function AvailabilityDayButton({
       aria-label={
         entry
           ? [
-              format(day.date, 'EEEE d MMMM'),
+              new Intl.DateTimeFormat(locale, { weekday: 'long', day: 'numeric', month: 'long' }).format(
+                day.date,
+              ),
               indicators && (entry.level === 'unavailable' ? soldOutLabel : entry.level),
               prices && entry.level !== 'unavailable' && entry.price,
             ]
@@ -205,6 +209,7 @@ function AvailabilityCalendar({
     if (month === undefined) setInner(next)
     onMonthChange?.(next)
   }
+  const { locale } = useLocale()
   const titleId = React.useId()
   const context = React.useMemo(
     () => ({ map: availability, soldOutLabel, prices, indicators }),
@@ -222,7 +227,7 @@ function AvailabilityCalendar({
         <header className="flex items-start justify-between gap-3">
           <div className="flex min-w-0 flex-col gap-0.5">
             <h3 id={titleId} className="type-text-base-semibold text-foreground">
-              {title ?? format(shown, 'LLLL yyyy')}
+              {title ?? new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' }).format(shown)}
             </h3>
             {subtitle && <p className="type-text-xs-normal text-muted-foreground">{subtitle}</p>}
           </div>

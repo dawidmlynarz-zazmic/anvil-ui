@@ -66,7 +66,7 @@ const inputGroupAddonVariants = cva(
       align: {
         'inline-start': 'order-first',
         // Figma: 16px between the search content and the shortcut.
-        'inline-end': 'order-last ml-2',
+        'inline-end': 'order-last ms-2',
         'block-start':
           'order-first w-full justify-start pt-3 group-has-[>input]/input-group:pt-2.5 [.border-b]:pb-3',
         'block-end':
