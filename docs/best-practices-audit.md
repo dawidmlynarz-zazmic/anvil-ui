@@ -108,7 +108,7 @@ Top systems gate every change with automated checks.
 | ✅ | Type, lint, test and build run on every change | `.github/workflows/ci.yml` (added 2026-10-14): typecheck, lint, tokens-up-to-date check, Storybook tests in light and dark, Storybook build. |
 | ❌ | Visual regression testing | None. Looks are compared by eye against Figma. Vitest browser mode can take screenshots without a new service. |
 | ❌ | Cross-browser coverage | Chromium only (Playwright). Firefox and WebKit matter for focus, `:has()`, container queries and Safari date inputs. |
-| ❌ | Unit tests for logic outside components | None; `lib/motion.ts`, the Showroom engine and Stepper maths are only covered through stories. |
+| ✅ | Unit tests for logic outside components | `pnpm test-unit` (2026-10-15): `src/**/*.test.ts[x]` in the same real browser; covers the shared motion classes and the Showroom engine (routing, abort, Reset, counts, widgets, chips). Runs in CI. |
 | ✅ | Dependency audit and automated updates | `pnpm audit --prod` is clean; Dependabot (weekly, grouped) added 2026-10-14. |
 | ❌ | Performance and bundle budgets | No bundle-size or render checks; matters once components are consumed. |
 | ❌ | Test coverage reporting | No coverage numbers. |
@@ -199,7 +199,7 @@ only one that needs a decision.
    Chat Shell, Prompt Input, Message Actions and Approval Card; log findings in the status doc.
 10. **Locale pass:** a `locale` and `currency` prop (or a provider) instead of the hard-coded `en-US`, and a
     pseudo-localisation story (long strings) to test text expansion.
-11. **Unit tests** for `lib/motion.ts` and the Showroom engine's scheduling and abort behaviour.
+11. ~~**Unit tests** for `lib/motion.ts` and the Showroom engine.~~ Done 2026-10-15.
 
 **Do before anyone else consumes it (needs a decision from you)**
 12. Public entry point and package build (tree-shakeable ES modules with types), changesets, semantic

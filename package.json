@@ -18,6 +18,7 @@
     "typecheck": "tsc -b --noEmit",
     "audit:narrow": "node scripts/audit-narrow.mjs",
     "audit:rtl": "node scripts/audit-narrow.mjs \"\" 1000 locale:ar-SA",
+    "test-unit": "vitest run --project=unit",
     "test-storybook": "vitest run --project=storybook-light --project=storybook-dark"
   },
   "dependencies": {

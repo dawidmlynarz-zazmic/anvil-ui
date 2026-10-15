@@ -64,6 +64,8 @@ jobs:
       - name: Install Chromium system dependencies
         run: pnpm exec playwright install-deps chromium
         if: steps.playwright-cache.outputs.cache-hit == 'true'
+      - name: Unit tests
+        run: pnpm test-unit
       - name: Interaction and accessibility tests
         run: pnpm test-storybook
 
