@@ -82,3 +82,26 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm build-storybook
+
+  # Firefox and WebKit (Safari's engine) run the same stories in the light theme. Not a required check yet:
+  # it reports, and becomes required once it has been stable for a while.
+  browsers:
+    name: Cross-browser (${{ matrix.browser }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [firefox, webkit]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Install ${{ matrix.browser }}
+        run: pnpm exec playwright install --with-deps ${{ matrix.browser }}
+      - name: Storybook tests in ${{ matrix.browser }}
+        run: pnpm exec vitest run --project=storybook-${{ matrix.browser }}

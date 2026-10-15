@@ -107,7 +107,7 @@ Top systems gate every change with automated checks.
 | ✅ | Custom lint for the system's own rules | Story standards, motion rules, levels, `show…`/Full stories. |
 | ✅ | Type, lint, test and build run on every change | `.github/workflows/ci.yml` (added 2026-10-14): typecheck, lint, tokens-up-to-date check, Storybook tests in light and dark, Storybook build. |
 | ❌ | Visual regression testing | None. Looks are compared by eye against Figma. Vitest browser mode can take screenshots without a new service. |
-| ❌ | Cross-browser coverage | Chromium only (Playwright). Firefox and WebKit matter for focus, `:has()`, container queries and Safari date inputs. |
+| 🟡 | Cross-browser coverage | Vitest projects `storybook-firefox` and `storybook-webkit` (light theme; `pnpm test-browsers`) and a CI job per browser (2026-10-15). WebKit passes all 981 tests; Firefox runs in CI (it would not launch on this Mac). Not a required check until it has been stable for a while. |
 | ✅ | Unit tests for logic outside components | `pnpm test-unit` (2026-10-15): `src/**/*.test.ts[x]` in the same real browser; covers the shared motion classes and the Showroom engine (routing, abort, Reset, counts, widgets, chips). Runs in CI. |
 | ✅ | Dependency audit and automated updates | `pnpm audit --prod` is clean; Dependabot (weekly, grouped) added 2026-10-14. |
 | ❌ | Performance and bundle budgets | No bundle-size or render checks; matters once components are consumed. |
@@ -194,7 +194,7 @@ only one that needs a decision.
    fix physical properties (`left-*`, `pl-*`) to logical ones. Test the 10 most interactive components.
 7. **Visual regression.** Vitest browser mode can take screenshots; start with the foundations pages and the
    10 most-used components in light and dark. Pairs with the Figma parity measurement already planned.
-8. **Firefox and WebKit** as extra Vitest browser projects (CI only if run time allows).
+8. ~~**Firefox and WebKit** as extra Vitest browser projects.~~ Added 2026-10-15; make them required once stable.
 9. **A human screen-reader pass** (VoiceOver + one Windows reader) on Dialog, Command Palette, Combobox, Calendar,
    Chat Shell, Prompt Input, Message Actions and Approval Card; log findings in the status doc.
 10. **Locale pass:** a `locale` and `currency` prop (or a provider) instead of the hard-coded `en-US`, and a

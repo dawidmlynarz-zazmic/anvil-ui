@@ -10,18 +10,21 @@ import { defineConfig } from 'vite'
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
 // Storybook stories run as Vitest browser tests once per theme, so a11y checks cover light and dark.
-const storybookProject = (theme: 'light' | 'dark') => ({
+const storybookProject = (
+  theme: 'light' | 'dark',
+  browser: 'chromium' | 'firefox' | 'webkit' = 'chromium',
+) => ({
   extends: true as const,
   // Read by .storybook/preview.tsx as the initial `theme` global (CSF Next ignores setProjectAnnotations).
   define: { __ANVIL_TEST_THEME__: JSON.stringify(theme) },
   plugins: [storybookTest({ configDir: path.join(dirname, '.storybook') })],
   test: {
-    name: `storybook-${theme}`,
+    name: browser === 'chromium' ? `storybook-${theme}` : `storybook-${browser}`,
     browser: {
       enabled: true,
       headless: true,
       provider: playwright(),
-      instances: [{ browser: 'chromium' as const }],
+      instances: [{ browser }],
     },
   },
 })
@@ -47,6 +50,13 @@ export default defineConfig({
     alias: { '@': path.resolve(dirname, './src') },
   },
   test: {
-    projects: [storybookProject('light'), storybookProject('dark'), unitProject],
+    projects: [
+      storybookProject('light'),
+      storybookProject('dark'),
+      // Cross-browser: the light theme in Firefox and WebKit (Safari's engine).
+      storybookProject('light', 'firefox'),
+      storybookProject('light', 'webkit'),
+      unitProject,
+    ],
   },
 })
