@@ -38,7 +38,7 @@ Node 24 (`.nvmrc`) and pnpm. Pin exact versions when installing.
 4. Run everything CI runs:
 
    ```bash
-   pnpm typecheck && pnpm lint && pnpm test-storybook
+   pnpm typecheck && pnpm lint && pnpm test-unit && pnpm test-storybook
    ```
 
 5. Update `docs/component-status.md` (and the Welcome catalog for a new component), then open a pull request.

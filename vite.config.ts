@@ -26,12 +26,27 @@ const storybookProject = (theme: 'light' | 'dark') => ({
   },
 })
 
+// Plain unit tests (src/**/*.test.ts[x]) run in the same real browser, so DOM and React behave as in production.
+const unitProject = {
+  extends: true as const,
+  test: {
+    name: 'unit',
+    include: ['src/**/*.test.{ts,tsx}'],
+    browser: {
+      enabled: true,
+      headless: true,
+      provider: playwright(),
+      instances: [{ browser: 'chromium' as const }],
+    },
+  },
+}
+
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: { '@': path.resolve(dirname, './src') },
   },
   test: {
-    projects: [storybookProject('light'), storybookProject('dark')],
+    projects: [storybookProject('light'), storybookProject('dark'), unitProject],
   },
 })

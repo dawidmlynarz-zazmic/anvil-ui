@@ -50,6 +50,7 @@ pnpm storybook         # http://localhost:6006
 | `pnpm storybook` | Storybook dev server |
 | `pnpm build-storybook` | Static Storybook in `storybook-static/` |
 | `pnpm test-storybook` | Interaction and a11y tests for every story, light and dark |
+| `pnpm test-unit` | Unit tests (`src/**/*.test.ts[x]`) in a real browser |
 | `pnpm typecheck` | TypeScript check |
 | `pnpm lint` | ESLint and Prettier check |
 | `pnpm tokens:build` | Regenerates the CSS tokens and foundation pages from `tokens/anvil.tokens.json` |
