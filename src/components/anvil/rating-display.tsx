@@ -45,7 +45,7 @@ function RatingDisplay({
         ))
       )}
       {label && (
-        <span className="ml-1 type-text-xs-normal whitespace-nowrap text-muted-foreground">{label}</span>
+        <span className="ms-1 type-text-xs-normal whitespace-nowrap text-muted-foreground">{label}</span>
       )}
     </div>
   )

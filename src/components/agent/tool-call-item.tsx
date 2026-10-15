@@ -56,7 +56,7 @@ function ToolCallItemTrigger({
     <CollapsibleTrigger
       data-slot="tool-call-item-trigger"
       className={cn(
-        'flex w-full min-w-0 items-center gap-2.5 rounded-sm text-left outline-none focus-visible:focus-ring',
+        'flex w-full min-w-0 items-center gap-2.5 rounded-sm text-start outline-none focus-visible:focus-ring',
         className,
       )}
       {...props}

@@ -22,7 +22,7 @@ const lineVariants = cva('shrink-0', {
   },
   compoundVariants: [
     { variant: 'dashed', orientation: 'horizontal', className: 'h-0 border-t border-dashed' },
-    { variant: 'dashed', orientation: 'vertical', className: 'w-0 border-l border-dashed' },
+    { variant: 'dashed', orientation: 'vertical', className: 'w-0 border-s border-dashed' },
   ],
   defaultVariants: { variant: 'solid', orientation: 'horizontal' },
 })

@@ -21,7 +21,7 @@ import { cn } from '@/lib/utils'
 const shellHeaderVariants = cva('group/shell-header flex justify-between gap-4', {
   variants: {
     variant: {
-      bar: 'min-h-12 shrink-0 items-center border-b border-overlay-8 bg-background py-2 pr-2 pl-4',
+      bar: 'min-h-12 shrink-0 items-center border-b border-overlay-8 bg-background py-2 pe-2 ps-4',
       inline: 'items-start',
       card: 'flex-wrap items-center gap-3 border-b p-4',
     },

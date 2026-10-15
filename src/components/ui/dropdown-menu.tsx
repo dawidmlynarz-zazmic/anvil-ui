@@ -87,7 +87,7 @@ function DropdownMenuCheckboxItem({
   return (
     <DropdownMenuPrimitive.CheckboxItem
       data-slot="dropdown-menu-checkbox-item"
-      className={cn(menuItemClassName, 'pr-2', className)}
+      className={cn(menuItemClassName, 'pe-2', className)}
       checked={checked}
       {...props}
     >
@@ -110,11 +110,11 @@ function DropdownMenuRadioItem({
   return (
     <DropdownMenuPrimitive.RadioItem
       data-slot="dropdown-menu-radio-item"
-      className={cn(menuItemClassName, 'pr-8', className)}
+      className={cn(menuItemClassName, 'pe-8', className)}
       {...props}
     >
       {children}
-      <span className="pointer-events-none absolute right-2 flex size-4 items-center justify-center">
+      <span className="pointer-events-none absolute end-2 flex size-4 items-center justify-center">
         <DropdownMenuPrimitive.ItemIndicator>
           <Icon icon={CheckIcon} />
         </DropdownMenuPrimitive.ItemIndicator>
@@ -181,7 +181,7 @@ function DropdownMenuSubTrigger({
       {...props}
     >
       {children}
-      <Icon icon={ChevronRightIcon} size="xs" className="ml-auto text-foreground-subtle" />
+      <Icon icon={ChevronRightIcon} size="xs" className="ms-auto text-foreground-subtle" />
     </DropdownMenuPrimitive.SubTrigger>
   )
 }

@@ -90,7 +90,7 @@ function MessageAction({
       inert={collapsed || undefined}
       className={cn(
         'grid grid-cols-[1fr] transition-[grid-template-columns,margin,opacity,scale] duration-(--duration-base) ease-out',
-        'data-[collapsed=true]:-ml-1 data-[collapsed=true]:grid-cols-[0fr] data-[collapsed=true]:scale-90 data-[collapsed=true]:opacity-0',
+        'data-[collapsed=true]:-ms-1 data-[collapsed=true]:grid-cols-[0fr] data-[collapsed=true]:scale-90 data-[collapsed=true]:opacity-0',
         'data-[collapsed=true]:duration-(--duration-fast) data-[collapsed=true]:ease-in-out',
         // Reduced motion: only the fade; no scaling or sliding.
         'motion-reduce:transition-opacity motion-reduce:data-[collapsed=true]:scale-100',

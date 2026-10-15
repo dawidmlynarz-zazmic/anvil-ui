@@ -126,7 +126,7 @@ function RatingScale({
       {(lowLabel || highLabel) && (
         <div className="flex justify-between gap-4 type-text-xs-normal text-muted-foreground">
           <span>{lowLabel}</span>
-          <span className="text-right">{highLabel}</span>
+          <span className="text-end">{highLabel}</span>
         </div>
       )}
     </div>

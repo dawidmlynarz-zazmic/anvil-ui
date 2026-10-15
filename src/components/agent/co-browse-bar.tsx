@@ -46,7 +46,7 @@ function CoBrowseBar({
       role="group"
       aria-label="Assistant controls"
       className={cn(
-        'flex w-fit max-w-full flex-wrap items-center gap-x-2 gap-y-1.5 rounded-full bg-background-inverse py-1.5 pr-1.5 pl-3 text-foreground-inverse shadow-elevation-raised',
+        'flex w-fit max-w-full flex-wrap items-center gap-x-2 gap-y-1.5 rounded-full bg-background-inverse py-1.5 pe-1.5 ps-3 text-foreground-inverse shadow-elevation-raised',
         className,
       )}
       {...props}

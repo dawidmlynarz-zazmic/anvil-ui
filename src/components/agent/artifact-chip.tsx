@@ -49,7 +49,7 @@ function ArtifactChip({
       variant="outline"
       size="sm"
       className={cn(
-        'w-full max-w-90 flex-nowrap gap-2.5 bg-card p-2 text-left hover:border-border-strong',
+        'w-full max-w-90 flex-nowrap gap-2.5 bg-card p-2 text-start hover:border-border-strong',
         open && 'border-2 border-border-action p-1.75 hover:border-border-action',
         className,
       )}

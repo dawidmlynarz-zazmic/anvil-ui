@@ -113,7 +113,7 @@ function MenubarCheckboxItem({
   return (
     <MenubarPrimitive.CheckboxItem
       data-slot="menubar-checkbox-item"
-      className={cn(menuItemClassName, 'pr-2', className)}
+      className={cn(menuItemClassName, 'pe-2', className)}
       checked={checked}
       {...props}
     >
@@ -132,11 +132,11 @@ function MenubarRadioItem({
   return (
     <MenubarPrimitive.RadioItem
       data-slot="menubar-radio-item"
-      className={cn(menuItemClassName, 'pr-8', className)}
+      className={cn(menuItemClassName, 'pe-8', className)}
       {...props}
     >
       {children}
-      <span className="pointer-events-none absolute right-2 flex size-4 items-center justify-center">
+      <span className="pointer-events-none absolute end-2 flex size-4 items-center justify-center">
         <MenubarPrimitive.ItemIndicator>
           <Icon icon={CheckIcon} />
         </MenubarPrimitive.ItemIndicator>
@@ -196,7 +196,7 @@ function MenubarSubTrigger({
       {...props}
     >
       {children}
-      <Icon icon={ChevronRightIcon} size="xs" className="ml-auto text-foreground-subtle" />
+      <Icon icon={ChevronRightIcon} size="xs" className="ms-auto text-foreground-subtle" />
     </MenubarPrimitive.SubTrigger>
   )
 }
