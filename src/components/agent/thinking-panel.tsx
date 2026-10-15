@@ -67,7 +67,7 @@ function ThinkingPanelTrigger({
     <CollapsibleTrigger
       data-slot="thinking-panel-trigger"
       className={cn(
-        'flex min-h-6 w-full items-center gap-2 rounded-sm text-left outline-none focus-visible:focus-ring',
+        'flex min-h-6 w-full items-center gap-2 rounded-sm text-start outline-none focus-visible:focus-ring',
         className,
       )}
       {...props}

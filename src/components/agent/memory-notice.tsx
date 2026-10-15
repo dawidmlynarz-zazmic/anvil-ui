@@ -34,7 +34,7 @@ const CHANGE: Record<
 }
 
 const usedPill =
-  'inline-flex items-center gap-1.5 rounded-full bg-agent-subtle py-1 pr-2.5 pl-2 type-text-xs-medium text-agent-strong dark:text-foreground [&>svg]:size-3.5 [&>svg]:text-agent dark:[&>svg]:text-agent-medium'
+  'inline-flex items-center gap-1.5 rounded-full bg-agent-subtle py-1 pe-2.5 ps-2 type-text-xs-medium text-agent-strong dark:text-foreground [&>svg]:size-3.5 [&>svg]:text-agent dark:[&>svg]:text-agent-medium'
 
 function MemoryNotice({
   status = 'used',
@@ -132,8 +132,8 @@ function MemoryNotice({
       data-slot="memory-notice"
       data-status={status}
       className={cn(
-        'inline-flex max-w-[min(100%,--spacing(160))] items-center gap-1.5 rounded-full bg-muted py-1 pl-2 type-text-xs-normal',
-        action ? 'pr-1' : 'pr-2.5',
+        'inline-flex max-w-[min(100%,--spacing(160))] items-center gap-1.5 rounded-full bg-muted py-1 ps-2 type-text-xs-normal',
+        action ? 'pe-1' : 'pe-2.5',
         className,
       )}
       {...props}

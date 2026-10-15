@@ -62,7 +62,7 @@ function KeyValueRow({
       <dd
         className={cn(
           'min-w-0 text-foreground',
-          layout === 'spread' ? 'shrink-0 text-right whitespace-nowrap' : 'flex-1',
+          layout === 'spread' ? 'shrink-0 text-end whitespace-nowrap' : 'flex-1',
           strong || layout === 'aligned' ? 'type-text-sm-semibold' : 'type-text-sm-medium',
         )}
       >

@@ -82,3 +82,42 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm build-storybook
+
+  # Firefox and WebKit (Safari's engine) run the same stories in the light theme. Not a required check yet:
+  # it reports, and becomes required once it has been stable for a while.
+  browsers:
+    name: Cross-browser (${{ matrix.browser }} ${{ matrix.shard }}/${{ matrix.total }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # Playwright's WebKit on Linux crashes at random under load (different shards on different runs, while every
+    # test passes on macOS), so WebKit reports but never fails the workflow. Firefox is stable.
+    continue-on-error: ${{ matrix.browser == 'webkit' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        # Sharded: one WebKit page running every story ran out of memory on the Linux runner, so WebKit gets
+        # smaller slices than Firefox.
+        include:
+          - { browser: firefox, shard: 1, total: 3 }
+          - { browser: firefox, shard: 2, total: 3 }
+          - { browser: firefox, shard: 3, total: 3 }
+          - { browser: webkit, shard: 1, total: 8 }
+          - { browser: webkit, shard: 2, total: 8 }
+          - { browser: webkit, shard: 3, total: 8 }
+          - { browser: webkit, shard: 4, total: 8 }
+          - { browser: webkit, shard: 5, total: 8 }
+          - { browser: webkit, shard: 6, total: 8 }
+          - { browser: webkit, shard: 7, total: 8 }
+          - { browser: webkit, shard: 8, total: 8 }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Install ${{ matrix.browser }}
+        run: pnpm exec playwright install --with-deps ${{ matrix.browser }}
+      - name: Storybook tests in ${{ matrix.browser }}
+        run: pnpm exec vitest run --project=storybook-${{ matrix.browser }} --shard=${{ matrix.shard }}/${{ matrix.total }} --maxWorkers=2

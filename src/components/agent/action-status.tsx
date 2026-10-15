@@ -54,7 +54,7 @@ function ActionStatus({
       data-slot="action-status"
       data-status={status}
       role="status"
-      className={cn('flex items-center gap-2.5 border-t py-2.5 pr-3 pl-4 wrap-break-word', tone, className)}
+      className={cn('flex items-center gap-2.5 border-t py-2.5 pe-3 ps-4 wrap-break-word', tone, className)}
       {...props}
     >
       {status === 'executing' ? <PulseDot /> : icon && <Icon icon={icon} />}

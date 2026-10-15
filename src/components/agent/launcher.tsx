@@ -61,7 +61,7 @@ function Launcher({
       <div
         data-slot="launcher"
         data-offline={offline || undefined}
-        className={cn('fixed right-6 bottom-6 z-(--z-sticky) flex items-center gap-3', className)}
+        className={cn('fixed end-6 bottom-6 z-(--z-sticky) flex items-center gap-3', className)}
         {...props}
       >
         {preview && !isOpen && (
@@ -77,7 +77,7 @@ function Launcher({
                 size="icon-xs"
                 aria-label="Dismiss"
                 onClick={onDismissPreview}
-                className="-mt-1 -mr-1"
+                className="-mt-1 -me-1"
               >
                 <Icon icon={XIcon} />
               </Button>
@@ -112,7 +112,7 @@ function Launcher({
               shape="pill"
               size="sm"
               aria-label={`${unread} unread`}
-              className="absolute -top-0.5 -right-1 min-w-5 justify-center px-1 ring-2 ring-background"
+              className="absolute -top-0.5 -end-1 min-w-5 justify-center px-1 ring-2 ring-background"
             >
               {unread}
             </Badge>

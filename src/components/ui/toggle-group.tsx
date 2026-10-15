@@ -71,7 +71,7 @@ function ToggleGroupItem({
         }),
         'shrink-0 focus:z-10 focus-visible:z-10',
         // Joined: square inner corners; outline strokes overlap so neighbours share one 1px line.
-        'data-[spacing=0]:rounded-none data-[spacing=0]:first:rounded-l-md data-[spacing=0]:last:rounded-r-md data-[spacing=0]:data-[variant=outline]:not-first:-ml-px',
+        'data-[spacing=0]:rounded-none data-[spacing=0]:first:rounded-s-md data-[spacing=0]:last:rounded-e-md data-[spacing=0]:data-[variant=outline]:not-first:-ms-px',
         className,
       )}
       {...props}

@@ -270,7 +270,7 @@ function ModelAndToolsPicker({
                 className="h-auto w-full justify-start gap-2.5 p-2 type-text-sm-medium"
               >
                 <Icon icon={PlugIcon} />
-                <span className="flex-1 text-left">Connectors</span>
+                <span className="flex-1 text-start">Connectors</span>
                 {connectors && (
                   <Badge variant="outline" size="xs">
                     {connectors}

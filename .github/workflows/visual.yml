@@ -1,0 +1,63 @@
+# Visual regression on a curated list of stories (visual/stories.json), light and dark, on Linux.
+# - Pull requests compare against the committed baselines in visual/baselines/ and upload diffs on failure.
+#   A story with no baseline yet gets one, committed to the branch (same-repository pull requests only).
+# - "Run workflow" with update = true re-renders ALL baselines on this branch and commits them (do this after an
+#   intentional visual change, then review the images in the pull request).
+name: Visual regression
+
+on:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      update:
+        description: Re-render the baselines and commit them to this branch
+        type: boolean
+        default: false
+
+concurrency:
+  group: visual-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  visual:
+    name: Visual regression
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    steps:
+      # Check out the branch itself (not the pull request's merge commit) so new baselines can be pushed to it.
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm build-storybook
+      - name: Compare with the baselines
+        if: ${{ !inputs.update }}
+        run: node scripts/visual.mjs
+      - name: Re-render the baselines
+        if: ${{ inputs.update }}
+        run: node scripts/visual.mjs --update
+      - name: Commit new or updated baselines
+        if: ${{ always() && (inputs.update || github.event.pull_request.head.repo.full_name == github.repository) }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add visual/baselines
+          git diff --cached --quiet || git commit -m "chore: update visual baselines"
+          git push origin HEAD:${{ github.head_ref || github.ref_name }}
+      - name: Upload the diffs
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-diffs
+          path: visual/diffs
