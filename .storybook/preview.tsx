@@ -6,6 +6,7 @@ import addonThemes, { withThemeByClassName } from '@storybook/addon-themes'
 import addonPseudoStates from 'storybook-addon-pseudo-states'
 import { configure } from 'storybook/test'
 
+import { LocaleProvider, directionOf } from '@/lib/locale'
 import { Toaster } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import '@/styles/globals.css'
@@ -29,13 +30,23 @@ function AnvilProviders({
   shell,
   motion,
   theme,
+  locale,
   children,
 }: {
   shell: Shell
   motion: 'on' | 'off'
   theme: 'light' | 'dark'
+  locale: string
   children: ReactNode
 }) {
+  const dir = directionOf(locale)
+  // Language and direction live on <html>, like a real page: logical properties, Intl formatting and
+  // the browser's own widgets all follow them.
+  useLayoutEffect(() => {
+    document.documentElement.lang = locale
+    document.documentElement.dir = dir
+  }, [locale, dir])
+
   useEffect(() => {
     document.documentElement.classList.toggle('no-motion', motion === 'off')
   }, [motion])
@@ -47,10 +58,12 @@ function AnvilProviders({
   }, [theme])
 
   return (
-    <TooltipProvider>
-      <div data-shell={shell}>{children}</div>
-      <Toaster theme={theme} />
-    </TooltipProvider>
+    <LocaleProvider locale={locale} dir={dir}>
+      <TooltipProvider>
+        <div data-shell={shell}>{children}</div>
+        <Toaster theme={theme} />
+      </TooltipProvider>
+    </LocaleProvider>
   )
 }
 
@@ -59,6 +72,7 @@ const withAnvilProviders: Decorator = (Story, context) => (
     shell={(context.globals.shell ?? 'full-screen') as Shell}
     motion={context.globals.motion === 'off' ? 'off' : 'on'}
     theme={context.globals.theme === 'dark' ? 'dark' : 'light'}
+    locale={typeof context.globals.locale === 'string' ? context.globals.locale : 'en-US'}
   >
     <Story />
   </AnvilProviders>
@@ -99,6 +113,22 @@ export default definePreview({
         dynamicTitle: true,
       },
     },
+    locale: {
+      description:
+        'Language and text direction (Intl formatting, logical layout; arabic and hebrew are right-to-left)',
+      toolbar: {
+        title: 'Locale',
+        icon: 'globe',
+        items: [
+          { value: 'en-US', title: 'English (US)' },
+          { value: 'de-DE', title: 'Deutsch (long words)' },
+          { value: 'ja-JP', title: '日本語' },
+          { value: 'ar-SA', title: 'العربية (RTL)' },
+          { value: 'he-IL', title: 'עברית (RTL)' },
+        ],
+        dynamicTitle: true,
+      },
+    },
     motion: {
       description: 'Animations and transitions',
       toolbar: {
@@ -115,6 +145,7 @@ export default definePreview({
   initialGlobals: {
     shell: 'full-screen',
     motion: 'on',
+    locale: 'en-US',
     ...(testTheme ? { theme: testTheme } : {}),
   },
   argTypes: {

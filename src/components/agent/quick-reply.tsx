@@ -46,7 +46,7 @@ function QuickReply({
           type="button"
           data-slot="quick-reply"
           className={cn(
-            'flex w-full items-center gap-2 px-3 py-2 text-left type-text-sm-normal text-foreground outline-none',
+            'flex w-full items-center gap-2 px-3 py-2 text-start type-text-sm-normal text-foreground outline-none',
             'transition-colors duration-(--duration-fast) ease-out hover:bg-muted focus-visible:focus-ring focus-visible:ring-offset-0',
             'disabled:pointer-events-none disabled:opacity-50',
             className,
@@ -69,7 +69,7 @@ function QuickReply({
         className={cn(
           chipVariants({ variant: 'outline', size: 'lg', interactive: false }),
           reply,
-          "max-w-full justify-start text-left whitespace-normal [&_svg:not([class*='size-'])]:size-3.5",
+          "max-w-full justify-start text-start whitespace-normal [&_svg:not([class*='size-'])]:size-3.5",
           className,
         )}
         {...props}
@@ -96,7 +96,7 @@ function QuickReplyFilter({
         variant="outline"
         size="lg"
         className={cn(
-          'group/filter h-auto min-h-8 rounded-md px-3 max-w-full justify-start bg-transparent py-1.5 text-left type-text-sm-medium whitespace-normal inset-ring-border hover:bg-muted hover:inset-ring-input',
+          'group/filter h-auto min-h-8 rounded-md px-3 max-w-full justify-start bg-transparent py-1.5 text-start type-text-sm-medium whitespace-normal inset-ring-border hover:bg-muted hover:inset-ring-input',
           "[&_svg:not([class*='size-'])]:size-3.5",
           'data-[state=on]:bg-agent-subtle data-[state=on]:text-agent data-[state=on]:inset-ring-1 data-[state=on]:inset-ring-agent-soft data-[state=on]:hover:bg-agent-soft dark:data-[state=on]:text-agent-medium',
           className,

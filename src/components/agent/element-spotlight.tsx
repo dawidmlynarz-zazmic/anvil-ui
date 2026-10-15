@@ -9,7 +9,7 @@ import { CheckIcon, EyeIcon, Icon, LoaderCircleIcon, TriangleAlertIcon } from '@
 // Figma state → `status`: referenced (--agent) · filling (--agent, a spinning glyph: decorative, the label says “Filling…”) · filled (--success) ·
 // review (Figma "needs review", --warning). A 2px border in the status colour at radius lg, sized to
 // the element it wraps (`children`, or the host sizes it), and a solid pill Badge 6px above it,
-// right-aligned (`right-0 -top-7`): glyph + `label`. The label always says the state, so colour is
+// right-aligned (`end-0 -top-7`): glyph + `label`. The label always says the state, so colour is
 // never the only signal, and it is a polite status (the host page is not interrupted). The page scrim
 // is the overlay (--overlay), not part of this; an anchored tooltip is a Popover.
 
@@ -55,7 +55,7 @@ function ElementSpotlight({
         shape="pill"
         size="sm"
         role="status"
-        className="absolute -top-7 right-0 py-[3px]"
+        className="absolute -top-7 end-0 py-[3px]"
       >
         {status === 'filling' ? (
           <Icon icon={LoaderCircleIcon} className="animate-spin" />

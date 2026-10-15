@@ -2,6 +2,8 @@ import { useState } from 'react'
 import preview from '#.storybook/preview'
 import { expect, fn, userEvent } from 'storybook/test'
 
+import { LocaleProvider } from '@/lib/locale'
+
 import { AvailabilityCalendar, type AvailabilityMap } from './availability-calendar'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10668-16157'
@@ -124,8 +126,8 @@ export const Default = meta.story()
 
 Default.test('picks a day, names its availability, moves between months', async ({ canvas, args }) => {
   await expect(canvas.getByRole('heading', { name: 'October 2026' })).toBeVisible()
-  await expect(canvas.getByRole('button', { name: /Saturday 10 October, Sold out/ })).toBeVisible()
-  await userEvent.click(canvas.getByRole('button', { name: /Saturday 17 October/ }))
+  await expect(canvas.getByRole('button', { name: /Saturday, October 10, Sold out/ })).toBeVisible()
+  await userEvent.click(canvas.getByRole('button', { name: /Saturday, October 17/ }))
   await expect(args.onSelect).toHaveBeenCalled()
   await userEvent.click(canvas.getByRole('button', { name: 'Next month' }))
   await expect(canvas.getByRole('heading', { name: 'November 2026' })).toBeVisible()
@@ -195,3 +197,27 @@ export const States = meta.story({
     </div>
   ),
 })
+
+/** Right-to-left: the month, weekdays and day names follow the locale and the grid mirrors. */
+export const Arabic = meta.story({
+  decorators: [
+    (Story) => (
+      <LocaleProvider locale="ar-SA">
+        <div dir="rtl" className="w-145 max-w-full">
+          <Story />
+        </div>
+      </LocaleProvider>
+    ),
+  ],
+})
+
+Arabic.test(
+  'names months and days in the locale and runs right to left',
+  async ({ canvas, canvasElement }) => {
+    await expect(canvasElement.querySelector('[dir=rtl]')).not.toBeNull()
+    const month = new Intl.DateTimeFormat('ar-SA', { month: 'long', year: 'numeric' }).format(
+      new Date(2026, 9, 1),
+    )
+    await expect(canvas.getByRole('heading', { name: month })).toBeVisible()
+  },
+)

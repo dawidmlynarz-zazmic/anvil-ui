@@ -63,7 +63,7 @@ function Poll({
               key={option.value}
               variant="outline"
               intent="neutral"
-              className="h-auto min-h-10 justify-start py-2.5 text-left type-text-sm-normal whitespace-normal"
+              className="h-auto min-h-10 justify-start py-2.5 text-start type-text-sm-normal whitespace-normal"
               onClick={() => {
                 setInner(option.value)
                 onVote?.(option.value)
@@ -86,7 +86,7 @@ function Poll({
               >
                 <span
                   aria-hidden
-                  className={cn('absolute inset-y-0 left-0', chosen ? 'bg-info-subtle' : 'bg-border')}
+                  className={cn('absolute inset-y-0 start-0', chosen ? 'bg-info-subtle' : 'bg-border')}
                   style={{ width: `${percent}%` }}
                 />
                 <span className={cn('relative min-w-0 flex-1', chosen && 'type-text-sm-semibold')}>

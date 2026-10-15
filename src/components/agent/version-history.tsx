@@ -107,7 +107,7 @@ function VersionHistoryItem({
       asChild
       size="sm"
       selected={selected}
-      className="w-full flex-nowrap items-start gap-2.5 p-2.5 text-left hover:bg-muted data-current:bg-muted disabled:pointer-events-none disabled:opacity-50"
+      className="w-full flex-nowrap items-start gap-2.5 p-2.5 text-start hover:bg-muted data-current:bg-muted disabled:pointer-events-none disabled:opacity-50"
     >
       <button
         data-slot="version-history-item"

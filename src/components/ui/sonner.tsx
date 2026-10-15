@@ -46,7 +46,7 @@ const toastClassNames: NonNullable<ToasterProps['toastOptions']>['classNames'] =
   ),
   content: cn(
     'flex min-w-0 flex-col gap-1',
-    'toast-compact:mr-2 toast-compact:flex-1',
+    'toast-compact:me-2 toast-compact:flex-1',
     'toast-extended:col-start-2 toast-extended:col-end-5 toast-extended:row-start-1',
   ),
   title: cn('toast-compact:type-text-xs-normal', 'toast-extended:type-text-sm-semibold'),
@@ -59,7 +59,7 @@ const toastClassNames: NonNullable<ToasterProps['toastOptions']>['classNames'] =
     // extended: Button default · neutral · sm, after the cancel when there is one
     'toast-extended:col-start-2 toast-extended:row-start-2 toast-extended:mt-2.5 toast-extended:h-8 toast-extended:justify-self-start toast-extended:rounded-md toast-extended:px-3',
     'toast-extended:bg-button-neutral toast-extended:text-button-neutral-foreground toast-extended:hover:bg-button-neutral-hover',
-    'toast-extended:[[data-cancel]~&]:col-start-3 toast-extended:[[data-cancel]~&]:-ml-1',
+    'toast-extended:[[data-cancel]~&]:col-start-3 toast-extended:[[data-cancel]~&]:-ms-1',
   ),
   cancelButton: cn(
     'inline-flex shrink-0 items-center justify-center whitespace-nowrap outline-none select-none type-text-xs-semibold',

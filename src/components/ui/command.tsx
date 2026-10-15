@@ -175,7 +175,7 @@ function CommandShortcut({ className, ...props }: React.ComponentProps<'span'>) 
       data-slot="command-shortcut"
       // --foreground-subtle on the highlighted --muted row is 4.34:1; --muted-foreground passes.
       className={cn(
-        'ml-auto pl-2 type-text-xs-medium text-foreground-subtle in-data-[selected=true]:text-muted-foreground',
+        'ms-auto ps-2 type-text-xs-medium text-foreground-subtle in-data-[selected=true]:text-muted-foreground',
         className,
       )}
       {...props}

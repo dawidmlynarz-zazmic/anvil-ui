@@ -237,9 +237,9 @@ function MediaGallery({
         </div>
       ) : (
         <Carousel setApi={setApi} opts={{ loop: false }} className="relative">
-          <CarouselContent className="ml-0">
+          <CarouselContent className="ms-0">
             {items.map((item, at) => (
-              <CarouselItem key={at} className="pl-0">
+              <CarouselItem key={at} className="ps-0">
                 {tile(item, at, 'aspect-16/9 w-full rounded-lg')}
               </CarouselItem>
             ))}
@@ -248,12 +248,12 @@ function MediaGallery({
             variant="default"
             tone="neutral"
             size="sm"
-            className="pointer-events-none absolute top-3 right-3"
+            className="pointer-events-none absolute top-3 end-3"
           >
             {slide + 1} / {count}
           </Badge>
-          <CarouselPrevious className="left-3 bg-background/90" />
-          <CarouselNext className="right-3 bg-background/90" />
+          <CarouselPrevious className="start-3 bg-background/90" />
+          <CarouselNext className="end-3 bg-background/90" />
           <div className="pointer-events-none absolute inset-x-0 bottom-3 flex justify-center">
             <CarouselDots className="pointer-events-auto mt-0 rounded-full bg-background-inverse/60 px-2 py-1 [&_[aria-current=true]>span]:bg-foreground-inverse [&_span]:bg-foreground-inverse/50" />
           </div>

@@ -54,7 +54,7 @@ function ToolCallAccordionTrigger({
     <CollapsibleTrigger
       data-slot="tool-call-accordion-trigger"
       className={cn(
-        'flex w-full min-w-0 items-center gap-2.5 px-3 py-2.5 text-left outline-none group-data-[state=open]/tool-calls:border-b focus-visible:focus-ring focus-visible:ring-offset-0',
+        'flex w-full min-w-0 items-center gap-2.5 px-3 py-2.5 text-start outline-none group-data-[state=open]/tool-calls:border-b focus-visible:focus-ring focus-visible:ring-offset-0',
         className,
       )}
       {...props}

@@ -83,7 +83,7 @@ function OfferCard({
       type="button"
       aria-pressed={selected}
       onClick={onSelect}
-      className={cn(stretch, 'text-left')}
+      className={cn(stretch, 'text-start')}
     >
       {title}
     </button>

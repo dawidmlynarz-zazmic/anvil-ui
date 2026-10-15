@@ -5,6 +5,7 @@ import { ShellDescription, ShellFooter, ShellHeader, ShellTitle } from '@/compon
 import { Stepper } from '@/components/anvil/stepper'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
+import { formatCurrency, useLocale } from '@/lib/locale'
 
 // Figma Agent Patterns › Scheduling · quantity selector (10668:16339): types with steppers and a running
 // total (tickets, guests and rooms, party size, cart quantities). Built on Card, Shell Header / Footer (card
@@ -31,10 +32,12 @@ function QuantitySelector({
   maxTotal,
   unit = 'ticket',
   currency = 'USD',
+  locale: localeProp,
   note,
   actionLabel,
   onAction,
   emptySummary,
+  summary,
   className,
   ...props
 }: Omit<React.ComponentProps<'section'>, 'title'> & {
@@ -49,18 +52,22 @@ function QuantitySelector({
   /** The thing counted, singular: “ticket”, “guest”. */
   unit?: string
   currency?: string
+  /** Formats the prices; defaults to the page locale (`LocaleProvider` or the document's `lang`). */
+  locale?: string
   note?: React.ReactNode
   actionLabel?: string
   onAction?: (values: QuantityValues) => void
   /** The summary when nothing is chosen. */
   emptySummary?: string
+  /** Writes the running summary for your language (plurals differ): `(count, formattedTotal) => string`. */
+  summary?: (count: number, total: string) => string
 }) {
   const [inner, setInner] = React.useState<QuantityValues>(defaultValues ?? {})
   const current = values ?? inner
   const count = types.reduce((sum, type) => sum + (current[type.id] ?? 0), 0)
   const total = types.reduce((sum, type) => sum + (current[type.id] ?? 0) * type.price, 0)
-  const money = (amount: number) =>
-    new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(amount)
+  const page = useLocale()
+  const money = (amount: number) => formatCurrency(localeProp ?? page.locale, amount, currency)
   const set = (id: string, next: number) => {
     const updated = { ...current, [id]: next }
     if (values === undefined) setInner(updated)
@@ -112,7 +119,8 @@ function QuantitySelector({
               <span role="status" className="block type-text-sm-semibold text-foreground">
                 {count === 0
                   ? (emptySummary ?? `Select ${unit}s`)
-                  : `${count} ${count === 1 ? unit : `${unit}s`} · ${money(total)}`}
+                  : (summary?.(count, money(total)) ??
+                    `${count} ${count === 1 ? unit : `${unit}s`} · ${money(total)}`)}
               </span>
               {note}
             </>

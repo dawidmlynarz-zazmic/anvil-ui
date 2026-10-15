@@ -17,6 +17,7 @@ agreement in [`CLAUDE.md`](CLAUDE.md) (which Claude Code follows); both say the 
 - **shadcn is the foundation.** Start from the unmodified `shadcn add` output (its own commit), then restyle.
   List any behaviour change under "Intentional deviations from shadcn" in the status doc.
 - **Ask before** adding a dependency, changing the folder structure or renaming a public prop.
+- Use logical CSS properties (`ms-`, `pe-`, `start-`, `text-start`…), not `ml-` / `pr-` / `left-`; format numbers and dates through `useLocale()`. See [`docs/i18n-rtl.md`](docs/i18n-rtl.md).
 - Never edit `tokens/` or `src/styles/tokens/` by hand: re-pull from Figma and run `pnpm tokens:build`.
 
 ## Setup
