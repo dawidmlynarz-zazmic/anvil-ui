@@ -74,8 +74,8 @@ Top systems treat accessibility as a release gate, not a review comment (Carbon,
 | ✅ | Reflow and 320px width | `pnpm audit:narrow` checks every story at 390px; Agent Builder overflow went from 119 stories to 16 (intended scrollers). |
 | ✅ | Reduced motion respected | Global; movement becomes a short fade. |
 | ✅ | Accessibility guidance per component | Every story has `guide.a11y`; lint requires it. |
-| ❌ | Real screen reader testing (VoiceOver, NVDA, JAWS) | Only automated tooling. axe finds roughly a third of issues; live-region and focus-order problems need a human pass. |
-| ❌ | Forced-colors / high-contrast mode | No `forced-colors` styles or tests; inset-ring and shadow-based strokes can vanish in Windows High Contrast. |
+| 🟡 | Real screen reader testing (VoiceOver, NVDA, JAWS) | `docs/screen-reader-checklist.md` is ready (priority list, what to listen for, a results table); the pass itself needs a person with a screen reader and has not been run. |
+| ✅ | Forced-colors / high-contrast mode | A `forced-colors: active` block in `globals.css` restores field strokes, the focus ring, selected states, progress fills and availability bars with system colours; `pnpm audit:forced-colors` finds controls that lose their boundary or selected state (0 left on 2026-10-15). See `docs/accessibility.md`. |
 | 🟡 | Target size (WCAG 2.2: 24px minimum, 44px on touch) | Rating targets were raised to 24px; many controls are 24–32px. No touch-size audit. |
 | ✅ | ESLint accessibility rules (`jsx-a11y`) | `eslint-plugin-jsx-a11y` recommended rules on `src`, `stories` and `.storybook` (2026-10-14); our components are mapped to the elements they render, `role` on our own components is not treated as ARIA, and every intentional exception carries a written reason. The plugin's peer range stops at ESLint 9; it runs on 10.11 without problems so far. |
 | ✅ | Right-to-left support | Logical CSS properties everywhere (enforced by `scripts/check-logical.mjs` in `pnpm lint`), direction-aware icon mirroring, a Locale toolbar (Arabic, Hebrew), `pnpm audit:rtl`, an Arabic story with a test (2026-10-15). See `docs/i18n-rtl.md`. |
@@ -190,7 +190,7 @@ only one that needs a decision.
 5. ~~**Decide the source-of-truth rule in writing:**~~ Written into CLAUDE.md and CONTRIBUTING.md 2026-10-14: where code is ahead of Figma, code wins and Figma gets a flag.
 
 **Do next (medium)**
-6. **Forced-colors and RTL pass.** Add a `forced-colors` check for focus and strokes, an RTL toolbar toggle, and
+6. ~~**Forced-colors and RTL pass.**~~ Done 2026-10-15. Add a `forced-colors` check for focus and strokes, an RTL toolbar toggle, and
    fix physical properties (`left-*`, `pl-*`) to logical ones. Test the 10 most interactive components.
 7. **Visual regression.** Vitest browser mode can take screenshots; start with the foundations pages and the
    10 most-used components in light and dark. Pairs with the Figma parity measurement already planned.
