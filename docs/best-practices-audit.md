@@ -107,7 +107,7 @@ Top systems gate every change with automated checks.
 | ✅ | Custom lint for the system's own rules | Story standards, motion rules, levels, `show…`/Full stories. |
 | ✅ | Type, lint, test and build run on every change | `.github/workflows/ci.yml` (added 2026-10-14): typecheck, lint, tokens-up-to-date check, Storybook tests in light and dark, Storybook build. |
 | ❌ | Visual regression testing | None. Looks are compared by eye against Figma. Vitest browser mode can take screenshots without a new service. |
-| 🟡 | Cross-browser coverage | Vitest projects `storybook-firefox` and `storybook-webkit` (light theme; `pnpm test-browsers`) and a CI job per browser (2026-10-15). WebKit passes all 981 tests; Firefox runs in CI (it would not launch on this Mac). Not a required check until it has been stable for a while. |
+| 🟡 | Cross-browser coverage | Vitest projects `storybook-firefox` and `storybook-webkit` (light theme; `pnpm test-browsers`) and a CI job per browser (2026-10-15). Firefox passes all 981 tests in CI (3 shards; it would not launch on this Mac). WebKit passes all 981 on macOS, but Playwright's Linux WebKit crashes at random under load (a different shard each run), so its jobs report without failing the workflow. Neither is a required check. |
 | ✅ | Unit tests for logic outside components | `pnpm test-unit` (2026-10-15): `src/**/*.test.ts[x]` in the same real browser; covers the shared motion classes and the Showroom engine (routing, abort, Reset, counts, widgets, chips). Runs in CI. |
 | ✅ | Dependency audit and automated updates | `pnpm audit --prod` is clean; Dependabot (weekly, grouped) added 2026-10-14. |
 | ❌ | Performance and bundle budgets | No bundle-size or render checks; matters once components are consumed. |

@@ -89,6 +89,9 @@ jobs:
     name: Cross-browser (${{ matrix.browser }} ${{ matrix.shard }}/${{ matrix.total }})
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    # Playwright's WebKit on Linux crashes at random under load (different shards on different runs, while every
+    # test passes on macOS), so WebKit reports but never fails the workflow. Firefox is stable.
+    continue-on-error: ${{ matrix.browser == 'webkit' }}
     strategy:
       fail-fast: false
       matrix:
