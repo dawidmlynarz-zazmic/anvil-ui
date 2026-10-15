@@ -29,7 +29,10 @@ jobs:
     permissions:
       contents: write
     steps:
+      # Check out the branch itself (not the pull request's merge commit) so new baselines can be pushed to it.
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
@@ -51,7 +54,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add visual/baselines
           git diff --cached --quiet || git commit -m "chore: update visual baselines"
-          git push
+          git push origin HEAD:${{ github.head_ref || github.ref_name }}
       - name: Upload the diffs
         if: ${{ failure() }}
         uses: actions/upload-artifact@v4
