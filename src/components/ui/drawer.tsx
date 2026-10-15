@@ -75,8 +75,8 @@ function DrawerContent({ className, children, showCloseButton = true, ...props }
           '[animation-duration:var(--duration-slow)]! [animation-timing-function:var(--ease-out)]! data-[state=closed]:[animation-duration:var(--duration-base)]! data-[state=closed]:[animation-timing-function:var(--ease-in-out)]!',
           'data-[vaul-drawer-direction=top]:inset-x-0 data-[vaul-drawer-direction=top]:top-0 data-[vaul-drawer-direction=top]:mb-24 data-[vaul-drawer-direction=top]:max-h-[80dvh] data-[vaul-drawer-direction=top]:rounded-b-2xl',
           'data-[vaul-drawer-direction=bottom]:inset-x-0 data-[vaul-drawer-direction=bottom]:bottom-0 data-[vaul-drawer-direction=bottom]:mt-24 data-[vaul-drawer-direction=bottom]:max-h-[80dvh] data-[vaul-drawer-direction=bottom]:rounded-t-2xl',
-          'data-[vaul-drawer-direction=right]:inset-y-0 data-[vaul-drawer-direction=right]:right-0 data-[vaul-drawer-direction=right]:w-3/4 data-[vaul-drawer-direction=right]:sm:max-w-sm',
-          'data-[vaul-drawer-direction=left]:inset-y-0 data-[vaul-drawer-direction=left]:left-0 data-[vaul-drawer-direction=left]:w-3/4 data-[vaul-drawer-direction=left]:sm:max-w-sm',
+          'data-[vaul-drawer-direction=right]:inset-y-0 data-[vaul-drawer-direction=right]:end-0 data-[vaul-drawer-direction=right]:w-3/4 data-[vaul-drawer-direction=right]:sm:max-w-sm',
+          'data-[vaul-drawer-direction=left]:inset-y-0 data-[vaul-drawer-direction=left]:start-0 data-[vaul-drawer-direction=left]:w-3/4 data-[vaul-drawer-direction=left]:sm:max-w-sm',
           className,
         )}
         {...props}
@@ -91,7 +91,7 @@ function DrawerContent({ className, children, showCloseButton = true, ...props }
           <DrawerPrimitive.Close asChild>
             <ShellCloseButton
               data-slot="drawer-close-button"
-              className="absolute top-2 right-2 group-data-[vaul-drawer-direction=bottom]/drawer-content:top-7"
+              className="absolute top-2 end-2 group-data-[vaul-drawer-direction=bottom]/drawer-content:top-7"
             />
           </DrawerPrimitive.Close>
         )}
@@ -105,7 +105,7 @@ function DrawerHeader({ className, ...props }: Omit<ShellHeaderProps, 'close'>) 
   return (
     <ShellHeader
       data-slot="drawer-header"
-      className={cn('in-data-close-button:pr-12', className)}
+      className={cn('in-data-close-button:pe-12', className)}
       {...props}
     />
   )

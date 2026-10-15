@@ -4,6 +4,7 @@ import { DayPicker, getDefaultClassNames, type DayButton } from 'react-day-picke
 import { Button, buttonVariants } from '@/components/ui/button'
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, Icon } from '@/components/ui/icon'
 import { cn } from '@/lib/utils'
+import { useLocale } from '@/lib/locale'
 
 // Figma: Date Picker page → `calendar` (10944:273) and `.calendar day` (10944:67). Month grid on
 // react-day-picker: --background, 1px --border stroke, radius lg, padding 12 (transparent and
@@ -26,9 +27,12 @@ function Calendar({
   buttonVariant?: React.ComponentProps<typeof Button>['variant']
 }) {
   const defaultClassNames = getDefaultClassNames()
+  const { locale, dir } = useLocale()
+  const intl = (options: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat(locale, options)
 
   return (
     <DayPicker
+      dir={dir}
       showOutsideDays={showOutsideDays}
       className={cn(
         'group/calendar rounded-lg border border-border bg-background p-3 [--cell-size:--spacing(9)]',
@@ -39,7 +43,9 @@ function Calendar({
       )}
       captionLayout={captionLayout}
       formatters={{
-        formatMonthDropdown: (date) => date.toLocaleString('default', { month: 'short' }),
+        formatMonthDropdown: (date) => intl({ month: 'short' }).format(date),
+        formatCaption: (date) => intl({ month: 'long', year: 'numeric' }).format(date),
+        formatWeekdayName: (date) => intl({ weekday: 'short' }).format(date),
         ...formatters,
       }}
       classNames={{
@@ -77,7 +83,7 @@ function Calendar({
           'type-text-sm-medium text-foreground select-none',
           captionLayout === 'label'
             ? ''
-            : 'flex h-8 items-center gap-1 rounded-md pr-1 pl-2 [&>svg]:size-3.5 [&>svg]:text-muted-foreground',
+            : 'flex h-8 items-center gap-1 rounded-md pe-1 ps-2 [&>svg]:size-3.5 [&>svg]:text-muted-foreground',
           defaultClassNames.caption_label,
         ),
         month_grid: cn('w-full border-collapse', defaultClassNames.month_grid),
@@ -93,15 +99,15 @@ function Calendar({
           defaultClassNames.week_number,
         ),
         day: cn(
-          'group/day relative aspect-square h-full w-full p-0 text-center select-none [&:last-child[data-selected=true]_button]:rounded-r-md',
+          'group/day relative aspect-square h-full w-full p-0 text-center select-none [&:last-child[data-selected=true]_button]:rounded-e-md',
           props.showWeekNumber
-            ? '[&:nth-child(2)[data-selected=true]_button]:rounded-l-md'
-            : '[&:first-child[data-selected=true]_button]:rounded-l-md',
+            ? '[&:nth-child(2)[data-selected=true]_button]:rounded-s-md'
+            : '[&:first-child[data-selected=true]_button]:rounded-s-md',
           defaultClassNames.day,
         ),
-        range_start: cn('rounded-l-md bg-accent', defaultClassNames.range_start),
+        range_start: cn('rounded-s-md bg-accent', defaultClassNames.range_start),
         range_middle: cn('rounded-none', defaultClassNames.range_middle),
-        range_end: cn('rounded-r-md bg-accent', defaultClassNames.range_end),
+        range_end: cn('rounded-e-md bg-accent', defaultClassNames.range_end),
         today: cn(
           'rounded-md bg-accent text-foreground data-[selected=true]:rounded-none [&_button]:type-text-sm-medium',
           defaultClassNames.today,
@@ -168,8 +174,8 @@ function CalendarDayButton({ className, day, modifiers, ...props }: React.Compon
         'flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 rounded-md type-text-sm-normal leading-none text-inherit transition-colors duration-(--duration-fast) ease-out hover:bg-muted',
         'group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:focus-ring',
         'data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground',
-        'data-[range-start=true]:rounded-md data-[range-start=true]:rounded-r-none data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground',
-        'data-[range-end=true]:rounded-md data-[range-end=true]:rounded-l-none data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground',
+        'data-[range-start=true]:rounded-md data-[range-start=true]:rounded-e-none data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground',
+        'data-[range-end=true]:rounded-md data-[range-end=true]:rounded-s-none data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground',
         'data-[range-start=true]:data-[range-end=true]:rounded-md',
         'data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-accent data-[range-middle=true]:text-foreground',
         '[&>span]:type-text-xs-normal [&>span]:opacity-70',

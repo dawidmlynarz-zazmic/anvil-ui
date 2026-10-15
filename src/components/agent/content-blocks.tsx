@@ -30,7 +30,7 @@ function ContentBlocks({ className, ...props }: React.ComponentProps<'div'>) {
         '[&_blockquote]:flex [&_blockquote]:flex-col [&_blockquote]:gap-1 [&_blockquote_cite]:type-text-xs-normal [&_blockquote_cite]:text-muted-foreground [&_blockquote_cite]:not-italic [&_blockquote_footer]:type-text-xs-normal [&_blockquote_footer]:text-muted-foreground',
         // table
         '[&_table]:w-full [&_table]:border-separate [&_table]:border-spacing-0 [&_table]:overflow-hidden [&_table]:rounded-lg [&_table]:border',
-        '[&_th]:border-b [&_th]:bg-muted [&_th]:px-3 [&_th]:py-2.5 [&_th]:text-left [&_th]:type-text-sm-semibold',
+        '[&_th]:border-b [&_th]:bg-muted [&_th]:px-3 [&_th]:py-2.5 [&_th]:text-start [&_th]:type-text-sm-semibold',
         '[&_td]:border-b [&_td]:px-3 [&_td]:py-2.5 [&_td]:type-text-sm-normal [&_tr:last-child>td]:border-b-0',
         // code
         '[&_pre]:overflow-x-auto [&_pre]:outline-none [&_pre]:focus-visible:focus-ring [&_pre]:rounded-lg [&_pre]:border [&_pre]:bg-background [&_pre]:p-3 [&_pre]:type-code-xs',

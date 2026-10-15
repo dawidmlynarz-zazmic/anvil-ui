@@ -122,3 +122,23 @@ AtLimit.test('no stepper can add more than the limit', async ({ canvas }) => {
   await expect(canvas.getByRole('button', { name: 'Increase Concession' })).toBeDisabled()
   await expect(canvas.getByRole('button', { name: 'Decrease Adult' })).toBeEnabled()
 })
+
+/** Prices follow the locale, and `summary` writes the total for your language. */
+export const German = meta.story({
+  args: {
+    locale: 'de-DE',
+    currency: 'EUR',
+    title: 'Wie viele Tickets?',
+    subtitle: 'Paper Kingdoms · Sa 17. Okt · 19:30',
+    note: 'Höchstens 8 pro Bestellung',
+    actionLabel: 'Plätze suchen',
+    emptySummary: 'Tickets wählen',
+    summary: (count: number, total: string) => `${count} ${count === 1 ? 'Ticket' : 'Tickets'} · ${total}`,
+    defaultValues: { adult: 2 },
+  },
+})
+
+German.test('prices and the summary use German formatting', async ({ canvas }) => {
+  await expect(canvas.getByText(/45,00\s€/)).toBeVisible()
+  await expect(canvas.getByText(/2 Tickets · 90,00\s€/)).toBeVisible()
+})

@@ -80,17 +80,17 @@ function TableRow({ className, ...props }: React.ComponentProps<'tr'>) {
 
 // Cells carry the row look (separate borders let the ghost hover round its ends).
 const cellClassName = cn(
-  'h-14 px-2 py-4 align-middle whitespace-nowrap first:pl-4 last:pr-4 transition-colors duration-(--duration-fast) ease-out',
-  'group-data-[density=compact]/table:h-10 group-data-[density=compact]/table:px-3 group-data-[density=compact]/table:py-2 group-data-[density=compact]/table:first:pl-3 group-data-[density=compact]/table:last:pr-3',
+  'h-14 px-2 py-4 align-middle whitespace-nowrap first:ps-4 last:pe-4 transition-colors duration-(--duration-fast) ease-out',
+  'group-data-[density=compact]/table:h-10 group-data-[density=compact]/table:px-3 group-data-[density=compact]/table:py-2 group-data-[density=compact]/table:first:ps-3 group-data-[density=compact]/table:last:pe-3',
   // contained and flush: dividers between rows, --background, hover --muted.
   'group-data-dividers/table:border-b group-data-dividers/table:border-overlay-8 group-data-dividers/table:bg-background',
   'group-data-dividers/table:in-data-[slot=table-body]:group-last/row:border-b-0',
   'group-data-striped/table:in-data-[slot=table-body]:group-even/row:bg-border-alpha-4',
   'group-data-dividers/table:in-data-[slot=table-body]:group-hover/row:bg-muted',
   // ghost: hover --overlay-4 with rounded ends.
-  'group-data-[variant=ghost]/table:first:rounded-l-md group-data-[variant=ghost]/table:last:rounded-r-md',
+  'group-data-[variant=ghost]/table:first:rounded-s-md group-data-[variant=ghost]/table:last:rounded-e-md',
   'group-data-[variant=ghost]/table:in-data-[slot=table-body]:group-hover/row:bg-overlay-4',
-  'group-data-[state=selected]/row:bg-muted! [&:has([role=checkbox])]:w-9 [&:has([role=checkbox])]:pr-0',
+  'group-data-[state=selected]/row:bg-muted! [&:has([role=checkbox])]:w-9 [&:has([role=checkbox])]:pe-0',
 )
 
 const SORT_ICON = { none: ArrowUpDownIcon, asc: ArrowUpIcon, desc: ArrowDownIcon } as const
@@ -114,7 +114,7 @@ function TableHead({
       aria-sort={sort ? ARIA_SORT[sort] : undefined}
       className={cn(
         cellClassName,
-        'text-left type-text-sm-semibold text-foreground-subtle',
+        'text-start type-text-sm-semibold text-foreground-subtle',
         'group-data-[density=compact]/table:h-9 group-data-[density=compact]/table:type-text-xs-semibold group-data-[density=compact]/table:text-muted-foreground',
         className,
       )}
