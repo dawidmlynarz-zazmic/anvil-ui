@@ -221,7 +221,7 @@ function ClarifyingQuestion({
                 aria-pressed={chosen}
                 onClick={() => answer(option.value)}
                 className={cn(
-                  'h-auto w-full justify-start gap-2.5 px-3 py-2.5 text-left whitespace-normal',
+                  'h-auto w-full justify-start gap-2.5 px-3 py-2.5 text-start whitespace-normal',
                   'aria-pressed:bg-info-subtle aria-pressed:inset-ring-border-action',
                 )}
               >

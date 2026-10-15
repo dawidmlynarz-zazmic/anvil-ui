@@ -18,7 +18,7 @@ import { cn } from '@/lib/utils'
 
 const valueStackVariants = cva('flex max-w-64 flex-col gap-0.5 break-words', {
   variants: {
-    align: { start: 'items-start text-left', end: 'items-end text-right' },
+    align: { start: 'items-start text-start', end: 'items-end text-end' },
     variant: { default: '', tile: 'w-full max-w-none rounded-md bg-muted p-3' },
   },
   defaultVariants: { align: 'start', variant: 'default' },

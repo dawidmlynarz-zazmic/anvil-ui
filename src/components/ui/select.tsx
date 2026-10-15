@@ -162,7 +162,7 @@ function SelectItem({ className, children, ...props }: React.ComponentProps<type
     <SelectPrimitive.Item
       data-slot="select-item"
       className={cn(
-        'relative flex h-9 w-full cursor-pointer items-center gap-2 rounded-md py-2 pr-8 pl-2 type-text-sm-normal text-foreground outline-hidden select-none',
+        'relative flex h-9 w-full cursor-pointer items-center gap-2 rounded-md py-2 pe-8 ps-2 type-text-sm-normal text-foreground outline-hidden select-none',
         'data-[highlighted]:bg-muted data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         '*:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2',
@@ -172,7 +172,7 @@ function SelectItem({ className, children, ...props }: React.ComponentProps<type
     >
       <span
         data-slot="select-item-indicator"
-        className="absolute right-2 flex size-4 items-center justify-center"
+        className="absolute end-2 flex size-4 items-center justify-center"
       >
         <SelectPrimitive.ItemIndicator>
           <Icon icon={CheckIcon} />

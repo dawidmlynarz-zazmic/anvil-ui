@@ -6,7 +6,7 @@ import { Slot } from 'radix-ui'
 // Figma Agent Builder › message row, role system: an event line in the thread (text/xs/normal
 // --muted-foreground, 12px icon 4px from the text). Links underline and turn --foreground on hover.
 const markerVariants = cva(
-  "group/marker relative flex min-h-4 w-full items-center gap-1 text-left type-text-xs-normal text-muted-foreground [&_svg:not([class*='size-'])]:size-3 [a]:rounded-sm [a]:underline [a]:underline-offset-3 [a]:transition-colors [a]:duration-(--duration-fast) [a]:ease-out [a]:outline-none [a]:hover:text-foreground [a]:focus-visible:focus-ring",
+  "group/marker relative flex min-h-4 w-full items-center gap-1 text-start type-text-xs-normal text-muted-foreground [&_svg:not([class*='size-'])]:size-3 [a]:rounded-sm [a]:underline [a]:underline-offset-3 [a]:transition-colors [a]:duration-(--duration-fast) [a]:ease-out [a]:outline-none [a]:hover:text-foreground [a]:focus-visible:focus-ring",
   {
     variants: {
       variant: {

@@ -64,8 +64,8 @@ const sheetContentVariants = cva(
     variants: {
       side: {
         right:
-          'inset-y-0 right-0 h-full w-full max-w-100 data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right',
-        left: 'inset-y-0 left-0 h-full w-full max-w-100 data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left',
+          'inset-y-0 end-0 h-full w-full max-w-100 data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right',
+        left: 'inset-y-0 start-0 h-full w-full max-w-100 data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left',
         top: 'inset-x-0 top-0 h-auto max-h-[80dvh] data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top',
         bottom:
           'inset-x-0 bottom-0 h-auto max-h-[80dvh] data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom',
@@ -102,7 +102,7 @@ function SheetContent({
         {children}
         {showCloseButton && (
           <SheetPrimitive.Close asChild>
-            <ShellCloseButton data-slot="sheet-close-button" className="absolute top-2 right-2" />
+            <ShellCloseButton data-slot="sheet-close-button" className="absolute top-2 end-2" />
           </SheetPrimitive.Close>
         )}
       </SheetPrimitive.Content>
@@ -115,7 +115,7 @@ function SheetHeader({ className, ...props }: Omit<ShellHeaderProps, 'close'>) {
   return (
     <ShellHeader
       data-slot="sheet-header"
-      className={cn('in-data-close-button:pr-12', className)}
+      className={cn('in-data-close-button:pe-12', className)}
       {...props}
     />
   )

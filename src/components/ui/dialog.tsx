@@ -101,7 +101,7 @@ function DialogContent({
         {children}
         {showCloseButton && (
           <DialogPrimitive.Close asChild>
-            <ShellCloseButton data-slot="dialog-close-button" className="absolute top-2 right-2" />
+            <ShellCloseButton data-slot="dialog-close-button" className="absolute top-2 end-2" />
           </DialogPrimitive.Close>
         )}
       </DialogPrimitive.Content>
@@ -114,7 +114,7 @@ function DialogHeader({ className, ...props }: Omit<ShellHeaderProps, 'close'>) 
   return (
     <ShellHeader
       data-slot="dialog-header"
-      className={cn('in-data-close-button:pr-12', className)}
+      className={cn('in-data-close-button:pe-12', className)}
       {...props}
     />
   )

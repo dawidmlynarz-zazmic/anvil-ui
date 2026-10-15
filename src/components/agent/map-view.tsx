@@ -173,8 +173,8 @@ function MapView({
           aria-hidden
           className="absolute inset-0 [background-image:linear-gradient(var(--background)_3px,transparent_3px),linear-gradient(90deg,var(--background)_3px,transparent_3px)] [background-position:20px_30px] [background-size:100px_100px]"
         >
-          <div className="absolute top-[18%] right-[8%] h-[26%] w-[20%] rounded-lg bg-success-subtle" />
-          <div className="absolute bottom-[-12%] left-[-6%] h-[34%] w-[40%] rounded-[50%] bg-info-subtle" />
+          <div className="absolute top-[18%] end-[8%] h-[26%] w-[20%] rounded-lg bg-success-subtle" />
+          <div className="absolute bottom-[-12%] start-[-6%] h-[34%] w-[40%] rounded-[50%] bg-info-subtle" />
         </div>
       )}
       {loaded && route && route.length > 1 && (
@@ -199,7 +199,7 @@ function MapView({
           <MapPin key={pin.id} pin={pin} selected={selected === pin.id} onSelect={onSelectPin} />
         ))}
       {loaded && (onZoomIn || onZoomOut || onLocate) && (
-        <div className="absolute top-3 right-3 z-30 flex flex-col gap-2">
+        <div className="absolute top-3 end-3 z-30 flex flex-col gap-2">
           {onZoomIn && (
             <Button variant="outline" intent="neutral" size="icon-sm" aria-label="Zoom in" onClick={onZoomIn}>
               <Icon icon={PlusIcon} />
@@ -232,7 +232,7 @@ function MapView({
       {loaded && preview && (
         <Card
           size="sm"
-          className="absolute bottom-3 left-3 z-30 min-w-0 w-[min(22rem,calc(100%-1.5rem))] flex-row items-center gap-3 rounded-lg border-border bg-background p-2 shadow-elevation-raised"
+          className="absolute bottom-3 start-3 z-30 min-w-0 w-[min(22rem,calc(100%-1.5rem))] flex-row items-center gap-3 rounded-lg border-border bg-background p-2 shadow-elevation-raised"
         >
           <div className="size-14 shrink-0 overflow-hidden rounded-md bg-accent [&>img]:size-full [&>img]:object-cover">
             {preview.media}
