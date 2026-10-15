@@ -86,15 +86,26 @@ jobs:
   # Firefox and WebKit (Safari's engine) run the same stories in the light theme. Not a required check yet:
   # it reports, and becomes required once it has been stable for a while.
   browsers:
-    name: Cross-browser (${{ matrix.browser }} ${{ matrix.shard }}/3)
+    name: Cross-browser (${{ matrix.browser }} ${{ matrix.shard }}/${{ matrix.total }})
     runs-on: ubuntu-latest
     timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
-        browser: [firefox, webkit]
-        # Sharded: one WebKit page running every story ran out of memory on the runner.
-        shard: [1, 2, 3]
+        # Sharded: one WebKit page running every story ran out of memory on the Linux runner, so WebKit gets
+        # smaller slices than Firefox.
+        include:
+          - { browser: firefox, shard: 1, total: 3 }
+          - { browser: firefox, shard: 2, total: 3 }
+          - { browser: firefox, shard: 3, total: 3 }
+          - { browser: webkit, shard: 1, total: 8 }
+          - { browser: webkit, shard: 2, total: 8 }
+          - { browser: webkit, shard: 3, total: 8 }
+          - { browser: webkit, shard: 4, total: 8 }
+          - { browser: webkit, shard: 5, total: 8 }
+          - { browser: webkit, shard: 6, total: 8 }
+          - { browser: webkit, shard: 7, total: 8 }
+          - { browser: webkit, shard: 8, total: 8 }
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -106,4 +117,4 @@ jobs:
       - name: Install ${{ matrix.browser }}
         run: pnpm exec playwright install --with-deps ${{ matrix.browser }}
       - name: Storybook tests in ${{ matrix.browser }}
-        run: pnpm exec vitest run --project=storybook-${{ matrix.browser }} --shard=${{ matrix.shard }}/3
+        run: pnpm exec vitest run --project=storybook-${{ matrix.browser }} --shard=${{ matrix.shard }}/${{ matrix.total }}
