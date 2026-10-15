@@ -51,6 +51,7 @@ describe('useLocale', () => {
   }
 
   it('defaults to en-US, left to right', () => {
+    document.documentElement.removeAttribute('lang')
     expect(read()).toEqual({ locale: 'en-US', dir: 'ltr' })
   })
 
