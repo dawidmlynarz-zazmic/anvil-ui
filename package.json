@@ -20,6 +20,7 @@
     "audit:forced-colors": "node scripts/audit-forced-colors.mjs",
     "audit:rtl": "node scripts/audit-narrow.mjs \"\" 1000 locale:ar-SA",
     "test-unit": "vitest run --project=unit",
+    "test-browsers": "vitest run --project=storybook-firefox --project=storybook-webkit",
     "visual": "node scripts/visual.mjs",
     "visual:update": "node scripts/visual.mjs --update",
     "test-storybook": "vitest run --project=storybook-light --project=storybook-dark"

@@ -1,6 +1,6 @@
 import preview from '#.storybook/preview'
 import { REGEXP_ONLY_DIGITS } from 'input-otp'
-import { expect, userEvent } from 'storybook/test'
+import { expect, userEvent, waitFor } from 'storybook/test'
 
 import { Field, FieldDescription, FieldError, FieldLabel } from './field'
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from './input-otp'
@@ -89,9 +89,12 @@ Default.test('typing fills the slots and moves the active slot', async ({ canvas
   await userEvent.click(input)
   await userEvent.keyboard('294')
   await expect(input).toHaveValue('294')
-  await expect(canvasElement.querySelectorAll('[data-slot=input-otp-slot]')[3]).toHaveAttribute(
-    'data-active',
-    'true',
+  // The active slot follows the input's selection, which WebKit reports a moment after the keystrokes.
+  await waitFor(() =>
+    expect(canvasElement.querySelectorAll('[data-slot=input-otp-slot]')[3]).toHaveAttribute(
+      'data-active',
+      'true',
+    ),
   )
 })
 
