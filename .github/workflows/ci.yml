@@ -117,4 +117,4 @@ jobs:
       - name: Install ${{ matrix.browser }}
         run: pnpm exec playwright install --with-deps ${{ matrix.browser }}
       - name: Storybook tests in ${{ matrix.browser }}
-        run: pnpm exec vitest run --project=storybook-${{ matrix.browser }} --shard=${{ matrix.shard }}/${{ matrix.total }}
+        run: pnpm exec vitest run --project=storybook-${{ matrix.browser }} --shard=${{ matrix.shard }}/${{ matrix.total }} --maxWorkers=2
