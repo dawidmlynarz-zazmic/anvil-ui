@@ -18,6 +18,8 @@
     "typecheck": "tsc -b --noEmit",
     "audit:narrow": "node scripts/audit-narrow.mjs",
     "test-unit": "vitest run --project=unit",
+    "visual": "node scripts/visual.mjs",
+    "visual:update": "node scripts/visual.mjs --update",
     "test-storybook": "vitest run --project=storybook-light --project=storybook-dark"
   },
   "dependencies": {
