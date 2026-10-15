@@ -86,13 +86,15 @@ jobs:
   # Firefox and WebKit (Safari's engine) run the same stories in the light theme. Not a required check yet:
   # it reports, and becomes required once it has been stable for a while.
   browsers:
-    name: Cross-browser (${{ matrix.browser }})
+    name: Cross-browser (${{ matrix.browser }} ${{ matrix.shard }}/3)
     runs-on: ubuntu-latest
     timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
         browser: [firefox, webkit]
+        # Sharded: one WebKit page running every story ran out of memory on the runner.
+        shard: [1, 2, 3]
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -104,4 +106,4 @@ jobs:
       - name: Install ${{ matrix.browser }}
         run: pnpm exec playwright install --with-deps ${{ matrix.browser }}
       - name: Storybook tests in ${{ matrix.browser }}
-        run: pnpm exec vitest run --project=storybook-${{ matrix.browser }}
+        run: pnpm exec vitest run --project=storybook-${{ matrix.browser }} --shard=${{ matrix.shard }}/3

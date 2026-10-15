@@ -50,6 +50,10 @@ export default defineConfig({
     alias: { '@': path.resolve(dirname, './src') },
   },
   test: {
+    // Known, harmless browser noise that Firefox raises while the tests drive pointer events and layout: not failures.
+    onUnhandledError(error) {
+      if (/setPointerCapture|ResizeObserver loop/.test(String(error.message))) return false
+    },
     projects: [
       storybookProject('light'),
       storybookProject('dark'),
