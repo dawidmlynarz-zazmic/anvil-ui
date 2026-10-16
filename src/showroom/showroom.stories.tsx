@@ -68,6 +68,18 @@ Scripted.test('the order flow asks for approval and tracks the delivery', async 
   })
 })
 
+Scripted.test('the booking flow goes from offers to tickets, one answer at a time', async ({ canvas }) => {
+  await say(canvas, 'book tickets for a show')
+  await userEvent.click((await canvas.findAllByRole('button', { name: 'View dates' }))[0])
+  await userEvent.click(await canvas.findByRole('button', { name: /Saturday, October 17/ }))
+  await userEvent.click(await canvas.findByRole('radio', { name: /19:30/ }))
+  await userEvent.click(await canvas.findByRole('button', { name: 'Continue' }))
+  await userEvent.click(await canvas.findByRole('button', { name: 'Approve' }))
+  await waitFor(() => expect(canvas.getByText(/tickets-PK-91274\.pdf/)).toBeVisible(), { timeout: 15000 })
+  await expect(canvas.getByText('Date chosen')).toBeVisible()
+  await expect(canvas.getByText('Time chosen')).toBeVisible()
+})
+
 Scripted.test('the research flow runs from questions to a summary', async ({ canvas }) => {
   await say(canvas, 'research')
   await userEvent.click(await canvas.findByRole('button', { name: 'EU' }))

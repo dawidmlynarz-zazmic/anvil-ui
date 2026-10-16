@@ -373,6 +373,7 @@ export const eggs: Intent[] = [
     const choice = await a.chips([
       'Research how competitors price team plans',
       'Find me a waterproof daypack under $150',
+      'Book two tickets for a show this weekend',
       'I’d like to talk to a person',
       ...CATEGORIES,
     ])

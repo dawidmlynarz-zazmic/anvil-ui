@@ -16,6 +16,7 @@ Flows can be mixed in one conversation: starting a new flow leaves the running o
 | --- | --- |
 | `research`, `competitor`, `deep dive`, `investigate`, `pricing study` | Questions → brief (approve / edit / refine) → plan (approve / edit) → live progress (pause, resume, stop, wrap up) → summary with follow-ups |
 | `daypack`, `backpack`, `buy`, `shop`, `order` | Tool calls → offer card → Order it / Show me another / Not now → approval → order tracker |
+| `tickets`, `book`, `theatre`, `musical`, `this weekend` | Tool calls → a carousel of three shows → the availability calendar → the slot list → the quantity selector → an approval → confirmation with a ticket file. Each step folds into a one-line summary once answered |
 | `human`, `person`, `someone`, `representative`, `refund`, `complain`, `support`, `speak to` | Pick a topic → summary → queue (3 → 2 → 1) → connected → Maya replies |
 
 ## Easter eggs and small talk
