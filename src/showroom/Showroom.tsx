@@ -41,6 +41,7 @@ import {
   SquarePenIcon,
   SunIcon,
   TelescopeIcon,
+  TicketIcon,
   UserRoundIcon,
   MessageSquareIcon,
   MaximizeIcon,
@@ -83,6 +84,12 @@ const STARTERS = [
     title: 'Find a daypack',
     description: 'An offer, an approval and a delivery tracker.',
     prompt: 'Find me a waterproof daypack under $150',
+  },
+  {
+    icon: TicketIcon,
+    title: 'Book a show',
+    description: 'Offers, a calendar, times and tickets.',
+    prompt: 'Book two tickets for a show this weekend',
   },
   {
     icon: UserRoundIcon,

@@ -1,5 +1,6 @@
 import type { Intent } from './engine'
 import { eggs } from './eggs'
+import { booking } from './flows/booking'
 import { handoff } from './flows/handoff'
 import { order } from './flows/order'
 import { research } from './flows/research'
@@ -8,7 +9,7 @@ import { research } from './flows/research'
 // conversations (and are listed in the actions menu); eggs are instant replies. To add a flow, write
 // `flows/<name>.ts` and add it to `flows` below.
 
-export const flows: Intent[] = [research, order, handoff]
+export const flows: Intent[] = [research, order, booking, handoff]
 export const intents: Intent[] = [...flows, ...eggs]
 
 const MISSES = [
