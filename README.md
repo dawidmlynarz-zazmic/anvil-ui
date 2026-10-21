@@ -60,7 +60,13 @@ pnpm storybook         # http://localhost:6006
 
 `.github/workflows/ci.yml` runs on every pull request and on `main`: typecheck, lint (ESLint, Prettier, story
 standards, motion rules), a check that the generated tokens are up to date, the Storybook tests in light and dark,
-and a Storybook build. It builds and tests only; nothing is published or hosted.
+and a Storybook build. CI builds and tests only.
+
+## Live Storybook (GitHub Pages)
+
+`.github/workflows/pages.yml` builds Storybook (component docs and the Showroom) and publishes it to GitHub Pages
+on every push to `main`: https://dawidmlynarz-zazmic.github.io/anvil-ui/. The site is public. One-time setup:
+Settings → Pages → Source: **GitHub Actions**.
 
 ## Repository layout
 

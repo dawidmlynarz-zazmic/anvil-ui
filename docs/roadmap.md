@@ -100,7 +100,8 @@ Ordered so each group completes something usable and later groups build on earli
 
 ## Later — publish (only when asked)
 
-Not in scope yet. When requested: Cloud Run + Identity-Aware Proxy for an internal Storybook
+Storybook is published to GitHub Pages (public, from `main`; `.github/workflows/pages.yml`). Not in scope yet.
+When requested: Cloud Run + Identity-Aware Proxy for an internal Storybook
 with shareable links and PR previews; shadcn registry served from the private repo
 (`npx shadcn add @anvil/button`); `@zazmic/anvil-tokens` package; Figma Code Connect
 (`*.figma.tsx`) published from CI; Figma library and repo tagged v1.0.0 together.
