@@ -8,10 +8,9 @@ import {
   ToolCallAccordionTrigger,
 } from '@/components/agent/tool-call-accordion'
 import { ToolCallItem, ToolCallItemTrigger } from '@/components/agent/tool-call-item'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { BotIcon, Icon } from '@/components/ui/icon'
+import { Icon } from '@/components/ui/icon'
 import { Marker, MarkerContent, MarkerIcon } from '@/components/ui/marker'
-import { Message, MessageAvatar, MessageContent, MessageGroup } from '@/components/ui/message'
+import { Message, MessageContent, MessageGroup } from '@/components/ui/message'
 import { MessageBubble, MessageBubbleContent } from '@/components/ui/message-bubble'
 import { MessageScrollerItem, useMessageScroller } from '@/components/ui/message-scroller'
 
@@ -25,13 +24,6 @@ function Agent({ turn, emit }: { turn: AgentTurn; emit: Emit }) {
   const toolsDone = tools && tools.done >= tools.list.length
   return (
     <Message>
-      <MessageAvatar>
-        <Avatar size="xs">
-          <AvatarFallback tone="agent">
-            <Icon icon={BotIcon} />
-          </AvatarFallback>
-        </Avatar>
-      </MessageAvatar>
       <MessageContent className="min-w-0 gap-3">
         {turn.typing && <StreamingPlaceholder variant="dots" label="Typing" />}
         {thinking && (

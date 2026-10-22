@@ -36,7 +36,7 @@ const meta = preview.meta({
         '`aria-invalid` on `MessageBubbleContent` for a message that failed to send.',
       ],
       avoid: [
-        'A whole message with avatar, actions and status: use Message or Message Row.',
+        'A whole message with author, actions and status: use Message or Message Row.',
         'System events (joined, files shared, a new day): use Marker. Rich results: use Card or a widget.',
       ],
       content: [

@@ -146,7 +146,7 @@ const meta = preview.meta({
       {
         property: 'show avatar · avatar',
         values: 'boolean · instance',
-        code: '`avatar` prop (agent avatar by default)',
+        code: 'nothing: agent rows have no avatar (code is ahead of Figma)',
       },
       { property: 'show author', values: 'boolean', code: 'pass `author` or not' },
       { property: 'show timestamp', values: 'boolean', code: 'pass `timestamp` or not' },
@@ -172,7 +172,7 @@ const meta = preview.meta({
         'Errors say what went wrong and what to do next (“The connection dropped… Retry to continue.”).',
       ],
       a11y: [
-        'Each row names its author, so screen readers know who is speaking without the avatar.',
+        'Each row names its author, so screen readers know who is speaking.',
         'Queued content uses `--muted-foreground` instead of opacity, keeping 4.5:1 contrast.',
         'Message actions are a toolbar named “Message actions” with labelled icon buttons.',
       ],

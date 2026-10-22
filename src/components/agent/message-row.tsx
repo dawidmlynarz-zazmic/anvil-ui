@@ -3,24 +3,24 @@ import * as React from 'react'
 import { cn } from '@/lib/utils'
 import { PulseDot } from '@/components/agent/pulse-dot'
 import { Link } from '@/components/anvil/link'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { MessageBubble, MessageBubbleContent } from '@/components/ui/message-bubble'
-import { BotIcon, CheckIcon, CircleAlertIcon, ClockIcon, Icon } from '@/components/ui/icon'
+import { CheckIcon, CircleAlertIcon, ClockIcon, Icon } from '@/components/ui/icon'
 import { Marker, MarkerContent, MarkerIcon } from '@/components/ui/marker'
-import { Message, MessageAvatar, MessageContent, MessageFooter, MessageHeader } from '@/components/ui/message'
+import { Message, MessageContent, MessageFooter, MessageHeader } from '@/components/ui/message'
 
 // Figma Agent Builder › Core Kit › message row (10663:3597): the unit of a conversation thread, built
 // on Message + MessageBubble. `role` user · assistant · system · tool × `status` queued · streaming ·
 // complete · failed (Figma state; invalid = failed).
 // - user: right-aligned, author "You" + time (+ clock while queued), muted bubble; failed → danger
 //   border and "Failed to send · Retry".
-// - assistant: agent avatar, author + time, then the slots in Figma order — thinking, the answer
+// - assistant: left-aligned, no avatar; author + time, then the slots in Figma order — thinking, the answer
 //   (ghost bubble; a blinking --agent caret while streaming), citations, widget, error, actions.
 // - system: a centered Marker line (alert icon when failed).
-// - tool: avatar, author + time, a --muted card (--border-alpha-16, radius lg) with the tool call in
+// - tool: left-aligned, no avatar; author + time, a --muted card (--border-alpha-16, radius lg) with the tool call in
 //   text/xs/medium and its status: Queued · Running… (pulse) · done (check, --success-strong) ·
 //   failed (alert, --danger).
-// Figma dims queued content to 60%; code uses --muted-foreground text instead (opacity breaks
+// The agent avatar was dropped (Oct 2026): messages use the full width, left-aligned. Code is ahead of
+// Figma here (docs/component-status.md). Figma dims queued content to 60%; code uses --muted-foreground text instead (opacity breaks
 // contrast). Figma's show … booleans = pass the slot or not.
 
 type Role = 'user' | 'assistant' | 'system' | 'tool'
@@ -31,8 +31,6 @@ type MessageRowProps = Omit<React.ComponentProps<'div'>, 'role'> & {
   status?: Status
   author?: React.ReactNode
   timestamp?: React.ReactNode
-  /** Replaces the agent avatar (assistant, tool). */
-  avatar?: React.ReactNode
   /** Thinking Panel (assistant). */
   thinking?: React.ReactNode
   /** Citation Chips (assistant). */
@@ -47,16 +45,6 @@ type MessageRowProps = Omit<React.ComponentProps<'div'>, 'role'> & {
   detail?: React.ReactNode
   /** User failed: the Retry action. */
   onRetry?: () => void
-}
-
-function AgentAvatar() {
-  return (
-    <Avatar size="xs">
-      <AvatarFallback tone="agent">
-        <Icon icon={BotIcon} />
-      </AvatarFallback>
-    </Avatar>
-  )
 }
 
 function Meta({
@@ -83,7 +71,6 @@ function MessageRow({
   status = 'complete',
   author,
   timestamp,
-  avatar,
   thinking,
   citations,
   widget,
@@ -150,7 +137,6 @@ function MessageRow({
     }[status]
     return (
       <Message {...shared} className={cn('max-w-(--shell-thread-max)', className)}>
-        <MessageAvatar>{avatar ?? <AgentAvatar />}</MessageAvatar>
         <MessageContent>
           <Meta author={author} timestamp={timestamp} queued={queued} />
           <div className="flex w-full max-w-140 items-center gap-2 rounded-lg bg-muted px-3 py-2 inset-ring inset-ring-border-alpha-16">
@@ -169,7 +155,6 @@ function MessageRow({
 
   return (
     <Message {...shared} className={cn('max-w-(--shell-thread-max)', className)}>
-      <MessageAvatar>{avatar ?? <AgentAvatar />}</MessageAvatar>
       <MessageContent>
         <Meta author={author} timestamp={timestamp} queued={queued} />
         {thinking}

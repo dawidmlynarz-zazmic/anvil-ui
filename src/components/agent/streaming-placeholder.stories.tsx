@@ -43,7 +43,7 @@ const meta = preview.meta({
     docs: {
       description: {
         component:
-          "Holds the assistant's place before the first token arrives (`@/components/agent/streaming-placeholder`, on Skeleton): `variant` skeleton (the agent avatar, a shimmering `label` and skeleton lines; `length` short · medium · long) or dots (the typing pill; Figma typing indicator). A status named by its label. Replace it with the message once it starts streaming.",
+          "Holds the assistant's place before the first token arrives (`@/components/agent/streaming-placeholder`, on Skeleton): `variant` skeleton (a shimmering `label` and skeleton lines; `length` short · medium · long) or dots (the typing pill; Figma typing indicator). A status named by its label. Replace it with the message once it starts streaming.",
       },
     },
   },
@@ -52,7 +52,6 @@ const meta = preview.meta({
     variant: { control: 'inline-radio', options: ['skeleton', 'dots'] },
     length: { control: 'inline-radio', options: ['short', 'medium', 'long'] },
     label: { control: 'text' },
-    icon: { control: false },
   },
 })
 
