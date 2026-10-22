@@ -30,7 +30,7 @@ Actions always say what they do ("Delete", "Save changes", "Send feedback"), at 
 
 Every higher-level story draws from one world so the kit reads as one product.
 
-- **Product**: an AI workspace assistant, called **"Assistant"** in the UI (avatar: bot icon).
+- **Product**: an AI workspace assistant, called **"Assistant"** in the UI (no avatar in the thread; the bot icon is used in headers and launchers).
 - **User**: **Maya Chen**, product lead at **Northwind Labs** (fictional), initials **MC**.
 - **Project**: **"Q3 launch plan"**, a launch of **Northwind Sync** (fictional app).
 - **Conversations**: "Q3 launch plan", "Competitor pricing research", "Onboarding email draft",

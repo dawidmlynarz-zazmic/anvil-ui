@@ -43,7 +43,7 @@ import {
 } from '@/components/ui/icon'
 import { Item, ItemContent, ItemDescription, ItemMedia, ItemTitle } from '@/components/ui/item'
 import { Marker, MarkerContent, MarkerIcon } from '@/components/ui/marker'
-import { Message, MessageAvatar, MessageContent, MessageGroup } from '@/components/ui/message'
+import { Message, MessageContent, MessageGroup } from '@/components/ui/message'
 import { MessageBubble, MessageBubbleContent } from '@/components/ui/message-bubble'
 import {
   MessageScroller,
@@ -958,24 +958,11 @@ function Widget({ widget }: { widget: WidgetSpec }) {
   }
 }
 
-function AgentAvatar() {
-  return (
-    <MessageAvatar>
-      <Avatar size="xs">
-        <AvatarFallback tone="agent">
-          <Icon icon={BotIcon} />
-        </AvatarFallback>
-      </Avatar>
-    </MessageAvatar>
-  )
-}
-
 function Agent({ turn }: { turn: AgentTurn }): ReactNode {
   const { tools, thinking } = turn
   const toolsDone = tools && tools.done >= tools.list.length
   return (
     <Message>
-      <AgentAvatar />
       <MessageContent className="min-w-0 gap-3">
         {turn.typing && <StreamingPlaceholder variant="dots" label="Typing" />}
         {thinking && (

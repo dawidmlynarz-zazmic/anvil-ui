@@ -2,17 +2,14 @@ import * as React from 'react'
 
 import { cn } from '@/lib/utils'
 import { TextShimmer } from '@/components/agent/text-shimmer'
-import { IconTile } from '@/components/anvil/icon-tile'
-import { BotIcon } from '@/components/ui/icon'
 import { Skeleton } from '@/components/ui/skeleton'
 
 // Figma Agent Builder › Core Kit › streaming placeholder (10735:2952), built on Skeleton: holds the
-// assistant's place before the first token. 32px --agent-subtle circle with the bot icon, 12px from
-// a column (10px gap) of a shimmering label and 14px skeleton lines. `length` short (2 lines) ·
+// assistant's place before the first token: a column (10px gap) of a shimmering label and 14px
+// skeleton lines, left-aligned with no avatar (dropped Oct 2026; Figma still draws a 32px bot tile). `length` short (2 lines) ·
 // medium (4) · long (6), widths as drawn on the 640px frame. A role="status" named by `label`.
 // `variant` dots is Figma's typing indicator (10734:2807), merged here (same job): a --muted pill
-// (radius xl, 16/12px, 4px gap) with three 8px --muted-foreground dots rising in turn. The avatar
-// is an agent Icon Tile (sm, circle).
+// (radius xl, 16/12px, 4px gap) with three 8px --muted-foreground dots rising in turn.
 
 type Length = 'short' | 'medium' | 'long'
 
@@ -27,18 +24,15 @@ function StreamingPlaceholder({
   variant = 'skeleton',
   length = 'short',
   label = 'Thinking…',
-  icon,
   className,
   ...props
 }: React.ComponentProps<'div'> & {
-  /** skeleton: avatar, shimmering label and lines · dots: the typing pill (Figma typing indicator). */
+  /** skeleton: shimmering label and lines · dots: the typing pill (Figma typing indicator). */
   variant?: 'skeleton' | 'dots'
   /** Skeleton: how many lines. */
   length?: Length
   /** The shimmering status; also the status's accessible name. */
   label?: string
-  /** Replaces the bot avatar tile. */
-  icon?: React.ReactNode
 }) {
   if (variant === 'dots') {
     return (
@@ -67,10 +61,9 @@ function StreamingPlaceholder({
       data-variant="skeleton"
       role="status"
       aria-label={label}
-      className={cn('flex w-full max-w-(--shell-widget-max) items-start gap-3', className)}
+      className={cn('flex w-full max-w-(--shell-widget-max) items-start', className)}
       {...props}
     >
-      {icon ?? <IconTile icon={BotIcon} tone="agent" size="sm" shape="circle" />}
       <div aria-hidden className="flex min-w-0 flex-1 flex-col gap-2.5">
         <TextShimmer>{label}</TextShimmer>
         {LINES[length].map((width, i) => (

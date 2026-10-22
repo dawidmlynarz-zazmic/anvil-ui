@@ -1,29 +1,16 @@
 import preview from '#.storybook/preview'
 import { expect } from 'storybook/test'
 
-import { Avatar, AvatarFallback } from './avatar'
 import { MessageBubble, MessageBubbleContent } from './message-bubble'
 import { Button } from './button'
-import { BotIcon, CircleAlertIcon, CopyIcon, Icon, RotateCcwIcon, ThumbsDownIcon, ThumbsUpIcon } from './icon'
-import { Message, MessageAvatar, MessageContent, MessageFooter, MessageGroup, MessageHeader } from './message'
+import { CircleAlertIcon, CopyIcon, Icon, RotateCcwIcon, ThumbsDownIcon, ThumbsUpIcon } from './icon'
+import { Message, MessageContent, MessageFooter, MessageGroup, MessageHeader } from './message'
 
 const FIGMA = 'https://www.figma.com/design/2170cRKZD9nhz325op4rL1/?node-id=10663-3597'
 
 const USER_PROMPT = 'Summarize the Q3 launch plan'
 const ANSWER =
   'The Q3 launch plan ships Northwind Sync on September 14. A private beta for 200 teams runs through August, then pricing goes live with the launch.'
-
-function AgentAvatar() {
-  return (
-    <MessageAvatar>
-      <Avatar size="xs">
-        <AvatarFallback tone="agent">
-          <Icon icon={BotIcon} />
-        </AvatarFallback>
-      </Avatar>
-    </MessageAvatar>
-  )
-}
 
 /** Figma message actions: copy, retry, good and bad response (ghost icon buttons). */
 function Actions() {
@@ -83,7 +70,7 @@ const meta = preview.meta({
     docs: {
       description: {
         component:
-          'One turn in a conversation (shadcn/ui Message): `Message` (`align` start for the assistant, end for the user) › `MessageAvatar`, `MessageContent` › `MessageHeader` (author in `<strong>`, then the time), a `MessageBubble`, `MessageFooter` (actions or status). `MessageGroup` stacks turns. Figma draws it as the Agent Builder › Core Kit message row; the Core Kit component composes these parts.',
+          'One turn in a conversation (shadcn/ui Message): `Message` (`align` start for the assistant, end for the user) › `MessageContent` › `MessageHeader` (author in `<strong>`, then the time), a `MessageBubble`, `MessageFooter` (actions or status). `MessageGroup` stacks turns. Agent turns are left-aligned with no avatar; `MessageAvatar` stays available for other chats (e.g. several people in one thread). Figma draws it as the Agent Builder › Core Kit message row; the Core Kit component composes these parts.',
       },
     },
   },
@@ -92,7 +79,6 @@ const meta = preview.meta({
   render: (args) => (
     <div className="max-w-(--shell-thread-max)">
       <Message {...args}>
-        {args.align === 'start' && <AgentAvatar />}
         <MessageContent>
           <MessageHeader>
             <strong>{args.align === 'end' ? 'Maya Chen' : 'Assistant'}</strong>
@@ -107,7 +93,7 @@ const meta = preview.meta({
   ),
 })
 
-/** Alignment is in Controls: start (assistant, ghost bubble, avatar) or end (user, muted bubble). */
+/** Alignment is in Controls: start (assistant, ghost bubble, no avatar) or end (user, muted bubble). */
 export const Default = meta.story()
 
 Default.test('renders the author, time and content', async ({ canvas, canvasElement }) => {
@@ -125,7 +111,6 @@ export const WithActions = meta.story({
   render: () => (
     <div className="max-w-(--shell-thread-max)">
       <Message>
-        <AgentAvatar />
         <MessageContent>
           <MessageHeader>
             <strong>Assistant</strong>
@@ -196,7 +181,6 @@ export const Thread = meta.story({
         </MessageContent>
       </Message>
       <Message>
-        <AgentAvatar />
         <MessageContent>
           <MessageHeader>
             <strong>Assistant</strong>
