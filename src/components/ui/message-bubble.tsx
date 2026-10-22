@@ -14,13 +14,13 @@ function MessageBubbleGroup({ className, ...props }: React.ComponentProps<'div'>
 }
 
 // shadcn Bubble, named Message Bubble in Anvil (reactions removed: the kit has none).
-// Every bubble stops at 80% of the row, so the user's reply and the assistant's text leave the same
-// 20% gap on the opposite side (a real chat rhythm); widgets and panels stay full width.
+// Every bubble stops at 90% of the row, so the user's reply and the assistant's text leave the same
+// 10% gap on the opposite side (a real chat rhythm); widgets and panels stay full width.
 // Figma Agent Builder › message row draws the bubble: user = muted, assistant = ghost (plain
 // text), failed send = muted + danger border (`aria-invalid`). The other variants keep shadcn's
 // set, mapped to Anvil tokens.
 const messageBubbleVariants = cva(
-  'group/message-bubble relative flex w-fit max-w-[80%] min-w-0 flex-col gap-1 group-data-[align=end]/message:self-end data-[align=end]:self-end',
+  'group/message-bubble relative flex w-fit max-w-[90%] min-w-0 flex-col gap-1 group-data-[align=end]/message:self-end data-[align=end]:self-end',
   {
     variants: {
       variant: {
