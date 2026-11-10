@@ -31,6 +31,7 @@ import {
 import { Kbd } from '@/components/ui/kbd'
 import { cn } from '@/lib/utils'
 
+import { managerUrl } from '../../.storybook/manager-url'
 import { LEVELS, type LevelTitle } from '../../.storybook/taxonomy'
 
 import { catalog, type CatalogItem } from './catalog'
@@ -89,10 +90,10 @@ function StoryLink({
   const onClick = (event: MouseEvent<HTMLAnchorElement>) => {
     if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
     event.preventDefault()
-    addons.getChannel().emit(NAVIGATE_URL, `?path=${path}`)
+    addons.getChannel().emit(NAVIGATE_URL, managerUrl(path))
   }
   return (
-    <a href={`/?path=${path}`} target="_top" onClick={onClick} className={className} {...props}>
+    <a href={managerUrl(path)} target="_top" onClick={onClick} className={className} {...props}>
       {children}
     </a>
   )
