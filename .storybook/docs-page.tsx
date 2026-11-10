@@ -3,6 +3,7 @@ import { Controls, Description, Primary, Stories, Subtitle, Title, useOf } from 
 import { NAVIGATE_URL } from 'storybook/internal/core-events'
 import { addons } from 'storybook/preview-api'
 
+import { managerUrl } from './manager-url'
 import { docsIdOf, relationshipsOf } from './relationships'
 import { contextsOf, levelOf, shadcnUrl, type FigmaProp, type Guide } from './taxonomy'
 
@@ -76,11 +77,11 @@ function DocsLink({ title }: { title: string }) {
   const onClick = (event: MouseEvent<HTMLAnchorElement>) => {
     if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
     event.preventDefault()
-    addons.getChannel().emit(NAVIGATE_URL, `?path=${path}`)
+    addons.getChannel().emit(NAVIGATE_URL, managerUrl(path))
   }
   const parts = title.split('/')
   return (
-    <a href={`/?path=${path}`} target="_top" onClick={onClick}>
+    <a href={managerUrl(path)} target="_top" onClick={onClick}>
       {parts.at(-1)}
       <span className="sb-unstyled type-text-xs-normal text-muted-foreground">
         {' '}
