@@ -30,11 +30,11 @@ jobs:
       contents: write
     steps:
       # Check out the branch itself (not the pull request's merge commit) so new baselines can be pushed to it.
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ github.head_ref || github.ref_name }}
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
           cache: pnpm
@@ -57,7 +57,7 @@ jobs:
           git push origin HEAD:${{ github.head_ref || github.ref_name }}
       - name: Upload the diffs
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: visual-diffs
           path: visual/diffs
