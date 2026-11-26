@@ -194,11 +194,12 @@ function MediaGallery({
       </div>
     )
 
-  const tile = (item: MediaItem, at: number, className?: string, overlay?: React.ReactNode) => (
+  const tile = (item: MediaItem, at: number, className?: string, overlay?: string) => (
     <button
       key={at}
       type="button"
-      aria-label={`Open photo ${at + 1}: ${item.alt}`}
+      // The overlay's text (“+12 photos”) is part of the name: names contain what the button shows.
+      aria-label={[`Open photo ${at + 1}: ${item.alt}`, overlay].filter(Boolean).join(', ')}
       onClick={() => openAt(at)}
       className={cn(
         'relative block overflow-hidden outline-none focus-visible:focus-ring focus-visible:ring-inset focus-visible:ring-offset-0',
@@ -206,7 +207,11 @@ function MediaGallery({
       )}
     >
       <Photo item={item} />
-      {overlay}
+      {overlay && (
+        <span className="absolute inset-0 grid place-items-center bg-background-inverse/70 type-text-sm-medium text-foreground-inverse">
+          {overlay}
+        </span>
+      )}
     </button>
   )
   const more = count - 5
@@ -227,11 +232,7 @@ function MediaGallery({
               item,
               at,
               at === 0 ? 'col-span-2 row-span-2' : undefined,
-              at === 4 && more > 0 ? (
-                <span className="absolute inset-0 grid place-items-center bg-background-inverse/70 type-text-sm-medium text-foreground-inverse">
-                  +{more} photos
-                </span>
-              ) : undefined,
+              at === 4 && more > 0 ? `+${more} photos` : undefined,
             ),
           )}
         </div>

@@ -126,7 +126,7 @@ export const Default = meta.story()
 
 Default.test('picks a day, names its availability, moves between months', async ({ canvas, args }) => {
   await expect(canvas.getByRole('heading', { name: 'October 2026' })).toBeVisible()
-  await expect(canvas.getByRole('button', { name: /Saturday, October 10, Sold out/ })).toBeVisible()
+  await expect(canvas.getByRole('button', { name: '10 Sold out, Saturday, October 10' })).toBeVisible()
   await userEvent.click(canvas.getByRole('button', { name: /Saturday, October 17/ }))
   await expect(args.onSelect).toHaveBeenCalled()
   await userEvent.click(canvas.getByRole('button', { name: 'Next month' }))
