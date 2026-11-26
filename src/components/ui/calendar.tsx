@@ -21,6 +21,7 @@ function Calendar({
   captionLayout = 'label',
   buttonVariant = 'ghost',
   formatters,
+  labels,
   components,
   ...props
 }: React.ComponentProps<typeof DayPicker> & {
@@ -46,7 +47,21 @@ function Calendar({
         formatMonthDropdown: (date) => intl({ month: 'short' }).format(date),
         formatCaption: (date) => intl({ month: 'long', year: 'numeric' }).format(date),
         formatWeekdayName: (date) => intl({ weekday: 'short' }).format(date),
+        formatDay: (date) => intl({ day: 'numeric' }).format(date),
         ...formatters,
+      }}
+      // Day names come from Intl too ("Friday, October 9, 2026"), so they contain the number the
+      // button shows (WCAG 2.5.3; react-day-picker's default says "9th").
+      labels={{
+        labelDayButton: (date, modifiers) =>
+          [
+            modifiers.today && 'Today',
+            intl({ weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }).format(date),
+            modifiers.selected && 'selected',
+          ]
+            .filter(Boolean)
+            .join(', '),
+        ...labels,
       }}
       classNames={{
         root: cn('w-fit', defaultClassNames.root),

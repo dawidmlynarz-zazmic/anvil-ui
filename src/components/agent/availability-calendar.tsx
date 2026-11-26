@@ -63,6 +63,16 @@ function AvailabilityDayButton({
   const entry = modifiers.outside ? undefined : map[format(day.date, 'yyyy-MM-dd')]
   const selected = Boolean(modifiers.selected)
   const tile = entry && entry.level !== 'unavailable'
+  const dayNumber = new Intl.DateTimeFormat(locale, { day: 'numeric' }).format(day.date)
+  const soldOut = indicators && entry?.level === 'unavailable'
+  const price = !soldOut && prices && entry?.price
+  const visibleText = [dayNumber, soldOut ? soldOutLabel : price].filter(Boolean)
+  const dateLabel = new Intl.DateTimeFormat(locale, {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+  }).format(day.date)
+  const level = indicators && entry && entry.level !== 'unavailable' ? entry.level : undefined
   return (
     <Button
       ref={ref}
@@ -73,19 +83,10 @@ function AvailabilityDayButton({
       data-level={entry?.level ?? 'none'}
       data-selected={selected || undefined}
       data-today={modifiers.today || undefined}
-      aria-label={
-        entry
-          ? [
-              new Intl.DateTimeFormat(locale, { weekday: 'long', day: 'numeric', month: 'long' }).format(
-                day.date,
-              ),
-              indicators && (entry.level === 'unavailable' ? soldOutLabel : entry.level),
-              prices && entry.level !== 'unavailable' && entry.price,
-            ]
-              .filter(Boolean)
-              .join(', ')
-          : undefined
-      }
+      // The name starts with exactly what the tile shows (day number, then the price or "Sold out"), so
+      // voice-control users can say what they see (WCAG 2.5.3; axe label-content-name-mismatch), then
+      // the full date and the availability.
+      aria-label={entry ? [visibleText.join(' '), dateLabel, level].filter(Boolean).join(', ') : undefined}
       className={cn(
         'h-14 w-full min-w-0 flex-col gap-0.5 rounded-lg px-0 transition-colors duration-(--duration-fast) ease-out',
         tile && 'bg-muted hover:border-border-strong',
@@ -103,8 +104,8 @@ function AvailabilityDayButton({
           entry?.level === 'unavailable' && !selected && 'text-muted-foreground',
         )}
       >
-        {day.date.getDate()}
-      </span>
+        {dayNumber}
+      </span>{' '}
       {indicators && entry?.level === 'unavailable' ? (
         <span
           className={cn(

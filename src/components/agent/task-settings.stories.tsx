@@ -39,7 +39,10 @@ function PublishedAfter() {
   const [date, setDate] = useState<Date | undefined>(new Date(2025, 9, 1))
   return (
     <DatePicker>
-      <DatePickerTrigger aria-label="Published after" className="w-auto">
+      <DatePickerTrigger
+        aria-label={date ? `Published after ${format(date, 'MMM yyyy')}` : 'Published after'}
+        className="w-auto"
+      >
         {date ? format(date, 'MMM yyyy') : undefined}
       </DatePickerTrigger>
       <DatePickerContent>

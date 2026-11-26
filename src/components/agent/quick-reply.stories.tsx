@@ -256,6 +256,7 @@ LongContent.test('long replies stay inside the column', async ({ canvasElement }
 LongContent.test('wrapping text is left-aligned in every layout', async ({ canvasElement }) => {
   for (const button of canvasElement.querySelectorAll<HTMLElement>('button')) {
     await expect(getComputedStyle(button).textAlign).toMatch(/^(left|start)$/)
-    await expect(getComputedStyle(button).justifyContent).toMatch(/^(flex-start|start|normal)$/)
+    // Newer Chromium reports a button's default as `flow-start` (still start alignment).
+    await expect(getComputedStyle(button).justifyContent).toMatch(/^(flex-start|flow-start|start|normal)$/)
   }
 })

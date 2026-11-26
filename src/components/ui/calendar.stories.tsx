@@ -104,24 +104,24 @@ export const Default = meta.story()
 
 Default.test('a day is selected; clicking another selects it', async ({ canvas }) => {
   const grid = canvas.getByRole('grid')
-  await expect(within(grid).getByRole('button', { name: /October 15th, 2026/ })).toHaveAttribute(
+  await expect(within(grid).getByRole('button', { name: /October 15, 2026/ })).toHaveAttribute(
     'data-selected-single',
     'true',
   )
-  await userEvent.click(within(grid).getByRole('button', { name: /October 20th, 2026/ }))
+  await userEvent.click(within(grid).getByRole('button', { name: /October 20, 2026/ }))
   await waitFor(() =>
     expect(
-      within(canvas.getByRole('grid')).getByRole('button', { name: /October 20th, 2026/ }),
+      within(canvas.getByRole('grid')).getByRole('button', { name: /October 20, 2026/ }),
     ).toHaveAttribute('data-selected-single', 'true'),
   )
 })
 
 Default.test('arrow keys move between days', async ({ canvas }) => {
   within(canvas.getByRole('grid'))
-    .getByRole('button', { name: /October 15th, 2026/ })
+    .getByRole('button', { name: /October 15, 2026/ })
     .focus()
   await userEvent.keyboard('{ArrowRight}')
-  await expect(canvas.getByRole('button', { name: /October 16th, 2026/ })).toHaveFocus()
+  await expect(canvas.getByRole('button', { name: /October 16, 2026/ })).toHaveFocus()
 })
 
 /** Figma mode=range: start, middle and end. */
@@ -134,5 +134,5 @@ export const TwoMonths = meta.story({ args: { mode: 'range', numberOfMonths: 2 }
 export const Disabled = meta.story({ args: { disablePast: true, captionLayout: 'dropdown' } })
 
 Disabled.test('past days cannot be picked', async ({ canvas }) => {
-  await expect(canvas.getByRole('button', { name: /October 2nd, 2026/ })).toBeDisabled()
+  await expect(canvas.getByRole('button', { name: /October 2, 2026/ })).toBeDisabled()
 })
